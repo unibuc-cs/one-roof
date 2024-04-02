@@ -1,4 +1,5 @@
 import express from 'express';
+import connect from "./database";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -24,3 +25,16 @@ app.get('/api', (req, res) => {
 app.listen(3000, '0.0.0.0', () => {
     console.log(`Server is running at http://localhost:${port}`);
 });
+
+connect();
+// const findUsers = async () => {
+//     const users = await User.find();
+//     console.log(users);
+// }
+//
+// const createUser = async () => {
+//     const user = new User({ name: 'John' });
+//     await user.save();
+//     console.log('User created');
+// }
+
