@@ -1,15 +1,14 @@
 import express from 'express';
-import connect from "./database";
+import connect from './database';
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT ?? 3000;
 
 app.use((req, res, next) => {
     const now = new Date().toISOString();
     console.log(`${now} - ${req.method} ${req.path} - IP: ${req.ip}`);
     next();
 });
-
 
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
@@ -27,14 +26,3 @@ app.listen(3000, '0.0.0.0', () => {
 });
 
 connect();
-// const findUsers = async () => {
-//     const users = await User.find();
-//     console.log(users);
-// }
-//
-// const createUser = async () => {
-//     const user = new User({ name: 'John' });
-//     await user.save();
-//     console.log('User created');
-// }
-

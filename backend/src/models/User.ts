@@ -1,14 +1,20 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
+
+function SortOrders(): void {
+    throw new Error('Function not implemented.');
+}
+
+SortOrders();
 
 interface IUser extends mongoose.Document {
-    auth0Id: string;
-    email: string;
-    nickname: string;
-    firstName: string;
-    lastName: string;
-    role: 'user' | 'landlord';
-    createdAt: Date;
-    updatedAt: Date;
+    auth0Id: string,
+    email: string,
+    nickname: string,
+    firstName: string,
+    lastName: string,
+    role: 'user' | 'landlord',
+    createdAt: Date,
+    updatedAt: Date,
 }
 
 const UserSchema = new mongoose.Schema({

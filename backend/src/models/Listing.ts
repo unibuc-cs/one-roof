@@ -1,12 +1,12 @@
-import { Schema, Document, model } from "mongoose";
+import { Schema, type Document, model } from 'mongoose';
 
 interface IListing extends Document {
-    landlordId: Schema.Types.ObjectId;
-    title: string;
-    description: string;
-    photos: string[];
-    address: string;
-    price: number;
+    landlordId: Schema.Types.ObjectId,
+    title: string,
+    description: string,
+    photos: string[],
+    address: string,
+    price: number,
 }
 
 const ListingSchema = new Schema({
