@@ -1,5 +1,5 @@
 import express from 'express';
-import connect from './database';
+import { connect, seedDatabase } from './database';
 
 const app = express();
 const port = process.env.PORT ?? 3000;
@@ -25,4 +25,11 @@ app.listen(3000, '0.0.0.0', () => {
     console.log(`Server is running at http://localhost:${port}`);
 });
 
-connect();
+connect().then(() => {
+    console.log('Database connected');
+    seedDatabase().then(() => {
+        console.log('Database seeded');
+    }).catch((error) => {
+        console.error('Database seeding failed');
+    });
+});
