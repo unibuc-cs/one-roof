@@ -2,7 +2,7 @@ import express from 'express';
 import { connect, seedDatabase } from './database';
 import { config } from './configure';
 
-const app = express();
+export const app = express();
 const port = config.PORT;
 
 app.use((req, res, next) => {
