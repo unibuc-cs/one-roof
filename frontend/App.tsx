@@ -1,8 +1,9 @@
 import { StyleSheet, Text, View } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
-import { useEffect, useState } from 'react';
-import { config } from './configure';
+import React, { useEffect, useState } from 'react';
+import { HomeScreen } from './src/screens';
+import { config } from './src/configure';
 import axios from 'axios';
+import { AuthProvider } from './src/auth/useAuth';
 
 export default function App() {
     const [myData, setMyData] = useState<string>('');
@@ -18,11 +19,9 @@ export default function App() {
         fetchData();
     }, []);
     return (
-        <View style={styles.container}>
-            <Text>Open up App.tsx to start working on your app!</Text>
-            <Text>response {myData}</Text>
-            <StatusBar style="auto" />
-        </View>
+        <AuthProvider>
+            <HomeScreen myData={myData} />
+        </AuthProvider>
     );
 };
 
