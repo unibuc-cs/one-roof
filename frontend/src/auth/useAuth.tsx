@@ -1,6 +1,6 @@
 import * as AuthSession from 'expo-auth-session';
 import React, { useContext, useState, useEffect, createContext, type ReactNode } from 'react';
-import { Alert, Platform } from 'react-native';
+import { Alert, Linking, Platform } from 'react-native';
 import { AuthContext } from './AuthContext';
 import { type AuthRequestConfig, type AuthRequestPromptOptions, type AuthSessionRedirectUriOptions } from 'expo-auth-session';
 import { config } from '../configure';
@@ -14,12 +14,14 @@ interface IAuthContext {
 }
 
 const auth0ClientId = config.auth0.clientId;
-const authorizationEndpoint = `https://${config.auth0.domain}/authorize`;
-
 const useProxy: boolean = Platform.select({ web: false, default: true });
+const authorizationEndpoint = `https://${config.auth0.domain}/authorize`;
 const redirectUri: string = AuthSession.makeRedirectUri({ useProxy } as AuthSessionRedirectUriOptions);
+const logoutRedirectUri: string = AuthSession.makeRedirectUri({ useProxy: false } as AuthSessionRedirectUriOptions);
+const logoutUrl = `https://${config.auth0.domain}/v2/logout?client_id=${config.auth0.clientId}&returnTo=${encodeURIComponent(logoutRedirectUri)}`;
 
 console.log('redirectUri:', redirectUri);
+console.log('logoutRedirectUri:', logoutRedirectUri);
 
 interface AuthProviderProps {
     children: ReactNode,
@@ -59,8 +61,9 @@ const useProvideAuth = () => {
         await promptAsync({ useProxy } as AuthRequestPromptOptions);
     };
 
-    const signOut = () => {
+    const signOut = async () => {
         setUser(null);
+        await Linking.openURL(logoutUrl);
     };
 
     return { user, signIn, signOut };
