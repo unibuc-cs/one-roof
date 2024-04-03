@@ -64,3 +64,9 @@ dist
 
 tmp/
 temp/
+
+.env*
+.env.vault
+.flaskenv*
+!.env.project
+!.env.vault

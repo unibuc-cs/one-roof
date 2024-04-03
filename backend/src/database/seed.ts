@@ -1,8 +1,7 @@
-import USERS from './seeds/users';
+import { USERS } from './seeds';
 
 const seedUsers = async () => {
-    const usersToSeed = USERS;
-    for (const user of usersToSeed) {
+    for (const user of USERS) {
         await user.save();
     }
 };

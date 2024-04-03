@@ -1,9 +1,9 @@
 import mongoose from 'mongoose';
+import { config } from '../configure';
 
-const mongoURI = 'mongodb://localhost:27017/one-roof';
 const connect = async (): Promise<void> => {
     try {
-        await mongoose.connect(mongoURI);
+        await mongoose.connect(config.MONGO_URI);
         console.log('Database connected');
     } catch (error) {
         console.error('Database connection failed');

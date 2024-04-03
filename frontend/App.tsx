@@ -1,14 +1,15 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
+import { config } from './configure';
 import axios from 'axios';
 
-export default function App(): JSX.Element {
+export default function App() {
     const [myData, setMyData] = useState<string>('');
     useEffect(() => {
         const fetchData = async (): Promise<void> => {
             try {
-                const response = await axios.get<string>('http://192.168.191.158:3000/api');
+                const response = await axios.get<string>(`${config.api.baseUrl}/api`);
                 setMyData(response.data);
             } catch (error) {
                 console.error('Error fetching data:', error);

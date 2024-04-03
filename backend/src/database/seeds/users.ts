@@ -22,4 +22,4 @@ export const LANDLORD_USER = new User({
 
 const USERS = [REGULAR_USER, LANDLORD_USER];
 
-export default USERS;
+export { USERS };

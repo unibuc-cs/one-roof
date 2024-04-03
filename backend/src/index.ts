@@ -1,8 +1,9 @@
 import express from 'express';
 import { connect, seedDatabase } from './database';
+import { config } from './configure';
 
 const app = express();
-const port = process.env.PORT ?? 3000;
+const port = config.PORT;
 
 app.use((req, res, next) => {
     const now = new Date().toISOString();
@@ -21,7 +22,7 @@ app.get('/api', (req, res) => {
     res.send('Hello World!');
 });
 
-app.listen(3000, '0.0.0.0', () => {
+app.listen(port, '0.0.0.0', () => {
     console.log(`Server is running at http://localhost:${port}`);
 });
 

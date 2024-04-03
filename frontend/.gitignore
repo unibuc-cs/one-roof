@@ -30,9 +30,14 @@ yarn-error.*
 
 # local env files
 .env*.local
+.env.vault
 
 # typescript
 *.tsbuildinfo
 
 # idea
 .idea/
+.env*
+.flaskenv*
+!.env.project
+!.env.vault
