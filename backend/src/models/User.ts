@@ -1,33 +1,27 @@
-import mongoose from 'mongoose';
+import { Schema, type Document, model } from 'mongoose';
 
-function SortOrders(): void {
-    throw new Error('Function not implemented.');
-}
-
-SortOrders();
-
-interface IUser extends mongoose.Document {
+interface IUser extends Document {
     auth0Id: string,
     email: string,
     nickname: string,
     firstName: string,
     lastName: string,
+    profilePicture: string,
     role: 'user' | 'landlord',
     createdAt: Date,
     updatedAt: Date,
 }
 
-const UserSchema = new mongoose.Schema({
+const UserSchema = new Schema<IUser>({
     auth0Id: { type: String, required: true },
-    name: { type: String, required: true },
     email: { type: String, required: true },
     nickname: { type: String, required: true },
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
-    role: { type: String, required: true, enum: ['user', 'landlord'] },
-    createdAt: { type: Date, default: Date.now },
-    updatedAt: { type: Date, default: Date.now }
-});
+    profilePicture: { type: String },
+    role: { type: String, required: true, enum: ['user', 'landlord'] }
+},
+{ timestamps: true });
 
-const User = mongoose.model<IUser>('User', UserSchema);
-export default User;
+const User = model<IUser>('User', UserSchema);
+export { UserSchema, type IUser, User };
