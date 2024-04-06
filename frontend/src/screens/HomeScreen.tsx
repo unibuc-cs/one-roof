@@ -1,25 +1,25 @@
 import React from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
+import { View, Text, StyleSheet } from 'react-native';
 import { useAuth } from '../auth/useAuth';
+import { Button } from 'react-native-paper';
 
 interface HomeScreenProps {
     myData: string,
 };
 
 export const HomeScreen: React.FC<HomeScreenProps> = ({ myData }) => {
-    const { user, signIn, signOut } = useAuth();
+    const { accessToken, user, signIn, signOut } = useAuth();
     return (
         <View style={styles.container}>
             {user
                 ? (
                     <>
-                        <Text>Welcome, {user.name}!</Text>
-                        <Button title="Sign Out" onPress={signOut} />
+                        <Text>Welcome, {user.name} with {accessToken}!</Text>
+                        <Button onPress={signOut} > Sign Out! </Button>
                     </>
                 )
                 : (
-                    <Button title="Sign In" onPress={signIn} />
+                    <Button onPress={signIn} > Sign In! </Button>
                 )}
         </View>
     );

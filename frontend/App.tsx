@@ -1,9 +1,15 @@
-import { StyleSheet, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { HomeScreen } from './src/screens';
 import { config } from './src/configure';
 import axios from 'axios';
-import { AuthProvider } from './src/auth/useAuth';
+import { ClerkProvider, SignedIn, SignedOut } from '@clerk/clerk-expo';
+import { tokenCache } from './src/auth/tokenCache';
+import { PaperProvider } from 'react-native-paper';
+import { Text, StyleSheet, View, ImageBackground } from 'react-native';
+import { theme } from './src/theme';
+import Background from './src/components/Background';
+import { SignOut } from './src/components';
+import SignInScreen from './src/screens/SignInScreen';
+import { EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY } from '@env';
 
 export default function App() {
     const [myData, setMyData] = useState<string>('');
@@ -19,9 +25,21 @@ export default function App() {
         fetchData();
     }, []);
     return (
-        <AuthProvider>
-            <HomeScreen myData={myData} />
-        </AuthProvider>
+        <ClerkProvider
+            tokenCache={tokenCache}
+            publishableKey={EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY}>
+            <PaperProvider theme={theme}>
+                <SignedIn>
+                    <Background>
+                        <Text> You are signed in! </Text>
+                        <SignOut/>
+                    </Background>
+                </SignedIn>
+                <SignedOut>
+                    <SignInScreen/>
+                </SignedOut>
+            </PaperProvider>
+        </ClerkProvider>
     );
 };
 

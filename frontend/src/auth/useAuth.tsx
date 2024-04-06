@@ -6,12 +6,7 @@ import { type AuthRequestConfig, type AuthRequestPromptOptions, type AuthSession
 import { config } from '../configure';
 import 'core-js/stable/atob';
 import { jwtDecode } from 'jwt-decode';
-
-interface IAuthContext {
-    user: { name: string } | null,
-    signIn: () => Promise<void>,
-    signOut: () => void,
-}
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const auth0ClientId = config.auth0.clientId;
 const useProxy: boolean = Platform.select({ web: false, default: true });
@@ -35,6 +30,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }: { childr
 const useProvideAuth = () => {
     const [user, setUser] = useState<{ name: string } | null>(null);
 
+    const [accessToken, setAccessToken] = useState<string | null>(null);
     const [request, result, promptAsync] = AuthSession.useAuthRequest({
         redirectUri,
         clientId: auth0ClientId,
@@ -49,6 +45,8 @@ const useProvideAuth = () => {
                 const jwtToken = result.params.id_token;
                 const decoded: { name: string } = jwtDecode(jwtToken);
                 setUser({ name: decoded.name });
+                AsyncStorage.setItem('accessToken', jwtToken).then(r => { console.log('accessToken saved:', r); });
+                setAccessToken(jwtToken);
             } else {
                 setUser(null);
             }
@@ -66,7 +64,7 @@ const useProvideAuth = () => {
         await Linking.openURL(logoutUrl);
     };
 
-    return { user, signIn, signOut };
+    return { accessToken, user, signIn, signOut };
 };
 
 export const useAuth = () => {

@@ -12,7 +12,7 @@ describe('dummy', () => {
 
 describe('dummy route', () => {
     it('should return Hello World!', (done) => {
-        chai.request(`http://localhost:${config.PORT}`)
+        chai.request(`http://localhost:${config.port}`)
             .get('/api')
             .end((err, res) => {
                 chai.expect(res).to.have.status(200);

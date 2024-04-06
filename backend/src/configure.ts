@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const getEnvirontmentVariable = (key: string): string => {
+const getEnvironmentVariable = (key: string): string => {
     const value = process.env[key];
     if (!value) {
         throw new Error(`Environment variable ${key} not set`);
@@ -11,6 +11,11 @@ const getEnvirontmentVariable = (key: string): string => {
 };
 
 export const config = {
-    MONGO_URI: getEnvirontmentVariable('MONGO_URI'),
-    PORT: parseInt(getEnvirontmentVariable('PORT'))
+    mongo_uri: getEnvironmentVariable('MONGO_URI'),
+    port: parseInt(getEnvironmentVariable('PORT')),
+    auth0: {
+        domain: getEnvironmentVariable('AUTH0_DOMAIN'),
+        audience: getEnvironmentVariable('AUTH0_AUDIENCE'),
+        secret: getEnvironmentVariable('AUTH0_SECRET')
+    }
 };

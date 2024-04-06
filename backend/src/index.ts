@@ -3,7 +3,7 @@ import { connect, seedDatabase } from './database';
 import { config } from './configure';
 
 export const app = express();
-const port = config.PORT;
+const port = config.port;
 
 app.use((req, res, next) => {
     const now = new Date().toISOString();
