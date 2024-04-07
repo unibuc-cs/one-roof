@@ -7,13 +7,15 @@ import { PaperProvider } from 'react-native-paper';
 import { Text, StyleSheet, View, ImageBackground } from 'react-native';
 import { theme } from './src/theme';
 import Background from './src/components/Background';
-import { SignOut } from './src/components';
 import SignInScreen from './src/screens/SignInScreen';
 import { EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY } from '@env';
-import Button from './src/components/Button';
-import {fetchDiscoveryAsync} from 'expo-auth-session';
-import {UnauthenticatedHomeScreen} from './src/screens/UnauthenticatedHomeScreen';
+import { UnauthenticatedHomeScreen } from './src/screens/UnauthenticatedHomeScreen';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import SignUpScreen from './src/screens/SignUpScreen';
+import { HomeScreen } from './src/screens';
 
+const Stack = createNativeStackNavigator();
 export default function App() {
 	const [myData, setMyData] = useState<string>('');
 
@@ -37,15 +39,21 @@ export default function App() {
 			<PaperProvider theme={theme}>
 				<SignedIn>
 					<Background>
-						<Text> You are signed in! </Text>
-						<Button mode="contained" onPress={fetchData}>
-                            Fetch Data
-						</Button>
-						<SignOut/>
+						<HomeScreen/>
 					</Background>
 				</SignedIn>
 				<SignedOut>
-					<UnauthenticatedHomeScreen />
+					<NavigationContainer>
+						<Stack.Navigator
+							initialRouteName={'Home'}
+							screenOptions={{
+								headerShown: false
+							}}>
+							<Stack.Screen name="Home" component={UnauthenticatedHomeScreen}/>
+							<Stack.Screen name="SignIn" component={SignInScreen}/>
+							<Stack.Screen name="SignUp" component={SignUpScreen}/>
+						</Stack.Navigator>
+					</NavigationContainer>
 				</SignedOut>
 			</PaperProvider>
 		</ClerkProvider>
