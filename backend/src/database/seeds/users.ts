@@ -1,25 +1,21 @@
 import { User } from '../../models';
 
 export const REGULAR_USER = new User({
-    auth0Id: 'auth0|regularuser123',
-    email: 'john_doe@example.com',
-    nickname: 'johnny',
-    firstName: 'John',
-    lastName: 'Doe',
-    profilePicture: 'https://example.com/path/to/regularuser/profilepic.jpg',
-    role: 'user'
+	clerkId: 'clerk|regularuser123',
+	profilePicture: 'https://example.com/path/to/regularuser/profilepic.jpg',
+	role: 'regularUser',
+	onboardingStep: 1,
 });
 
 export const LANDLORD_USER = new User({
-    auth0Id: 'auth0|landlorduser123',
-    email: 'landlord@example.com',
-    nickname: 'landlord',
-    firstName: 'Land',
-    lastName: 'Lord',
-    profilePicture: 'https://example.com/path/to/landlord/profilepic.jpg',
-    role: 'landlord'
+	clerkId: 'clerk|landlorduser123',
+	profilePicture: 'https://example.com/path/to/landlord/profilepic.jpg',
+	role: 'landlord',
+	onboardingStep: 1,
 });
 
 const USERS = [REGULAR_USER, LANDLORD_USER];
 
 export { USERS };
+
+

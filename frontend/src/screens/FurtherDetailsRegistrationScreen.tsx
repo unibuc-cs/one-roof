@@ -11,6 +11,8 @@ import { HeaderText } from '../components/HeaderText';
 import { theme } from '../theme';
 import Userpic from 'react-native-userpic';
 import { ProfilePicture } from '../components/ProfilePicture';
+import { useUser } from '@clerk/clerk-expo';
+import userService from '../api/users';
 
 export const FurtherDetailsRegistrationScreen: React.FC = () => {
 	const { onboardingStep,
@@ -20,6 +22,7 @@ export const FurtherDetailsRegistrationScreen: React.FC = () => {
 		role,
 		setRole } = useUserDetails();
 
+	const { user } = useUser();
 	const pickImage = async () => {
 		const result = await ImagePicker.launchImageLibraryAsync({
 			mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -30,6 +33,20 @@ export const FurtherDetailsRegistrationScreen: React.FC = () => {
 		if (!result.canceled) {
 			setProfilePicture(result.assets[0].uri);
 		}
+	};
+
+	const submitDetails = async () => {
+		if (user === null || user === undefined) {
+			throw new Error('User is null');
+		}
+
+		setOnboardingStep(onboardingStep + 1);
+
+		await userService.createUser({
+			role: role,
+			profilePicture: profilePicture || '',
+			onboardingStep: onboardingStep,
+		}, user.id);
 	};
 
 	return (
@@ -57,7 +74,7 @@ export const FurtherDetailsRegistrationScreen: React.FC = () => {
 				mode={'elevated'}
 				onPress={pickImage}>Choose File</Button>
 			{profilePicture && <ProfilePicture source={{ uri: profilePicture }} style={{ width: 300, height: 300 }} />}
-			<Button mode="contained" onPress={() => setOnboardingStep(onboardingStep + 1)}>
+			<Button mode="contained" onPress={submitDetails}>
 				Continue
 			</Button>
 		</Background>

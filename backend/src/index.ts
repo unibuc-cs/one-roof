@@ -2,6 +2,7 @@ import express from 'express';
 import { connect, seedDatabase } from './database';
 import { config } from './configure';
 import { ClerkExpressWithAuth } from '@clerk/clerk-sdk-node';
+import { usersRouter } from './controllers/UserController';
 
 export const app = express();
 const port = config.port;
@@ -26,6 +27,8 @@ app.get('/api', (req, res) => {
 app.get('/api/secret', ClerkExpressWithAuth(), (req, res) => {
 	res.send('Secret data');
 });
+
+app.use('/api/users', usersRouter);
 
 app.listen(port, '0.0.0.0', () => {
 	console.log(`Server is running at http://localhost:${port}`);
