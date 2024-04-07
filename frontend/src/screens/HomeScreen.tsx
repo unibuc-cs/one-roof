@@ -1,24 +1,12 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { Button } from 'react-native-paper';
-import { useUser } from '@clerk/clerk-expo';
-import { SignOut as SignOutButton } from '../components/SignOut';
+import { View, Text } from 'react-native';
+import { SignOutButton } from '../components';
 
-export const HomeScreen: React.FC = () => {
-	const { user } = useUser();
+export const HomeScreen = () => {
 	return (
-		<View style={styles.container}>
-			<Text> {user?.fullName} </Text>
+		<View>
+			<Text>Home Screen</Text>
 			<SignOutButton />
 		</View>
 	);
 };
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: '#fff',
-		alignItems: 'center',
-		justifyContent: 'center'
-	}
-});

@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import  Button from './Button';
 import { useAuth } from '@clerk/clerk-expo';
 
-export const SignOut = () => {
+export const SignOutButton = () => {
 	const { isLoaded, signOut } = useAuth();
 	if (!isLoaded) {
 		return null;

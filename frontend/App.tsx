@@ -13,34 +13,22 @@ import { UnauthenticatedHomeScreen } from './src/screens/UnauthenticatedHomeScre
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SignUpScreen from './src/screens/SignUpScreen';
-import { HomeScreen } from './src/screens';
+import { OnboardingDecisionScreen } from './src/screens';
+import { UserDetailsProvider } from './src/contexts/UserDetailsContext';
 
 const Stack = createNativeStackNavigator();
 export default function App() {
-	const [myData, setMyData] = useState<string>('');
-
-	const fetchData = async (): Promise<void> => {
-		try {
-			console.log('Fetching data...');
-			const url = `${config.api.baseUrl}/api/secret`;
-			console.log('URL:', url);
-			const response = await axios.get<string>(url);
-			console.log('Data fetched:', response.data);
-			setMyData(response.data);
-		} catch (error) {
-			console.error('Error fetching data:', error);
-		}
-	};
-
 	return (
 		<ClerkProvider
 			tokenCache={tokenCache}
 			publishableKey={EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY}>
 			<PaperProvider theme={theme}>
 				<SignedIn>
-					<Background>
-						<HomeScreen/>
-					</Background>
+					<UserDetailsProvider>
+						<Background>
+							<OnboardingDecisionScreen/>
+						</Background>
+					</UserDetailsProvider>
 				</SignedIn>
 				<SignedOut>
 					<NavigationContainer>
@@ -68,3 +56,19 @@ const styles = StyleSheet.create({
 		justifyContent: 'center'
 	}
 });
+
+
+// const [myData, setMyData] = useState<string>('');
+//
+// const fetchData = async (): Promise<void> => {
+// 	try {
+// 		console.log('Fetching data...');
+// 		const url = `${config.api.baseUrl}/api/secret`;
+// 		console.log('URL:', url);
+// 		const response = await axios.get<string>(url);
+// 		console.log('Data fetched:', response.data);
+// 		setMyData(response.data);
+// 	} catch (error) {
+// 		console.error('Error fetching data:', error);
+// 	}
+// };
