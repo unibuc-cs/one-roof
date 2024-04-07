@@ -12,6 +12,7 @@ import SignInScreen from './src/screens/SignInScreen';
 import { EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY } from '@env';
 import Button from './src/components/Button';
 import {fetchDiscoveryAsync} from 'expo-auth-session';
+import {UnauthenticatedHomeScreen} from './src/screens/UnauthenticatedHomeScreen';
 
 export default function App() {
 	const [myData, setMyData] = useState<string>('');
@@ -44,7 +45,7 @@ export default function App() {
 					</Background>
 				</SignedIn>
 				<SignedOut>
-					<SignInScreen/>
+					<UnauthenticatedHomeScreen />
 				</SignedOut>
 			</PaperProvider>
 		</ClerkProvider>
