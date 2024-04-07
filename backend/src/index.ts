@@ -1,6 +1,7 @@
 import express from 'express';
 import { connect, seedDatabase } from './database';
 import { config } from './configure';
+import { ClerkExpressWithAuth } from '@clerk/clerk-sdk-node';
 
 export const app = express();
 const port = config.port;
@@ -20,6 +21,10 @@ app.use((req, res, next) => {
 
 app.get('/api', (req, res) => {
     res.send('Hello World!');
+});
+
+app.get('/api/secret', ClerkExpressWithAuth(), (req, res) => {
+    res.send('Secret data');
 });
 
 app.listen(port, '0.0.0.0', () => {

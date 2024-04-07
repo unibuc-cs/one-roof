@@ -13,9 +13,5 @@ const getEnvironmentVariable = (key: string): string => {
 export const config = {
     mongo_uri: getEnvironmentVariable('MONGO_URI'),
     port: parseInt(getEnvironmentVariable('PORT')),
-    auth0: {
-        domain: getEnvironmentVariable('AUTH0_DOMAIN'),
-        audience: getEnvironmentVariable('AUTH0_AUDIENCE'),
-        secret: getEnvironmentVariable('AUTH0_SECRET')
-    }
+    clerk_secret_key: getEnvironmentVariable('CLERK_SECRET_KEY')
 };
