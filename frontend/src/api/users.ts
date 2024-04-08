@@ -7,6 +7,10 @@ type UserDetails = {
 	role: string,
 };
 
+type User = UserDetails & {
+	clerkId: string,
+};
+
 const userService = {
 	async createUser(userDetails: UserDetails, userId: string): Promise<any> {
 		return callApi('users', {
@@ -28,6 +32,9 @@ const userService = {
 			method: 'DELETE',
 		});
 	},
+	async getAll(): Promise<User[]> {
+		return callApi('users');
+	}
 };
 
 export default userService;

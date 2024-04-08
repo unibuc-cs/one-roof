@@ -1,7 +1,9 @@
 import {User, type IUser} from '../models';
+
 class UserService {
-	public async createUser(user: IUser): Promise<IUser> {
+	public async createUser(clerkId: string, role: string, onboardingStep: number,  profilePicture?: string): Promise<IUser> {
 		try {
+			const user = new User({ clerkId, profilePicture, role, onboardingStep });
 			return await user.save();
 		} catch (error) {
 			throw new Error('Error creating user');
