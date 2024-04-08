@@ -11,7 +11,7 @@ export const HomeScreen = () => {
 		<View>
 			<Text>Home Screen</Text>
 			<SignOutButton />
-			<Button mode="contained" onPress={() => userService.getAll()}>Get All Users</Button>
+			<Button mode="contained" onPress={() => userService.getWithClerkDetails(user?.id as string)}>Get All Users</Button>
 		</View>
 	);
 };

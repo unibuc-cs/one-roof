@@ -1,4 +1,5 @@
-import {User, type IUser} from '../models';
+import {User, type IUser, IUserWithClerk} from '../models';
+import {clerkClient} from '@clerk/clerk-sdk-node';
 
 class UserService {
 	public async createUser(clerkId: string, role: string, onboardingStep: number,  profilePicture?: string): Promise<IUser> {
@@ -14,6 +15,24 @@ class UserService {
 	}
 	async getUserByClerkId(clerkId: string): Promise<IUser | null> {
 		return User.findOne({ clerkId });
+	}
+
+	async getUserWithClerkDetails(clerkId: string): Promise<IUserWithClerk | null> {
+		const databaseUser = await this.getUserByClerkId(clerkId);
+		if (!databaseUser) {
+			return null;
+		}
+		const clerkUser = await clerkClient.users.getUser(clerkId);
+		if (!clerkUser) {
+			return null;
+		}
+		return {
+			...databaseUser.toObject(),
+			firstName: clerkUser.firstName,
+			lastName: clerkUser.lastName,
+			email: clerkUser.primaryEmailAddressId,
+			nickname: clerkUser.username
+		} as IUserWithClerk;
 	}
 
 	async updateUserByClerkId(clerkId: string, update: Partial<IUser>): Promise<IUser | null> {

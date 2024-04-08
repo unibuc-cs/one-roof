@@ -1,4 +1,5 @@
 import { Schema, type Document, model } from 'mongoose';
+import { User as ClerkUser } from '@clerk/clerk-sdk-node';
 
 interface IUser extends Document {
     clerkId: string,
@@ -9,6 +10,13 @@ interface IUser extends Document {
     updatedAt: Date,
 }
 
+type IUserWithClerk = IUser & {
+    firstName: string,
+    lastName: string,
+    email: string,
+    nickname: string,
+};
+
 const UserSchema = new Schema<IUser>({
 	clerkId: { type: String, required: true },
 	profilePicture: { type: String },
@@ -18,4 +26,4 @@ const UserSchema = new Schema<IUser>({
 { timestamps: true });
 
 const User = model<IUser>('User', UserSchema);
-export { UserSchema, type IUser, User };
+export { UserSchema, type IUser, type IUserWithClerk, User };

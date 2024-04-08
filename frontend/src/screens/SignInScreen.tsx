@@ -1,16 +1,12 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { TextInput } from '../components';
 import { useSignIn, useUser } from '@clerk/clerk-expo';
 import Background from '../components/Background';
 import Button from '../components/Button';
 import Logo from '../components/Logo';
-import userService from '../api/services/usersService';
-import { useUserDetails } from '../contexts/UserDetailsContext';
 
 export default function SignInScreen() {
 	const { signIn, setActive, isLoaded } = useSignIn();
-	const { setRole, setOnboardingStep, setProfilePicture } = useUserDetails();
-	const { user } = useUser();
 
 	const [emailAddress, setEmailAddress] = React.useState('');
 	const [password, setPassword] = React.useState('');
