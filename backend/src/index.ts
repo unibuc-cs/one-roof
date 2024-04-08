@@ -5,6 +5,9 @@ import { ClerkExpressWithAuth } from '@clerk/clerk-sdk-node';
 import { usersRouter } from './controllers/UserController';
 
 export const app = express();
+
+app.use(express.json());
+
 const port = config.port;
 
 app.use((req, res, next) => {

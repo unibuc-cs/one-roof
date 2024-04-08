@@ -4,7 +4,8 @@ export const usersRouter = Router();
 
 usersRouter.post('/', async (req, res) => {
 	try {
-		const clerkId = req.body.clerkId;
+		console.log(req);
+		const clerkId = req.headers['x-clerk-user-id'] as string;
 		const {profilePicture, role, onboardingStep} = req.body;
 		console.log('Creating user with clerkId:', clerkId);
 		console.log('Creating user with profilePicture:', profilePicture);
