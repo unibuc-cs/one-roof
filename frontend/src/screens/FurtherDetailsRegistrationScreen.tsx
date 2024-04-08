@@ -9,10 +9,9 @@ import { UserRoleEnum } from '../enums/UserRoleEnum';
 import SwitchSelector from 'react-native-switch-selector';
 import { HeaderText } from '../components/HeaderText';
 import { theme } from '../theme';
-import Userpic from 'react-native-userpic';
 import { ProfilePicture } from '../components/ProfilePicture';
 import { useUser } from '@clerk/clerk-expo';
-import userService from '../api/users';
+import userService from '../api/services/usersService';
 
 export const FurtherDetailsRegistrationScreen: React.FC = () => {
 	const { onboardingStep,
@@ -40,12 +39,14 @@ export const FurtherDetailsRegistrationScreen: React.FC = () => {
 			throw new Error('User is null');
 		}
 
-		setOnboardingStep(onboardingStep + 1);
+		const nextOnboardingStep = onboardingStep + 1;
+
+		setOnboardingStep(nextOnboardingStep);
 
 		await userService.createUser({
 			role: role,
 			profilePicture: profilePicture || '',
-			onboardingStep: onboardingStep,
+			onboardingStep: nextOnboardingStep
 		}, user.id);
 	};
 

@@ -4,9 +4,6 @@ import Background from '../components/Background';
 import { TextInput } from '../components';
 import Button from '../components/Button';
 import Logo from '../components/Logo';
-import * as ImagePicker from 'expo-image-picker';
-import { RadioButton } from 'react-native-paper';
-import { Image, View, Text } from 'react-native';
 
 export default function SignUpScreen() {
 	const { isLoaded, signUp, setActive } = useSignUp();

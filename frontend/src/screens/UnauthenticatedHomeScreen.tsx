@@ -8,6 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 
 export const UnauthenticatedHomeScreen = () => {
 	const navigation = useNavigation();
+
 	return (
 		<Background>
 			<Logo/>

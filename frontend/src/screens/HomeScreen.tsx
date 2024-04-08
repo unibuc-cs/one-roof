@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text } from 'react-native';
 import { SignOutButton } from '../components';
 import Button from '../components/Button';
-import userService from '../api/users';
+import userService from '../api/services/usersService';
+import { useUser } from '@clerk/clerk-expo';
 
 export const HomeScreen = () => {
+	const { user } = useUser();
 	return (
 		<View>
 			<Text>Home Screen</Text>
