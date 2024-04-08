@@ -1,5 +1,4 @@
 import Background from '../components/Background';
-import Logo from '../components/Logo';
 import { Divider, RadioButton } from 'react-native-paper';
 import Button from '../components/Button';
 import * as React from 'react';
