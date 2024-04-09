@@ -1,4 +1,4 @@
-import { CallApiOptions, callApi } from '../apiWrapper';
+import { CallApiOptions, callApi } from '../../utils/apiWrapper';
 
 // TODO: fix this rewrite
 type UserDetails = {

@@ -10,26 +10,31 @@ import { HeaderText } from '../components/HeaderText';
 import { theme } from '../theme';
 import { ProfilePicture } from '../components/ProfilePicture';
 import { useUser } from '@clerk/clerk-expo';
-import userService from '../api/services/usersService';
+import userService from '../services/internal/usersService';
+import { uploadProfilePicture } from '../services';
 
 export const FurtherDetailsRegistrationScreen: React.FC = () => {
 	const { onboardingStep,
 		setOnboardingStep,
-		profilePicture,
-		setProfilePicture,
+		profilePictureUrl,
+		setProfilePictureUrl,
 		role,
 		setRole } = useUserDetails();
 
+	const [image, setImage] = React.useState(null);
+
 	const { user } = useUser();
-	const pickImage = async () => {
-		const result = await ImagePicker.launchImageLibraryAsync({
-			mediaTypes: ImagePicker.MediaTypeOptions.Images,
-			allowsEditing: true,
-			aspect: [4, 3],
-			quality: 1
-		});
-		if (!result.canceled) {
-			setProfilePicture(result.assets[0].uri);
+	const pickImageAndUpload = async () => {
+		if (!user || !user.id) {
+			console.error('user is not defined');
+			return;
+		}
+
+		const url = await uploadProfilePicture(user.id);
+		if (url) {
+			setProfilePictureUrl(url);
+		} else {
+			console.error('Failed to upload profile picture');
 		}
 	};
 
@@ -44,7 +49,7 @@ export const FurtherDetailsRegistrationScreen: React.FC = () => {
 
 		await userService.createUser({
 			role: role,
-			profilePicture: profilePicture || '',
+			profilePicture: profilePictureUrl || '',
 			onboardingStep: nextOnboardingStep
 		}, user.id);
 	};
@@ -72,8 +77,8 @@ export const FurtherDetailsRegistrationScreen: React.FC = () => {
 			<HeaderText paddingBottom={1} size={20}>Pick your Profile Picture (optional)</HeaderText>
 			<Button
 				mode={'elevated'}
-				onPress={pickImage}>Choose File</Button>
-			{profilePicture && <ProfilePicture source={{ uri: profilePicture }} style={{ width: 300, height: 300 }} />}
+				onPress={pickImageAndUpload}>Choose File</Button>
+			{profilePictureUrl && <ProfilePicture source={{ uri: profilePictureUrl }} style={{ width: 300, height: 300 }} />}
 			<Button mode="contained" onPress={submitDetails}>
 				Continue
 			</Button>

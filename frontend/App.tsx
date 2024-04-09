@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { config } from './src/config/configure';
-import axios from 'axios';
 import { ClerkProvider, SignedIn, SignedOut } from '@clerk/clerk-expo';
 import { tokenCache } from './src/auth/tokenCache';
 import { PaperProvider } from 'react-native-paper';
@@ -15,39 +13,10 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SignUpScreen from './src/screens/SignUpScreen';
 import { OnboardingDecisionScreen } from './src/screens';
 import { UserDetailsProvider } from './src/contexts/UserDetailsContext';
-import { storage } from './src/config/firebaseConfig';
-import { ref, uploadBytes } from 'firebase/storage';
-import * as ImagePicker from 'expo-image-picker';
+import { uploadFile } from './src/services';
 
 const Stack = createNativeStackNavigator();
 export default function App() {
-	const uploadImage = async () => {
-		const pickerResult = await ImagePicker.launchImageLibraryAsync();
-		if (pickerResult.canceled) {
-			console.log('User cancelled image picker');
-			return;
-		}
-		const imageUri = pickerResult.assets[0].uri;
-		const response = await fetch(imageUri);
-		const blob = await response.blob();
-
-		const storageRef = ref(storage, 'image1');
-		uploadBytes(storageRef, blob).then((snapshot) => {
-			console.log('Uploaded a blob or file!');
-		}).catch((error) => {
-			console.error('Error uploading file:', error);
-		});
-	};
-
-	useEffect(() => {
-		uploadImage().then(
-			() => console.log('Image uploaded')
-		).catch(
-			(error) => console.error('Error uploading image:', error)
-		);
-	}, []);
-
-
 	return (
 		<ClerkProvider
 			tokenCache={tokenCache}
@@ -55,9 +24,9 @@ export default function App() {
 			<PaperProvider theme={theme}>
 				<SignedIn>
 					<UserDetailsProvider>
-						<Background>
+						<NavigationContainer>
 							<OnboardingDecisionScreen/>
-						</Background>
+						</NavigationContainer>
 					</UserDetailsProvider>
 				</SignedIn>
 				<SignedOut>

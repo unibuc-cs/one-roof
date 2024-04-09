@@ -5,8 +5,8 @@ import { useUser } from '@clerk/clerk-expo';
 interface UserDetails {
 	onboardingStep: number,
 	setOnboardingStep: React.Dispatch<React.SetStateAction<number>>,
-	profilePicture?: string,
-	setProfilePicture: React.Dispatch<React.SetStateAction<string>>,
+	profilePictureUrl?: string,
+	setProfilePictureUrl: React.Dispatch<React.SetStateAction<string>>,
 	role: UserRoleEnum,
 	setRole: React.Dispatch<React.SetStateAction<UserRoleEnum>>,
 }
@@ -14,8 +14,8 @@ interface UserDetails {
 const defaultUserDetails: UserDetails = {
 	onboardingStep: 1,
 	setOnboardingStep: () => {},
-	profilePicture: '',
-	setProfilePicture: () => {},
+	profilePictureUrl: '',
+	setProfilePictureUrl: () => {},
 	role: UserRoleEnum.RegularUser,
 	setRole: () => {},
 };
@@ -32,7 +32,7 @@ export const UserDetailsProvider: React.FC<UserDetailsProviderProps> = ({ childr
 	const [role, setRole] = useState<UserRoleEnum>(UserRoleEnum.RegularUser);
 
 	return (
-		<UserDetailsContext.Provider value={{ onboardingStep, setOnboardingStep, profilePicture, setProfilePicture, role, setRole }}>
+		<UserDetailsContext.Provider value={{ onboardingStep, setOnboardingStep, profilePictureUrl: profilePicture, setProfilePictureUrl: setProfilePicture, role, setRole }}>
 			{children}
 		</UserDetailsContext.Provider>
 	);

@@ -9,5 +9,7 @@ export const theme = {
 		error: '#e5405c',
 		surface: '#459e6c',
 		text: '#1f211f',
+		dropdown: '#34312D',
+		onDrag: '#7e7f83',
 	}
 };

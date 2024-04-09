@@ -3,7 +3,8 @@ import { Text, View } from 'react-native';
 import Button from '../components/Button';
 import { useUserDetails } from '../contexts/UserDetailsContext';
 import { useUser } from '@clerk/clerk-expo';
-import userService from '../api/services/usersService';
+import userService from '../services/internal/usersService';
+import Background from '../components/Background';
 
 export const CreateReviewScreen: React.FC = () => {
 	const { onboardingStep, setOnboardingStep } = useUserDetails();
@@ -22,11 +23,11 @@ export const CreateReviewScreen: React.FC = () => {
 		}
 	};
 	return (
-		<View>
-			<Text style={{ fontSize: 40 }} >TODO: Create Review Screen</Text>
-			<Button mode="contained" onPress={handleContinue}>
-				Continue
-			</Button>
-		</View>
+		<Background>
+			<View>
+				<Text style={{ fontSize: 40 }} >TODO: Create Review Screen</Text>
+				{isFirstTimeUser && <Button onPress={handleContinue}>Continue</Button>}
+			</View>
+		</Background>
 	);
 };
