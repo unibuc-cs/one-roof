@@ -3,26 +3,34 @@ import { StyleSheet } from 'react-native';
 import { Button as PaperButton } from 'react-native-paper';
 import { theme } from '../theme';
 
-type Props = React.ComponentProps<typeof PaperButton>;
+type ButtonProps = {
+	mode?: 'text' | 'outlined' | 'contained',
+	style?: any,
+	width?: string | number,
+	children: React.ReactNode,
+} & React.ComponentProps<typeof PaperButton>;
 
-const Button = ({ mode, style, children, ...props }: Props) => (
-	<PaperButton
-		style={[
-			styles.button,
-			mode === 'outlined' && { backgroundColor: theme.colors.surface },
-			style
-		]}
-		labelStyle={styles.text}
-		mode={mode}
-		{...props}
-	>
-		{children}
-	</PaperButton>
-);
+const Button = ({ mode, style, width, children, ...props }: ButtonProps) => {
+	width = width || '100%';
+	return (
+		<PaperButton
+			style={[
+				{ width },
+				styles.button,
+				mode === 'outlined' && { backgroundColor: theme.colors.surface },
+				style
+			]}
+			labelStyle={styles.text}
+			mode={mode}
+			{...props}
+		>
+			{children}
+		</PaperButton>
+	);
+};
 
 const styles = StyleSheet.create({
 	button: {
-		width: '100%',
 		marginVertical: 15
 	},
 	text: {
