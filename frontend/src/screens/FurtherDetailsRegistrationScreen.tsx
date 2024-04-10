@@ -78,7 +78,7 @@ export const FurtherDetailsRegistrationScreen: React.FC = () => {
 			<Button
 				mode={'elevated'}
 				onPress={pickImageAndUpload}>Choose File</Button>
-			{profilePictureUrl && <ProfilePicture source={{ uri: profilePictureUrl }} style={{ width: 300, height: 300 }} />}
+			{profilePictureUrl && <ProfilePicture canEdit={true} source={{ uri: profilePictureUrl }}  />}
 			<Button mode="contained" onPress={submitDetails}>
 				Continue
 			</Button>

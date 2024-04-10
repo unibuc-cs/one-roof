@@ -4,7 +4,7 @@ import { Button as PaperButton } from 'react-native-paper';
 import { theme } from '../theme';
 
 type ButtonProps = {
-	mode?: 'text' | 'outlined' | 'contained',
+	mode?: string,
 	style?: any,
 	width?: string | number,
 	children: React.ReactNode,

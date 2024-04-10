@@ -13,7 +13,7 @@ export const EditableField: React.FC<EditableFieldProps> = ({ label, value, onSa
 	const [isEditing, setIsEditing] = useState(false);
 	const [editValue, setEditValue] = useState(value);
 
-	// TODO: make this prettier
+	// TODO: make this prettier, remove hardcoded height
 	return (
 		<View style={styles.fieldContainerColumn}>
 			<Text style={styles.label}>{label}:</Text>
@@ -31,12 +31,12 @@ export const EditableField: React.FC<EditableFieldProps> = ({ label, value, onSa
 					<Text style={styles.value}>{value}</Text>
 				)}
 				{isEditing ? (
-					<Button style={{ width: 50 }} onPress={() => {
+					<Button style={{ width: 80 }} onPress={() => {
 						onSave(editValue);
 						setIsEditing(false);
 					}}>Save</Button>
 				) : (
-					<Button width={50} onPress={() => setIsEditing(true)}>Edit</Button>
+					<Button width={80} onPress={() => setIsEditing(true)}>Edit</Button>
 				)}
 			</View>
 		</View>

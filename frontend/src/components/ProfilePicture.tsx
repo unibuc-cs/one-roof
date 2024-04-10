@@ -29,6 +29,7 @@ export const ProfilePicture: React.FC<ProfilePictureProps> = (props) => {
 		<Image
 			source={{ uri: profilePictureUrl || undefined }}
 			style={styles.image}
+			{...props}
 		/>
 	);
 

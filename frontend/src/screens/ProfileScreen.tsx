@@ -19,7 +19,9 @@ export const ProfileScreen: React.FC = () => {
 
 	return (
 		<Background>
-			<ProfilePicture canEdit={true} source={{ uri: profilePictureUrl }} />
+			<View style={{ marginBottom: 30 }}>
+				<ProfilePicture canEdit={true} source={{ uri: profilePictureUrl }} />
+			</View>
 			<EditableField
 				label="Username"
 				value={user.username || ''}
