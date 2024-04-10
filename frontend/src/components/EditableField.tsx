@@ -2,27 +2,27 @@ import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Text, TextInput } from 'react-native-paper';
 import Button  from '../components/Button';
+import { HeaderText } from './HeaderText';
 
 type EditableFieldProps = {
 	label: string,
 	value: string,
+	isEditable: boolean,
 	onSave: (newValue: string) => void,
 };
 
-export const EditableField: React.FC<EditableFieldProps> = ({ label, value, onSave }) => {
+export const EditableField: React.FC<EditableFieldProps> = ({ label, value, onSave, isEditable }) => {
 	const [isEditing, setIsEditing] = useState(false);
 	const [editValue, setEditValue] = useState(value);
 
-	// TODO: make this prettier, remove hardcoded height
 	return (
 		<View style={styles.fieldContainerColumn}>
-			<Text style={styles.label}>{label}:</Text>
+			<HeaderText size={20} textAlign="left">{label}</HeaderText>
 			<View style={styles.fieldContainerRow}>
 				{isEditing ? (
-					<View style={{ height: 50 }}>
+					<View style={{ width: '70%' }}>
 						<TextInput
-							dense
-							style={{ ...styles.input, width: 'fitContent', height: 50 }}
+							style={{ ...styles.input, width: '100%' }}
 							value={editValue}
 							onChangeText={setEditValue}
 						/>
@@ -31,12 +31,12 @@ export const EditableField: React.FC<EditableFieldProps> = ({ label, value, onSa
 					<Text style={styles.value}>{value}</Text>
 				)}
 				{isEditing ? (
-					<Button style={{ width: 80 }} onPress={() => {
+					<Button mode="elevated" width={'fit-content'} style={{ marginLeft: 10 }} onPress={() => {
 						onSave(editValue);
 						setIsEditing(false);
 					}}>Save</Button>
 				) : (
-					<Button width={80} onPress={() => setIsEditing(true)}>Edit</Button>
+					<Button mode="elevated" disabled={!isEditable} width={80} onPress={() => setIsEditing(true)}>Edit</Button>
 				)}
 			</View>
 		</View>
@@ -46,13 +46,10 @@ export const EditableField: React.FC<EditableFieldProps> = ({ label, value, onSa
 const styles = StyleSheet.create({
 	fieldContainerColumn: {
 		flexDirection: 'column',
-		alignItems: 'center',
-		marginVertical: 10,
 	},
 	fieldContainerRow: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		marginVertical: 8,
 	},
 	label: {
 		fontSize: 16,
@@ -61,9 +58,26 @@ const styles = StyleSheet.create({
 	},
 	value: {
 		fontSize: 16,
+		backgroundColor: '#f6f6f6',
+		padding: 10,
+		marginRight: 15,
+		borderRadius: 20,
+		paddingLeft: 15,
+		borderColor: '#dcdcdc',
+		borderWidth: 1,
+		width: '70%',
+		color: '#616161'
 	},
 	input: {
-		flex: 1,
-		marginRight: 10,
+		fontSize: 16,
+		backgroundColor: '#eaeaea',
+		borderColor: '#dcdcdc',
+		borderWidth: 1,
+		width: '70%',
+		borderRadius: 20,
+		borderTopRightRadius: 20,
+		borderTopLeftRadius: 20,
+		height: 40,
+		color: 'black'
 	},
 });

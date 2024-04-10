@@ -10,19 +10,21 @@ type HeaderTextProps = {
 	size: number,
 	paddingBottom?: number,
 	color?: ColorValue,
+	textAlign?: 'center' | 'left' | 'right' | 'justify' | 'auto',
+	marginTop?: number,
 } & TextProps;
 
-export const HeaderText = ({ children, color, size, paddingBottom, ...props }: HeaderTextProps) => {
+export const HeaderText = ({ children, color, size, paddingBottom, textAlign, ...props }: HeaderTextProps) => {
 	const customFonts = useCustomFonts();
 	if (!customFonts) {
 		return <ActivityIndicator size="large"/>;
 	}
 
-	paddingBottom = paddingBottom || 20;
 	color = color || theme.colors.text;
+	textAlign = textAlign || 'center';
 
 	return (
-		<Text style={[styles.headerText, { color: color, fontSize: size, paddingBottom: paddingBottom, fontFamily: 'ProximaNova-Bold' }]} {...props}>
+		<Text {...props} style={[styles.headerText, { textAlign: textAlign, color: color, fontSize: size, paddingBottom: paddingBottom, fontFamily: 'ProximaNova-Bold' }]}>
 			{children}
 		</Text>
 	);
@@ -33,7 +35,6 @@ const styles = StyleSheet.create({
 		fontSize: 20,
 		lineHeight: 28,
 		paddingTop: 20,
-		textAlign: 'center',
 		paddingHorizontal: 5,
 	},
 });
