@@ -42,7 +42,7 @@ const TopBar: React.FC<TopBarProps> = (props) => {
 				<View style={[styles.smallerRowContainer, { marginTop: 20, marginBottom: 10 }]}>
 					<SwitchSelector
 						options={[
-							{ label: 'Properties', value: SearchTypeEnum.Properties },
+							{ label: 'Listings', value: SearchTypeEnum.Listings },
 							{ label: 'Reviews', value: SearchTypeEnum.Reviews },
 						]}
 						buttonColor={theme.colors.inverseSurface}
