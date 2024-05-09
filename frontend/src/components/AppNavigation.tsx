@@ -1,17 +1,16 @@
 import { DrawerContent } from '../screens';
 import React from 'react';
-import { Pressable, View } from 'react-native';
+import { Pressable } from 'react-native';
 import { CreateReviewScreen } from '../screens';
 import { HomeScreen } from '../screens';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { theme } from '../theme';
 import { ProfileScreen } from '../screens';
 import { AlertsScreen } from '../screens';
 import { CreateListingScreen } from '../screens';
 import { ChatsScreen }  from '../screens';
 import { FavoritesScreen } from '../screens';
 import { MenuIcon } from './MenuIcon';
+import TopBar from './TopBar';
 
 export const AppNavigation = () => {
 	const Drawer = createDrawerNavigator();
@@ -21,24 +20,9 @@ export const AppNavigation = () => {
 			initialRouteName="Home"
 			drawerContent={(props) => <DrawerContent {...props} />}
 			screenOptions={({ navigation }) => ({
-				headerLeft: () => (
-					<Pressable
-						onPress={() => navigation.openDrawer()}
-						style={({ pressed }) => [
-							{
-								opacity: pressed ? 0.5 : 1,
-							}
-						]}
-					>
-						<MenuIcon iconName="menu"/>
-					</Pressable>
-				),
-				headerLeftContainerStyle: {
-					paddingLeft: 10,
-				},
+				header: () => <TopBar navigation={navigation} />,
 				headerShown: true,
 				headerTitle: '',
-				headerTransparent: true,
 			})}
 		>
 			<Drawer.Screen name="Home" component={HomeScreen} />

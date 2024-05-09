@@ -1,6 +1,6 @@
 import MapView, { Marker } from 'react-native-maps';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native';
 import { locationsService } from '../services';
 
 const BUCHAREST_COORDINATES = {
@@ -15,6 +15,7 @@ interface Point {
 
 export const Map: React.FC = () => {
 	const [pinpoints, setPinpoints] = useState<Point[]>([]);
+
 	useEffect(() => {
 		const fetchLocations = async () => {
 			const coords = await locationsService.getAllLocationCoordinates();
@@ -48,14 +49,15 @@ export const Map: React.FC = () => {
 			</MapView>
 		</View>
 	);
-
 };
 
 const styles = StyleSheet.create({
 	map: {
-		flex: 1,
-		width: '100%',
-		height: '100%',
+		position: 'absolute',
+		top: 0,
+		left: 0,
+		right: 0,
+		bottom: 0,
 	},
 });
 

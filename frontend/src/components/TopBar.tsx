@@ -1,14 +1,35 @@
 import React from 'react';
-import { View, TextInput, TouchableOpacity, StyleSheet, Text } from 'react-native';
+import {
+	View,
+	StyleSheet, Pressable,
+} from 'react-native';
 import { Searchbar } from 'react-native-paper';
 import { MenuIcon } from './MenuIcon';
+import { theme } from '../theme';
 
-const TopBar = () => {
+
+type TopBarProps = {
+	navigation: any,
+};
+
+const TopBar: React.FC<TopBarProps> = (props) => {
 	const [search, setSearch] = React.useState('');
 	return (
 		<View style={styles.container}>
-			<Searchbar value={search} placeholder="Search"/>
-			<MenuIcon iconName="tune"/>
+			<View style={styles.smallerContainer}>
+				<Pressable
+					style={{
+						display: 'flex',
+						justifyContent: 'center',
+						alignItems: 'center',
+					}}
+					onPress={() => props.navigation.openDrawer()}
+				>
+					<MenuIcon iconName="menu"/>
+				</Pressable>
+				<Searchbar style={styles.searchBar} value={search} placeholder="Search.." onChangeText={setSearch}/>
+				<MenuIcon iconName="tune"/>
+			</View>
 		</View>
 	);
 };
@@ -17,21 +38,26 @@ export default TopBar;
 
 const styles = StyleSheet.create({
 	container: {
-		width: '70%',
+		height: 'auto',
+		width: '100%',
+		display: 'flex',
+		alignItems: 'center',
+		flexDirection: 'row',
+		padding: 10,
+		backgroundColor: theme.colors.offWhite,
+		elevation: 20,
+	},
+	smallerContainer: {
+		marginTop: 20,
+		width: '80%',
 		display: 'flex',
 		flexDirection: 'row',
-		alignItems: 'center',
 		justifyContent: 'space-between',
 		padding: 10,
-		backgroundColor: 'white',
-		height: '12.5%',
-		shadowColor: '#000',
-		shadowOffset: { width: 0, height: 10 },
-		shadowOpacity: 0.1,
-		shadowRadius: 4,
-		elevation: 4,
+		elevation: 1,
 	},
-	iconButton: {
-		padding: 10,
-	},
+	searchBar: {
+		marginLeft: '5%',
+		marginRight: '5%'
+	}
 });

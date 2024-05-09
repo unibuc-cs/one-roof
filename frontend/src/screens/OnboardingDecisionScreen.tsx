@@ -11,7 +11,6 @@ export const OnboardingDecisionScreen: React.FC = () => {
 	const { onboardingStep, setOnboardingStep, setProfilePictureUrl, setRole } = useUserDetails();
 	const { user } = useUser();
 
-
 	useEffect(() => {
 		if (user) {
 			const userId = user.id;

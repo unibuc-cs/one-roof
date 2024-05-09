@@ -1,13 +1,12 @@
 import React from 'react';
 import { TextInput } from '../components';
-import { useSignIn, useUser } from '@clerk/clerk-expo';
+import { useSignIn } from '@clerk/clerk-expo';
 import Background from '../components/Background';
 import Button from '../components/Button';
 import Logo from '../components/Logo';
 
 export default function SignInScreen() {
 	const { signIn, setActive, isLoaded } = useSignIn();
-
 	const [emailAddress, setEmailAddress] = React.useState('');
 	const [password, setPassword] = React.useState('');
 
@@ -16,7 +15,6 @@ export default function SignInScreen() {
 		if (!isLoaded) {
 			return;
 		}
-
 		try {
 			const completeSignIn = await signIn.create({
 				identifier: emailAddress,
