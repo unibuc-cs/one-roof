@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useUser } from '@clerk/clerk-expo';
 import { useUserDetails } from '../contexts/UserDetailsContext';
 import { FurtherDetailsRegistrationScreen } from './FurtherDetailsRegistrationScreen';
 import { CreateReviewScreen } from './CreateReviewScreen';
 import userService from '../services/internal/usersService';
-import { AppNavigation } from '../components';
+import { AppNavigation, BottomBar } from '../components';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 export const OnboardingDecisionScreen: React.FC = () => {
 	const { onboardingStep, setOnboardingStep, setProfilePictureUrl, setRole } = useUserDetails();
@@ -31,7 +32,11 @@ export const OnboardingDecisionScreen: React.FC = () => {
 	case 2:
 		return <CreateReviewScreen />;
 	default:
-		return <AppNavigation />;
+		return (
+			<GestureHandlerRootView style={{ flex: 1 }}>
+				<AppNavigation/>
+			</GestureHandlerRootView>
+		);
 	}
 };
 

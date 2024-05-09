@@ -66,6 +66,7 @@ const styles = StyleSheet.create({
 		width: '80%',
 	},
 	container: {
+		zIndex: 1000,
 		height: 'auto',
 		width: '100%',
 		display: 'flex',

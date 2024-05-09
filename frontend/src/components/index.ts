@@ -6,3 +6,5 @@ export * from './Map';
 export * from './MenuIcon';
 export * from './AppNavigation';
 export * from './ToggleButton';
+export * from './BottomBar';
+export * from './HeaderText';
