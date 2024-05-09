@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { ClerkProvider, SignedIn, SignedOut } from '@clerk/clerk-expo';
 import { tokenCache } from './src/auth/tokenCache';
 import { PaperProvider } from 'react-native-paper';
@@ -13,7 +13,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SignUpScreen from './src/screens/SignUpScreen';
 import { OnboardingDecisionScreen } from './src/screens';
 import { UserDetailsProvider } from './src/contexts/UserDetailsContext';
-import { uploadFile } from './src/services';
 
 const Stack = createNativeStackNavigator();
 export default function App() {

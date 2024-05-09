@@ -1,8 +1,7 @@
 import Background from '../components/Background';
-import { Divider, RadioButton } from 'react-native-paper';
+import { Divider } from 'react-native-paper';
 import Button from '../components/Button';
 import * as React from 'react';
-import * as ImagePicker from 'expo-image-picker';
 import { useUserDetails } from '../contexts/UserDetailsContext';
 import { UserRoleEnum } from '../enums/UserRoleEnum';
 import SwitchSelector from 'react-native-switch-selector';
@@ -57,7 +56,7 @@ export const FurtherDetailsRegistrationScreen: React.FC = () => {
 	return (
 		<Background>
 			<HeaderText color={theme.colors.primary} size={30}> Almost There! </HeaderText>
-			<HeaderText size={20}>Pick your Role</HeaderText>
+			<HeaderText paddingBottom={10} size={20}>Pick your Role</HeaderText>
 			<SwitchSelector
 				options={[
 					{ label: 'Regular User', value: UserRoleEnum.RegularUser },

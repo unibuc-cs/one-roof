@@ -15,14 +15,14 @@ interface IReview extends Document {
 }
 
 const ReviewSchema = new Schema<IReview>({
-    reviewerId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    rating: { type: Number, required: true },
-    content: { type: String, required: true },
-    locationId: { type: Schema.Types.ObjectId, ref: 'Location', required: true },
-    addressId: { type: Schema.Types.ObjectId, ref: 'Address' },
-    areaFeedback: { type: Schema.Types.Mixed, required: true },
-    buildingFeedback: { type: Object, required: true },
-    tags: { type: [String] }
+	reviewerId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+	rating: { type: Number, required: true },
+	content: { type: String, required: true },
+	locationId: { type: Schema.Types.ObjectId, ref: 'Location', required: true },
+	addressId: { type: Schema.Types.ObjectId, ref: 'Address' },
+	areaFeedback: { type: Schema.Types.Mixed, required: true },
+	buildingFeedback: { type: Object, required: true },
+	tags: { type: [String] }
 }, { timestamps: true });
 
 const Review = model<IReview>('Review', ReviewSchema);

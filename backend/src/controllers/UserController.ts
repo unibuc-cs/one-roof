@@ -1,17 +1,15 @@
 import {Router} from 'express';
-import {userService} from '../services/UserService';
+import {userService} from '../services';
 
 export const usersRouter = Router();
 
 usersRouter.post('/', async (req, res) => {
 	try {
-		console.log(req);
 		const clerkId = req.headers['x-clerk-user-id'] as string;
 		const {profilePicture, role, onboardingStep} = req.body;
 		const newUser = await userService.createUser(clerkId, role, onboardingStep, profilePicture);
 		res.status(201).json(newUser);
 	} catch (error) {
-		console.error(error);
 		res.status(500).json({ error: 'Error creating user' });
 	}
 });

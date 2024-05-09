@@ -1,7 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import MapView, { Marker, MapViewProps } from 'react-native-maps';
-import { theme } from '../theme';
+import { View, StyleSheet } from 'react-native';
+import MapView, { Marker } from 'react-native-maps';
 
 const BUCHAREST_COORDINATES = {
 	latitude: 44.4268,

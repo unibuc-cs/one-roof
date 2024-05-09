@@ -10,9 +10,11 @@ class UserService {
 			throw new Error('Error creating user');
 		}
 	}
+
 	async getAllUsers(): Promise<IUser[]> {
 		return User.find();
 	}
+
 	async getUserByClerkId(clerkId: string): Promise<IUser | null> {
 		return User.findOne({ clerkId });
 	}
