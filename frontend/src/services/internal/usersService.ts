@@ -1,6 +1,7 @@
 import { CallApiOptions, callApi } from '../../utils/apiWrapper';
 
 // TODO: fix this rewrite
+// TODO: fix any's
 type UserDetails = {
 	onboardingStep: number,
 	profilePicture: string,
@@ -35,7 +36,7 @@ const userService = {
 			method: 'DELETE',
 		});
 	},
-	async getAll(): Promise<User[]> {
+	async getAllUsers(): Promise<User[]> {
 		return callApi('users');
 	}
 };

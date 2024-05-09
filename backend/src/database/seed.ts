@@ -1,4 +1,5 @@
 import { USERS, LOCATIONS } from './seeds';
+import { Location } from '../models';
 
 const seedUsers = async () => {
 	for (const user of USERS) {
@@ -11,6 +12,7 @@ const seedLocations = async () => {
 		await location.save();
 	}
 };
+
 export const seedDatabase = async () => {
 	try {
 		await seedUsers();

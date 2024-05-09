@@ -8,16 +8,17 @@ const BUCHAREST_COORDINATES = {
 const generatePerimeterCoordinates = (center, radius, numPoints): number[][] => {
 	const points: number[][] = [];
 	for (let i = 0; i < numPoints; i++) {
-		const angle = (i / numPoints) * 2 * Math.PI;
-		const latitude = center.latitude + radius * Math.cos(angle);
-		const longitude = center.longitude + radius * Math.sin(angle);
-		points.push([longitude, latitude]);
+		const angle = Math.random() * 2 * Math.PI;
+		const randomRadius = Math.sqrt(Math.random()) * radius;
+		const latitude = center.latitude + randomRadius * Math.cos(angle);
+		const longitude = center.longitude + randomRadius * Math.sin(angle);
+		points.push([latitude, longitude]);
 	}
 	return points;
 };
 
 const radius = 0.08;
-const points: number[][] = generatePerimeterCoordinates(BUCHAREST_COORDINATES, radius, 50);
+const points: number[][] = generatePerimeterCoordinates(BUCHAREST_COORDINATES, radius, 30);
 
 const LOCATIONS = points.map(point => new Location({
 	type: 'Point',
