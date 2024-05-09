@@ -1,6 +1,5 @@
 import { DrawerContent } from '../screens';
 import React from 'react';
-import { Pressable } from 'react-native';
 import { CreateReviewScreen } from '../screens';
 import { HomeScreen } from '../screens';
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -9,7 +8,6 @@ import { AlertsScreen } from '../screens';
 import { CreateListingScreen } from '../screens';
 import { ChatsScreen }  from '../screens';
 import { FavoritesScreen } from '../screens';
-import { MenuIcon } from './MenuIcon';
 import TopBar from './TopBar';
 
 export const AppNavigation = () => {
