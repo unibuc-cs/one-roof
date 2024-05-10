@@ -1,9 +1,9 @@
 import express, { Express } from 'express';
 import corsMiddleware from './middleware/cors';
 import loggerMiddleware from './middleware/logger';
-import { usersRouter } from './controllers/UserController';
 import { config } from './configure';
-import { locationsRouter } from './controllers/LocationController';
+import { userRouter, reviewRouter, listingRouter } from './routes';
+import { locationsRouter } from './controllers/locationController';
 
 const app: Express = express();
 
@@ -17,8 +17,11 @@ app.get('/api', (req, res) => {
 	res.send('Hello World!');
 });
 
-app.use('/api/users', usersRouter);
+app.use('/api/users', userRouter);
+app.use('/api/reviews', reviewRouter);
+app.use('/api/listings', listingRouter);
 
+// TODO: remove
 app.use('/api/locations', locationsRouter);
 
 export default app;
