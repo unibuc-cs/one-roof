@@ -1,8 +1,7 @@
 import React, { useCallback, useRef } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import BottomSheet, { BottomSheetScrollView, BottomSheetView } from '@gorhom/bottom-sheet';
+import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { ItemList } from './ItemList';
-import { theme } from '../theme';
 
 export const BottomBar = () => {
 	const bottomSheetRef = useRef<BottomSheet>(null);

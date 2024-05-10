@@ -1,5 +1,5 @@
 import { Listing, IListing } from '../models';
-import { FilterQuery, UpdateQuery, Document } from 'mongoose';
+import { FilterQuery, UpdateQuery } from 'mongoose';
 
 export const ListingService = {
 	createListing: async (listingData: IListing): Promise<IListing> => {

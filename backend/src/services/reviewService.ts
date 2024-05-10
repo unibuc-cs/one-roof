@@ -1,5 +1,5 @@
 import { Review, IReview } from '../models';
-import { FilterQuery, UpdateQuery, Document } from 'mongoose';
+import { FilterQuery, UpdateQuery } from 'mongoose';
 
 export const ReviewService = {
 	createReview: async (reviewData: IReview): Promise<IReview> => {

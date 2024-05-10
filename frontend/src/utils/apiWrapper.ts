@@ -1,7 +1,6 @@
-import { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { AxiosRequestConfig } from 'axios';
 import axios from 'axios';
-import { API_HOST, API_PORT } from '@env'; // Assuming you're using react-native-dotenv
-import { useAuth } from '@clerk/clerk-expo'; // Adjust the import based on your setup
+import { API_HOST, API_PORT } from '@env';
 
 const baseUrl = `http://${API_HOST}:${API_PORT}/api`;
 
