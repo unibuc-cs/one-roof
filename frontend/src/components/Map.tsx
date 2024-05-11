@@ -5,9 +5,7 @@ import { BUCHAREST_COORDINATES, getShortenedString } from '../utils';
 import { useListings } from '../hooks';
 import { getCoordinatesFromListing } from '../utils';
 import { IListing } from '../models';
-import PropertyCard from './PropertyCard';
-import BottomSheet from '@gorhom/bottom-sheet';
-import { BottomCard } from './BottomCard';
+import { BottomListingCard } from './BottomListingCard';
 
 export const Map: React.FC = () => {
 	const { listings } = useListings();
@@ -15,7 +13,7 @@ export const Map: React.FC = () => {
 
 	const handleClose = () => setOpenedListing(undefined);
 	const handleMarkerPress = (listing: IListing) => {
-		if (openedListing) {
+		if (openedListing == listing) {
 			setOpenedListing(undefined);
 		} else {
 			setOpenedListing(listing);
@@ -32,6 +30,7 @@ export const Map: React.FC = () => {
 					longitudeDelta: 0.0421,
 				}}
 				customMapStyle={mapStyles}
+				onPress={() => setOpenedListing(undefined)}
 			>
 				{listings.map((listing, index) => (
 					<Marker
@@ -44,7 +43,7 @@ export const Map: React.FC = () => {
 			</MapView>
 			{openedListing && (
 				<View style={styles.bottomCardContainer}>
-					<BottomCard item={openedListing} onClose={handleClose} />
+					<BottomListingCard item={openedListing} onClose={handleClose} />
 				</View>
 			)}
 		</View>

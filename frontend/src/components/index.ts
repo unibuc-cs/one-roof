@@ -9,4 +9,4 @@ export * from './ToggleButton';
 export * from './BottomBar';
 export * from './HeaderText';
 export * from './DetailBox';
-export * from './BottomCard';
+export * from './BottomListingCard';

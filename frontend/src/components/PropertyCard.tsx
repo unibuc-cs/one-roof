@@ -1,12 +1,9 @@
 import React from 'react';
-import { Image, Text, StyleSheet, Dimensions, View } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 import { Card } from 'react-native-paper';
 import { IListing } from '../models';
 import { DetailBox, HeaderText } from '.';
-import { ProfilePicture } from './ProfilePicture';
 
-
-const { width } = Dimensions.get('window');
 
 type PropertyCardProps = {
 	listing: IListing,
