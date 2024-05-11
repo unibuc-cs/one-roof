@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { ListingService } from '../services';
+import { LISTINGS } from '../database';
 
 export const ListingController = {
 	async createListing(req: Request, res: Response) {
@@ -9,6 +10,11 @@ export const ListingController = {
 		} catch (error) {
 			res.status(500).json({ error: 'Failed to create listing' });
 		}
+	},
+
+	async getAllListings(req: Request, res: Response) {
+		const listings = await ListingService.getAllListings({});
+		res.status(200).json(listings);
 	},
 
 	async getListing(req: Request, res: Response) {

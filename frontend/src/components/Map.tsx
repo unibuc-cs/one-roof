@@ -1,30 +1,17 @@
 import MapView, { Marker } from 'react-native-maps';
-import React, { useEffect, useState } from 'react';
-import { KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native';
-import { locationsService } from '../services';
-
-const BUCHAREST_COORDINATES = {
-	latitude: 44.4268,
-	longitude: 26.1025,
-};
-
-interface Point {
-	latitude: number,
-	longitude: number,
-}
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
+import { BUCHAREST_COORDINATES } from '../utils';
+import { useListings } from '../hooks';
 
 export const Map: React.FC = () => {
-	const [pinpoints, setPinpoints] = useState<Point[]>([]);
-
-	useEffect(() => {
-		const fetchLocations = async () => {
-			const coords = await locationsService.getAllLocationCoordinates();
-			setPinpoints(coords);
+	const { listings } = useListings();
+	const pins = listings.map((listing) => {
+		return {
+			'latitude': listing.location.coordinates[1],
+			'longitude': listing.location.coordinates[0],
 		};
-		fetchLocations();
-	}, []);
-
-
+	});
 	return (
 		<View style={styles.map}>
 			<MapView
@@ -37,7 +24,7 @@ export const Map: React.FC = () => {
 				}}
 				customMapStyle={mapStyles}
 			>
-				{pinpoints.map((pinpoint, index) => (
+				{pins.map((pinpoint, index) => (
 					<Marker
 						key={index}
 						coordinate={{ latitude: pinpoint.latitude, longitude: pinpoint.longitude }}

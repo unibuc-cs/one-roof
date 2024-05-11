@@ -1,5 +1,6 @@
 import { callApi } from '../../utils';
 import { IUser, IUserDetails } from '../../models';
+import { getUserRoleEnumFromString, UserRoleEnum } from '../../enums';
 
 
 const userService = {
@@ -10,7 +11,9 @@ const userService = {
 		}, userId);
 	},
 	async getUserById(userId: string): Promise<IUser> {
-		return callApi(`users/${userId}`);
+		const user: any = await callApi(`users/${userId}`);
+		user.role = getUserRoleEnumFromString(user.role);
+		return user;
 	},
 	async getWithClerkDetails(userId: string): Promise<IUser> {
 		return callApi(`users/full/${userId}`);

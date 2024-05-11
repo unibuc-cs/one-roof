@@ -5,7 +5,7 @@ import { useUserDetails } from '../contexts/UserDetailsContext';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { uploadProfilePicture } from '../services';
 import { useUser } from '@clerk/clerk-expo';
-import userService from '../services/internal/usersService';
+import userService from '../services/internal/userService';
 
 type ProfilePictureProps = {
 	canEdit: boolean,

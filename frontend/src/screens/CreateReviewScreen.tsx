@@ -3,7 +3,7 @@ import { Text, View } from 'react-native';
 import Button from '../components/Button';
 import { useUserDetails } from '../contexts/UserDetailsContext';
 import { useUser } from '@clerk/clerk-expo';
-import userService from '../services/internal/usersService';
+import userService from '../services/internal/userService';
 import Background from '../components/Background';
 
 export const CreateReviewScreen: React.FC = () => {

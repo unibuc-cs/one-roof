@@ -1,5 +1,5 @@
-import { USERS, LOCATIONS } from './seeds';
-import { Location } from '../models';
+import { USERS, LISTINGS } from './seeds';
+import { Listing } from '../models';
 
 const seedUsers = async () => {
 	for (const user of USERS) {
@@ -7,16 +7,17 @@ const seedUsers = async () => {
 	}
 };
 
-const seedLocations = async () => {
-	for (const location of LOCATIONS) {
-		await location.save();
+const seedListings = async () => {
+	await Listing.deleteMany({});
+	for (const listing of LISTINGS) {
+		await listing.save();
 	}
 };
 
 export const seedDatabase = async () => {
 	try {
-		await seedUsers();
-		await seedLocations();
+		// await seedUsers();
+		await seedListings();
 		console.log('Database seeding successful');
 	} catch (error) {
 		console.error('Database seeding failed');

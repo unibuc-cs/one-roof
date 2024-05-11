@@ -9,7 +9,7 @@ import { HeaderText } from '../components/HeaderText';
 import { theme } from '../theme';
 import { ProfilePicture } from '../components/ProfilePicture';
 import { useUser } from '@clerk/clerk-expo';
-import userService from '../services/internal/usersService';
+import userService from '../services/internal/userService';
 import { uploadProfilePicture } from '../services';
 
 export const FurtherDetailsRegistrationScreen: React.FC = () => {

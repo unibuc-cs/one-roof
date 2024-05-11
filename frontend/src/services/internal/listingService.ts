@@ -9,6 +9,10 @@ export const listingService = {
 		return callApi(`listings/${id}`, {}, userId);
 	},
 
+	getAllListings: () => {
+		return callApi('listings');
+	},
+
 	updateListing: (id: string, data: any, userId: string) => {
 		return callApi(`listings/${id}`, { method: 'PUT', body: data }, userId);
 	},

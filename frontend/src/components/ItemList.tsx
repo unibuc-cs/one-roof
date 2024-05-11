@@ -1,7 +1,6 @@
 import { Text } from 'react-native';
 import { Card } from 'react-native-paper';
 import React from 'react';
-import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 
 type MockDataType = {
 	id: string,
@@ -31,9 +30,5 @@ export const ItemList = () => {
 		</Card>
 	);
 
-	return (
-		<BottomSheetScrollView>
-			{data.map((item: MockDataType) => renderItem(item))}
-		</BottomSheetScrollView>
-	);
+	return data.map((item: MockDataType) => renderItem(item));
 };

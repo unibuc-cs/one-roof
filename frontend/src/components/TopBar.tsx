@@ -15,48 +15,61 @@ type TopBarProps = {
 };
 
 
-const TopBar: React.FC<TopBarProps> = (props) => {
+const TopBar: React.FC<TopBarProps> = ({ navigation }) => {
+	const routeName = navigation.getState().routes[navigation.getState().index].name;
 	const [searchQuery, setSearchQuery] = React.useState('');
 	const [searchType, setSearchType] = React.useState<SearchTypeEnum>();
-	return (
-		<View style={styles.container}>
-			<View style={styles.rowContainer}>
-				<View style={[styles.smallerRowContainer, { marginTop: 40 }]}>
-					<Pressable
-						style={{
-							display: 'flex',
-							justifyContent: 'center',
-							alignItems: 'center',
-						}}
-						onPress={() => props.navigation.openDrawer()}
-					>
-						<MenuIcon iconName="menu"/>
-					</Pressable>
-					<View style={styles.searchBarContainer}>
-						<Searchbar style={styles.searchBar} value={searchQuery} placeholder="Search.." onChangeText={setSearchQuery}/>
-					</View>
-					<MenuIcon iconName="tune"/>
-				</View>
-			</View>
-			<View style={[styles.rowContainer, { width: '80%' }]}>
-				<View style={[styles.smallerRowContainer, { marginTop: 20, marginBottom: 10 }]}>
-					<SwitchSelector
-						options={[
-							{ label: 'Listings', value: SearchTypeEnum.Listings },
-							{ label: 'Reviews', value: SearchTypeEnum.Reviews },
-						]}
-						buttonColor={theme.colors.inverseSurface}
-						backgroundColor={theme.colors.inversePrimary}
-						borderColor={theme.colors.text}
-						borderWidth={10}
-						initial={0}
-						bold={true}
-						onPress={(value: SearchTypeEnum) => setSearchType(value)}
-					/>
-				</View>
-			</View>
-		</View>
+	const openMenuIcon = (
+		<Pressable
+			style={{
+				display: 'flex',
+				justifyContent: 'center',
+				alignItems: 'center',
+			}}
+			onPress={() => navigation.openDrawer()}
+		>
+			<MenuIcon iconName="menu"/>
+		</Pressable>
 	);
+
+	if (routeName === 'Home') {
+		return (
+			<View style={styles.container}>
+				<View style={styles.rowContainer}>
+					<View style={[styles.smallerRowContainer, { marginTop: 40 }]}>
+						{openMenuIcon}
+						<View style={styles.searchBarContainer}>
+							<Searchbar style={styles.searchBar} value={searchQuery} placeholder="Search.." onChangeText={setSearchQuery}/>
+						</View>
+						<MenuIcon iconName="tune"/>
+					</View>
+				</View>
+				<View style={[styles.rowContainer, { width: '80%' }]}>
+					<View style={[styles.smallerRowContainer, { marginTop: 20, marginBottom: 10 }]}>
+						<SwitchSelector
+							options={[
+								{ label: 'Listings', value: SearchTypeEnum.Listings },
+								{ label: 'Reviews', value: SearchTypeEnum.Reviews },
+							]}
+							buttonColor={theme.colors.inverseSurface}
+							backgroundColor={theme.colors.inversePrimary}
+							borderColor={theme.colors.text}
+							borderWidth={10}
+							initial={0}
+							bold={true}
+							onPress={(value: SearchTypeEnum) => setSearchType(value)}
+						/>
+					</View>
+				</View>
+			</View>
+		);
+	} else {
+		return (
+			<View style={styles.menuContainer}>
+				{ openMenuIcon }
+			</View>
+		);
+	}
 };
 
 export default TopBar;
@@ -106,4 +119,10 @@ const styles = StyleSheet.create({
 		marginLeft: '7%',
 		marginRight: '7%'
 	},
+	/* TODO: maybe fix hardcoded? */
+	menuContainer: {
+		position: 'absolute',
+		marginLeft: '3%',
+		marginTop: '9%'
+	}
 });

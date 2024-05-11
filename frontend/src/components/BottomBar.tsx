@@ -12,6 +12,7 @@ export const BottomBar = () => {
 
 	return (
 		<BottomSheet
+			index={0}
 			ref={bottomSheetRef}
 			snapPoints={[75, '100%']}
 			onChange={handleSheetChanges}

@@ -3,7 +3,6 @@ import corsMiddleware from './middleware/cors';
 import loggerMiddleware from './middleware/logger';
 import { config } from './configure';
 import { userRouter, reviewRouter, listingRouter } from './routes';
-import { locationsRouter } from './controllers/locationController';
 
 const app: Express = express();
 
@@ -20,8 +19,5 @@ app.get('/api', (req, res) => {
 app.use('/api/users', userRouter);
 app.use('/api/reviews', reviewRouter);
 app.use('/api/listings', listingRouter);
-
-// TODO: remove
-app.use('/api/locations', locationsRouter);
 
 export default app;
