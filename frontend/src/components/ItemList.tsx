@@ -1,6 +1,8 @@
 import { Text } from 'react-native';
 import { Card } from 'react-native-paper';
-import React from 'react';
+import React, { useCallback } from 'react';
+import { FlatList } from 'react-native-gesture-handler';
+import { BottomSheetFlatList } from '@gorhom/bottom-sheet';
 
 type MockDataType = {
 	id: string,
@@ -21,14 +23,16 @@ const data: MockDataType[] = [
 ];
 
 export const ItemList = () => {
-	const renderItem = (item: MockDataType) => (
-		<Card key={item.id}>
-			<Card.Title title={item.title} subtitle={item.subtitle} />
-			<Card.Content>
-				<Text>{item.description}</Text>
-			</Card.Content>
-		</Card>
+	const renderItem = useCallback(
+		(item: MockDataType) => (
+			<Card key={item.id}>
+				<Card.Title title={item.title} subtitle={item.subtitle} />
+				<Card.Content>
+					<Text>{item.description}</Text>
+				</Card.Content>
+			</Card>
+		), []
 	);
 
-	return data.map((item: MockDataType) => renderItem(item));
+	return data.map(renderItem);
 };

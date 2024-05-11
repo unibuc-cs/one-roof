@@ -1,17 +1,20 @@
 import MapView, { Marker } from 'react-native-maps';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { BUCHAREST_COORDINATES } from '../utils';
+import { BUCHAREST_COORDINATES, getShortenedString } from '../utils';
 import { useListings } from '../hooks';
+import { getCoordinatesFromListing } from '../utils';
+import { IListing } from '../models';
+import PropertyCard from './PropertyCard';
+import BottomSheet from '@gorhom/bottom-sheet';
+import { BottomCard } from './BottomCard';
 
 export const Map: React.FC = () => {
 	const { listings } = useListings();
-	const pins = listings.map((listing) => {
-		return {
-			'latitude': listing.location.coordinates[1],
-			'longitude': listing.location.coordinates[0],
-		};
-	});
+	const [openedListing, setOpenedListing] = React.useState<IListing>();
+
+	const handleClose = () => setOpenedListing(undefined);
+
 	return (
 		<View style={styles.map}>
 			<MapView
@@ -24,21 +27,32 @@ export const Map: React.FC = () => {
 				}}
 				customMapStyle={mapStyles}
 			>
-				{pins.map((pinpoint, index) => (
+				{listings.map((listing, index) => (
 					<Marker
 						key={index}
-						coordinate={{ latitude: pinpoint.latitude, longitude: pinpoint.longitude }}
-						title="Cozy Apartment"
-						description="Nice place to stay!"
+						coordinate={getCoordinatesFromListing(listing)}
+						onPress={() => setOpenedListing(listing)}
 					>
 					</Marker>
 				))}
 			</MapView>
+			{openedListing && (
+				<View style={styles.bottomCardContainer}>
+					<BottomCard item={openedListing} onClose={handleClose} />
+				</View>
+			)}
 		</View>
 	);
 };
 
 const styles = StyleSheet.create({
+	bottomCardContainer: {
+		position: 'absolute',
+		bottom: 0,
+		height: 300,
+		width: '100%',
+		zIndex: 1000,
+	},
 	map: {
 		position: 'absolute',
 		top: 0,

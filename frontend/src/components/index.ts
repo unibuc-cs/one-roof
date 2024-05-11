@@ -8,3 +8,5 @@ export * from './AppNavigation';
 export * from './ToggleButton';
 export * from './BottomBar';
 export * from './HeaderText';
+export * from './DetailBox';
+export * from './BottomCard';

@@ -2,12 +2,15 @@ import { Listing } from '../../models';
 
 const landlordId = '663cb48ee88f928f9cb35f69';
 
+const photos = ['https://firebasestorage.googleapis.com/v0/b/one-roof-bb7ce.appspot.com/o/apart1.jpeg?alt=media&token=ef9567f0-aa4f-4370-a207-7afc1c22f022',
+	'https://firebasestorage.googleapis.com/v0/b/one-roof-bb7ce.appspot.com/o/apart2.jpeg?alt=media&token=b08cc3a8-f2b9-4a75-a8f6-4fa4ee7467c4'];
+
 const listingSeeds = [
 	{
 		landlordId: landlordId,
 		title: 'Modern 2 Bedroom Apartment in Aviației',
 		description: 'Stylish apartment in a new building, featuring modern amenities and a balcony with great views. Close to Herastrau Park.',
-		photos: ['aviatiei1.jpg', 'aviatiei2.jpg'],
+		photos: photos,
 		address: {
 			streetNumber: '78',
 			streetName: 'Aleea Teisani',
@@ -31,7 +34,7 @@ const listingSeeds = [
 		landlordId: landlordId,
 		title: 'Luxury Penthouse in Central Bucharest',
 		description: 'Exclusive penthouse offering panoramic city views, top-notch finishes, and private elevator access. Located in the heart of the city.',
-		photos: ['penthouse_central1.jpg', 'penthouse_central2.jpg'],
+		photos: photos,
 		address: {
 			streetNumber: '15',
 			streetName: 'Calea Victoriei',
@@ -55,7 +58,7 @@ const listingSeeds = [
 		landlordId: landlordId,
 		title: 'Family Apartment Near Park and School',
 		description: 'Spacious and sunny apartment in a family-friendly neighborhood, steps away from schools and large parks.',
-		photos: ['family_apartment1.jpg', 'family_apartment2.jpg'],
+		photos: photos,
 		address: {
 			streetNumber: '212',
 			streetName: 'Drumul Taberei',
@@ -79,7 +82,7 @@ const listingSeeds = [
 		landlordId: landlordId,
 		title: 'Economical One-Bedroom Apartment',
 		description: 'Ideal for singles or couples, located in a quiet area, with easy access to metro and local markets.',
-		photos: ['economical1.jpg', 'economical2.jpg'],
+		photos: photos,
 		address: {
 			streetNumber: '19',
 			streetName: 'Liviu Rebreanu',
