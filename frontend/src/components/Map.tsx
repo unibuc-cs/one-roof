@@ -14,7 +14,13 @@ export const Map: React.FC = () => {
 	const [openedListing, setOpenedListing] = React.useState<IListing>();
 
 	const handleClose = () => setOpenedListing(undefined);
-
+	const handleMarkerPress = (listing: IListing) => {
+		if (openedListing) {
+			setOpenedListing(undefined);
+		} else {
+			setOpenedListing(listing);
+		}
+	};
 	return (
 		<View style={styles.map}>
 			<MapView
@@ -31,7 +37,7 @@ export const Map: React.FC = () => {
 					<Marker
 						key={index}
 						coordinate={getCoordinatesFromListing(listing)}
-						onPress={() => setOpenedListing(listing)}
+						onPress={() => handleMarkerPress(listing)}
 					>
 					</Marker>
 				))}

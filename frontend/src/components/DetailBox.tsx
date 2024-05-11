@@ -1,4 +1,4 @@
-import { Text, View } from 'react-native';
+import { Text, TextProps, View } from 'react-native';
 import React from 'react';
 import { theme } from '../theme';
 
@@ -29,7 +29,7 @@ const styles = {
 	},
 	detailText: {
 		textAlign: 'center',
-		fontWeight: 200,
+		fontWeight: '200',
 		color: 'white',
 		fontSize: 16
 	}

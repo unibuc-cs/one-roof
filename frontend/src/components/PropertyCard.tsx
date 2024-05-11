@@ -24,10 +24,9 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ listing }) => {
 					style={{
 						width: '100%',
 						height: 150,
-						marginBottom: 10
 					}}
 				/>
-				<HeaderText paddingBottom={10} size={20}> {listing.price} RON </HeaderText>
+				<HeaderText paddingTop={0} paddingBottom={10} size={20}> {listing.price} RON </HeaderText>
 				<View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
 					<DetailBox content={`${listing.size} m2`}/>
 					<DetailBox content={`${listing.numberOfRooms} bedrooms`}/>
