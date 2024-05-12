@@ -45,19 +45,3 @@ export default function App() {
 		</ClerkProvider>
 	);
 }
-
-
-// const [myData, setMyData] = useState<string>('');
-//
-// const fetchData = async (): Promise<void> => {
-// 	try {
-// 		console.log('Fetching data...');
-// 		const url = `${config.api.baseUrl}/api/secret`;
-// 		console.log('URL:', url);
-// 		const response = await axios.get<string>(url);
-// 		console.log('Data fetched:', response.data);
-// 		setMyData(response.data);
-// 	} catch (error) {
-// 		console.error('Error fetching data:', error);
-// 	}
-// };

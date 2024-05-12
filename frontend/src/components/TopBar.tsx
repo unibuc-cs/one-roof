@@ -18,7 +18,7 @@ type TopBarProps = {
 const TopBar: React.FC<TopBarProps> = ({ navigation }) => {
 	const routeName = navigation.getState().routes[navigation.getState().index].name;
 	const [searchQuery, setSearchQuery] = React.useState('');
-	const [searchType, setSearchType] = React.useState<SearchTypeEnum>();
+	const [, setSearchType] = React.useState<SearchTypeEnum>();
 	const openMenuIcon = (
 		<Pressable
 			style={{
@@ -39,7 +39,7 @@ const TopBar: React.FC<TopBarProps> = ({ navigation }) => {
 					<View style={[styles.smallerRowContainer, { marginTop: 40 }]}>
 						{openMenuIcon}
 						<View style={styles.searchBarContainer}>
-							<Searchbar style={styles.searchBar} value={searchQuery} placeholder="Search.." onChangeText={setSearchQuery}/>
+							<Searchbar style={styles.searchBar} value={searchQuery} placeholder="Search by location.." onChangeText={setSearchQuery}/>
 						</View>
 						<MenuIcon iconName="tune"/>
 					</View>

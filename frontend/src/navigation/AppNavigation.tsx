@@ -8,7 +8,7 @@ import { CreateListingScreen } from '../screens';
 import { ChatsScreen }  from '../screens';
 import { FavoritesScreen } from '../screens';
 import { ListingScreen } from '../screens';
-import TopBar from './TopBar';
+import TopBar from '../components/TopBar';
 import { NavigationContainer } from '@react-navigation/native';
 import SignInScreen from '../screens/SignInScreen';
 import SignUpScreen from '../screens/SignUpScreen';

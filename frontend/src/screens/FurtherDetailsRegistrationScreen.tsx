@@ -11,6 +11,7 @@ import { ProfilePicture } from '../components/ProfilePicture';
 import { useUser } from '@clerk/clerk-expo';
 import userService from '../services/internal/userService';
 import { uploadProfilePicture } from '../services';
+import { IUserDetails } from '../models';
 
 export const FurtherDetailsRegistrationScreen: React.FC = () => {
 	const { onboardingStep,
@@ -48,7 +49,7 @@ export const FurtherDetailsRegistrationScreen: React.FC = () => {
 			role: role,
 			profilePicture: profilePictureUrl || '',
 			onboardingStep: nextOnboardingStep
-		}, user.id);
+		} as IUserDetails, user.id);
 	};
 
 	return (

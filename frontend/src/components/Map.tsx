@@ -1,16 +1,19 @@
 import MapView, { Marker } from 'react-native-maps';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { BUCHAREST_COORDINATES } from '../utils';
-import { useListings } from '../hooks';
 import { getCoordinatesFromListing } from '../utils';
 import { IListing } from '../models';
 import { BottomListingCard } from './BottomListingCard';
+import { useSearchContext } from '../contexts/SearchContext';
+
+const EPSILON = 0.001;
 
 export const Map: React.FC = () => {
-	const { listings } = useListings();
 	const [openedListing, setOpenedListing] = React.useState<IListing>();
+	const { state, setState } = useSearchContext();
+
 	const handleClose = () => setOpenedListing(undefined);
+
 	const handleMarkerPress = (listing: IListing) => {
 		if (openedListing == listing) {
 			setOpenedListing(undefined);
@@ -18,20 +21,30 @@ export const Map: React.FC = () => {
 			setOpenedListing(listing);
 		}
 	};
+
+	const handleRegionChange = (newRegion) => {
+		if (needsUpdate(state.region, newRegion)) {
+			setState(prev => ({ ...prev, region: newRegion }));
+		}
+	};
+
+	const needsUpdate = (oldRegion, newRegion) => {
+		return Math.abs(newRegion.latitude - oldRegion.latitude) > EPSILON ||
+			Math.abs(newRegion.longitude - oldRegion.longitude) > EPSILON||
+			Math.abs(newRegion.latitudeDelta - oldRegion.latitudeDelta) > EPSILON||
+			Math.abs(newRegion.longitudeDelta - oldRegion.longitudeDelta) > EPSILON;
+	};
+
 	return (
 		<View style={styles.map}>
 			<MapView
 				style={styles.map}
-				initialRegion={{
-					latitude: BUCHAREST_COORDINATES.latitude,
-					longitude: BUCHAREST_COORDINATES.longitude,
-					latitudeDelta: 0.0922,
-					longitudeDelta: 0.0421,
-				}}
+				region={state.region}
+				onRegionChangeComplete={handleRegionChange}
 				customMapStyle={mapStyles}
 				onPress={() => setOpenedListing(undefined)}
 			>
-				{listings.map((listing, index) => (
+				{state.filteredListings.map((listing, index) => (
 					<Marker
 						key={index}
 						coordinate={getCoordinatesFromListing(listing)}
