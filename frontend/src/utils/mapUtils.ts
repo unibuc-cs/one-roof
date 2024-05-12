@@ -1,8 +1,8 @@
-import { IListing } from '../models';
+import { ILocation } from '../models';
 
-export const getCoordinatesFromListing = (listing: IListing) => {
+export const getCoordinatesFromLocation = (location: ILocation) => {
 	return {
-		'latitude': listing.location.coordinates[1],
-		'longitude': listing.location.coordinates[0]
+		'latitude': location.coordinates[1],
+		'longitude': location.coordinates[0]
 	};
 };

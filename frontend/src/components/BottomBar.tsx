@@ -1,11 +1,11 @@
-import React, { useCallback, useContext, useRef } from 'react';
+import React, { useRef } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import BottomSheet, { BottomSheetScrollView, BottomSheetView } from '@gorhom/bottom-sheet';
+import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { ItemList } from './ItemList';
 import { useSearchContext } from '../contexts/SearchContext';
 
 export const BottomBar = () => {
-	const { state, setState } = useSearchContext();
+	const { state } = useSearchContext();
 	const bottomSheetRef = useRef<BottomSheet>(null);
 
 	return (
@@ -19,7 +19,7 @@ export const BottomBar = () => {
 					<Text style={{
 						fontWeight: 'bold',
 						fontSize: 18,
-					}}> {state.listings.length} results </Text>
+					}}> {state.searchType === 'listings' ? state.listings.length : state.reviews.length} results </Text>
 					<View style={ { height: 25 }} ></View>
 				</View>
 				<ItemList/>

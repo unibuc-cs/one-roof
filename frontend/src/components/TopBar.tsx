@@ -8,6 +8,7 @@ import { MenuIcon } from './MenuIcon';
 import { theme } from '../theme';
 import SwitchSelector from 'react-native-switch-selector';
 import { SearchTypeEnum } from '../enums';
+import { useSearchContext } from '../contexts/SearchContext';
 
 
 type TopBarProps = {
@@ -16,9 +17,14 @@ type TopBarProps = {
 
 
 const TopBar: React.FC<TopBarProps> = ({ navigation }) => {
+	const { state, setSearchType } = useSearchContext();
 	const routeName = navigation.getState().routes[navigation.getState().index].name;
 	const [searchQuery, setSearchQuery] = React.useState('');
-	const [, setSearchType] = React.useState<SearchTypeEnum>();
+
+	const changeSearchType = (newType: SearchTypeEnum) => {
+		setSearchType(newType);
+	};
+
 	const openMenuIcon = (
 		<Pressable
 			style={{
@@ -57,7 +63,10 @@ const TopBar: React.FC<TopBarProps> = ({ navigation }) => {
 							borderWidth={10}
 							initial={0}
 							bold={true}
-							onPress={(value: SearchTypeEnum) => setSearchType(value)}
+							onPress={(value) => {
+								console.log('new value: ', value);
+								changeSearchType(value);
+							}}
 						/>
 					</View>
 				</View>
