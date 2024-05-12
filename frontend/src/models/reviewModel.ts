@@ -1,6 +1,7 @@
 import { IAddress, ILocation } from '.';
 
 export interface IReview {
+	_id: string,
 	reviewerId: string,
 	rating: number,
 	content: string,

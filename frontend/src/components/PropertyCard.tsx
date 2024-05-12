@@ -5,7 +5,6 @@ import { IListing } from '../models';
 import { DetailBox, HeaderText } from '.';
 import { useNavigation } from '@react-navigation/native';
 
-
 type PropertyCardProps = {
 	listing: IListing,
 	canOpen: boolean,
@@ -18,7 +17,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ listing, canOpen }) => {
 			<View style={styles.contentContainer}>
 				<View style={styles.imageContainer}>
 					{canOpen && (
-						<Button mode="elevated" style={styles.openButton} onPress={() => navigate('Listing', { title: listing.title })}>
+						<Button mode="elevated" style={styles.openButton} onPress={() => navigate('Listing', { id: listing._id })}>
 							Open
 						</Button>
 					)}

@@ -1,6 +1,7 @@
 import { IAddress, ILocation } from '.';
 
 export interface IListing {
+	_id: string,
 	landlordId: string,
 	title: string,
 	description: string,

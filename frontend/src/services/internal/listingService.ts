@@ -1,4 +1,5 @@
 import { callApi } from '../../utils';
+import { useUser } from '@clerk/clerk-expo';
 
 export const listingService = {
 	createListing: (data: any, userId: string) => {

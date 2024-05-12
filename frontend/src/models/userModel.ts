@@ -3,6 +3,7 @@ import { UserRoleEnum } from '../enums';
 export type IUserDetails = Omit<IUser, 'clerkId'>;
 
 export interface IUser {
+	_id: string,
 	clerkId: string,
 	profilePicture: string,
 	role: UserRoleEnum,

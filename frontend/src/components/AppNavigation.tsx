@@ -22,7 +22,7 @@ export type RootStackParamList = {
 	CreateListing: undefined,
 	Favorites: undefined,
 	Profile: undefined,
-	Listing: {title: string},
+	Listing: { id: string },
 };
 
 export const AppNavigation = () => {
