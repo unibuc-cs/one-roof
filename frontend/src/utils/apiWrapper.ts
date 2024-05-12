@@ -35,6 +35,7 @@ export async function callApi(endpoint: string, options: CallApiOptions = {}, us
 		console.log(`API call succeeded with response: ${JSON.stringify(response.data)}`);
 		return response.data;
 	} catch (error) {
+		console.error(error);
 		if (axios.isAxiosError(error)) {
 			throw new Error(error.response?.data.message || 'API call failed');
 		} else {

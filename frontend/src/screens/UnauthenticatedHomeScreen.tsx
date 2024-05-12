@@ -1,8 +1,8 @@
 import Background from '../components/Background';
 import React from 'react';
 import Logo from '../components/Logo';
-import { HeaderText } from '../components/HeaderText';
-import { Text, View } from 'react-native';
+import { HeaderText } from '../components/';
+import { View } from 'react-native';
 import Button from '../components/Button';
 import { useNavigation } from '@react-navigation/native';
 

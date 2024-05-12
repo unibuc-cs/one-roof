@@ -3,9 +3,9 @@ import { Divider } from 'react-native-paper';
 import Button from '../components/Button';
 import * as React from 'react';
 import { useUserDetails } from '../contexts/UserDetailsContext';
-import { UserRoleEnum } from '../enums/UserRoleEnum';
+import { UserRoleEnum } from '../enums';
 import SwitchSelector from 'react-native-switch-selector';
-import { HeaderText } from '../components/HeaderText';
+import { HeaderText } from '../components';
 import { theme } from '../theme';
 import { ProfilePicture } from '../components/ProfilePicture';
 import { useUser } from '@clerk/clerk-expo';
@@ -19,8 +19,6 @@ export const FurtherDetailsRegistrationScreen: React.FC = () => {
 		setProfilePictureUrl,
 		role,
 		setRole } = useUserDetails();
-
-	const [image, setImage] = React.useState(null);
 
 	const { user } = useUser();
 	const pickImageAndUpload = async () => {

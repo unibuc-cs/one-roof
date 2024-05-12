@@ -1,7 +1,7 @@
 import MapView, { Marker } from 'react-native-maps';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { BUCHAREST_COORDINATES, getShortenedString } from '../utils';
+import { BUCHAREST_COORDINATES } from '../utils';
 import { useListings } from '../hooks';
 import { getCoordinatesFromListing } from '../utils';
 import { IListing } from '../models';
@@ -10,7 +10,6 @@ import { BottomListingCard } from './BottomListingCard';
 export const Map: React.FC = () => {
 	const { listings } = useListings();
 	const [openedListing, setOpenedListing] = React.useState<IListing>();
-
 	const handleClose = () => setOpenedListing(undefined);
 	const handleMarkerPress = (listing: IListing) => {
 		if (openedListing == listing) {

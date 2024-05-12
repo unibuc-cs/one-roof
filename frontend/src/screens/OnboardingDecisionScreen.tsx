@@ -1,21 +1,21 @@
 import React, { useEffect } from 'react';
-import { StyleSheet } from 'react-native';
 import { useUser } from '@clerk/clerk-expo';
 import { useUserDetails } from '../contexts/UserDetailsContext';
+import userService from '../services/internal/userService';
 import { FurtherDetailsRegistrationScreen } from './FurtherDetailsRegistrationScreen';
 import { CreateReviewScreen } from './CreateReviewScreen';
-import userService from '../services/internal/userService';
-import { AppNavigation } from '../components';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { HomeScreen } from './HomeScreen';
 
-export const OnboardingDecisionScreen: React.FC = () => {
+export const OnboardingDecisionScreen = () => {
 	const { onboardingStep, setOnboardingStep, setProfilePictureUrl, setRole } = useUserDetails();
 	const { user } = useUser();
 
 	useEffect(() => {
 		if (user) {
 			const userId = user.id;
-			fetchAndStoreUserDetails(userId);
+			fetchAndStoreUserDetails(userId)
+				.then((res) => console.log(res))
+				.catch((err) => console.log(err));
 		}
 	}, [user]);
 
@@ -28,23 +28,10 @@ export const OnboardingDecisionScreen: React.FC = () => {
 
 	switch (onboardingStep) {
 	case 1:
-		return <FurtherDetailsRegistrationScreen />;
+		return <FurtherDetailsRegistrationScreen/>;
 	case 2:
-		return <CreateReviewScreen />;
-	default:
-		return (
-			<GestureHandlerRootView style={{ flex: 1 }}>
-				<AppNavigation/>
-			</GestureHandlerRootView>
-		);
+		return <CreateReviewScreen/>;
+	case 3:
+		return <HomeScreen/>;
 	}
 };
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: '#fff',
-		alignItems: 'center',
-		justifyContent: 'center'
-	}
-});

@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import BottomSheet from '@gorhom/bottom-sheet';
 import PropertyCard from './PropertyCard';
 
@@ -11,15 +11,16 @@ export const BottomListingCard: React.FC<any> = ({ item, onClose }) => {
 		if (onClose) onClose();
 	};
 
+	// snap points value needs to match bottom card container height in Map.tsx
 	return (
 		<BottomSheet
 			ref={bottomSheetRef}
 			onClose={handleClosePress}
 			enablePanDownToClose={true}
-			snapPoints={[350]}
+			snapPoints={[300]}
 			index={isOpen ? 0 : -1}
 		>
-			<PropertyCard listing={item} />
+			<PropertyCard canOpen={true} listing={item} />
 		</BottomSheet>
 	);
 };
