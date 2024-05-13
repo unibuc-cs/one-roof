@@ -28,7 +28,7 @@ const listingSeeds = [
 		numberOfRooms: 2,
 		numberOfBathrooms: 2,
 		size: 75,
-		amenities: ['Balcony', 'Modern finishes', 'Parking spot included'],
+		amenities: ['Balcony', 'WiFi', 'Parking'],
 	},
 	{
 		landlordId: landlordId,
@@ -52,7 +52,7 @@ const listingSeeds = [
 		numberOfRooms: 3,
 		numberOfBathrooms: 3,
 		size: 120,
-		amenities: ['Private elevator', 'Swimming pool', '24/7 Security'],
+		amenities: ['Elevator', 'Pool', 'AirConditioning', 'SecuritySystem'],
 	},
 	{
 		landlordId: landlordId,
@@ -76,7 +76,7 @@ const listingSeeds = [
 		numberOfRooms: 3,
 		numberOfBathrooms: 2,
 		size: 85,
-		amenities: ['Near park', 'Schools in vicinity', 'Recently renovated'],
+		amenities: ['PetFriendly', 'Microwave', 'Dishwasher']
 	},
 	{
 		landlordId: landlordId,
@@ -100,7 +100,7 @@ const listingSeeds = [
 		numberOfRooms: 1,
 		numberOfBathrooms: 1,
 		size: 30,
-		amenities: ['Furnished', 'Affordable utilities', 'Quiet neighborhood'],
+		amenities: ['Dishwasher', 'Refrigerator']
 	}
 ];
 

@@ -1,8 +1,9 @@
 import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { IListing, IReview } from '../models';
-import { SearchTypeEnum } from '../enums';
+import { NumberOfBathroomsEnum, NumberOfBedroomsEnum, PropertyTypeEnum, SearchTypeEnum } from '../enums';
 import { BUCHAREST_COORDINATES, callApi, DEFAULT_LATITUDE_DELTA, DEFAULT_LONGITUDE_DELTA } from '../utils';
 import { useListings } from '../hooks';
+import RentalAmenitiesEnum from '../enums/RentalAmenitiesEnum';
 
 export interface SearchContextState {
 	region: {
@@ -16,7 +17,13 @@ export interface SearchContextState {
 	reviews: IReview[],
 	filteredListings: IListing[],
 	filteredReviews: IReview[],
-	filters: any, // TODO: define filters
+	filters: {
+		roomType?: PropertyTypeEnum,
+		priceRange?: { min: number, max: number },
+		bedrooms?: number,
+		bathrooms?: number,
+		amenities: RentalAmenitiesEnum[],
+	},
 }
 
 const SearchContext = createContext<{
@@ -25,7 +32,7 @@ const SearchContext = createContext<{
 	setSearchType: React.Dispatch<React.SetStateAction<SearchTypeEnum>>,
 	setListings: React.Dispatch<React.SetStateAction<IListing[]>>,
 	setReviews: React.Dispatch<React.SetStateAction<IReview[]>>,
-	setFilters: React.Dispatch<React.SetStateAction<any>>,
+	setFilters: React.Dispatch<React.SetStateAction<SearchContextState['filters']>>,
 }>(null!);
 
 export const useSearchContext = () => useContext(SearchContext);
@@ -40,7 +47,13 @@ export const SearchProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 	const [searchType, setSearchType] = useState<SearchTypeEnum>(SearchTypeEnum.Listings);
 	const [listings, setListings] = useState<IListing[]>([]);
 	const [reviews, setReviews] = useState<IReview[]>([]);
-	const [filters, setFilters] = useState<any>({}); // Initialize this as needed
+	const [filters, setFilters] = useState<SearchContextState['filters']>({
+		roomType: PropertyTypeEnum.Studio,
+		priceRange: { min: 500, max: 3000 },
+		bedrooms: NumberOfBedroomsEnum.Any,
+		bathrooms: NumberOfBathroomsEnum.Any,
+		amenities: []
+	});
 
 	const { listings: loadedListings, error, isLoading } = useListings();
 

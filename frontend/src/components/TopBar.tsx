@@ -26,19 +26,6 @@ const TopBar: React.FC<TopBarProps> = ({ navigation }) => {
 		setSearchType(newType);
 	};
 
-	const openMenuIcon = (
-		<Pressable
-			style={{
-				display: 'flex',
-				justifyContent: 'center',
-				alignItems: 'center',
-			}}
-			onPress={() => navigation.openDrawer()}
-		>
-			<MenuIcon iconName="menu"/>
-		</Pressable>
-	);
-
 	const handleSearchQuery = () => {
 		if (searchQuery) {
 			getCoordinatesFromAddress(searchQuery)
@@ -66,11 +53,11 @@ const TopBar: React.FC<TopBarProps> = ({ navigation }) => {
 			<View style={styles.container}>
 				<View style={styles.rowContainer}>
 					<View style={[styles.smallerRowContainer, { marginTop: 40 }]}>
-						{openMenuIcon}
+						<MenuIcon iconName={'menu'} onPress={() => navigation.openDrawer()} />
 						<View style={styles.searchBarContainer}>
 							{searchBar}
 						</View>
-						<MenuIcon iconName="tune"/>
+						<MenuIcon iconName="tune" onPress={() => navigation.navigate('Filters')}/>
 					</View>
 				</View>
 				<View style={[styles.rowContainer, { width: '80%' }]}>
@@ -94,10 +81,12 @@ const TopBar: React.FC<TopBarProps> = ({ navigation }) => {
 				</View>
 			</View>
 		);
+	} else if (routeName === 'Filters') {
+		return null;
 	} else {
 		return (
 			<View style={styles.menuContainer}>
-				{ openMenuIcon }
+				<MenuIcon iconName={'menu'} onPress={() => {}}/>
 			</View>
 		);
 	}
