@@ -40,7 +40,6 @@ export const Map: React.FC = () => {
 			Math.abs(newRegion.longitudeDelta - oldRegion.longitudeDelta) > EPSILON;
 	};
 
-	console.log(state.searchType);
 
 	return (
 		<View style={styles.map}>

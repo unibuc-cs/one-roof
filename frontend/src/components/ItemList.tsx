@@ -9,7 +9,7 @@ export const ItemList = () => {
 
 	const renderListing = useCallback(
 		(listing: IListing) => (
-			<PropertyCard listing={listing} canOpen={true}/>
+			<PropertyCard key={listing._id} listing={listing} canOpen={true}/>
 		), []
 	);
 

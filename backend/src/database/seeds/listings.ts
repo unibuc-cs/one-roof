@@ -23,7 +23,7 @@ const listingSeeds = [
 			type: 'Point',
 			coordinates: [26.0703, 44.4875]
 		},
-		type: 'Apartment',
+		type: 'studio',
 		price: 750,
 		numberOfRooms: 2,
 		numberOfBathrooms: 2,
@@ -47,7 +47,7 @@ const listingSeeds = [
 			type: 'Point',
 			coordinates: [26.0963, 44.4323]
 		},
-		type: 'Apartment',
+		type: 'studio',
 		price: 2000,
 		numberOfRooms: 3,
 		numberOfBathrooms: 3,
@@ -71,7 +71,7 @@ const listingSeeds = [
 			type: 'Point',
 			coordinates: [26.0454, 44.4341]
 		},
-		type: 'Apartment',
+		type: 'studio',
 		price: 500,
 		numberOfRooms: 3,
 		numberOfBathrooms: 2,
@@ -95,8 +95,8 @@ const listingSeeds = [
 			type: 'Point',
 			coordinates: [26.1290, 44.4275]
 		},
-		type: 'Apartment',
-		price: 300,
+		type: 'room',
+		price: 600,
 		numberOfRooms: 1,
 		numberOfBathrooms: 1,
 		size: 30,

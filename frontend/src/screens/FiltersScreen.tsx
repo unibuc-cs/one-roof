@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Checkbox } from 'react-native-paper';
 import { Button, HeaderText } from '../components';
@@ -9,26 +9,42 @@ import { useCustomFonts } from '../hooks/useCustomFonts';
 import { theme } from '../theme';
 import RentalAmenitiesEnum from '../enums/RentalAmenitiesEnum';
 import { MAX_PRICE, MIN_PRICE } from '../utils';
-import { IListing } from '../models';
 import { useSearchContext } from '../contexts/SearchContext';
 
 const amenities = ['WiFi', 'Parking', 'Pool', 'Gym'];
 
-export const FiltersScreen = () => {
+export const FiltersScreen = ({ navigation }) => {
 	useCustomFonts();
-
-	const { state, setFilters } = useSearchContext();
+	const [cleared, setCleared] = useState<boolean>(false);
+	const { state, setFilters, triggerSearch } = useSearchContext();
 	const { filters } = state;
 	const amenitiesArray = Object.entries(RentalAmenitiesEnum);
 
 	const clearFilters = () => {
 		setFilters({
-			roomType: PropertyTypeEnum.Studio,
+			roomType: PropertyTypeEnum.Any,
 			priceRange: { min: MIN_PRICE, max: MAX_PRICE },
 			bedrooms: NumberOfBedroomsEnum.Any,
 			bathrooms: NumberOfBathroomsEnum.Any,
 			amenities: [],
 		});
+		setCleared(true);
+	};
+
+	const navigateToHome = () => setTimeout(() => navigation.navigate('Home'), 500);
+
+
+	useEffect(() => {
+		if (cleared) {
+			triggerSearch();
+			setCleared(false);
+			navigateToHome();
+		}
+	}, [cleared]);
+
+	const handleSearch = () => {
+		triggerSearch();
+		navigateToHome();
 	};
 
 	const handleSelectAmenity = (amenity) => {
@@ -62,6 +78,7 @@ export const FiltersScreen = () => {
 				<HeaderText paddingBottom={10} textAlign={'left'} size={17}>Property Type:</HeaderText>
 				<CustomSwitchSelector
 					options={[
+						{ label: 'Any', value: PropertyTypeEnum.Any },
 						{ label: 'Studio', value: PropertyTypeEnum.Studio },
 						{ label: 'Room', value: PropertyTypeEnum.Room },
 						{ label: 'House', value: PropertyTypeEnum.House },
@@ -127,6 +144,7 @@ export const FiltersScreen = () => {
 				<ScrollView>
 					{amenitiesArray.map(((amenity, index) => (
 						<Checkbox.Item
+							labelStyle={styles.checkbox}
 							key={index}
 							label={amenity[1]}
 							status={filters.amenities.includes(amenity[0]) ? 'checked' : 'unchecked'}
@@ -137,13 +155,16 @@ export const FiltersScreen = () => {
 			</View>
 			<View style={[styles.buttonsContainer]}>
 				<Button width={'auto'} mode={'contained'} onPress={clearFilters}> Clear All </Button>
-				<Button width={'auto'} mode={'contained'} onPress={() => console.log('Search with filters')}> Search </Button>
+				<Button width={'auto'} mode={'contained'} onPress={handleSearch}> Search </Button>
 			</View>
 		</View>
 	);
 };
 
 const styles = StyleSheet.create({
+	checkbox: {
+		fontFamily: 'ProximaNova-Regular'
+	},
 	flexContainer: {
 		display: 'flex',
 		alignItems: 'center'
