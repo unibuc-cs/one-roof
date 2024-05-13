@@ -9,6 +9,7 @@ import { theme } from '../theme';
 import SwitchSelector from 'react-native-switch-selector';
 import { SearchTypeEnum } from '../enums';
 import { useSearchContext } from '../contexts/SearchContext';
+import { getCoordinatesFromAddress } from '../services/external/googleMapsService';
 
 
 type TopBarProps = {
@@ -17,7 +18,7 @@ type TopBarProps = {
 
 
 const TopBar: React.FC<TopBarProps> = ({ navigation }) => {
-	const { state, setSearchType } = useSearchContext();
+	const { state, setSearchType, setRegion } = useSearchContext();
 	const routeName = navigation.getState().routes[navigation.getState().index].name;
 	const [searchQuery, setSearchQuery] = React.useState('');
 
@@ -38,6 +39,28 @@ const TopBar: React.FC<TopBarProps> = ({ navigation }) => {
 		</Pressable>
 	);
 
+	const handleSearchQuery = () => {
+		if (searchQuery) {
+			getCoordinatesFromAddress(searchQuery)
+				.then(region => {
+					setRegion(region);
+				})
+				.catch(error => {
+					console.error('Geocoding error:', error);
+				});
+		}
+	};
+
+	const searchBar = (
+		<Searchbar
+			style={styles.searchBar}
+			value={searchQuery}
+			placeholder="Search by location.."
+			onChangeText={setSearchQuery}
+			onSubmitEditing={handleSearchQuery}
+		/>
+	);
+
 	if (routeName === 'Home') {
 		return (
 			<View style={styles.container}>
@@ -45,7 +68,7 @@ const TopBar: React.FC<TopBarProps> = ({ navigation }) => {
 					<View style={[styles.smallerRowContainer, { marginTop: 40 }]}>
 						{openMenuIcon}
 						<View style={styles.searchBarContainer}>
-							<Searchbar style={styles.searchBar} value={searchQuery} placeholder="Search by location.." onChangeText={setSearchQuery}/>
+							{searchBar}
 						</View>
 						<MenuIcon iconName="tune"/>
 					</View>
@@ -64,7 +87,6 @@ const TopBar: React.FC<TopBarProps> = ({ navigation }) => {
 							initial={0}
 							bold={true}
 							onPress={(value) => {
-								console.log('new value: ', value);
 								changeSearchType(value);
 							}}
 						/>

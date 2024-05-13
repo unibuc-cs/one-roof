@@ -7,3 +7,8 @@ export interface I2DPoint {
 	latitude: number,
 	longitude: number,
 }
+
+export type IRegion = I2DPoint & {
+	latitudeDelta: number,
+	longitudeDelta: number,
+};
