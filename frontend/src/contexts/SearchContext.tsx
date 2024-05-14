@@ -1,8 +1,16 @@
 import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { IListing, IReview } from '../models';
-import { SearchTypeEnum } from '../enums';
-import { BUCHAREST_COORDINATES, callApi, DEFAULT_LATITUDE_DELTA, DEFAULT_LONGITUDE_DELTA } from '../utils';
+import { NumberOfBathroomsEnum, NumberOfBedroomsEnum, PropertyTypeEnum, SearchTypeEnum } from '../enums';
+import {
+	BUCHAREST_COORDINATES,
+	callApi,
+	DEFAULT_LATITUDE_DELTA,
+	DEFAULT_LONGITUDE_DELTA,
+	MAX_PRICE,
+	MIN_PRICE
+} from '../utils';
 import { useListings } from '../hooks';
+import RentalAmenitiesEnum from '../enums/RentalAmenitiesEnum';
 
 export interface SearchContextState {
 	region: {
@@ -16,17 +24,24 @@ export interface SearchContextState {
 	reviews: IReview[],
 	filteredListings: IListing[],
 	filteredReviews: IReview[],
-	filters: any, // TODO: define filters
+	filters: {
+		roomType?: PropertyTypeEnum,
+		priceRange?: { min: number, max: number },
+		bedrooms?: number,
+		bathrooms?: number,
+		amenities: RentalAmenitiesEnum[],
+	},
 }
 
 const SearchContext = createContext<{
+	triggerSearch: () => void,
 	state: SearchContextState,
 	setRegion: React.Dispatch<React.SetStateAction<SearchContextState['region']>>,
 	setSearchType: React.Dispatch<React.SetStateAction<SearchTypeEnum>>,
 	setListings: React.Dispatch<React.SetStateAction<IListing[]>>,
 	setReviews: React.Dispatch<React.SetStateAction<IReview[]>>,
-	setFilters: React.Dispatch<React.SetStateAction<any>>,
-}>(null!);
+	setFilters: React.Dispatch<React.SetStateAction<SearchContextState['filters']>>,
+		}>(null!);
 
 export const useSearchContext = () => useContext(SearchContext);
 
@@ -40,7 +55,15 @@ export const SearchProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 	const [searchType, setSearchType] = useState<SearchTypeEnum>(SearchTypeEnum.Listings);
 	const [listings, setListings] = useState<IListing[]>([]);
 	const [reviews, setReviews] = useState<IReview[]>([]);
-	const [filters, setFilters] = useState<any>({}); // Initialize this as needed
+	const [filteredListings, setFilteredListings] = useState<IListing[]>([]);
+	const [filteredReviews, setFilteredReviews] = useState<IReview[]>([]);
+	const [filters, setFilters] = useState<SearchContextState['filters']>({
+		roomType: PropertyTypeEnum.Any,
+		priceRange: { min: MIN_PRICE, max: MAX_PRICE },
+		bedrooms: NumberOfBedroomsEnum.Any,
+		bathrooms: NumberOfBathroomsEnum.Any,
+		amenities: [],
+	});
 
 	const { listings: loadedListings, error, isLoading } = useListings();
 
@@ -61,18 +84,26 @@ export const SearchProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 			});
 			setListings(response.listings);
 			setReviews(response.reviews);
+			setFilteredListings(response.filteredListings);
+			setFilteredReviews(response.filteredReviews);
 		} catch (error) {
 			console.error('Failed to fetch filtered data:', error);
 		}
 	};
 
+	const triggerSearch = () => {
+		console.log('triggered');
+		fetchFilteredData();
+	};
+
 	useEffect(() => {
 		fetchFilteredData();
-	}, [region, filters]);
+	}, [region]);
 
 	return (
 		<SearchContext.Provider value={{
-			state: { region, searchType, listings, reviews, filteredListings: listings, filteredReviews: reviews, filters },
+			triggerSearch,
+			state: { region, searchType, listings, reviews, filteredListings, filteredReviews, filters },
 			setRegion,
 			setSearchType,
 			setListings,

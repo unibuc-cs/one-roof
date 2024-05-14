@@ -23,12 +23,12 @@ const listingSeeds = [
 			type: 'Point',
 			coordinates: [26.0703, 44.4875]
 		},
-		type: 'Apartment',
+		type: 'studio',
 		price: 750,
 		numberOfRooms: 2,
 		numberOfBathrooms: 2,
 		size: 75,
-		amenities: ['Balcony', 'Modern finishes', 'Parking spot included'],
+		amenities: ['Balcony', 'WiFi', 'Parking'],
 	},
 	{
 		landlordId: landlordId,
@@ -47,12 +47,12 @@ const listingSeeds = [
 			type: 'Point',
 			coordinates: [26.0963, 44.4323]
 		},
-		type: 'Apartment',
+		type: 'studio',
 		price: 2000,
 		numberOfRooms: 3,
 		numberOfBathrooms: 3,
 		size: 120,
-		amenities: ['Private elevator', 'Swimming pool', '24/7 Security'],
+		amenities: ['Elevator', 'Pool', 'AirConditioning', 'SecuritySystem'],
 	},
 	{
 		landlordId: landlordId,
@@ -71,12 +71,12 @@ const listingSeeds = [
 			type: 'Point',
 			coordinates: [26.0454, 44.4341]
 		},
-		type: 'Apartment',
+		type: 'studio',
 		price: 500,
 		numberOfRooms: 3,
 		numberOfBathrooms: 2,
 		size: 85,
-		amenities: ['Near park', 'Schools in vicinity', 'Recently renovated'],
+		amenities: ['PetFriendly', 'Microwave', 'Dishwasher']
 	},
 	{
 		landlordId: landlordId,
@@ -95,12 +95,12 @@ const listingSeeds = [
 			type: 'Point',
 			coordinates: [26.1290, 44.4275]
 		},
-		type: 'Apartment',
-		price: 300,
+		type: 'room',
+		price: 600,
 		numberOfRooms: 1,
 		numberOfBathrooms: 1,
 		size: 30,
-		amenities: ['Furnished', 'Affordable utilities', 'Quiet neighborhood'],
+		amenities: ['Dishwasher', 'Refrigerator']
 	}
 ];
 

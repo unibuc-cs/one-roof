@@ -8,6 +8,7 @@ const seedUsers = async () => {
 };
 
 const seedListings = async () => {
+	// TODO: delete
 	await Listing.deleteMany({});
 	for (const listing of LISTINGS) {
 		await listing.save();

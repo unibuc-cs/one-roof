@@ -28,6 +28,7 @@ const ListingSchema = new Schema<IListing>({
 	price: { type: Number, required: true },
 	numberOfRooms: { type: Number, required: true },
 	numberOfBathrooms: { type: Number, required: true },
+	type: { type: String, required: true },
 	size: { type: Number, required: true },
 	amenities: { type: [String], required: true }
 }, { timestamps: true });

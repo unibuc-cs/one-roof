@@ -7,6 +7,7 @@ import { BottomListingCard } from './BottomListingCard';
 import { useSearchContext } from '../contexts/SearchContext';
 import { SearchTypeEnum } from '../enums';
 import { BottomReviewCard } from './BottomReviewCard';
+import { CustomMarker } from './CustomMarker';
 
 const EPSILON = 0.001;
 
@@ -39,7 +40,6 @@ export const Map: React.FC = () => {
 			Math.abs(newRegion.longitudeDelta - oldRegion.longitudeDelta) > EPSILON;
 	};
 
-	console.log(state.searchType);
 
 	return (
 		<View style={styles.map}>
@@ -51,12 +51,13 @@ export const Map: React.FC = () => {
 				onPress={() => setSelectedItem(undefined)}
 			>
 				{(state.searchType === 'listings' ? state.filteredListings : state.filteredReviews).map((item, index) => (
-					<Marker
+					<CustomMarker
 						key={index}
 						coordinate={getCoordinatesFromLocation(item.location)}
 						onPress={() => handleMarkerPress(item)}
+						text={state.searchType === 'listings' ? `${item.price} RON` : 'review'}
 					>
-					</Marker>
+					</CustomMarker>
 				))}
 			</MapView>
 			{selectedItem && (
@@ -75,7 +76,7 @@ const styles = StyleSheet.create({
 	bottomCardContainer: {
 		position: 'absolute',
 		bottom: 0,
-		height: 300,
+		height: 400,
 		width: '100%',
 		zIndex: 1000,
 	},
