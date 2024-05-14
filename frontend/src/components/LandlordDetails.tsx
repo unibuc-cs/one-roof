@@ -4,14 +4,13 @@ import {Image, StyleSheet, View} from "react-native";
 import {theme} from "../theme";
 
 
-const  LandlordDetails: React.FC<any> = ({listing}) => {
+const  LandlordDetails: React.FC<any> = ({landlordID}) => {
     return (
         <Card style={styles.container}>
-            <Text>Detalii Landlord</Text>
+            <Text> Landlord information {landlordID}</Text>
         </Card>
     );
 };
-
 
 const styles = StyleSheet.create({
     container: {

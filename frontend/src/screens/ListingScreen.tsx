@@ -56,13 +56,12 @@ export const ListingScreen: React.FC = () => {
 				/>
 				<PropertyDetails listing = {listing}/>
 				<Text style={styles.description}>{listing.description}</Text>
-				<LandlordDetails landlord = {listing.landlordId}/>
+				<LandlordDetails landlordID = {listing.landlordId}/>
 
 			</Card>
 		</Background>
 	);
 };
-// TODO: add amenities
 // TODO: add landlord information
 // TODO: Include map?
 

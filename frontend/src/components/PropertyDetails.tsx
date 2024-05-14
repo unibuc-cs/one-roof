@@ -5,37 +5,47 @@ import {theme} from "../theme";
 
 const  PropertyDetails: React.FC<any> = ({listing}) => {
     return (
-        <View style={styles.detailsContainer}>
-            <View style={styles.row}>
-                <View style={[styles.cell, styles.borderBottom]}>
-                    <Text style={styles.label}>City:</Text>
-                    <Text style={styles.value}>{listing.address.city}</Text>
+        <View style={styles.container}>
+            <View style={styles.detailsContainer}>
+                <View style={styles.row}>
+                    <View style={[styles.cell, styles.borderBottom]}>
+                        <Text style={styles.label}>City:</Text>
+                        <Text style={styles.value}>{listing.address.city}</Text>
+                    </View>
+                    <View style={[styles.cell, styles.borderBottom]}>
+                        <Text style={styles.label}>Rooms:</Text>
+                        <Text style={styles.value}>{listing.numberOfRooms}</Text>
+                    </View>
                 </View>
-                <View style={[styles.cell, styles.borderBottom]}>
-                    <Text style={styles.label}>Rooms:</Text>
-                    <Text style={styles.value}>{listing.numberOfRooms}</Text>
+                <View style={styles.row}>
+                    <View style={[styles.cell, styles.borderBottom]}>
+                        <Text style={styles.label}>Bathrooms:</Text>
+                        <Text style={styles.value}>{listing.numberOfBathrooms}</Text>
+                    </View>
+                    <View style={[styles.cell, styles.borderBottom]}>
+                        <Text style={styles.label}>Size:</Text>
+                        <Text style={styles.value}>{listing.size} m2</Text>
+                    </View>
                 </View>
             </View>
-            <View style={styles.row}>
-                <View style={[styles.cell, styles.borderBottom]}>
-                    <Text style={styles.label}>Bathrooms:</Text>
-                    <Text style={styles.value}>{listing.numberOfBathrooms}</Text>
-                </View>
-                <View style={[styles.cell, styles.borderBottom]}>
-                    <Text style={styles.label}>Size:</Text>
-                    <Text style={styles.value}>{listing.size} m2</Text>
-                </View>
+            <View style={styles.amenitiesList}>
+                <Text style={styles.label}>Amenities:</Text>
+                {listing.amenities.map((amenity, index) => (
+                    <Text key={index} style={styles.amenity}>  {`\u2022  ${amenity}`}</Text>
+                ))}
             </View>
+
         </View>
     );
 };
 
 
 const styles = StyleSheet.create({
-    detailsContainer: {
-        flex: 1,
+    container:{
         paddingVertical: 10,
-        maxHeight: 100, //TODO: fix hardcoding
+    },
+    detailsContainer: {
+        paddingBottom: 10,
     },
     row: {
         flexDirection: 'row',
@@ -63,6 +73,14 @@ const styles = StyleSheet.create({
     borderBottom: {
         borderBottomWidth: 1,
         borderColor: '#ccc',
+    },
+    amenitiesList: {
+        marginTop: 5,
+        height: 'fit-content',
+    },
+    amenity: {
+        fontSize: 16,
+        marginLeft: 5,
     },
 });
 
