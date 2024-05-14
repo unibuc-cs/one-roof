@@ -2,9 +2,11 @@ import React from "react";
 import {Button, Card, Text} from "react-native-paper";
 import {Image, StyleSheet, View} from "react-native";
 import {theme} from "../theme";
+import {useCustomFonts} from "../hooks/useCustomFonts";
 
 
 const  LandlordDetails: React.FC<any> = ({landlordID}) => {
+    const customFont = useCustomFonts();
     return (
         <Card style={styles.container}>
             <Text> Landlord information {landlordID}</Text>
@@ -21,6 +23,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         color: 'white',
+        fontFamily: 'ProximaNova-Regular',
     },
 
 });

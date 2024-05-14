@@ -10,6 +10,7 @@ import PropertyDetails from "../components/PropertyDetails";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import {Card} from "react-native-paper";
 import LandlordDetails from "../components/LandlordDetails";
+import {useCustomFonts} from "../hooks/useCustomFonts";
 
 type ListingScreenRouteProp = RouteProp<RootStackParamList, 'Listing'>;
 
@@ -19,7 +20,7 @@ export const ListingScreen: React.FC = () => {
 	const { user } = useUser();
 	const { listing } = useListing(id, user?.id as string);
 	const width = Dimensions.get('window').width;
-
+	const customFont = useCustomFonts();
 	if (listing == null) {
 		return <Text>Error - listing not found</Text>;
 	}
@@ -71,28 +72,31 @@ const styles = StyleSheet.create({
 		marginVertical: 20,
 		paddingVertical: 20,
 		margin: 10,
-		backgroundColor: 'white'
+		backgroundColor: 'white',
+		fontFamily: 'ProximaNova-Regular'
 	},
 	image: {
 		width: '100%',
 		height: '100%',
 		resizeMode: 'cover',
+		borderRadius: 10,
 	},
 	titleContainer:{
 		paddingBottom: 20,
 	},
 	title: {
 		fontSize: 25,
-		fontWeight: 'bold',
+		fontFamily: 'ProximaNova-Bold',
 	},
 	description: {
 		marginTop: 5,
 		marginBottom: 10,
+		fontFamily: 'ProximaNova-Regular',
 	},
 	price: {
+		fontFamily: 'ProximaNova-Bold',
 		paddingVertical: 5,
 		fontSize: 20,
-		fontWeight: 'bold',
 		color: 'green',
 	},
 

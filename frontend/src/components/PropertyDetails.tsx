@@ -2,8 +2,10 @@ import React from "react";
 import {Button, Card, Text} from "react-native-paper";
 import {Image, StyleSheet, View} from "react-native";
 import {theme} from "../theme";
+import {useCustomFonts} from "../hooks/useCustomFonts";
 
 const  PropertyDetails: React.FC<any> = ({listing}) => {
+    const customFont = useCustomFonts()
     return (
         <View style={styles.container}>
             <View style={styles.detailsContainer}>
@@ -43,6 +45,7 @@ const  PropertyDetails: React.FC<any> = ({listing}) => {
 const styles = StyleSheet.create({
     container:{
         paddingVertical: 10,
+        fontFamily: 'ProximaNova-Regular'
     },
     detailsContainer: {
         paddingBottom: 10,
@@ -58,10 +61,11 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         paddingHorizontal: 5,
         width: '48%',
+        fontFamily: 'ProximaNova-Regular'
     },
     label: {
         fontSize: 16,
-        fontWeight: 'bold',
+        fontFamily: 'ProximaNova-Bold',
     },
     value: {
         fontSize: 16,
@@ -81,6 +85,7 @@ const styles = StyleSheet.create({
     amenity: {
         fontSize: 16,
         marginLeft: 5,
+        fontFamily: 'ProximaNova-Regular'
     },
 });
 

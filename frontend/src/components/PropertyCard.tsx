@@ -1,11 +1,12 @@
 import React from 'react';
-import { Image, StyleSheet, View } from 'react-native';
+import {Dimensions, Image, StyleSheet, View} from 'react-native';
 import { Button, Card, Text } from 'react-native-paper';
 import { IListing } from '../models';
 import { DetailBox, HeaderText } from '.';
 import { useNavigation } from '@react-navigation/native';
 import { transparent } from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
 import { theme } from '../theme';
+import Carousel from "react-native-reanimated-carousel";
 
 type PropertyCardProps = {
 	listing: IListing,
@@ -16,6 +17,8 @@ type PropertyCardProps = {
 
 const PropertyCard: React.FC<PropertyCardProps> = ({ listing, canOpen, mode, backgroundColor  }) => {
 	const { navigate }  = useNavigation();
+	const width = Dimensions.get('window').width;
+
 	return (
 		<Card mode={mode ?? 'elevated'} key={listing._id} style={[styles.cardContainer, {
 			backgroundColor: backgroundColor ?? theme.colors.background
@@ -32,11 +35,24 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ listing, canOpen, mode, bac
 						</Button>
 					)}
 					{/* TODO: de pus o galerie mai frumoasa */}
-					<Image
-						source={{
-							uri: listing.photos[0]
-						}}
-						style={styles.image}
+					<Carousel
+						loop
+						width={width - 100}
+						height={width / 2}
+						autoPlay={true}
+						data= {listing.photos}
+						autoPlayInterval={5000}
+						scrollAnimationDuration={1000}
+						renderItem={({ index }) => (
+							<View>
+								<Image
+									style={styles.image}
+									source={{
+										uri: listing.photos[index]
+									}}
+								/>
+							</View>
+						)}
 					/>
 				</View>
 				<HeaderText paddingTop={0} paddingBottom={10} size={20}> {listing.price} RON </HeaderText>
@@ -80,9 +96,9 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 	image: {
-		position: 'absolute',
 		width: '100%',
 		height: '100%',
+		resizeMode: 'cover',
 		borderRadius: 10,
 	},
 	openButton: {
