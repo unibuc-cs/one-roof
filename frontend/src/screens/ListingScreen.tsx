@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet, Image, Dimensions} from 'react-native';
+import {View, Text, StyleSheet, Image, Dimensions, ScrollView} from 'react-native';
 import { useRoute, RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../components';
 import { useUser } from '@clerk/clerk-expo';
@@ -26,41 +26,43 @@ export const ListingScreen: React.FC = () => {
 	}
 
 	return (
-		<Background>
-			<Card style={styles.container}>
-				<View style={styles.titleContainer}>
-					<Text style={styles.title}>{listing.title}</Text>
-					<Text style={styles.price}>Price: {listing.price} RON</Text>
-					<Text>
-						<Icon name={'map-marker'}/>
-							{listing.address.city}, {listing.address.stateOrProvince}, {listing.address.country}
-					</Text>
-				</View>
-				<Carousel
-					loop
-					width={width - 100}
-					height={width / 2}
-					autoPlay={true}
-					data= {listing.photos}
-					autoPlayInterval={5000}
-					scrollAnimationDuration={1000}
-					renderItem={({ index }) => (
-						<View>
-							<Image
-								style={styles.image}
-								source={{
-									uri: listing.photos[index]
-								}}
-								/>
-						</View>
-					)}
-				/>
-				<PropertyDetails listing = {listing}/>
-				<Text style={styles.description}>{listing.description}</Text>
-				<LandlordDetails landlordID = {listing.landlordId}/>
+		<ScrollView>
+			<Background>
+				<Card style={styles.container}>
+					<View style={styles.titleContainer}>
+						<Text style={styles.title}>{listing.title}</Text>
+						<Text style={styles.price}>Price: {listing.price} RON</Text>
+						<Text>
+							<Icon name={'map-marker'}/>
+								{listing.address.city}, {listing.address.stateOrProvince}, {listing.address.country}
+						</Text>
+					</View>
+					<Carousel
+						loop
+						width={width - 100}
+						height={width / 2}
+						autoPlay={true}
+						data= {listing.photos}
+						autoPlayInterval={5000}
+						scrollAnimationDuration={1000}
+						renderItem={({ index }) => (
+							<View>
+								<Image
+									style={styles.image}
+									source={{
+										uri: listing.photos[index]
+									}}
+									/>
+							</View>
+						)}
+					/>
+					<PropertyDetails listing = {listing}/>
+					<Text style={styles.description}>{listing.description}</Text>
+					<LandlordDetails landlordID = {listing.landlordId}/>
 
-			</Card>
-		</Background>
+				</Card>
+			</Background>
+		</ScrollView>
 	);
 };
 // TODO: add landlord information

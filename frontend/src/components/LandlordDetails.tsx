@@ -1,29 +1,58 @@
 import React from "react";
-import {Button, Card, Text} from "react-native-paper";
+import {Card, Text} from "react-native-paper";
 import {Image, StyleSheet, View} from "react-native";
 import {theme} from "../theme";
+import { useUserData } from '../hooks/useUserData';
+import Button from "../components/Button";
 import {useCustomFonts} from "../hooks/useCustomFonts";
 
 
-const  LandlordDetails: React.FC<any> = ({landlordID}) => {
+    const  LandlordDetails: React.FC<any> = ({landlordID}) => {
     const customFont = useCustomFonts();
+    // const {landlord} = useUserData(landlordID)
     return (
         <Card style={styles.container}>
-            <Text> Landlord information {landlordID}</Text>
+            <Text style={styles.landlordTitle}>Contact the landlord</Text>
+            <View style={{flexDirection: "row", alignItems: "center"}}>
+                <Image style={styles.landlordProfilePicture} source={{uri: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'}} />
+                <Text style={styles.landlordName}>First name, last name</Text>
+            </View>
+            <Button mode={"elevated"}>Send a message</Button>
         </Card>
     );
 };
-
+//TODO: add on press for button
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingVertical: 10,
-        maxHeight: 100, //TODO: fix hardcoding
+        padding: 10,
+        marginVertical: 10,
         backgroundColor: theme.colors.primary,
-        alignItems: 'center',
-        justifyContent: 'center',
         color: 'white',
         fontFamily: 'ProximaNova-Regular',
+    },
+    landlordTitle: {
+        fontFamily: 'ProximaNova-Bold',
+        fontSize: 20,
+        paddingHorizontal: 5,
+        color: 'white',
+        marginBottom: 10,
+    },
+    landlordProfilePicture: {
+        width: 70,
+        height: 70,
+        borderRadius: 35,
+        marginBottom: 10,
+        marginRight:5,
+    },
+    landlordName: {
+        fontSize: 16,
+        marginBottom: 5,
+        fontFamily: 'ProximaNova-Regular',
+        color: 'white',
+    },
+    landlordEmail: {
+        fontSize: 14,
     },
 
 });
