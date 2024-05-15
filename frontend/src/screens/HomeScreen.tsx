@@ -7,7 +7,6 @@ export const HomeScreen = () => {
 	return (
 		<View style={{ flex: 1 }}>
 			<Map />
-			{/*<NewListingButton />*/}
 			<BottomBar/>
 		</View>
 	);
