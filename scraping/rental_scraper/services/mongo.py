@@ -1,4 +1,5 @@
 from pymongo import MongoClient
+from .google_maps import GoogleMapsService
 
 
 class MongoService:
@@ -6,6 +7,7 @@ class MongoService:
         self.client = MongoClient(uri)
         self.db = self.client[db_name]
         self.collection = self.db[collection_name]
+        self.google_maps_service = GoogleMapsService()
 
     def insert_apartment(self, apartment_data):
         apartment = {
@@ -18,6 +20,11 @@ class MongoService:
             'numberOfBathrooms': apartment_data.get('bathrooms', 1),
             'photos': apartment_data['photos'],
             'type': 'apartment',
+            'location': {
+                'type': 'Point',
+                'coordinates': self.google_maps_service.get_coordinates(apartment_data['address']),
+            },
+            'external': True,
         }
         self.collection.insert_one(apartment)
 
@@ -35,3 +42,4 @@ class MongoService:
 
     def close_connection(self):
         self.client.close()
+

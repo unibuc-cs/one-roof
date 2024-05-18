@@ -56,7 +56,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ listing, canOpen, mode, bac
 				</View>
 				<HeaderText paddingTop={0} paddingBottom={10} size={20}> {listing.price} RON </HeaderText>
 				<Text style={styles.address}>
-					{listing.address.streetName} {listing.address.streetNumber}, {listing.address.city}
+					{listing.address}
 				</Text>
 				<View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
 					<DetailBox content={`${listing.size} m2`}/>

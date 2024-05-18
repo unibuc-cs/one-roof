@@ -6,8 +6,8 @@ export interface ISearchParams {
 		longitudeDelta: number,
 	},
 	filters: {
-		roomType: 'studio' | 'room' | 'house',
-		priceRange: { min: 500, max: 3000 },
+		roomType: 'studio' | 'apartment' | 'house',
+		priceRange: { min: 100, max: 3000 },
 		bedrooms: 0 | 1 | 2 | 3 | 4,
 		bathrooms: 0 | 1 | 2 | 3,
 		amenities: [],
