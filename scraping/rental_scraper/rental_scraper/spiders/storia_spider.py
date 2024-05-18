@@ -1,22 +1,45 @@
 import scrapy
+import re
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import time
-import json
+from services import MongoService
 
-class RentalSpider(scrapy.Spider):
+
+class StoriaSpider(scrapy.Spider):
     name = "storia_spider"
+    conversion_rate = 0.2  # from RON to EUR
     start_urls = [
         'https://www.storia.ro/ro/oferta/garsoniera-linistita-colentina-IDAil1'
     ]
 
     def __init__(self, *args, **kwargs):
-        super(RentalSpider, self).__init__(*args, **kwargs)
+        super(StoriaSpider, self).__init__(*args, **kwargs)
         geckodriver_path = '/snap/bin/geckodriver'
         self.driver = webdriver.Firefox(service=Service(geckodriver_path))
+        self.mongo_service = MongoService()
+
+    @staticmethod
+    def get_nested_text_by_aria_label(response, aria_label):
+        divs = response.css(f'div[aria-label="{aria_label}"] > div')
+        return divs[1].css('div::text').get().strip().split()[0]
+
+    @staticmethod
+    def process_price(price):
+        # if price is in RON, converts it to EUR
+        if 'RON' in price:
+            cleaned_price = re.sub(r'\s*RON', '', price)
+            cleaned_price = cleaned_price.replace(' ', '')
+            price_in_ron = int(cleaned_price)
+            price_in_eur = price_in_ron * StoriaSpider.conversion_rate
+            return price_in_eur
+        # otherwise cleans the price and returns it as it is
+        else:
+            cleaned_price = re.sub(r'\s*€', '', price)
+            cleaned_price = cleaned_price.replace(' ', '')
+            return int(cleaned_price)
 
     def parse(self, response):
         self.driver.get(response.url)
@@ -36,22 +59,26 @@ class RentalSpider(scrapy.Spider):
         photo_urls = [img.get_attribute('src') for img in photos]
 
         title = response.css('h1[data-cy="adPageAdTitle"]::text').get().strip()
-        price = response.css('strong[data-cy="adPageHeaderPrice"]::text').get().strip().split()[0]
+        price = response.css('strong[data-cy="adPageHeaderPrice"]::text').get().strip()
         address = response.css('div[data-testid="map-link-container"] > a::text').get().strip()
-        surface_divs = response.css('div[aria-label="Suprafață utilă"] > div')
-        surface = surface_divs[1].css('div::text').get().strip().split()[0]
+        surface = StoriaSpider.get_nested_text_by_aria_label(response, 'Suprafață utilă')
+        rooms = StoriaSpider.get_nested_text_by_aria_label(response, 'Numărul de camere')
 
-        room_divs = response.css('div[aria-label="Numărul de camere"] > div')
-        rooms = room_divs[1].css('div::text').get().strip()
-
-        yield {
+        data = {
             'title': title,
-            'price': int(price),
+            'price': StoriaSpider.process_price(price),
             'address': address,
             'surface': int(surface),
             'rooms': int(rooms),
-            'photo_urls': photo_urls,
+            'photos': photo_urls,
+            'url': response.url,
         }
+
+        self.mongo_service.insert_apartment(data)
+        self.logger.info(f'Inserted data: {data}')
+
+        yield data
 
     def closed(self, reason):
         self.driver.quit()
+        self.mongo_service.close_connection()
