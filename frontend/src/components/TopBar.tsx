@@ -1,7 +1,7 @@
 import React from 'react';
 import {
 	View,
-	StyleSheet, Pressable,
+	StyleSheet
 } from 'react-native';
 import { Searchbar } from 'react-native-paper';
 import { MenuIcon } from './MenuIcon';
@@ -18,7 +18,7 @@ type TopBarProps = {
 
 
 const TopBar: React.FC<TopBarProps> = ({ navigation }) => {
-	const { state, setSearchType, setRegion } = useSearchContext();
+	const { setSearchType, setRegion } = useSearchContext();
 	const routeName = navigation.getState().routes[navigation.getState().index].name;
 	const [searchQuery, setSearchQuery] = React.useState('');
 
@@ -31,6 +31,7 @@ const TopBar: React.FC<TopBarProps> = ({ navigation }) => {
 			getCoordinatesFromAddress(searchQuery)
 				.then(region => {
 					setRegion(region);
+					setSearchQuery('');
 				})
 				.catch(error => {
 					console.error('Geocoding error:', error);
