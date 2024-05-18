@@ -31,10 +31,10 @@ export const ListingScreen: React.FC = () => {
 				<Card style={styles.container}>
 					<View style={styles.titleContainer}>
 						<Text style={styles.title}>{listing.title}</Text>
-						<Text style={styles.price}>Price: {listing.price} RON</Text>
+						<Text style={styles.price}>Price: {listing.price} €</Text>
 						<Text>
 							<Icon name={'map-marker'}/>
-							{listing.address.city}, {listing.address.stateOrProvince}, {listing.address.country}
+							{listing.address}
 						</Text>
 					</View>
 					<Carousel

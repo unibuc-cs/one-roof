@@ -80,7 +80,7 @@ export const FiltersScreen = ({ navigation }) => {
 					options={[
 						{ label: 'Any', value: PropertyTypeEnum.Any },
 						{ label: 'Studio', value: PropertyTypeEnum.Studio },
-						{ label: 'Room', value: PropertyTypeEnum.Room },
+						{ label: 'Apartment', value: PropertyTypeEnum.Apartment },
 						{ label: 'House', value: PropertyTypeEnum.House },
 					]}
 					onPress={handleRoomChange}
@@ -91,9 +91,9 @@ export const FiltersScreen = ({ navigation }) => {
 				<HeaderText textAlign={'left'} size={17}>Price Range (monthly fee):</HeaderText>
 				<View style={styles.flexContainer}>
 					<View style={styles.priceContainer}>
-						<Text style={styles.priceStyling}>{filters.priceRange?.min} RON </Text>
+						<Text style={styles.priceStyling}>{filters.priceRange?.min} € </Text>
 						<Text> - </Text>
-						<Text style={styles.priceStyling}>{filters.priceRange?.max} RON </Text>
+						<Text style={styles.priceStyling}>{filters.priceRange?.max} € </Text>
 					</View>
 					<View>
 						<MultiSlider

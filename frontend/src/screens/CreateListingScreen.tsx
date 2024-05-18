@@ -66,7 +66,7 @@ export const CreateListingScreen = () => {
 						<CustomSwitchSelector
 							options={[
 								{ label: 'Studio', value: PropertyTypeEnum.Studio },
-								{ label: 'Room', value: PropertyTypeEnum.Room },
+								{ label: 'Apartment', value: PropertyTypeEnum.Apartment },
 								{ label: 'House', value: PropertyTypeEnum.House },
 							]}
 							onPress={type => setType(type)}
@@ -126,7 +126,7 @@ export const CreateListingScreen = () => {
 									onValuesChangeStart={this.disableScroll}
 									onValuesChangeFinish={this.enableScroll}
 								/>
-								<Text style={styles.priceStyling}>{price} RON </Text>
+								<Text style={styles.priceStyling}>{price} € </Text>
 
 							</View>
 						</View>

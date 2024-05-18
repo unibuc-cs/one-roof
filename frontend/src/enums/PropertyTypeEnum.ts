@@ -1,6 +1,6 @@
 export enum PropertyTypeEnum {
 	Studio = 'studio',
-	Room = 'room',
+	Apartment = 'apartment',
 	House = 'house',
 	Any = 'any',
 }

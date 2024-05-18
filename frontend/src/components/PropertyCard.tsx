@@ -3,9 +3,13 @@ import { Dimensions, Image, StyleSheet, View } from 'react-native';
 import { Button, Card, Text } from 'react-native-paper';
 import { IListing } from '../models';
 import { DetailBox, HeaderText } from '.';
-import { useNavigation } from '@react-navigation/native';
+import { Link, useNavigation } from '@react-navigation/native';
 import { theme } from '../theme';
 import Carousel from 'react-native-reanimated-carousel';
+import { PropertyTypeEnum } from '../enums';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useCustomFonts } from '../hooks/useCustomFonts';
+import * as Linking from 'expo-linking';
 
 type PropertyCardProps = {
 	listing: IListing,
@@ -14,9 +18,18 @@ type PropertyCardProps = {
 	backgroundColor?: string,
 };
 
-const PropertyCard: React.FC<PropertyCardProps> = ({ listing, canOpen, mode, backgroundColor  }) => {
-	const { navigate }  = useNavigation();
+const PropertyCard: React.FC<PropertyCardProps> = ({ listing, canOpen, mode, backgroundColor }) => {
+	useCustomFonts();
+	const { navigate } = useNavigation();
 	const width = Dimensions.get('window').width;
+
+	const open = () => {
+		if (!listing.external) {
+			navigate('Listing', { id: listing._id })
+		} else {
+			Linking.openURL(listing.url as string);
+		}
+	}
 
 	return (
 		<Card mode={mode ?? 'elevated'} key={listing._id} style={[styles.cardContainer, {
@@ -28,7 +41,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ listing, canOpen, mode, bac
 						<Button
 							mode="elevated"
 							style={styles.openButton}
-							onPress={() => navigate('Listing', { id: listing._id })}
+							onPress={open}
 						>
 							Open
 						</Button>
@@ -39,7 +52,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ listing, canOpen, mode, bac
 						width={width - 100}
 						height={width / 2}
 						autoPlay={true}
-						data= {listing.photos}
+						data={listing.photos}
 						autoPlayInterval={5000}
 						scrollAnimationDuration={1000}
 						renderItem={({ index }) => (
@@ -54,14 +67,27 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ listing, canOpen, mode, bac
 						)}
 					/>
 				</View>
-				<HeaderText paddingTop={0} paddingBottom={10} size={20}> {listing.price} RON </HeaderText>
+				<HeaderText paddingTop={0} paddingBottom={5} size={20}> {listing.price} € </HeaderText>
 				<Text style={styles.address}>
 					{listing.address}
 				</Text>
-				<View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
-					<DetailBox content={`${listing.size} m2`}/>
-					<DetailBox content={`${listing.numberOfRooms} bedrooms`}/>
-					<DetailBox content={`${listing.numberOfBathrooms} bathrooms`}/>
+				<View style={[styles.detailRow, { marginBottom: 15 }]}>
+					<DetailBox>
+						<Text style={styles.contentText}> {listing.size} m2 </Text>
+					</DetailBox>
+					<DetailBox>
+						<Text style={styles.contentText}>{listing.type}</Text>
+					</DetailBox>
+					{listing.type !== PropertyTypeEnum.Studio && (
+						<DetailBox>
+							<Text style={styles.contentText}>{listing.numberOfRooms}</Text>
+							<MaterialCommunityIcons style={styles.icon} name={'bed-king-outline'} size={20} color={'white'}/>
+						</DetailBox>)}
+					{listing.type !== PropertyTypeEnum.Studio && (
+						<DetailBox>
+							<Text style={styles.contentText}>{listing.numberOfBathrooms}</Text>
+							<MaterialCommunityIcons style={styles.icon} name={'bathtub'} size={20} color={'white'}/>
+						</DetailBox>)}
 				</View>
 			</View>
 		</Card>
@@ -69,30 +95,41 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ listing, canOpen, mode, bac
 };
 
 const styles = StyleSheet.create({
+	contentText: {
+		color: 'white',
+		fontSize: 16,
+		fontFamily: 'ProximaNova-Bold',
+	},
+	icon: {
+		marginLeft: 3
+	},
+	detailRow: {
+		display: 'flex',
+		flexDirection: 'row',
+		justifyContent: 'space-around'
+	},
 	address: {
 		marginBottom: 15,
 		fontSize: 16,
-		fontFamily: 'ProximaNova-Regular'
+		fontFamily: 'ProximaNova-Regular',
 	},
 	cardContainer: {
 		zIndex: 1000,
-		padding: 30,
 		height: 350,
 		marginHorizontal: 15,
-		marginBottom: 30
 	},
 	contentContainer: {
 		flexDirection: 'column',
 		justifyContent: 'center',
 		alignItems: 'center',
-		height: '100%'
+		height: '100%',
 	},
 	imageContainer: {
-		marginTop: 100,
 		width: '100%',
 		height: 200,
 		alignItems: 'center',
 		justifyContent: 'center',
+		marginTop: 40,
 	},
 	image: {
 		width: '100%',
@@ -104,7 +141,7 @@ const styles = StyleSheet.create({
 		zIndex: 100,
 		position: 'absolute',
 		top: 5,
-		left: '74%'
+		left: '67%'
 	}
 });
 

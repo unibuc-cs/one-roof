@@ -16,8 +16,8 @@ class StoriaSpider(scrapy.Spider):
     name = "storia_spider"
     conversion_rate = 0.2  # from RON to EUR
     start_urls = [
-        # 'https://www.storia.ro/ro/rezultate/inchiriere/apartament/bucuresti?ownerTypeSingleSelect=ALL&distanceRadius=0&viewType=listing&limit=72&page=1'
-        'https://www.storia.ro/ro/oferta/2-camere-dorobanti-polona-IDzSCE',
+        'https://www.storia.ro/ro/rezultate/inchiriere/apartament/bucuresti?ownerTypeSingleSelect=ALL&distanceRadius=0&viewType=listing&limit=72&page=1'
+        # 'https://www.storia.ro/ro/oferta/2-camere-dorobanti-polona-IDzSCE',
     ]
 
     def __init__(self, *args, **kwargs):
@@ -52,14 +52,14 @@ class StoriaSpider(scrapy.Spider):
             cleaned_price = cleaned_price.replace(' ', '')
             return int(cleaned_price)
 
-    # def parse(self, response):
-    #     # collects all links to listings we want to scrape next
-    #     listing_urls = response.css('a[data-cy="listing-item-link"]::attr(href)').getall()
-    #     for url in listing_urls:
-    #         full_url = response.urljoin(url)
-    #         yield scrapy.Request(full_url, callback=self.parse_listing)
-
     def parse(self, response):
+        # collects all links to listings we want to scrape next
+        listing_urls = response.css('a[data-cy="listing-item-link"]::attr(href)').getall()
+        for url in listing_urls:
+            full_url = response.urljoin(url)
+            yield scrapy.Request(full_url, callback=self.parse_listing)
+
+    def parse_listing(self, response):
         # parse an individual listing
         self.driver.get(response.url)
         try:

@@ -1,4 +1,4 @@
-import MapView, { Marker } from 'react-native-maps';
+import MapView from 'react-native-maps';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { getCoordinatesFromLocation, mapStyles } from '../utils';
@@ -55,7 +55,7 @@ export const Map: React.FC = () => {
 						key={index}
 						coordinate={getCoordinatesFromLocation(item.location)}
 						onPress={() => handleMarkerPress(item)}
-						text={state.searchType === 'listings' ? `${item.price} RON` : 'review'}
+						text={state.searchType === SearchTypeEnum.Listings ? `${item.price} €` : 'review'}
 					>
 					</CustomMarker>
 				))}
