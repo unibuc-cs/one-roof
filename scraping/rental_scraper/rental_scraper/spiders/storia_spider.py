@@ -1,3 +1,5 @@
+import json
+import logging
 import scrapy
 import re
 from selenium import webdriver
@@ -7,12 +9,15 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from services import MongoService
 
+logging.getLogger('selenium.webdriver.remote.remote_connection').setLevel(logging.WARNING)
+logging.getLogger('urllib3.connectionpool').setLevel(logging.WARNING)
 
 class StoriaSpider(scrapy.Spider):
     name = "storia_spider"
     conversion_rate = 0.2  # from RON to EUR
     start_urls = [
-        'https://www.storia.ro/ro/oferta/garsoniera-linistita-colentina-IDAil1'
+        'https://www.storia.ro/ro/rezultate/inchiriere/apartament/bucuresti?ownerTypeSingleSelect=ALL&distanceRadius=0&viewType=listing&limit=72&page=1'
+        # 'https://www.storia.ro/ro/oferta/2-camere-dorobanti-polona-IDzSCE',
     ]
 
     def __init__(self, *args, **kwargs):
@@ -22,9 +27,15 @@ class StoriaSpider(scrapy.Spider):
         self.mongo_service = MongoService()
 
     @staticmethod
-    def get_nested_text_by_aria_label(response, aria_label):
+    def get_nested_text_by_aria_label(response, aria_label, rooms_fallback=True):
         divs = response.css(f'div[aria-label="{aria_label}"] > div')
-        return divs[1].css('div::text').get().strip().split()[0]
+        try:
+            return divs[1].css('div::text').get().strip().split()[0]
+        except Exception as e:
+            if rooms_fallback:
+                return divs[1].css('a[data-cy="ad-information-link"]::text').get().strip()
+            return e
+
 
     @staticmethod
     def process_price(price):
@@ -42,16 +53,24 @@ class StoriaSpider(scrapy.Spider):
             return int(cleaned_price)
 
     def parse(self, response):
+        # collects all links to listings we want to scrape next
+        listing_urls = response.css('a[data-cy="listing-item-link"]::attr(href)').getall()
+        for url in listing_urls:
+            full_url = response.urljoin(url)
+            yield scrapy.Request(full_url, callback=self.parse_listing)
+
+    def parse_listing(self, response):
+        # parse an individual listing
         self.driver.get(response.url)
         try:
-            accept_cookies_button = WebDriverWait(self.driver, 20).until(
+            accept_cookies_button = WebDriverWait(self.driver, 10).until(
                 EC.element_to_be_clickable((By.CSS_SELECTOR, 'button#onetrust-accept-btn-handler'))
             )
             accept_cookies_button.click()
         except Exception as e:
             self.logger.info("No cookie acceptance button found or an error occurred.")
 
-        div = WebDriverWait(self.driver, 5).until(
+        div = WebDriverWait(self.driver, 20).until(
             EC.visibility_of_element_located((By.CSS_SELECTOR, 'div.image-gallery-swipe'))
         )
 
@@ -73,6 +92,9 @@ class StoriaSpider(scrapy.Spider):
             'photos': photo_urls,
             'url': response.url,
         }
+
+        with open('log.json', 'w') as f:
+            json.dump(data, f)
 
         self.mongo_service.insert_apartment(data)
         self.logger.info(f'Inserted data: {data}')
