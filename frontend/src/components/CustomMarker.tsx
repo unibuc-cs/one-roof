@@ -7,7 +7,7 @@ import { useCustomFonts } from '../hooks/useCustomFonts';
 export const CustomMarker: React.FC<any> = ({ coordinate, onPress, text }) => {
 	useCustomFonts();
 	return (
-		<Marker coordinate={coordinate} onPress={onPress}>
+		<Marker coordinate={coordinate} onPress={onPress} tracksViewChanges={false}>
 			<View style={styles.container}>
 				<Text style={styles.text}>{text}</Text>
 			</View>
