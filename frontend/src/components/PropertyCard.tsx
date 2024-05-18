@@ -1,12 +1,11 @@
 import React from 'react';
-import {Dimensions, Image, StyleSheet, View} from 'react-native';
+import { Dimensions, Image, StyleSheet, View } from 'react-native';
 import { Button, Card, Text } from 'react-native-paper';
 import { IListing } from '../models';
 import { DetailBox, HeaderText } from '.';
 import { useNavigation } from '@react-navigation/native';
-import { transparent } from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
 import { theme } from '../theme';
-import Carousel from "react-native-reanimated-carousel";
+import Carousel from 'react-native-reanimated-carousel';
 
 type PropertyCardProps = {
 	listing: IListing,

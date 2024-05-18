@@ -1,16 +1,16 @@
 import React from 'react';
-import {View, Text, StyleSheet, Image, Dimensions, ScrollView} from 'react-native';
+import { View, Text, StyleSheet, Image, Dimensions, ScrollView } from 'react-native';
 import { useRoute, RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../components';
 import { useUser } from '@clerk/clerk-expo';
 import { useListing } from '../hooks';
-import Background from "../components/Background";
+import Background from '../components/Background';
 import Carousel from 'react-native-reanimated-carousel';
-import PropertyDetails from "../components/PropertyDetails";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import {Card} from "react-native-paper";
-import LandlordDetails from "../components/LandlordDetails";
-import {useCustomFonts} from "../hooks/useCustomFonts";
+import PropertyDetails from '../components/PropertyDetails';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { Card } from 'react-native-paper';
+import LandlordDetails from '../components/LandlordDetails';
+import { useCustomFonts } from '../hooks/useCustomFonts';
 
 type ListingScreenRouteProp = RouteProp<RootStackParamList, 'Listing'>;
 
@@ -26,7 +26,7 @@ export const ListingScreen: React.FC = () => {
 	}
 
 	return (
-		<ScrollView>
+		<ScrollView contentContainerStyle={{ flex:1, alignItems: 'center', justifyContent: 'center' }}>
 			<Background>
 				<Card style={styles.container}>
 					<View style={styles.titleContainer}>
@@ -34,7 +34,7 @@ export const ListingScreen: React.FC = () => {
 						<Text style={styles.price}>Price: {listing.price} RON</Text>
 						<Text>
 							<Icon name={'map-marker'}/>
-								{listing.address.city}, {listing.address.stateOrProvince}, {listing.address.country}
+							{listing.address.city}, {listing.address.stateOrProvince}, {listing.address.country}
 						</Text>
 					</View>
 					<Carousel
@@ -52,13 +52,13 @@ export const ListingScreen: React.FC = () => {
 									source={{
 										uri: listing.photos[index]
 									}}
-									/>
+								/>
 							</View>
 						)}
 					/>
 					<PropertyDetails listing = {listing}/>
 					<Text style={styles.description}>{listing.description}</Text>
-					<LandlordDetails landlordID = {listing.landlordId}/>
+					{/*<LandlordDetails landlordID = {listing.landlordId}/>*/}
 
 				</Card>
 			</Background>

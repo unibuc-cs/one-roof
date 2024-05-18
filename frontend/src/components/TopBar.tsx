@@ -86,7 +86,7 @@ const TopBar: React.FC<TopBarProps> = ({ navigation }) => {
 	} else {
 		return (
 			<View style={styles.menuContainer}>
-				<MenuIcon iconName={'menu'} onPress={() => {}}/>
+				<MenuIcon iconName={'menu'} onPress={() => {navigation.openDrawer();}}/>
 			</View>
 		);
 	}
