@@ -22,8 +22,7 @@ type IMapItem = IListing | IReview;
 
 export const Map: React.FC = () => {
 	const [selectedItem, setSelectedItem] = React.useState<IMapItem>();
-	const { state, setRegion, triggerSearch } = useSearchContext();
-	const [localRegion, setLocalRegion] = useState(state.region);
+	const { state, setIsWaitingForSearch, triggerSearch } = useSearchContext();
 
 	const handleClose = useCallback(() => setSelectedItem(undefined), []);
 
@@ -31,16 +30,16 @@ export const Map: React.FC = () => {
 		setSelectedItem(prevItem => (prevItem === item ? undefined : item));
 	}, []);
 
-	const debouncedTriggerSearch = useCallback((regionToSearch) => {
-		triggerSearch(regionToSearch);
-	}, [triggerSearch]);
+	const debouncedRegionUpdate = useCallback(debounce((newRegion) => {
+		triggerSearch(newRegion);
+	}, 600), [triggerSearch]);
 
-	const handleRegionChange = useCallback(debounce((region) => {
-		if (needsUpdate(localRegion, region)) {
-			debouncedTriggerSearch(region);
+	const handleRegionChangeComplete = useCallback((newRegion) => {
+		if (needsUpdate(state.region, newRegion)) {
+			setIsWaitingForSearch(true);
+			debouncedRegionUpdate(newRegion);
 		}
-	}, 600), [debouncedTriggerSearch]);
-
+	}, [state.region, debouncedRegionUpdate]);
 
 	const needsUpdate = (oldRegion, newRegion) => {
 		return Math.abs(newRegion.latitude - oldRegion.latitude) > EPSILON ||
@@ -48,17 +47,13 @@ export const Map: React.FC = () => {
 			Math.abs(newRegion.latitudeDelta - oldRegion.latitudeDelta) > EPSILON ||
 			Math.abs(newRegion.longitudeDelta - oldRegion.longitudeDelta) > EPSILON;
 	};
-	//
-	// useEffect(() => {
-	// 	setLocalRegion(state.region);
-	// }, [state.filteredListings, state.filteredReviews]);
 
 	return (
 		<View style={styles.map}>
 			<MapView
 				style={styles.map}
-				initialRegion={localRegion}
-				onRegionChangeComplete={handleRegionChange}
+				initialRegion={state.region}
+				onRegionChangeComplete={handleRegionChangeComplete}
 				customMapStyle={mapStyles}
 				onPress={() => setSelectedItem(undefined)}
 			>
@@ -68,8 +63,7 @@ export const Map: React.FC = () => {
 						coordinate={getCoordinatesFromLocation(item.location)}
 						onPress={() => handleMarkerPress(item)}
 						text={state.searchType === SearchTypeEnum.Listings ? `${item.price} €` : 'review'}
-					>
-					</CustomMarker>
+					/>
 				))}
 			</MapView>
 			{selectedItem && (
@@ -77,7 +71,7 @@ export const Map: React.FC = () => {
 					{state.searchType === SearchTypeEnum.Listings ?
 						<BottomListingCard item={selectedItem as IListing} onClose={handleClose} /> :
 						<BottomReviewCard item={selectedItem as IReview} onClose={handleClose} />
-					}
+						}
 				</View>
 			)}
 		</View>

@@ -11,10 +11,9 @@ import {
 } from '../utils';
 import { useListings } from '../hooks';
 import RentalAmenitiesEnum from '../enums/RentalAmenitiesEnum';
-import debounce from 'lodash.debounce';
-import { throttle } from 'lodash';
 
 export interface SearchContextState {
+	isWaitingForSearch: boolean,
 	region: {
 		latitude: number,
 		longitude: number,
@@ -36,13 +35,14 @@ export interface SearchContextState {
 }
 
 const SearchContext = createContext<{
-	triggerSearch: (localRegion) => void,
+	triggerSearch: (newRegion) => void,
 	state: SearchContextState,
 	setRegion: React.Dispatch<React.SetStateAction<SearchContextState['region']>>,
 	setSearchType: React.Dispatch<React.SetStateAction<SearchTypeEnum>>,
 	setListings: React.Dispatch<React.SetStateAction<IListing[]>>,
 	setReviews: React.Dispatch<React.SetStateAction<IReview[]>>,
 	setFilters: React.Dispatch<React.SetStateAction<SearchContextState['filters']>>,
+	setIsWaitingForSearch: React.Dispatch<React.SetStateAction<boolean>>,
 }>(null!);
 
 export const useSearchContext = () => useContext(SearchContext);
@@ -66,7 +66,7 @@ export const SearchProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 		bathrooms: NumberOfBathroomsEnum.Any,
 		amenities: [],
 	});
-
+	const [isWaitingForSearch, setIsWaitingForSearch] = useState<boolean>(false);
 	const { listings: loadedListings, error, isLoading } = useListings();
 
 	useEffect(() => {
@@ -75,12 +75,12 @@ export const SearchProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 		}
 	}, [loadedListings, isLoading, error]);
 
-	const fetchFilteredData = useCallback(async (localRegion) => {
+	const fetchFilteredData = useCallback(async (newRegion) => {
 		try {
 			const response = await callApi('search', {
 				method: 'POST',
 				body: JSON.stringify({
-					region: localRegion,
+					region: newRegion,
 					filters
 				})
 			});
@@ -90,22 +90,27 @@ export const SearchProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 			setFilteredReviews(response.filteredReviews);
 		} catch (error) {
 			console.error('Failed to fetch filtered data:', error);
+		} finally {
+			setIsWaitingForSearch(false);
 		}
-	}, [region, filters]);
+	}, [filters]);
 
-	const triggerSearch = useCallback((localRegion) => {
-		fetchFilteredData(localRegion);
+	const triggerSearch = useCallback((newRegion) => {
+		setIsWaitingForSearch(true);
+		setRegion(newRegion);
+		fetchFilteredData(newRegion);
 	}, [fetchFilteredData]);
 
 	const contextValue = useMemo(() => ({
 		triggerSearch,
-		state: { region, searchType, listings, reviews, filteredListings, filteredReviews, filters },
+		state: { region, searchType, listings, reviews, filteredListings, filteredReviews, filters, isWaitingForSearch },
 		setRegion,
 		setSearchType,
 		setListings,
 		setReviews,
 		setFilters,
-	}), [triggerSearch, region, searchType, listings, reviews, filteredListings, filteredReviews, filters]);
+		setIsWaitingForSearch
+	}), [triggerSearch, isWaitingForSearch, region, searchType, listings, reviews, filteredListings, filteredReviews, filters]);
 
 
 	return (
