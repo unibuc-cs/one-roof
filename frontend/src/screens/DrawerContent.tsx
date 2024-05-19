@@ -43,7 +43,7 @@ export function DrawerContent(props: DrawerContentComponentProps) {
 								<MaterialCommunityIcons name="map-marker-outline" color={color} size={size} />
 							)}
 							label="Add Property"
-							onPress={() => { props.navigation.navigate('CreateProperty'); }}
+							onPress={() => { props.navigation.navigate('CreateListing'); }}
 						/>
 					}
 					{ role === UserRoleEnum.RegularUser &&

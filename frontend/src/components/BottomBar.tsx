@@ -18,19 +18,8 @@ export const BottomBar = () => {
 	const { navigate} = useNavigation();
 	const bottomSheetRef = useRef<BottomSheet>(null);
 
-	const handleCreateListing = () => {
-		navigate('CreateListing');
-	};
-
 	return (
 		<View style={styles.container}>
-			{state.searchType === 'listings' && role === 'Landlord' && (
-				<Button
-					style={styles.newListingButton}
-					mode={"contained"}
-					onPress={handleCreateListing}
-				>+ Listing </Button>
-			)}
 			<BottomSheet
 				index={0}
 				ref={bottomSheetRef}
