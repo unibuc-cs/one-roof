@@ -1,5 +1,5 @@
 import MapView from 'react-native-maps';
-import React from 'react';
+import React, { memo, useCallback } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { getCoordinatesFromLocation, mapStyles } from '../utils';
 import { IListing, IReview } from '../models';
@@ -8,6 +8,7 @@ import { useSearchContext } from '../contexts/SearchContext';
 import { SearchTypeEnum } from '../enums';
 import { BottomReviewCard } from './BottomReviewCard';
 import { CustomMarker } from './CustomMarker';
+import { debounce } from 'lodash';
 
 const EPSILON = 0.001;
 
@@ -17,29 +18,29 @@ export const Map: React.FC = () => {
 	const [selectedItem, setSelectedItem] = React.useState<IMapItem>();
 	const { state, setRegion } = useSearchContext();
 
-	const handleClose = () => setSelectedItem(undefined);
+	const handleClose = useCallback(() => setSelectedItem(undefined), []);
 
-	const handleMarkerPress = (item: IMapItem) => {
-		if (selectedItem == item) {
-			setSelectedItem(undefined);
-		} else {
-			setSelectedItem(item);
-		}
-	};
+	const handleMarkerPress = useCallback((item: IMapItem) => {
+		setSelectedItem(prevItem => (prevItem === item ? undefined : item));
+	}, []);
 
-	const handleRegionChange = (newRegion) => {
+	const debouncedRegionUpdate = useCallback(debounce((newRegion) => {
+		setRegion(newRegion);
+	}, 400), [setRegion]);
+
+	const handleRegionChange = useCallback((newRegion) => {
 		if (needsUpdate(state.region, newRegion)) {
-			setRegion(newRegion);
+			debouncedRegionUpdate(newRegion);
 		}
-	};
+	}, [state.region, debouncedRegionUpdate]);
+
 
 	const needsUpdate = (oldRegion, newRegion) => {
 		return Math.abs(newRegion.latitude - oldRegion.latitude) > EPSILON ||
-			Math.abs(newRegion.longitude - oldRegion.longitude) > EPSILON||
-			Math.abs(newRegion.latitudeDelta - oldRegion.latitudeDelta) > EPSILON||
+			Math.abs(newRegion.longitude - oldRegion.longitude) > EPSILON ||
+			Math.abs(newRegion.latitudeDelta - oldRegion.latitudeDelta) > EPSILON ||
 			Math.abs(newRegion.longitudeDelta - oldRegion.longitudeDelta) > EPSILON;
 	};
-
 
 	return (
 		<View style={styles.map}>

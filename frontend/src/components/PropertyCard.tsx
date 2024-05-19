@@ -18,7 +18,7 @@ type PropertyCardProps = {
 	backgroundColor?: string,
 };
 
-const PropertyCard: React.FC<PropertyCardProps> = ({ listing, canOpen, mode, backgroundColor }) => {
+export const PropertyCard: React.FC<PropertyCardProps> = ({ listing, canOpen, mode, backgroundColor }) => {
 	useCustomFonts();
 	const { navigate } = useNavigation();
 	const width = Dimensions.get('window').width;
@@ -51,7 +51,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ listing, canOpen, mode, bac
 						loop
 						width={width - 100}
 						height={width / 2}
-						autoPlay={true}
+						autoPlay={false}
 						data={listing.photos}
 						autoPlayInterval={5000}
 						scrollAnimationDuration={1000}
@@ -67,7 +67,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ listing, canOpen, mode, bac
 						)}
 					/>
 				</View>
-				<HeaderText paddingTop={0} paddingBottom={5} size={20}> {listing.price} € </HeaderText>
+				<HeaderText paddingTop={0} paddingBottom={3} size={20}> {listing.price} € </HeaderText>
 				<Text style={styles.address}>
 					{listing.address}
 				</Text>
@@ -109,9 +109,10 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-around'
 	},
 	address: {
-		marginBottom: 15,
+		marginBottom: 5,
 		fontSize: 16,
 		fontFamily: 'ProximaNova-Regular',
+		textAlign: 'center'
 	},
 	cardContainer: {
 		zIndex: 1000,
@@ -122,14 +123,14 @@ const styles = StyleSheet.create({
 		flexDirection: 'column',
 		justifyContent: 'center',
 		alignItems: 'center',
-		height: '100%',
+		paddingBottom: 30
 	},
 	imageContainer: {
 		width: '100%',
 		height: 200,
 		alignItems: 'center',
 		justifyContent: 'center',
-		marginTop: 40,
+		marginTop: 30,
 	},
 	image: {
 		width: '100%',
@@ -145,4 +146,3 @@ const styles = StyleSheet.create({
 	}
 });
 
-export default PropertyCard;

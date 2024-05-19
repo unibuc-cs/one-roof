@@ -1,4 +1,4 @@
-import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+import React, { createContext, ReactNode, useContext, useEffect, useState, useCallback, useMemo } from 'react';
 import { IListing, IReview } from '../models';
 import { NumberOfBathroomsEnum, NumberOfBedroomsEnum, PropertyTypeEnum, SearchTypeEnum } from '../enums';
 import {
@@ -11,6 +11,8 @@ import {
 } from '../utils';
 import { useListings } from '../hooks';
 import RentalAmenitiesEnum from '../enums/RentalAmenitiesEnum';
+import debounce from 'lodash.debounce';
+import { throttle } from 'lodash';
 
 export interface SearchContextState {
 	region: {
@@ -41,7 +43,7 @@ const SearchContext = createContext<{
 	setListings: React.Dispatch<React.SetStateAction<IListing[]>>,
 	setReviews: React.Dispatch<React.SetStateAction<IReview[]>>,
 	setFilters: React.Dispatch<React.SetStateAction<SearchContextState['filters']>>,
-		}>(null!);
+}>(null!);
 
 export const useSearchContext = () => useContext(SearchContext);
 
@@ -73,7 +75,7 @@ export const SearchProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 		}
 	}, [loadedListings, isLoading, error]);
 
-	const fetchFilteredData = async () => {
+	const fetchFilteredData = useCallback(async () => {
 		try {
 			const response = await callApi('search', {
 				method: 'POST',
@@ -89,27 +91,29 @@ export const SearchProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 		} catch (error) {
 			console.error('Failed to fetch filtered data:', error);
 		}
-	};
+	}, [region, filters]);
 
-	const triggerSearch = () => {
-		console.log('triggered');
+	const triggerSearch = useCallback(() => {
 		fetchFilteredData();
-	};
+	}, [fetchFilteredData]);
 
 	useEffect(() => {
 		fetchFilteredData();
-	}, [region]);
+	}, [region, fetchFilteredData]);
+
+	const contextValue = useMemo(() => ({
+		triggerSearch,
+		state: { region, searchType, listings, reviews, filteredListings, filteredReviews, filters },
+		setRegion,
+		setSearchType,
+		setListings,
+		setReviews,
+		setFilters,
+	}), [triggerSearch, region, searchType, listings, reviews, filteredListings, filteredReviews, filters]);
+
 
 	return (
-		<SearchContext.Provider value={{
-			triggerSearch,
-			state: { region, searchType, listings, reviews, filteredListings, filteredReviews, filters },
-			setRegion,
-			setSearchType,
-			setListings,
-			setReviews,
-			setFilters
-		}}>
+		<SearchContext.Provider value={contextValue}>
 			{children}
 		</SearchContext.Provider>
 	);
