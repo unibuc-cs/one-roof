@@ -1,7 +1,13 @@
 import MapView from 'react-native-maps';
-import React, { memo, useCallback } from 'react';
+import React, { memo, useCallback, useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { getCoordinatesFromLocation, mapStyles } from '../utils';
+import {
+	BUCHAREST_COORDINATES,
+	DEFAULT_LATITUDE_DELTA,
+	DEFAULT_LONGITUDE_DELTA,
+	getCoordinatesFromLocation,
+	mapStyles
+} from '../utils';
 import { IListing, IReview } from '../models';
 import { BottomListingCard } from './BottomListingCard';
 import { useSearchContext } from '../contexts/SearchContext';
@@ -16,7 +22,8 @@ type IMapItem = IListing | IReview;
 
 export const Map: React.FC = () => {
 	const [selectedItem, setSelectedItem] = React.useState<IMapItem>();
-	const { state, setRegion } = useSearchContext();
+	const { state, setRegion, triggerSearch } = useSearchContext();
+	const [localRegion, setLocalRegion] = useState(state.region);
 
 	const handleClose = useCallback(() => setSelectedItem(undefined), []);
 
@@ -24,15 +31,15 @@ export const Map: React.FC = () => {
 		setSelectedItem(prevItem => (prevItem === item ? undefined : item));
 	}, []);
 
-	const debouncedRegionUpdate = useCallback(debounce((newRegion) => {
-		setRegion(newRegion);
-	}, 400), [setRegion]);
+	const debouncedTriggerSearch = useCallback((regionToSearch) => {
+		triggerSearch(regionToSearch);
+	}, [triggerSearch]);
 
-	const handleRegionChange = useCallback((newRegion) => {
-		if (needsUpdate(state.region, newRegion)) {
-			debouncedRegionUpdate(newRegion);
+	const handleRegionChange = useCallback(debounce((region) => {
+		if (needsUpdate(localRegion, region)) {
+			debouncedTriggerSearch(region);
 		}
-	}, [state.region, debouncedRegionUpdate]);
+	}, 600), [debouncedTriggerSearch]);
 
 
 	const needsUpdate = (oldRegion, newRegion) => {
@@ -41,12 +48,16 @@ export const Map: React.FC = () => {
 			Math.abs(newRegion.latitudeDelta - oldRegion.latitudeDelta) > EPSILON ||
 			Math.abs(newRegion.longitudeDelta - oldRegion.longitudeDelta) > EPSILON;
 	};
+	//
+	// useEffect(() => {
+	// 	setLocalRegion(state.region);
+	// }, [state.filteredListings, state.filteredReviews]);
 
 	return (
 		<View style={styles.map}>
 			<MapView
 				style={styles.map}
-				region={state.region}
+				initialRegion={localRegion}
 				onRegionChangeComplete={handleRegionChange}
 				customMapStyle={mapStyles}
 				onPress={() => setSelectedItem(undefined)}

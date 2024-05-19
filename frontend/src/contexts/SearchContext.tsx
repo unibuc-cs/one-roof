@@ -36,7 +36,7 @@ export interface SearchContextState {
 }
 
 const SearchContext = createContext<{
-	triggerSearch: () => void,
+	triggerSearch: (localRegion) => void,
 	state: SearchContextState,
 	setRegion: React.Dispatch<React.SetStateAction<SearchContextState['region']>>,
 	setSearchType: React.Dispatch<React.SetStateAction<SearchTypeEnum>>,
@@ -75,12 +75,12 @@ export const SearchProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 		}
 	}, [loadedListings, isLoading, error]);
 
-	const fetchFilteredData = useCallback(async () => {
+	const fetchFilteredData = useCallback(async (localRegion) => {
 		try {
 			const response = await callApi('search', {
 				method: 'POST',
 				body: JSON.stringify({
-					region,
+					region: localRegion,
 					filters
 				})
 			});
@@ -93,13 +93,9 @@ export const SearchProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 		}
 	}, [region, filters]);
 
-	const triggerSearch = useCallback(() => {
-		fetchFilteredData();
+	const triggerSearch = useCallback((localRegion) => {
+		fetchFilteredData(localRegion);
 	}, [fetchFilteredData]);
-
-	useEffect(() => {
-		fetchFilteredData();
-	}, [region, fetchFilteredData]);
 
 	const contextValue = useMemo(() => ({
 		triggerSearch,
