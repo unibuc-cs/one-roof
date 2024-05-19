@@ -51,7 +51,6 @@ const getFilterQuery = (filters) => {
 
 export const SearchService = {
 	search: async (searchParams: ISearchParams) => {
-		console.log('aici 2')
 		const geoQuery = getGeospatialQuery(searchParams);
 		const filterQuery = getFilterQuery(searchParams.filters);
 		const combinedQuery = { ...geoQuery, ...filterQuery };
@@ -63,6 +62,7 @@ export const SearchService = {
 			const justFilteredListings = await Listing.find(filterQuery);
 			const justFilteredReviews = await Review.find(filterQuery);
 
+			console.log('region', searchParams.region);
 			console.log('restrictedListings', restrictedListings.length);
 			console.log('justFilteredListings', justFilteredListings.length);
 

@@ -35,11 +35,16 @@ export const Map: React.FC = () => {
 	}, 600), [triggerSearch]);
 
 	const handleRegionChangeComplete = useCallback((newRegion) => {
-		if (needsUpdate(state.region, newRegion)) {
+		 if (needsUpdate(state.region, newRegion)) {
 			setIsWaitingForSearch(true);
 			debouncedRegionUpdate(newRegion);
 		}
 	}, [state.region, debouncedRegionUpdate]);
+
+	const handleMapLoaded = useCallback(() => {
+		setIsWaitingForSearch(true);
+		debouncedRegionUpdate(state.region);
+	}, []);
 
 	const needsUpdate = (oldRegion, newRegion) => {
 		return Math.abs(newRegion.latitude - oldRegion.latitude) > EPSILON ||
@@ -53,6 +58,7 @@ export const Map: React.FC = () => {
 			<MapView
 				style={styles.map}
 				initialRegion={state.region}
+				onMapLoaded={handleMapLoaded}
 				onRegionChangeComplete={handleRegionChangeComplete}
 				customMapStyle={mapStyles}
 				onPress={() => setSelectedItem(undefined)}
