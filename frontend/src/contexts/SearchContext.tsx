@@ -80,7 +80,7 @@ export const SearchProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 			const response = await callApi('search', {
 				method: 'POST',
 				body: JSON.stringify({
-					region: newRegion,
+					region: newRegion || region,
 					filters
 				})
 			});
@@ -97,7 +97,9 @@ export const SearchProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 
 	const triggerSearch = useCallback((newRegion) => {
 		setIsWaitingForSearch(true);
-		setRegion(newRegion);
+		if (newRegion) {
+			setRegion(newRegion);
+		}
 		fetchFilteredData(newRegion);
 	}, [fetchFilteredData]);
 
