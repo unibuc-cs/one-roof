@@ -14,6 +14,7 @@ import RentalAmenitiesEnum from '../enums/RentalAmenitiesEnum';
 
 export interface SearchContextState {
 	isWaitingForSearch: boolean,
+	wasExternalSearchPerformed: boolean,
 	region: {
 		latitude: number,
 		longitude: number,
@@ -35,7 +36,7 @@ export interface SearchContextState {
 }
 
 const SearchContext = createContext<{
-	triggerSearch: (newRegion) => void,
+	triggerSearch: (newRegion, wasExternal) => void,
 	state: SearchContextState,
 	setRegion: React.Dispatch<React.SetStateAction<SearchContextState['region']>>,
 	setSearchType: React.Dispatch<React.SetStateAction<SearchTypeEnum>>,
@@ -43,6 +44,7 @@ const SearchContext = createContext<{
 	setReviews: React.Dispatch<React.SetStateAction<IReview[]>>,
 	setFilters: React.Dispatch<React.SetStateAction<SearchContextState['filters']>>,
 	setIsWaitingForSearch: React.Dispatch<React.SetStateAction<boolean>>,
+	setWasExternalSearchPerformed: React.Dispatch<React.SetStateAction<boolean>>,
 }>(null!);
 
 export const useSearchContext = () => useContext(SearchContext);
@@ -67,6 +69,7 @@ export const SearchProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 		amenities: [],
 	});
 	const [isWaitingForSearch, setIsWaitingForSearch] = useState<boolean>(false);
+	const [wasExternalSearchPerformed, setWasExternalSearchPerformed] = useState<boolean>(false);
 	const { listings: loadedListings, error, isLoading } = useListings();
 
 	useEffect(() => {
@@ -95,24 +98,29 @@ export const SearchProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 		}
 	}, [filters]);
 
-	const triggerSearch = useCallback((newRegion) => {
+	const triggerSearch = useCallback((newRegion, wasExternal) => {
 		setIsWaitingForSearch(true);
 		if (newRegion) {
 			setRegion(newRegion);
 		}
-		fetchFilteredData(newRegion);
+		fetchFilteredData(newRegion).then(() => {
+			if (wasExternal) {
+				setWasExternalSearchPerformed(true);
+			}
+		})
 	}, [fetchFilteredData]);
 
 	const contextValue = useMemo(() => ({
 		triggerSearch,
-		state: { region, searchType, listings, reviews, filteredListings, filteredReviews, filters, isWaitingForSearch },
+		state: { region, searchType, listings, reviews, filteredListings, filteredReviews, filters, isWaitingForSearch, wasExternalSearchPerformed },
 		setRegion,
 		setSearchType,
 		setListings,
 		setReviews,
 		setFilters,
-		setIsWaitingForSearch
-	}), [triggerSearch, isWaitingForSearch, region, searchType, listings, reviews, filteredListings, filteredReviews, filters]);
+		setIsWaitingForSearch,
+		setWasExternalSearchPerformed
+	}), [triggerSearch, wasExternalSearchPerformed, isWaitingForSearch, region, searchType, listings, reviews, filteredListings, filteredReviews, filters]);
 
 
 	return (

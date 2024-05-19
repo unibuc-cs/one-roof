@@ -1,5 +1,5 @@
 import MapView from 'react-native-maps';
-import React, { memo, useCallback, useEffect, useState } from 'react';
+import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import {
 	BUCHAREST_COORDINATES,
@@ -21,8 +21,10 @@ const EPSILON = 0.001;
 type IMapItem = IListing | IReview;
 
 export const Map: React.FC = () => {
+	const mapRef = useRef(null);
+	const [legalToUpdate, setLegalToUpdate] = useState<boolean>(true);
 	const [selectedItem, setSelectedItem] = React.useState<IMapItem>();
-	const { state, setIsWaitingForSearch, triggerSearch } = useSearchContext();
+	const { state, setIsWaitingForSearch, setWasExternalSearchPerformed, triggerSearch } = useSearchContext();
 
 	const handleClose = useCallback(() => setSelectedItem(undefined), []);
 
@@ -31,15 +33,20 @@ export const Map: React.FC = () => {
 	}, []);
 
 	const debouncedRegionUpdate = useCallback(debounce((newRegion) => {
-		triggerSearch(newRegion);
+		triggerSearch(newRegion, false);
 	}, 600), [triggerSearch]);
 
 	const handleRegionChangeComplete = useCallback((newRegion) => {
 		 if (needsUpdate(state.region, newRegion)) {
-			setIsWaitingForSearch(true);
-			debouncedRegionUpdate(newRegion);
+			 if (legalToUpdate) {
+				 setIsWaitingForSearch(true);
+				 debouncedRegionUpdate(newRegion);
+			 } else {
+				 console.log('was illegal');
+				 setLegalToUpdate(true);
+			 }
 		}
-	}, [state.region, debouncedRegionUpdate]);
+	}, [state.region, legalToUpdate, debouncedRegionUpdate]);
 
 	const handleMapLoaded = useCallback(() => {
 		setIsWaitingForSearch(true);
@@ -53,9 +60,28 @@ export const Map: React.FC = () => {
 			Math.abs(newRegion.longitudeDelta - oldRegion.longitudeDelta) > EPSILON;
 	};
 
+	useEffect(() => {
+		if (mapRef.current && state.wasExternalSearchPerformed) {
+			console.log('was external map');
+			mapRef.current.animateToRegion(state.region, 1000);
+			setWasExternalSearchPerformed(false);
+			setLegalToUpdate(false);
+		}
+	}, [state.wasExternalSearchPerformed]);
+
+	//
+	// useEffect(() => {
+	// 	if (mapRef.current && state.wasExternalSearchPerformed) {
+	// 		console.log('was external map');
+	// 		mapRef.current.animateToRegion(state.region, 1000);
+	// 		setWasExternalSearchPerformed(false);
+	// 	}
+	// }, [state.wasExternalSearchPerformed]);
+
 	return (
 		<View style={styles.map}>
 			<MapView
+				ref={mapRef}
 				style={styles.map}
 				initialRegion={state.region}
 				onMapLoaded={handleMapLoaded}
