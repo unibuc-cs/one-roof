@@ -9,15 +9,12 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from services import MongoService
 
-# logging.getLogger('selenium.webdriver.remote.remote_connection').setLevel(logging.WARNING)
-# logging.getLogger('urllib3.connectionpool').setLevel(logging.WARNING)
 
 class StoriaSpider(scrapy.Spider):
     name = "storia_spider"
     conversion_rate = 0.2  # from RON to EUR
     start_urls = [
         'https://www.storia.ro/ro/rezultate/inchiriere/apartament/bucuresti?ownerTypeSingleSelect=ALL&distanceRadius=0&viewType=listing&limit=72&page=1'
-        # 'https://www.storia.ro/ro/oferta/2-camere-dorobanti-polona-IDzSCE',
     ]
 
     def __init__(self, *args, **kwargs):
@@ -91,6 +88,7 @@ class StoriaSpider(scrapy.Spider):
             'rooms': int(rooms),
             'photos': photo_urls,
             'url': response.url,
+            'precise': True
         }
 
         self.mongo_service.insert_apartment(data)

@@ -14,7 +14,8 @@ class GoogleMapsService:
         try:
             geocode_result = self.client.geocode(address)
             if not geocode_result:
-                raise Exception(f'No results found for address: {address}')
+                print(f'No results found for address: {address}')
+                return None
             location = geocode_result[0]['geometry']['location']
             return [location['lng'], location['lat']]
         except Exception as e:

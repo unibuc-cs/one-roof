@@ -67,6 +67,7 @@ class OlxSpider(scrapy.Spider):
             if url.startswith('/d/oferta'):
                 full_url = response.urljoin(url)
                 yield scrapy.Request(full_url, callback=self.parse_listing)
+                break
 
     def parse_listing(self, response):
         # parse an individual listing
@@ -137,9 +138,10 @@ class OlxSpider(scrapy.Spider):
             'photos': photo_urls,
             'type': room_type,
             'url': response.url,
+            'precise': False
         }
 
-        # self.mongo_service.insert_apartment(data)
+        self.mongo_service.insert_apartment(data)
         self.logger.info(f'Inserted data: {data}')
 
         yield data
