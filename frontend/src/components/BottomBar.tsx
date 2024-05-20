@@ -4,18 +4,13 @@ import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { ItemList } from './ItemList';
 import { useSearchContext } from '../contexts/SearchContext';
 import { useCustomFonts } from '../hooks/useCustomFonts';
-import Button from "./Button";
 import {useNavigation} from "@react-navigation/native";
 import {useUserDetails} from "../contexts/UserDetailsContext";
-import {createDrawerNavigator} from "@react-navigation/drawer";
-import Spinner from 'react-native-loading-spinner-overlay';
 import { ActivityIndicator } from 'react-native-paper';
 
 export const BottomBar = () => {
 	useCustomFonts();
 	const { state } = useSearchContext();
-	const {role, setRole} = useUserDetails();
-	const { navigate} = useNavigation();
 	const bottomSheetRef = useRef<BottomSheet>(null);
 
 	return (

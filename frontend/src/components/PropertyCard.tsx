@@ -1,35 +1,37 @@
-import React from 'react';
-import { Dimensions, Image, StyleSheet, View } from 'react-native';
+import React, { useCallback } from 'react';
+import { Dimensions, StyleSheet, View } from 'react-native';
 import { Button, Card, Text } from 'react-native-paper';
 import { IListing } from '../models';
 import { DetailBox, HeaderText } from '.';
-import { Link, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { theme } from '../theme';
 import Carousel from 'react-native-reanimated-carousel';
 import { PropertyTypeEnum } from '../enums';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useCustomFonts } from '../hooks/useCustomFonts';
 import * as Linking from 'expo-linking';
+import { Image } from 'expo-image';
 
 type PropertyCardProps = {
 	listing: IListing,
 	canOpen: boolean,
 	mode?: string,
 	backgroundColor?: string,
+	showCarousel?: boolean,
 };
 
-export const PropertyCard: React.FC<PropertyCardProps> = ({ listing, canOpen, mode, backgroundColor }) => {
+export const PropertyCard: React.FC<PropertyCardProps> = ({ listing, canOpen, mode, backgroundColor, showCarousel = true }) => {
 	useCustomFonts();
 	const { navigate } = useNavigation();
 	const width = Dimensions.get('window').width;
 
-	const open = () => {
+	const open = useCallback(() => {
 		if (!listing.external) {
-			navigate('Listing', { id: listing._id })
+			navigate('Listing', { id: listing._id });
 		} else {
 			Linking.openURL(listing.url as string);
 		}
-	}
+	}, [listing, navigate]);
 
 	return (
 		<Card mode={mode ?? 'elevated'} key={listing._id} style={[styles.cardContainer, {
@@ -46,26 +48,36 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ listing, canOpen, mo
 							Open
 						</Button>
 					)}
-					{/* TODO: de pus o galerie mai frumoasa */}
-					<Carousel
-						loop
-						width={width - 100}
-						height={width / 2}
-						autoPlay={false}
-						data={listing.photos}
-						autoPlayInterval={5000}
-						scrollAnimationDuration={1000}
-						renderItem={({ index }) => (
-							<View>
-								<Image
-									style={styles.image}
-									source={{
-										uri: listing.photos[index]
-									}}
-								/>
-							</View>
-						)}
-					/>
+					{showCarousel ? (
+						<Carousel
+							loop
+							width={width - 100}
+							height={width / 2}
+							autoPlay={true}
+							data={listing.photos}
+							autoPlayInterval={5000}
+							scrollAnimationDuration={1000}
+							renderItem={({ index }) => (
+								<View>
+									<Image
+										style={styles.image}
+										source={{
+											uri: listing.photos[index],
+										}}
+										contentFit={'cover'}
+									/>
+								</View>
+							)}
+						/>
+					) : (
+						<Image
+							style={[styles.image, {width: width - 100}]}
+							source={{
+								uri: listing.photos[0],
+							}}
+							contentFit="cover"
+						/>
+					)}
 				</View>
 				<HeaderText paddingTop={0} paddingBottom={3} size={20}> {listing.price} € </HeaderText>
 				<Text style={styles.address}>
@@ -81,13 +93,15 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ listing, canOpen, mo
 					{listing.type !== PropertyTypeEnum.Studio && (
 						<DetailBox>
 							<Text style={styles.contentText}>{listing.numberOfRooms}</Text>
-							<MaterialCommunityIcons style={styles.icon} name={'bed-king-outline'} size={20} color={'white'}/>
-						</DetailBox>)}
+							<MaterialCommunityIcons style={styles.icon} name={'bed-king-outline'} size={20} color={'white'} />
+						</DetailBox>
+					)}
 					{listing.type !== PropertyTypeEnum.Studio && (
 						<DetailBox>
 							<Text style={styles.contentText}>{listing.numberOfBathrooms}</Text>
-							<MaterialCommunityIcons style={styles.icon} name={'bathtub'} size={20} color={'white'}/>
-						</DetailBox>)}
+							<MaterialCommunityIcons style={styles.icon} name={'bathtub'} size={20} color={'white'} />
+						</DetailBox>
+					)}
 				</View>
 			</View>
 		</Card>
@@ -145,4 +159,3 @@ const styles = StyleSheet.create({
 		left: '67%'
 	}
 });
-

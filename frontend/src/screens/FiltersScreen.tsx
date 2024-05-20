@@ -103,7 +103,6 @@ export const FiltersScreen = ({ navigation }) => {
 						<Text style={styles.priceStyling}>{priceRangeRef.current[1]} € </Text>
 					</View>
 					<MultiSlider
-						touchDimensions={height: 100}
 						trackStyle={{height: 3}}
 						values={priceRangeRef.current}
 						sliderLength={300}

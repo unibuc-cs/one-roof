@@ -67,7 +67,6 @@ class OlxSpider(scrapy.Spider):
             if url.startswith('/d/oferta'):
                 full_url = response.urljoin(url)
                 yield scrapy.Request(full_url, callback=self.parse_listing)
-                break
 
     def parse_listing(self, response):
         # parse an individual listing
