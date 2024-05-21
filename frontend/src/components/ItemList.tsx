@@ -1,8 +1,9 @@
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import React, { useCallback } from 'react';
 import { useSearchContext } from '../contexts/SearchContext';
 import { PropertyCard } from './PropertyCard';
 import { IListing, IReview } from '../models';
+import { ReviewCard } from './ReviewCard';
 
 export const ItemList = () => {
 	const { state } = useSearchContext();
@@ -17,7 +18,7 @@ export const ItemList = () => {
 
 	const renderReview = useCallback(
 		(review: IReview) => (
-			<Text> Not yet implemented! </Text>
+			<ReviewCard review={review} key={review._id}/>
 		), []
 	);
 

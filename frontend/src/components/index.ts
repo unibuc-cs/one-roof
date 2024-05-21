@@ -4,15 +4,17 @@ export * from './Background';
 export * from './TopBar';
 export * from './Map';
 export * from './MenuIcon';
+// TODO: FIX THIS CIRCULAR
 export * from '../navigation/AppNavigation';
 export * from './ToggleButton';
 export * from './BottomBar';
 export * from './HeaderText';
 export * from './DetailBox';
-export * from './BottomListingCard';
+export * from './BottomItemCard';
 export * from './CustomMarker';
 export * from './Button';
 export * from './TextInputSmaller';
 export * from './MapInput';
 export * from './PreferenceSlider';
 export * from './ReviewSection';
+export * from './ReviewCard';

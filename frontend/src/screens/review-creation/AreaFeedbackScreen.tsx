@@ -48,6 +48,7 @@ export const AreaFeedbackScreen: React.FC<AreaFeedbackScreenProps> = ({ route, n
 			title: generalDetails.title,
 			recommend: generalDetails.recommend,
 			description: generalDetails.comments,
+			livingSituation: generalDetails.livingSituation,
 			location: {
 				type: 'Point',
 				coordinates: [generalDetails.longitude, generalDetails.latitude],

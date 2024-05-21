@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { useUserDetails } from '../../contexts/UserDetailsContext';
 import { useAuth, useUser } from '@clerk/clerk-expo';
 import userService from '../../services/internal/userService';
@@ -12,7 +12,6 @@ import Logo from '../../components/Logo';
 export const CreateReviewScreen: React.FC<any> = ({navigation}) => {
 	const { onboardingStep, setOnboardingStep } = useUserDetails();
 	const { user } = useUser();
-	const { signOut } = useAuth();
 
 	const isFirstTimeUser = onboardingStep !== 3;
 	const handleContinue = async () => {
@@ -29,7 +28,7 @@ export const CreateReviewScreen: React.FC<any> = ({navigation}) => {
 
 	const callToAction = 'Share your thoughts about your current living place and surroundings!';
 	const firstTimeMessage = 'Welcome!\n To benefit from the community\'s knowledge, we first ask you to leave a review of your current or past place of residence.\nYour review will help others make informed decisions.'
-	const additionalReviewMessage = 'We appreciate your willingness to share your experiences and help the community by leaving additional review-creation!';
+	const additionalReviewMessage = 'We appreciate your willingness to share your experiences and help the community by leaving additional reviews!';
 	const welcomingMessage = isFirstTimeUser ? firstTimeMessage : additionalReviewMessage;
 
 	return (

@@ -9,10 +9,9 @@ import {
 	mapStyles
 } from '../utils';
 import { IListing, IReview } from '../models';
-import { BottomListingCard } from './BottomListingCard';
+import { BottomItemCard } from './BottomItemCard';
 import { useSearchContext } from '../contexts/SearchContext';
 import { SearchTypeEnum } from '../enums';
-import { BottomReviewCard } from './BottomReviewCard';
 import { CustomMarker } from './CustomMarker';
 import { debounce } from 'lodash';
 import { theme } from '../theme';
@@ -70,14 +69,6 @@ export const Map: React.FC = () => {
 		}
 	}, [state.wasExternalSearchPerformed]);
 
-	//
-	// useEffect(() => {
-	// 	if (mapRef.current && state.wasExternalSearchPerformed) {
-	// 		console.log('was external map');
-	// 		mapRef.current.animateToRegion(state.region, 1000);
-	// 		setWasExternalSearchPerformed(false);
-	// 	}
-	// }, [state.wasExternalSearchPerformed]);
 
 	return (
 		<View style={styles.map}>
@@ -103,8 +94,8 @@ export const Map: React.FC = () => {
 			{selectedItem && (
 				<View style={styles.bottomCardContainer}>
 					{state.searchType === SearchTypeEnum.Listings ?
-						<BottomListingCard item={selectedItem as IListing} onClose={handleClose} /> :
-						<BottomReviewCard item={selectedItem as IReview} onClose={handleClose} />
+						<BottomItemCard item={selectedItem as IListing} onClose={handleClose} /> :
+						<BottomItemCard item={selectedItem as IReview} type={'review'} onClose={handleClose} />
 						}
 				</View>
 			)}

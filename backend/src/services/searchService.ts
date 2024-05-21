@@ -68,9 +68,9 @@ export const SearchService = {
 
 		try {
 			const restrictedListings = await Listing.find(combinedQuery);
-			const restrictedReviews = await Review.find(combinedQuery);
+			const restrictedReviews = await Review.find(geoQuery);
 			const justFilteredListings = await Listing.find(filterQuery);
-			const justFilteredReviews = await Review.find(filterQuery);
+			const justFilteredReviews = await Review.find({ });
 
 			console.log('region', searchParams.region);
 			console.log('restrictedListings', restrictedListings.length);

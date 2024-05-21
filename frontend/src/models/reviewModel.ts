@@ -6,6 +6,7 @@ export interface IReview {
 	title: string,
 	recommend: 1 | 2 | 3 | 4 | 5,
 	description: string,
+	livingSituation: string,
 	location: ILocation,
 	address: IAddress,
 	areaFeedback: {
