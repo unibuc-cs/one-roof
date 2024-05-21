@@ -33,6 +33,16 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ listing, canOpen, mo
 		}
 	}, [listing, navigate]);
 
+	const getOpenMessage = useCallback(() => {
+		if (!listing.external) {
+			return 'Open';
+		} else if (listing.url?.startsWith('https://www.storia')) {
+			return 'Go to Storia';
+		} else {
+			return 'Go to Olx';
+		}
+	})
+
 	return (
 		<Card mode={mode ?? 'elevated'} key={listing._id} style={[styles.cardContainer, {
 			backgroundColor: backgroundColor ?? theme.colors.background
@@ -45,7 +55,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ listing, canOpen, mo
 							style={styles.openButton}
 							onPress={open}
 						>
-							Open
+							{ getOpenMessage() }
 						</Button>
 					)}
 					{showCarousel ? (
@@ -156,6 +166,6 @@ const styles = StyleSheet.create({
 		zIndex: 100,
 		position: 'absolute',
 		top: 5,
-		left: '67%'
+		right: '10%'
 	}
 });
