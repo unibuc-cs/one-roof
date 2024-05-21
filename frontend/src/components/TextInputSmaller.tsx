@@ -9,7 +9,6 @@ type Props = React.ComponentProps<typeof Input> & { errorText?: string, marginVe
 export const TextInputSmaller = ({ errorText, marginVertical, ...props }: Props) => {
 	useCustomFonts();
 	const customPadding = props.multiline ? 8 : 0;
-	console.log('custom', customPadding);
 	return  (
 		<View style={[styles.container]}>
 			<Input
@@ -38,6 +37,7 @@ const styles = StyleSheet.create({
 		backgroundColor: theme.colors.secondary,
 	},
 	input: {
+		paddingTop: 4,
 		fontFamily: 'ProximaNova-Regular',
 	},
 	error: {

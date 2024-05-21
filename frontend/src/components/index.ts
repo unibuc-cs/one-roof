@@ -14,3 +14,5 @@ export * from './CustomMarker';
 export * from './Button';
 export * from './TextInputSmaller';
 export * from './MapInput';
+export * from './PreferenceSlider';
+export * from './ReviewSection';
