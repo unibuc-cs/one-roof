@@ -18,7 +18,7 @@ type TopBarProps = {
 
 
 const TopBar: React.FC<TopBarProps> = ({ navigation }) => {
-	const { setSearchType, setRegion } = useSearchContext();
+	const { setSearchType, triggerSearch } = useSearchContext();
 	const routeName = navigation.getState().routes[navigation.getState().index].name;
 	const [searchQuery, setSearchQuery] = React.useState('');
 
@@ -30,7 +30,7 @@ const TopBar: React.FC<TopBarProps> = ({ navigation }) => {
 		if (searchQuery) {
 			getCoordinatesFromAddress(searchQuery)
 				.then(region => {
-					setRegion(region);
+					triggerSearch(region, true);
 					setSearchQuery('');
 				})
 				.catch(error => {

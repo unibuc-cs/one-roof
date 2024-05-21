@@ -30,6 +30,16 @@ const getFilterQuery = (filters) => {
 		query.type = filters.roomType;
 	}
 
+	if (filters.provider && filters.provider !== 'any') {
+		if (filters.provider === 'storia') {
+			query.url = { $regex: '^https://www.storia' };
+		} else if (filters.provider === 'olx') {
+			query.url = { $regex: '^https://www.olx' };
+		} else if (filters.provider === 'internal') {
+			query.url = { $not: { $regex: '^https://www.storia|^https://www.olx' } };
+		}
+	}
+
 	if (filters.priceRange) {
 		query.price = { $gte: filters.priceRange.min, $lte: filters.priceRange.max };
 	}
@@ -53,7 +63,6 @@ export const SearchService = {
 	search: async (searchParams: ISearchParams) => {
 		const geoQuery = getGeospatialQuery(searchParams);
 		const filterQuery = getFilterQuery(searchParams.filters);
-		console.error(filterQuery);
 		const combinedQuery = { ...geoQuery, ...filterQuery };
 		console.error('combined', combinedQuery);
 
@@ -62,6 +71,11 @@ export const SearchService = {
 			const restrictedReviews = await Review.find(combinedQuery);
 			const justFilteredListings = await Listing.find(filterQuery);
 			const justFilteredReviews = await Review.find(filterQuery);
+
+			console.log('region', searchParams.region);
+			console.log('restrictedListings', restrictedListings.length);
+			console.log('justFilteredListings', justFilteredListings.length);
+
 			return {
 				listings: restrictedListings,
 				reviews: restrictedReviews,

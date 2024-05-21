@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import BottomSheet from '@gorhom/bottom-sheet';
-import PropertyCard from './PropertyCard';
+import { PropertyCard } from './PropertyCard';
 
 export const BottomListingCard: React.FC<any> = ({ item, onClose }) => {
 	const [isOpen, setIsOpen] = useState(true);

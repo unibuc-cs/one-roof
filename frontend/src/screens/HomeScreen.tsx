@@ -1,7 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
 import { BottomBar, Map } from '../components';
-import {NewListingButton} from "../components/NewListingButton";
 
 export const HomeScreen = () => {
 	return (
