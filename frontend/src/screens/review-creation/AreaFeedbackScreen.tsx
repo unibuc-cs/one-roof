@@ -8,6 +8,8 @@ import Background from '../../components/Background';
 import { Card } from 'react-native-paper';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import { reviewService } from '../../services';
+import { useUserDetails } from '../../contexts/UserDetailsContext';
 
 const AreaFeedbackSchema = Yup.object().shape({
 	transport: Yup.object().shape({
@@ -42,10 +44,30 @@ export const AreaFeedbackScreen: React.FC<AreaFeedbackScreenProps> = ({ route, n
 		navigation.navigate('Home');
 	}
 	const handleSubmit = (values: any) => {
-		console.log('General Details:', generalDetails);
-		console.log('Building Feedback:', buildingFeedback);
-		console.log('Area Feedback:', values);
-		navigation.navigate('NextScreen', { generalDetails, buildingFeedback, areaFeedback: values });
+		const reviewData = {
+			title: generalDetails.title,
+			recommend: generalDetails.recommend,
+			description: generalDetails.comments,
+			location: {
+				type: 'Point',
+				coordinates: [generalDetails.longitude, generalDetails.latitude],
+			},
+			address: generalDetails.livingSituation,
+			areaFeedback: values,
+			buildingFeedback: buildingFeedback,
+			reviewerId: '664c96989d32dae8d13aba37',
+		}
+
+		console.log('reviewData', reviewData);
+
+		reviewService.createReview(reviewData, generalDetails.reviewerId)
+			.then(response => {
+				console.log('Review submitted successfully', response);
+				navigation.navigate('Home');
+			})
+			.catch(error => {
+				console.error('Error submitting review', error);
+			});
 	};
 
 	return (
@@ -106,7 +128,7 @@ export const AreaFeedbackScreen: React.FC<AreaFeedbackScreenProps> = ({ route, n
 											{ label: 'Bus', value: 'bus' },
 											{ label: 'Tram', value: 'tram' },
 											{ label: 'Car', value: 'car' },
-											{ label: 'Bicycle', value: 'bicycle'},
+											{ label: 'Bike', value: 'bike'},
 											{ label: 'Walking', value: 'walking' }
 										]
 									},
