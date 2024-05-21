@@ -1,4 +1,4 @@
-import MapView from 'react-native-maps';
+import MapView from 'react-native-map-clustering';
 import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import {
@@ -15,6 +15,7 @@ import { SearchTypeEnum } from '../enums';
 import { BottomReviewCard } from './BottomReviewCard';
 import { CustomMarker } from './CustomMarker';
 import { debounce } from 'lodash';
+import { theme } from '../theme';
 
 const EPSILON = 0.001;
 
@@ -81,6 +82,7 @@ export const Map: React.FC = () => {
 	return (
 		<View style={styles.map}>
 			<MapView
+				clusterColor={theme.colors.primary}
 				ref={mapRef}
 				style={styles.map}
 				initialRegion={state.region}
