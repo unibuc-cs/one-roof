@@ -79,7 +79,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ listing, canOpen, mo
 						/>
 					)}
 				</View>
-				<HeaderText paddingTop={0} paddingBottom={3} size={20}> {listing.price} € </HeaderText>
+				<HeaderText paddingTop={0} paddingBottom={3} size={20}> {listing.title} - {listing.price} € </HeaderText>
 				<Text style={styles.address}>
 					{listing.address}
 				</Text>
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
 	},
 	cardContainer: {
 		zIndex: 1000,
-		height: 350,
+		height: 375,
 		marginHorizontal: 15,
 	},
 	contentContainer: {

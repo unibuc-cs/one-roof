@@ -1,6 +1,12 @@
 import React, { createContext, ReactNode, useContext, useEffect, useState, useCallback, useMemo } from 'react';
 import { IListing, IReview } from '../models';
-import { NumberOfBathroomsEnum, NumberOfBedroomsEnum, PropertyTypeEnum, SearchTypeEnum } from '../enums';
+import {
+	NumberOfBathroomsEnum,
+	NumberOfBedroomsEnum,
+	PropertyTypeEnum,
+	SearchTypeEnum,
+	TypeOfProviderEnum
+} from '../enums';
 import {
 	BUCHAREST_COORDINATES,
 	callApi,
@@ -32,6 +38,7 @@ export interface SearchContextState {
 		bedrooms?: number,
 		bathrooms?: number,
 		amenities: RentalAmenitiesEnum[],
+		provider: TypeOfProviderEnum,
 	},
 }
 
@@ -67,6 +74,7 @@ export const SearchProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 		bedrooms: NumberOfBedroomsEnum.Any,
 		bathrooms: NumberOfBathroomsEnum.Any,
 		amenities: [],
+		provider: TypeOfProviderEnum.Any,
 	});
 	const [isWaitingForSearch, setIsWaitingForSearch] = useState<boolean>(false);
 	const [wasExternalSearchPerformed, setWasExternalSearchPerformed] = useState<boolean>(false);
