@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Checkbox } from 'react-native-paper';
 import { Button, HeaderText } from '../components';
-import { NumberOfBathroomsEnum, NumberOfBedroomsEnum, PropertyTypeEnum } from '../enums';
+import { NumberOfBathroomsEnum, NumberOfBedroomsEnum, PropertyTypeEnum, TypeOfProviderEnum } from '../enums';
 import { CustomSwitchSelector } from '../components/CustomSwitchSelector';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import { useCustomFonts } from '../hooks/useCustomFonts';
@@ -11,7 +11,6 @@ import RentalAmenitiesEnum from '../enums/RentalAmenitiesEnum';
 import { MAX_PRICE, MIN_PRICE } from '../utils';
 import { useSearchContext } from '../contexts/SearchContext';
 import { debounce } from 'lodash';
-import { TypeOfProviderEnum } from '../enums';
 
 export const FiltersScreen = ({ navigation }) => {
 	useCustomFonts();
@@ -57,9 +56,14 @@ export const FiltersScreen = ({ navigation }) => {
 		const updatedAmenities = filters.amenities.includes(amenity)
 			? filters.amenities.filter(item => item !== amenity)
 			: [...filters.amenities, amenity];
-		const updatedProvider = updatedAmenities.length > 0 ? TypeOfProviderEnum.Internal : filters.provider;
-		setFilters({ ...filters, amenities: updatedAmenities, provider: updatedProvider });
+		setFilters({
+			...filters,
+			amenities: updatedAmenities,
+			provider: TypeOfProviderEnum.Internal
+		});
+		providerRef.current = TypeOfProviderEnum.Internal;
 	};
+
 
 	const handlePriceChange = useCallback(
 		(values) => {
@@ -75,6 +79,9 @@ export const FiltersScreen = ({ navigation }) => {
 		if (value === PropertyTypeEnum.Studio) {
 			newFilters.bedrooms = NumberOfBedroomsEnum.One;
 			newFilters.bathrooms = NumberOfBathroomsEnum.One;
+		} else if (filters.roomType === PropertyTypeEnum.Studio) {
+			newFilters.bedrooms = NumberOfBedroomsEnum.Any;
+			newFilters.bathrooms = NumberOfBathroomsEnum.Any;
 		}
 		setFilters(newFilters);
 	}, 50), [filters]);
@@ -90,8 +97,19 @@ export const FiltersScreen = ({ navigation }) => {
 	}, 30), [filters]);
 
 	const handleProviderChange = useCallback(debounce((value) => {
+		if (value === TypeOfProviderEnum.Storia || value === TypeOfProviderEnum.Olx) {
+			setFilters({
+				...filters,
+				provider: value,
+				amenities: []
+			});
+		} else {
+			setFilters({
+				...filters,
+				provider: value
+			});
+		}
 		providerRef.current = value;
-		setFilters({ ...filters, provider: value });
 	}, 50), [filters]);
 
 	return (
@@ -118,7 +136,7 @@ export const FiltersScreen = ({ navigation }) => {
 					{ label: 'Olx', value: TypeOfProviderEnum.Olx },
 				]}
 				onPress={handleProviderChange}
-				value={providerRef.current}
+				value={filters.provider}
 				mode="green"
 			/>
 
@@ -153,7 +171,7 @@ export const FiltersScreen = ({ navigation }) => {
 					{ label: '4+', value: NumberOfBedroomsEnum.FourOrMore }
 				]}
 				mode="green"
-				value={bedroomsRef.current}
+				value={filters.bedrooms}
 				onPress={handleChangeBedrooms}
 				disabled={roomTypeRef.current === PropertyTypeEnum.Studio}
 			/>
@@ -167,7 +185,7 @@ export const FiltersScreen = ({ navigation }) => {
 					{ label: '3+', value: NumberOfBathroomsEnum.ThreeOrMore },
 				]}
 				mode="green"
-				value={bathroomsRef.current}
+				value={filters.bathrooms}
 				onPress={handleChangeBathrooms}
 				disabled={roomTypeRef.current === PropertyTypeEnum.Studio}
 			/>
@@ -179,6 +197,7 @@ export const FiltersScreen = ({ navigation }) => {
 						labelStyle={styles.checkbox}
 						key={index}
 						label={amenity[1]}
+						disabled={providerRef.current !== TypeOfProviderEnum.Internal && providerRef.current !== TypeOfProviderEnum.Any}
 						status={filters.amenities.includes(amenity[0]) ? 'checked' : 'unchecked'}
 						onPress={() => handleSelectAmenity(amenity[0])}
 					/>

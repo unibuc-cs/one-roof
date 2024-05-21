@@ -4,16 +4,17 @@ import { theme } from '../theme';
 import React from 'react';
 
 // TODO: fix any
-export const CustomSwitchSelector: React.FC<any> = ({ options, mode, value, onPress }) => {
+export const CustomSwitchSelector: React.FC<any> = ({ options, mode, value, onPress, disabled }) => {
 	const buttonColor = mode === 'green' ? theme.colors.inverseSurface : theme.colors.text;
 	const borderColor = mode === 'green' ? theme.colors.text : theme.colors.secondary;
 	const backgroundColor = mode === 'green' ? theme.colors.inversePrimary : '';
 	return (
 		<SwitchSelector
 			options={options}
-			buttonColor={buttonColor}
-			backgroundColor={backgroundColor}
+			buttonColor={disabled ? 'darkgray' : buttonColor}
+			backgroundColor={disabled ? 'lightgray' : backgroundColor}
 			borderColor={borderColor}
+			disabled={disabled}
 			animationDuration={150}
 			borderWidth={10}
 			height={50}
