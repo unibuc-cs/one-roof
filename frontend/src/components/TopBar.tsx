@@ -82,7 +82,7 @@ const TopBar: React.FC<TopBarProps> = ({ navigation }) => {
 				</View>
 			</View>
 		);
-	} else if (routeName === 'Filters') {
+	} else if (routeName === 'Filters' || routeName === 'ReviewGeneralDetails') {
 		return null;
 	} else {
 		return (

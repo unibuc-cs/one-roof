@@ -12,3 +12,5 @@ export * from './DetailBox';
 export * from './BottomListingCard';
 export * from './CustomMarker';
 export * from './Button';
+export * from './TextInputSmaller';
+export * from './MapInput';

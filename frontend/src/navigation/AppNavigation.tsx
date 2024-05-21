@@ -1,5 +1,11 @@
 import React from 'react';
-import { DrawerContent, OnboardingDecisionScreen } from '../screens';
+import {
+	AreaFeedbackScreen,
+	BuildingFeedbackScreen,
+	DrawerContent,
+	OnboardingDecisionScreen,
+	ReviewGeneralDetailsScreen
+} from '../screens';
 import { CreateReviewScreen } from '../screens';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { ProfileScreen } from '../screens';
@@ -26,6 +32,9 @@ export type RootStackParamList = {
 	Profile: undefined,
 	Listing: { id: string },
 	Filters: undefined,
+	ReviewGeneralDetails: undefined,
+	BuildingFeedback: undefined,
+	AreaFeedback: undefined,
 };
 
 export const AppNavigation = () => {
@@ -55,6 +64,9 @@ export const AppNavigation = () => {
 					<Drawer.Screen name="Profile" component={ProfileScreen} />
 					<Drawer.Screen name="Listing" component={ListingScreen}/>
 					<Drawer.Screen name="Filters" component={FiltersScreen}/>
+					<Drawer.Screen name="ReviewGeneralDetails" component={ReviewGeneralDetailsScreen}/>
+					<Drawer.Screen name="AreaFeedback" component={AreaFeedbackScreen}/>
+					<Drawer.Screen name="BuildingFeedback" component={BuildingFeedbackScreen}/>
 				</Drawer.Navigator>
 			</NavigationContainer>
 		</SearchProvider>

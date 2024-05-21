@@ -3,7 +3,7 @@ import { useUser } from '@clerk/clerk-expo';
 import { useUserDetails } from '../contexts/UserDetailsContext';
 import userService from '../services/internal/userService';
 import { FurtherDetailsRegistrationScreen } from './FurtherDetailsRegistrationScreen';
-import { CreateReviewScreen } from './CreateReviewScreen';
+import { CreateReviewScreen } from './review-creation';
 import { HomeScreen } from './HomeScreen';
 
 export const OnboardingDecisionScreen = () => {
