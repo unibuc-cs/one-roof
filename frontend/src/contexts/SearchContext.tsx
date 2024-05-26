@@ -1,6 +1,12 @@
-import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+import React, { createContext, ReactNode, useContext, useEffect, useState, useCallback, useMemo } from 'react';
 import { IListing, IReview } from '../models';
-import { NumberOfBathroomsEnum, NumberOfBedroomsEnum, PropertyTypeEnum, SearchTypeEnum } from '../enums';
+import {
+	NumberOfBathroomsEnum,
+	NumberOfBedroomsEnum,
+	PropertyTypeEnum,
+	SearchTypeEnum,
+	TypeOfProviderEnum
+} from '../enums';
 import {
 	BUCHAREST_COORDINATES,
 	callApi,
@@ -13,6 +19,8 @@ import { useListings } from '../hooks';
 import RentalAmenitiesEnum from '../enums/RentalAmenitiesEnum';
 
 export interface SearchContextState {
+	isWaitingForSearch: boolean,
+	wasExternalSearchPerformed: boolean,
 	region: {
 		latitude: number,
 		longitude: number,
@@ -30,18 +38,21 @@ export interface SearchContextState {
 		bedrooms?: number,
 		bathrooms?: number,
 		amenities: RentalAmenitiesEnum[],
+		provider: TypeOfProviderEnum,
 	},
 }
 
 const SearchContext = createContext<{
-	triggerSearch: () => void,
+	triggerSearch: (newRegion, wasExternal) => void,
 	state: SearchContextState,
 	setRegion: React.Dispatch<React.SetStateAction<SearchContextState['region']>>,
 	setSearchType: React.Dispatch<React.SetStateAction<SearchTypeEnum>>,
 	setListings: React.Dispatch<React.SetStateAction<IListing[]>>,
 	setReviews: React.Dispatch<React.SetStateAction<IReview[]>>,
 	setFilters: React.Dispatch<React.SetStateAction<SearchContextState['filters']>>,
-		}>(null!);
+	setIsWaitingForSearch: React.Dispatch<React.SetStateAction<boolean>>,
+	setWasExternalSearchPerformed: React.Dispatch<React.SetStateAction<boolean>>,
+}>(null!);
 
 export const useSearchContext = () => useContext(SearchContext);
 
@@ -63,8 +74,10 @@ export const SearchProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 		bedrooms: NumberOfBedroomsEnum.Any,
 		bathrooms: NumberOfBathroomsEnum.Any,
 		amenities: [],
+		provider: TypeOfProviderEnum.Any,
 	});
-
+	const [isWaitingForSearch, setIsWaitingForSearch] = useState<boolean>(false);
+	const [wasExternalSearchPerformed, setWasExternalSearchPerformed] = useState<boolean>(false);
 	const { listings: loadedListings, error, isLoading } = useListings();
 
 	useEffect(() => {
@@ -73,12 +86,12 @@ export const SearchProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 		}
 	}, [loadedListings, isLoading, error]);
 
-	const fetchFilteredData = async () => {
+	const fetchFilteredData = useCallback(async (newRegion) => {
 		try {
 			const response = await callApi('search', {
 				method: 'POST',
 				body: JSON.stringify({
-					region,
+					region: newRegion || region,
 					filters
 				})
 			});
@@ -88,28 +101,38 @@ export const SearchProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 			setFilteredReviews(response.filteredReviews);
 		} catch (error) {
 			console.error('Failed to fetch filtered data:', error);
+		} finally {
+			setIsWaitingForSearch(false);
 		}
-	};
+	}, [filters]);
 
-	const triggerSearch = () => {
-		console.log('triggered');
-		fetchFilteredData();
-	};
+	const triggerSearch = useCallback((newRegion, wasExternal) => {
+		setIsWaitingForSearch(true);
+		if (newRegion) {
+			setRegion(newRegion);
+		}
+		fetchFilteredData(newRegion).then(() => {
+			if (wasExternal) {
+				setWasExternalSearchPerformed(true);
+			}
+		})
+	}, [fetchFilteredData]);
 
-	useEffect(() => {
-		fetchFilteredData();
-	}, [region]);
+	const contextValue = useMemo(() => ({
+		triggerSearch,
+		state: { region, searchType, listings, reviews, filteredListings, filteredReviews, filters, isWaitingForSearch, wasExternalSearchPerformed },
+		setRegion,
+		setSearchType,
+		setListings,
+		setReviews,
+		setFilters,
+		setIsWaitingForSearch,
+		setWasExternalSearchPerformed
+	}), [triggerSearch, wasExternalSearchPerformed, isWaitingForSearch, region, searchType, listings, reviews, filteredListings, filteredReviews, filters]);
+
 
 	return (
-		<SearchContext.Provider value={{
-			triggerSearch,
-			state: { region, searchType, listings, reviews, filteredListings, filteredReviews, filters },
-			setRegion,
-			setSearchType,
-			setListings,
-			setReviews,
-			setFilters
-		}}>
+		<SearchContext.Provider value={contextValue}>
 			{children}
 		</SearchContext.Provider>
 	);
