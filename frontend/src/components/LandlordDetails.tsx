@@ -9,13 +9,13 @@ import { useCustomFonts } from '../hooks/useCustomFonts';
 
 const  LandlordDetails: React.FC<any> = ({ landlordID }) => {
 	const customFont = useCustomFonts();
-	const { user } = useUserData(landlordID);
+	// const { user } = useUserData(landlordID);
 	return (
 		<Card style={styles.container}>
 			<Text style={styles.landlordTitle}>Contact the landlord</Text>
 			<View style={{ flexDirection: 'row', alignItems: 'center' }}>
 				<Image style={styles.landlordProfilePicture} source={{ uri: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png' }} />
-				<Text style={styles.landlordName}>{user.role}</Text>
+				{/*<Text style={styles.landlordName}>{user.role}</Text>*/}
 			</View>
 			<Button mode={'elevated'}>Send a message</Button>
 		</Card>

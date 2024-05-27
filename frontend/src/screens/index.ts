@@ -1,6 +1,6 @@
 export * from './AlertsScreen';
 export * from './ChatsScreen';
-export * from './CreateListingScreen';
+export * from './listing-creation/CreateListingScreen';
 export * from './CreateReviewScreen';
 export * from './DrawerContent';
 export * from './FavoritesScreen';
@@ -13,3 +13,4 @@ export * from './SignUpScreen';
 export * from './UnauthenticatedHomeScreen';
 export * from './ListingScreen';
 export * from './FiltersScreen';
+export * from './listing-creation/ListingConfirmLocationScreen'

@@ -58,7 +58,7 @@ export const ListingScreen: React.FC = () => {
 					/>
 					<PropertyDetails listing = {listing}/>
 					<Text style={styles.description}>{listing.description}</Text>
-					{/*<LandlordDetails landlordID = {listing.landlordId}/>*/}
+					<LandlordDetails landlordID = {listing.landlordId}/>
 
 				</Card>
 			</Background>
