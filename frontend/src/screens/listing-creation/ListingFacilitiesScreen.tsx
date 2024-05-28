@@ -1,249 +1,173 @@
-// import React, { useEffect, useState } from 'react';
-// import { ScrollView, StyleSheet, Text, View } from 'react-native';
-// import { Card, Checkbox, TextInput } from 'react-native-paper';
-// import { Button, HeaderText } from '../components';
-// import { NumberOfBathroomsEnum, NumberOfBedroomsEnum, PropertyTypeEnum } from '../enums';
-// import { CustomSwitchSelector } from '../components/CustomSwitchSelector';
-// import { useCustomFonts } from '../hooks/useCustomFonts';
-// import { theme } from '../theme';
-// import RentalAmenitiesEnum from '../enums/RentalAmenitiesEnum';
-// import { MAX_PRICE, MIN_PRICE } from '../utils';
-// import * as Yup from 'yup';
-// import { AddressSchema, LocationSchema, type IAddress, type ILocation, type IUser } from '../../../backend/src/models/';
-// import { IListing } from '../models';
-// import SwitchSelector from 'react-native-switch-selector';
-// import MultiSlider from '@ptomasroos/react-native-multi-slider';
-// import Background from '../components/Background';
-//
-//
-// const GeneralDetailsSchema = Yup.object().shape({
-//     title: Yup.string().required('Title is required'),
-//     type: Yup.mixed().oneOf(Object.values(PropertyTypeEnum)).required("Type is required"),
-//     address: Yup.object().shape({
-//         country: Yup.string().required('Country is required'),
-//         stateOrProvince: Yup.string().required('State/Province is required'),
-//         city: Yup.string().required('City is required'),
-//         postalCode: Yup.string().required('PostalCode is required'),
-//         street: Yup.string().required('Street is required'),
-//         streetNumber: Yup.number().required('Street number is required'),
-//     }),
-//     price: Yup.number().required('Price is required'),
-//
-// });
-// export const CreateListingScreen: React.FC<any>= ({navigation}) => {
-//     useCustomFonts();
-//     const [listing, setListing] = useState<IListing>();
-//
-//     const [title, setTitle] = React.useState('');
-//     const [description, setDescription] = React.useState('');
-//     const [address, setAddress] = React.useState<IAddress>();
-//     const [country, setCountry] = React.useState('');
-//     const [stateOrProvince, setStateOrProvince] = React.useState('');
-//     const [city, setCity] = React.useState('');
-//     const [postalCode, setPostalCode] = React.useState('');
-//     const [streetNumber, setStreetNumber] = React.useState('');
-//     const [streetName, setStreetName] = React.useState('');
-//     const [location, setLocation] = React.useState<ILocation>();
-//     const [type, setType] = React.useState('');
-//     const [price, setPrice] = React.useState(1000);
-//     const [numberOfBedrooms, setNumberOfBedrooms] = React.useState(0);
-//     const [numberOfBathrooms, setNumberOfBathrooms] = React.useState(0);
-//     const [size, setSize] = React.useState('');
-//     const [amenities, setAmenities] = React.useState(['']);
-//     const [createdAt, setCreateAt] = React.useState(new Date());
-//     const [updatedAt, setUpdatedAt] = React.useState(new Date());
-//
-//     const amenitiesArray = Object.entries(RentalAmenitiesEnum);
-//
-//
-//     const handleSelectAmenity = (amenity) => {
-//         const updatedAmenities = amenities.includes(amenity)
-//             ? amenities.filter(item => item !== amenity)
-//             : [...amenities, amenity];
-//         setAmenities(updatedAmenities );
-//     };
-//
-//     return (
-//         <ScrollView>
-//             <Card style={{ marginTop: 20, padding:20 }}>
-//                 <View style={styles.container}>
-//                     <View
-//                         style={styles.filtersContainer}
-//                     >
-//                         <HeaderText paddingBottom={10} textAlign={'left'} size={17}>Listing title:</HeaderText>
-//                         <TextInput
-//                             value={title}
-//                             placeholder={'Listing title...'}
-//                             onChangeText={title => setTitle(title)}
-//                         />
-//
-//                         <HeaderText paddingBottom={10} textAlign={'left'} size={17}>Property Type:</HeaderText>
-//                         <CustomSwitchSelector
-//                             options={[
-//                                 { label: 'Studio', value: PropertyTypeEnum.Studio },
-//                                 { label: 'Apartment', value: PropertyTypeEnum.Apartment },
-//                                 { label: 'House', value: PropertyTypeEnum.House },
-//                             ]}
-//                             onPress={type => setType(type)}
-//                             value={type}
-//                             mode={'green'}
-//                         />
-//
-                            <HeaderText paddingBottom={10} textAlign={'left'} size={17}>Address:</HeaderText>
-//                         <TextInput
-//                             value={country}
-//                             placeholder={'Country'}
-//                             onChangeText={country => setCountry(country)}
-//                         />
-//
-//                         <TextInput
-//                             value={stateOrProvince}
-//                             placeholder={'State or Province'}
-//                             onChangeText={name => setStateOrProvince(name)}
-//                         />
-//
-//                         <TextInput
-//                             value={city}
-//                             placeholder={'City'}
-//                             onChangeText={city => setCity(city)}
-//                         />
-//                         <TextInput
-//                             value={postalCode}
-//                             placeholder={'Postal Code'}
-//                             onChangeText={postalCode => setPostalCode(postalCode)}
-//                         />
-//                         <TextInput
-//                             value={streetName}
-//                             placeholder={'Street name'}
-//                             onChangeText={streetName => setStreetName(streetName)}
-//                         />
-//                         <TextInput
-//                             value={streetNumber}
-//                             placeholder={'Street number'}
-//                             onChangeText={streetNumber => setStreetNumber(streetNumber)}
-//                         />
-//
-//
-//                         <HeaderText textAlign={'left'} size={17}>Price (monthly fee):</HeaderText>
-//                         <View style={styles.flexContainer}>
-//                             <View>
-//                                 <MultiSlider
-//                                     values={[price]}
-//                                     sliderLength={300}
-//                                     onValuesChange={(price) =>{
-//                                         setPrice(price);}}
-//                                     min={MIN_PRICE}
-//                                     max={MAX_PRICE}
-//                                     step={1}
-//                                     allowOverlap={false}
-//                                     snapped
-//                                     minMarkerOverlapDistance={40}
-//                                     onValuesChangeStart={this.disableScroll}
-//                                     onValuesChangeFinish={this.enableScroll}
-//                                 />
-//                                 <Text style={styles.priceStyling}>{price} € </Text>
-//
-//                             </View>
-//                         </View>
-//
-//                         <HeaderText paddingBottom={5} textAlign={'left'} size={17}>Number of Bedrooms:</HeaderText>
-//                         <CustomSwitchSelector
-//                             options={[
-//                                 { label: '1', value: NumberOfBedroomsEnum.One },
-//                                 { label: '2', value: NumberOfBedroomsEnum.Two },
-//                                 { label: '3', value: NumberOfBedroomsEnum.Three },
-//                                 { label: '4+', value: NumberOfBedroomsEnum.FourOrMore }
-//                             ]}
-//
-//                             mode='green'
-//                             value={numberOfBedrooms}
-//                             onPress={number => setNumberOfBedrooms(number)}
-//                         />
-//                         {/*In unele parti e number of rooms in altele number of Bedrooms*/}
-//                         <HeaderText paddingBottom={5} textAlign={'left'} size={17}>Number of Bathrooms:</HeaderText>
-//                         <CustomSwitchSelector
-//                             options={[
-//                                 { label: '1', value: NumberOfBathroomsEnum.One },
-//                                 { label: '2', value: NumberOfBathroomsEnum.Two },
-//                                 { label: '3+', value: NumberOfBathroomsEnum.ThreeOrMore },
-//                             ]}
-//                             mode='green'
-//                             value={numberOfBathrooms}
-//                             onPress={number => setNumberOfBathrooms(number)}
-//                         />
-//
-//                         <HeaderText textAlign={'left'} size={17}>Size (m2):</HeaderText>
-//                         <TextInput
-//                             value={size}
-//                             placeholder={'m2'}
-//                             onChangeText={size => setSize(size)}
-//                         />
-//                         <HeaderText textAlign={'left'} size={17}>Amenities:</HeaderText>
-//                         <ScrollView>
-//                             {amenitiesArray.map(((amenity, index) => (
-//                                 <Checkbox.Item
-//                                     labelStyle={styles.checkbox}
-//                                     key={index}
-//                                     label={amenity[1]}
-//                                     status={amenities.includes(amenity[0]) ? 'checked' : 'unchecked'}
-//                                     onPress={() => handleSelectAmenity(amenity[0])}
-//                                 />
-//                             )))}
-//                         </ScrollView>
-//                     </View>
-//                     <View style={[styles.buttonsContainer]}>
-//                         <Button width={'auto'} mode={'contained'}> Add </Button>
-//                     </View>
-//                 </View>
-//             </Card>
-//         </ScrollView>
-//     );
-// };
-//
-// const styles = StyleSheet.create({
-//     checkbox: {
-//         fontFamily: 'ProximaNova-Regular'
-//     },
-//     flexContainer: {
-//         display: 'flex',
-//         alignItems: 'center'
-//     },
-//     priceContainer: {
-//         display: 'flex',
-//         flexDirection: 'row',
-//         alignItems: 'center',
-//         justifyContent: 'center'
-//     },
-//     priceStyling: {
-//         fontFamily: 'ProximaNova-Regular',
-//         backgroundColor: 'lightgray',
-//         fontSize: 18,
-//         margin: 10,
-//         padding: 10,
-//         borderRadius: 20,
-//         elevation: 5,
-//         borderColor: 'darkgray',
-//         borderStyle: 'solid',
-//         borderWidth: 1,
-//         color: theme.colors.text
-//     },
-//     container: {
-//         flex: 1,
-//         margin: 10,
-//         marginTop: 50,
-//     },
-//     filtersContainer: {
-//         elevation: 3,
-//     },
-//     title: {
-//         fontSize: 16,
-//         fontWeight: 'bold',
-//         marginTop: 20,
-//     },
-//     buttonsContainer: {
-//         flexDirection: 'row',
-//         justifyContent: 'space-around',
-//         padding: 20
-//     }
-// });
-//
+import React, { useEffect, useState } from 'react';
+import { ScrollView, StyleSheet, Text, View} from 'react-native';
+import {Picker} from "@react-native-picker/picker";
+import { Card, TextInput } from 'react-native-paper';
+import { Checkbox } from 'react-native-paper';
+
+import { Button, HeaderText } from '../../components';
+import {NumberOfBathroomsEnum, NumberOfBedroomsEnum, PropertyTypeEnum, TypeOfProviderEnum} from '../../enums';
+import { CustomSwitchSelector } from '../../components/CustomSwitchSelector';
+import { useCustomFonts } from '../../hooks/useCustomFonts';
+import * as Yup from 'yup';
+import Background from '../../components/Background';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import {ErrorMessage, Field, Form, Formik} from "formik";
+import {RouteProp} from "@react-navigation/native";
+import * as Location from 'expo-location';
+import RentalAmenitiesEnum from "../../enums/RentalAmenitiesEnum";
+
+
+type ListingFacilitiesScreenPops = {
+    route: RouteProp<{ params: { generalDetails: any, location: Location.LocationObject } }, 'params'>;
+    navigation: any;
+};
+
+const FacilitiesSchema = Yup.object().shape({
+    size: Yup.number().required("Size is required"),
+    numberOfRooms: Yup.mixed().oneOf(Object.values(NumberOfBedroomsEnum)).required("Number of rooms is required"),
+    numberOfBathrooms: Yup.mixed().oneOf(Object.values(NumberOfBedroomsEnum)).required("Number of bathrooms is required"),
+    amenities: Yup.array().of(Yup.string().oneOf(Object.values(RentalAmenitiesEnum))),
+    description: Yup.string(),
+
+
+});
+export const ListingFacilitiesScreen: React.FC<ListingFacilitiesScreenPops>= ({route,navigation}) => {
+    useCustomFonts();
+    const {generalDetails, location} = route.params;
+
+    const handleDiscard = () => {
+        navigation.navigate('Home');
+    }
+
+    return (
+        <Background>
+            <Card style={styles.card}>
+                <Formik
+                    initialValues={{
+                        size: '',
+                        numberOfRooms: '',
+                        numberOfBathrooms: '',
+                        amenities: [],
+                        description: '',
+                    }}
+                    validationSchema={FacilitiesSchema}
+                    onSubmit={(values) => {
+                        navigation.navigate("ListingDescription", {generalDetails: generalDetails, location: location, facilities: values});
+                        console.log(values);
+                    }}
+                >
+                    {({ values, handleChange, handleBlur, handleSubmit, setFieldValue, errors, touched }) => (
+                        <View>
+                            <HeaderText paddingBottom={10} textAlign={'left'} size={17}>Size:</HeaderText>
+                            <TextInput
+                                style={styles.textInput}
+                                onChangeText={handleChange('size')}
+                                onBlur={handleBlur('size')}
+                                value={values.size}
+                                keyboardType="numeric"
+                            />
+                            {touched.size && errors.size && (
+                                <Text style={styles.error}>{errors.size}</Text>
+                            )}
+
+                            <HeaderText paddingBottom={10} textAlign={'left'} size={17}>Number of rooms:</HeaderText>
+                            <CustomSwitchSelector
+                                options={[
+                                    { label: '1', value: NumberOfBedroomsEnum.One },
+                                    { label: '2', value: NumberOfBedroomsEnum.Two },
+                                    { label: '3', value: NumberOfBedroomsEnum.Three },
+                                    { label: '+4', value: NumberOfBedroomsEnum.FourOrMore },
+                                ]}
+                                initial={1}
+                                onPress={(value) => setFieldValue('numberOfRooms', value)}
+                                mode={'green'}
+                            />
+                            {touched.numberOfRooms && errors.numberOfRooms && (
+                                <Text style={styles.error}>{errors.numberOfRooms}</Text>
+                            )}
+
+                            <HeaderText paddingBottom={10} textAlign={'left'} size={17}>Number of Bathrooms:</HeaderText>
+                            <CustomSwitchSelector
+                                options={[
+                                    { label: '1', value: NumberOfBathroomsEnum.One },
+                                    { label: '2', value: NumberOfBathroomsEnum.Two },
+                                    { label: '+3', value: NumberOfBathroomsEnum.ThreeOrMore },
+                                ]}
+                                initial={1}
+                                onPress={(value) => setFieldValue('numberOfBathrooms', value)}
+                                mode={'green'}
+                            />
+                            {touched.numberOfBathrooms && errors.numberOfBathrooms && (
+                                <Text style={styles.error}>{errors.numberOfBathrooms}</Text>
+                            )}
+
+                            <HeaderText paddingBottom={10} textAlign={'left'} size={17}>Amenities:</HeaderText>
+                            <KeyboardAwareScrollView style={{height:270}}>
+                                {Object.values(RentalAmenitiesEnum).map((amenity) => (
+                                    <View key={amenity} style={styles.checkboxContainer}>
+                                        <Checkbox.Item
+                                            labelStyle={{fontFamily: 'ProximaNova-Regular'}}
+                                            label={amenity.replace(/_/g, ' ')}
+                                            status={values.amenities.includes(amenity) ? 'checked' : 'unchecked'}
+                                            onPress={() => {
+                                                if (values.amenities.includes(amenity)) {
+                                                    setFieldValue('amenities', values.amenities.filter((item) => item !== amenity));
+                                                } else {
+                                                    setFieldValue('amenities', [...values.amenities, amenity]);
+                                                }
+                                            }}
+                                        />
+                                    </View>
+                                ))}
+                                {touched.amenities && errors.amenities && (
+                                    <Text style={styles.error}>{errors.amenities}</Text>
+                                )}
+                            </KeyboardAwareScrollView>
+
+                            <View style={styles.buttonsContainer}>
+                                <Button style={styles.button} mode= "contained" onPress={handleDiscard}>Discard</Button>
+                                <Button style={styles.button} mode="contained" onPress={() => handleSubmit()}>Next</Button>
+                            </View>
+                        </View>
+                    )}
+                </Formik>
+
+            </Card>
+        </Background>
+    );
+};
+
+const styles = StyleSheet.create({
+    card: {
+        flex:1,
+        width: '100%',
+        backgroundColor: 'white',
+        padding: 16,
+        margin: 30,
+    },
+    textInput:{
+        borderWidth: 0,
+        borderRadius: 10,
+        height: 40,
+        padding: -5,
+        backgroundColor: '#f0f0f0',
+        marginVertical: 5,
+    },
+    checkboxContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    error: {
+        color: 'red',
+        fontSize: 12,
+    },
+    buttonsContainer: {
+        paddingHorizontal: 20,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    button:{
+        width: 'fit-content',
+    }
+});
+

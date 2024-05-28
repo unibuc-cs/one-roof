@@ -19,7 +19,7 @@ const GeneralDetailsSchema = Yup.object().shape({
 			country: Yup.string().required('Country is required'),
 			stateOrProvince: Yup.string().required('State/Province is required'),
 			city: Yup.string().required('City is required'),
-			postalCode: Yup.string().required('PostalCode is required'),
+			postalCode: Yup.string(),
 			street: Yup.string().required('Street is required'),
 			streetNumber: Yup.number().required('Street number is required'),
 		}),
@@ -160,9 +160,10 @@ export const CreateListingScreen: React.FC<any>= ({navigation}) => {
 								 keyboardType="numeric"
 							/>
 							{touched.price && errors.price && <Text style={styles.error}>{errors.price}</Text>}
-
-
-							<Button mode="contained" onPress={() => handleSubmit()}>Next</Button>
+							<View style={styles.buttonsContainer}>
+								<Button style={styles.button} mode= "contained" onPress={handleDiscard}>Discard</Button>
+								<Button style={styles.button} mode="contained" onPress={() => handleSubmit()}>Next</Button>
+							</View>
 						</KeyboardAwareScrollView>
 					)}
 				</Formik>
@@ -173,6 +174,7 @@ export const CreateListingScreen: React.FC<any>= ({navigation}) => {
 
 const styles = StyleSheet.create({
 	card: {
+		flex:1,
 		width: '100%',
 		backgroundColor: 'white',
 		padding: 16,
@@ -198,9 +200,14 @@ const styles = StyleSheet.create({
 		color: 'red',
 		fontSize: 12,
 	},
-	flexContainer: {
-		display: 'flex',
-		alignItems: 'center'
+	buttonsContainer: {
+		paddingHorizontal: 20,
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+
+	},
+	button:{
+		width:'fit-content'
 	}
 });
 

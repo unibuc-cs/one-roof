@@ -16,6 +16,8 @@ import { useUserDetails } from '../contexts/UserDetailsContext';
 import { SearchProvider } from '../contexts/SearchContext';
 import { FiltersScreen } from '../screens';
 import {ListingConfirmLocationScreen} from '../screens';
+import {ListingFacilitiesScreen} from "../screens/listing-creation";
+import {ListingDescriptionScreen} from "../screens/listing-creation";
 
 export type RootStackParamList = {
 	Home: undefined,
@@ -56,8 +58,9 @@ export const AppNavigation = () => {
 					<Drawer.Screen name="Profile" component={ProfileScreen} />
 					<Drawer.Screen name="Listing" component={ListingScreen}/>
 					<Drawer.Screen name="Filters" component={FiltersScreen}/>
-					{/*<Drawer.Screen name="ListingGeneralDetails" component={ListingGeneralDetailsScreen}/>*/}
+					<Drawer.Screen name="ListingFacilities" component={ListingFacilitiesScreen}/>
 					<Drawer.Screen name="ConfirmLocation" component={ListingConfirmLocationScreen}/>
+					<Drawer.Screen name="ListingDescription" component={ListingDescriptionScreen}/>
 				</Drawer.Navigator>
 			</NavigationContainer>
 		</SearchProvider>

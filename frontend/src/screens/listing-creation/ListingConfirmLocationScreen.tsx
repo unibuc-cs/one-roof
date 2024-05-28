@@ -30,6 +30,10 @@ export const ListingConfirmLocationScreen: React.FC<ListingConfirmLocationScreen
     const handleDiscard = () => {
         navigation.navigate('Home');
     }
+    const handleConfirm = () =>{
+        console.log(location)
+        navigation.navigate('ListingFacilities', {generalDetails: generalDetails, location: location});
+    }
 
     useEffect(() => {
         (async () => {
@@ -94,8 +98,9 @@ export const ListingConfirmLocationScreen: React.FC<ListingConfirmLocationScreen
             </Card>
             <View style={styles.buttonsContainer}>
                 <Button style={styles.button} mode={"contained"} onPress={() => handleDiscard()}>Discard</Button>
-                <Button style={styles.button} mode={"contained"} onPress={() => handleDiscard()}>Confirm</Button>
+                <Button style={styles.button} mode={"contained"} onPress={() => handleConfirm()}>Confirm</Button>
             </View>
+
         </Background>
     );
 };
@@ -110,11 +115,11 @@ const styles = StyleSheet.create({
     map: {
         minHeight: '100%',
         minWidth: '100%',
-        padding: 20,
+        padding: 30,
         flex: 1,
     },
     buttonsContainer: {
-        paddingBottom: 20,
+        paddingBottom: 30,
         width: '80%',
         flexDirection: 'row',
         justifyContent: 'space-between',
