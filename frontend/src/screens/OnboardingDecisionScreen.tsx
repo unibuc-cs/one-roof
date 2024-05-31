@@ -7,7 +7,7 @@ import { CreateReviewScreen } from './CreateReviewScreen';
 import { HomeScreen } from './HomeScreen';
 
 export const OnboardingDecisionScreen = () => {
-	const { onboardingStep, setOnboardingStep, setProfilePictureUrl, setRole } = useUserDetails();
+	const { onboardingStep, setOnboardingStep, setProfilePictureUrl, setRole, setUserId } = useUserDetails();
 	const { user } = useUser();
 
 	useEffect(() => {
@@ -20,10 +20,11 @@ export const OnboardingDecisionScreen = () => {
 	}, [user]);
 
 	const fetchAndStoreUserDetails = async (userId: string) => {
-		const userDetails = await userService.getUserById(userId);
+		const userDetails = await userService.getUserByClerkId(userId);
 		setRole(userDetails.role);
 		setOnboardingStep(userDetails.onboardingStep);
 		setProfilePictureUrl(userDetails.profilePicture);
+		setUserId(userDetails._id)
 	};
 
 	switch (onboardingStep) {

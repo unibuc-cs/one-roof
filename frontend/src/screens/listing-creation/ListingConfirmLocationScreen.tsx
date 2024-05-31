@@ -39,9 +39,7 @@ export const ListingConfirmLocationScreen: React.FC<ListingConfirmLocationScreen
         (async () => {
             try {
                 const address = `${generalDetails.address.country} ${generalDetails.address.stateOrProvince} ${generalDetails.address.city} ${generalDetails.address.street} ${generalDetails.address.streetNumber}`;
-                console.log(address);
                 const region = await getCoordinatesFromAddress(address);
-                console.log(region);
                 setLocation({
                     coords:{
                         latitude: region.latitude,

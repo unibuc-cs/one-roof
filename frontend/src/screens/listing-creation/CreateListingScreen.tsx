@@ -9,7 +9,7 @@ import { useCustomFonts } from '../../hooks/useCustomFonts';
 import * as Yup from 'yup';
 import Background from '../../components/Background';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-	import {Formik} from "formik";
+import {Formik} from "formik";
 
 
 const GeneralDetailsSchema = Yup.object().shape({
@@ -26,34 +26,43 @@ const GeneralDetailsSchema = Yup.object().shape({
 		price: Yup.number().required('Price is required'),
 
 	});
+
+const initialFormValues={
+	title: 'Titlu',
+		type: '',
+		address: {
+		country: 'Romania',
+			stateOrProvince: 'Bucuresti',
+			city: 'Bucuresti',
+			postalCode: '060025',
+			street: 'Splaiul Independentei',
+			streetNumber: '204',
+	},
+	price: '200',
+};
+
+// TODO: reset all values when discard is pressed
+
 export const CreateListingScreen: React.FC<any>= ({navigation}) => {
 	useCustomFonts();
-	//TODO: add discard button
+	const [formValues, setFormValues] = useState(initialFormValues);
+
+	useEffect(() => {
+		setFormValues(initialFormValues);
+	}, []);
 	const handleDiscard = () => {
 		navigation.navigate('Home');
 	}
+
 
 	return (
 		<Background>
 			<Card style={styles.card}>
 				<Formik
-					initialValues={{
-						title: 'Titlu',
-						type: '',
-						address: {
-							country: 'Romania',
-							stateOrProvince: 'Bucuresti',
-							city: 'Bucuresti',
-							postalCode: '060025',
-							street: 'Splaiul Independentei',
-							streetNumber: '204',
-						},
-						price: '200',
-					}}
+					initialValues={formValues}
 					validationSchema={GeneralDetailsSchema}
 					onSubmit={(values) => {
 						navigation.navigate('ConfirmLocation', {generalDetails: values})
-						console.log('Form data', values);
 					}}
 				>
 					{({ handleChange, handleBlur, handleSubmit, setFieldValue, values, errors, touched }) => (

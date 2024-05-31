@@ -31,9 +31,24 @@ const FacilitiesSchema = Yup.object().shape({
 
 
 });
+
+const initialFormValues = {
+    size: '',
+    numberOfRooms: '',
+    numberOfBathrooms: '',
+    amenities: [],
+    description: '',
+};
+
 export const ListingFacilitiesScreen: React.FC<ListingFacilitiesScreenPops>= ({route,navigation}) => {
     useCustomFonts();
     const {generalDetails, location} = route.params;
+    const [formValues, setFormValues] = useState(initialFormValues);
+
+    useEffect(() => {
+        setFormValues(initialFormValues);
+    }, []);
+
 
     const handleDiscard = () => {
         navigation.navigate('Home');
@@ -43,17 +58,10 @@ export const ListingFacilitiesScreen: React.FC<ListingFacilitiesScreenPops>= ({r
         <Background>
             <Card style={styles.card}>
                 <Formik
-                    initialValues={{
-                        size: '',
-                        numberOfRooms: '',
-                        numberOfBathrooms: '',
-                        amenities: [],
-                        description: '',
-                    }}
+                    initialValues={formValues}
                     validationSchema={FacilitiesSchema}
                     onSubmit={(values) => {
                         navigation.navigate("ListingDescription", {generalDetails: generalDetails, location: location, facilities: values});
-                        console.log(values);
                     }}
                 >
                     {({ values, handleChange, handleBlur, handleSubmit, setFieldValue, errors, touched }) => (

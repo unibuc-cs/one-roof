@@ -10,8 +10,8 @@ const userService = {
 			body: userDetails,
 		}, userId);
 	},
-	async getUserById(userId: string): Promise<IUser> {
-		const user: any = await callApi(`users/${userId}`);
+	async getUserByClerkId(clerkId: string): Promise<IUser> {
+		const user: any = await callApi(`users/${clerkId}`);
 		user.role = getUserRoleEnumFromString(user.role);
 		return user;
 	},
