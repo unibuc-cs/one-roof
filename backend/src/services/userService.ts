@@ -24,12 +24,34 @@ class UserService {
 		return User.findOne({ clerkId });
 	}
 
+	async getUserByUserId(userId: string): Promise<IUser | null> {
+		return User.findOne({ _id: userId });
+	}
+
 	async getUserWithClerkDetails(clerkId: string): Promise<IUserWithClerk | null> {
 		const databaseUser = await this.getUserByClerkId(clerkId);
 		if (!databaseUser) {
 			return null;
 		}
 		const clerkUser = await clerkClient.users.getUser(clerkId);
+		if (!clerkUser) {
+			return null;
+		}
+		return {
+			...databaseUser.toObject(),
+			firstName: clerkUser.firstName,
+			lastName: clerkUser.lastName,
+			email: clerkUser.primaryEmailAddressId,
+			nickname: clerkUser.username
+		} as IUserWithClerk;
+	}
+
+	async getUserWithClerkDetailsByUserId(userId: string): Promise<IUserWithClerk | null> {
+		const databaseUser = await this.getUserByUserId(userId);
+		if (!databaseUser) {
+			return null;
+		}
+		const clerkUser = await clerkClient.users.getUser(databaseUser.clerkId);
 		if (!clerkUser) {
 			return null;
 		}

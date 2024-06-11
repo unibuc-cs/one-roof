@@ -26,8 +26,8 @@ export const ListingScreen: React.FC = () => {
 	}
 
 	return (
-		<ScrollView contentContainerStyle={{ flex:1, alignItems: 'center', justifyContent: 'center' }}>
-			<Background>
+		<Background>
+			<ScrollView contentContainerStyle={{alignItems: 'center', justifyContent: 'center' }} showsVerticalScrollIndicator={false}>
 				<Card style={styles.container}>
 					<View style={styles.titleContainer}>
 						<Text style={styles.title}>{listing.title}</Text>
@@ -61,8 +61,9 @@ export const ListingScreen: React.FC = () => {
 					<LandlordDetails landlordID = {listing.landlordId}/>
 
 				</Card>
-			</Background>
-		</ScrollView>
+			</ScrollView>
+
+		</Background>
 	);
 };
 // TODO: add landlord information
@@ -75,7 +76,9 @@ const styles = StyleSheet.create({
 		paddingVertical: 20,
 		margin: 10,
 		backgroundColor: 'white',
-		fontFamily: 'ProximaNova-Regular'
+		fontFamily: 'ProximaNova-Regular',
+		flex: 1,
+		minHeight: 'fit-content',
 	},
 	image: {
 		width: '100%',

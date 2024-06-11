@@ -18,6 +18,9 @@ const userService = {
 	async getWithClerkDetails(userId: string): Promise<IUser> {
 		return callApi(`users/full/${userId}`);
 	},
+	async getWithClerkDetailsByUserId(userId: string): Promise<IUser> {
+		return callApi(`users/fullByUserId/${userId}`);
+	},
 	async updateUser(userId: string, updates: Partial<IUserDetails>): Promise<IUser> {
 		return callApi(`users/${userId}`, {
 			method: 'PUT',

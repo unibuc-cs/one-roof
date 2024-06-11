@@ -7,14 +7,14 @@ export const useUserData = (userId: string) => {
 	const [error, setError] = useState(null);
 
 	useEffect(() => {
-		userService.getWithClerkDetails(userId)
+		userService.getWithClerkDetailsByUserId(userId)
 			.then(data => {
 				setUser(data);
 			})
 			.catch(err => {
 				setError(err);
 			});
-	}, );
+	}, [userId]);
 
 	return { user, error };
 };
