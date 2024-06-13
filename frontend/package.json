@@ -33,6 +33,7 @@
     "lodash": "^4.17.21",
     "react": "18.2.0",
     "react-native": "0.73.6",
+    "react-native-emoji-selector": "^0.2.0",
     "react-native-gesture-handler": "~2.14.0",
     "react-native-image-picker": "^7.1.2",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
