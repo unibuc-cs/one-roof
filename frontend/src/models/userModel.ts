@@ -8,6 +8,7 @@ export interface IUser {
 	profilePicture: string,
 	role: UserRoleEnum,
 	onboardingStep: number,
+	contactedUsers: IUser['_id'][],
 	createdAt?: Date,
 	updatedAt?: Date,
 }

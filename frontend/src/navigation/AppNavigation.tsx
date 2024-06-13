@@ -18,6 +18,7 @@ import { FiltersScreen } from '../screens';
 import {ListingConfirmLocationScreen} from '../screens';
 import {ListingFacilitiesScreen} from "../screens/listing-creation";
 import {ListingDescriptionScreen} from "../screens/listing-creation";
+import ChatMessagesScreen from "../screens/ChatMessagesScreen";
 
 export type RootStackParamList = {
 	Home: undefined,
@@ -61,6 +62,7 @@ export const AppNavigation = () => {
 					<Drawer.Screen name="ListingFacilities" component={ListingFacilitiesScreen}/>
 					<Drawer.Screen name="ConfirmLocation" component={ListingConfirmLocationScreen}/>
 					<Drawer.Screen name="ListingDescription" component={ListingDescriptionScreen}/>
+					<Drawer.Screen name="Messages" component={ChatMessagesScreen}/>
 				</Drawer.Navigator>
 			</NavigationContainer>
 		</SearchProvider>

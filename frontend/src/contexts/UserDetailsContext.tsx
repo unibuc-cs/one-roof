@@ -10,6 +10,8 @@ interface UserDetails {
 	setRole: React.Dispatch<React.SetStateAction<UserRoleEnum>>,
 	userId: string
 	setUserId: React.Dispatch<React.SetStateAction<string>>,
+	contactedUsers: string[],
+	setContactedUsers: React.Dispatch<React.SetStateAction<string[]>>,
 }
 
 const defaultUserDetails: UserDetails = {
@@ -20,7 +22,9 @@ const defaultUserDetails: UserDetails = {
 	role: UserRoleEnum.RegularUser,
 	setRole: () => {},
 	userId: '',
-	setUserId:() => {}
+	setUserId:() => {},
+	contactedUsers: [],
+	setContactedUsers: () => {},
 };
 
 const UserDetailsContext = createContext<UserDetails>(defaultUserDetails);
@@ -34,9 +38,10 @@ export const UserDetailsProvider: React.FC<UserDetailsProviderProps> = ({ childr
 	const [profilePicture, setProfilePicture] = useState<string>('');
 	const [role, setRole] = useState<UserRoleEnum>(UserRoleEnum.RegularUser);
 	const [userId, setUserId] = useState<string>('');
+	const [contactedUsers, setContactedUsers] = useState<string[]>([]);
 
 	return (
-		<UserDetailsContext.Provider value={{ onboardingStep, setOnboardingStep, profilePictureUrl: profilePicture, setProfilePictureUrl: setProfilePicture, role, setRole, userId, setUserId }}>
+		<UserDetailsContext.Provider value={{ onboardingStep, setOnboardingStep, profilePictureUrl: profilePicture, setProfilePictureUrl: setProfilePicture, role, setRole, userId, setUserId, contactedUsers, setContactedUsers }}>
 			{children}
 		</UserDetailsContext.Provider>
 	);

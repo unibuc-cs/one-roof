@@ -14,7 +14,7 @@ import { useCustomFonts } from '../hooks/useCustomFonts';
 
 type ListingScreenRouteProp = RouteProp<RootStackParamList, 'Listing'>;
 
-export const ListingScreen: React.FC = () => {
+export const ListingScreen: React.FC = ({navigation}) => {
 	const route = useRoute<ListingScreenRouteProp>();
 	const { id } = route.params;
 	const { user } = useUser();

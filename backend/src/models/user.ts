@@ -5,6 +5,7 @@ interface IUser extends Document {
     profilePicture: string,
     role: 'regularUser' | 'landlord',
     onboardingStep: number,
+    contactedUsers: IUser['_id'][],
     createdAt: Date,
     updatedAt: Date,
 }
@@ -20,8 +21,9 @@ const UserSchema = new Schema<IUser>({
 	clerkId: { type: String, required: true },
 	profilePicture: { type: String },
 	onboardingStep: { type: Number, required: true, default: 1, min: 1, max: 3},
-	role: { type: String, required: true, enum: ['regularUser', 'landlord'] }
-},
+	role: { type: String, required: true, enum: ['regularUser', 'landlord'] },
+    contactedUsers: [{type: Schema.Types.ObjectId, ref: 'User'}],
+    },
 { timestamps: true });
 
 const User = model<IUser>('User', UserSchema);

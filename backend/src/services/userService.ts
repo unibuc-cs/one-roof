@@ -60,7 +60,7 @@ class UserService {
 			firstName: clerkUser.firstName,
 			lastName: clerkUser.lastName,
 			email: clerkUser.primaryEmailAddressId,
-			nickname: clerkUser.username
+			nickname: clerkUser.username,
 		} as IUserWithClerk;
 	}
 
