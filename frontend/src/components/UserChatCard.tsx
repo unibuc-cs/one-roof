@@ -5,6 +5,7 @@ import {theme} from "../theme";
 import {useNavigation} from "@react-navigation/native";
 
 
+
 const UserChatCard: React.FC<any> = ({userId, index}) => {
     const { user, isLoading, error } = useUserData(userId);
     const {navigate} = useNavigation();
@@ -32,7 +33,7 @@ const UserChatCard: React.FC<any> = ({userId, index}) => {
     }
 
     return (
-      <Pressable style={styles.container} onPress={() => navigate("Messages",{ recipientId: user._id})}>
+      <Pressable style={styles.container} onPress={() => navigate("Messages",{ receiverId: user._id})}>
           <Image style={styles.profilePicture} source={{ uri: user.profilePicture }} />
           <View style={{gap:5, flex:1}}>
               <Text style={styles.name}>{user.firstName} {user.lastName}</Text>

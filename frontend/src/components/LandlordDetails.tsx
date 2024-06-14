@@ -32,14 +32,8 @@ const LandlordDetails: React.FC<any> = ({ landlordID }) => {
 	const yearMonth = `${monthName} ${year}`;
 
 	const handleSendMessage = async () => {
-		if (!contactedUsers.includes(landlordID)) {
-			const newContactedUsers = [...contactedUsers, landlordID]; // Add landlord ID to contactedUsers
-			// Update the user model with newContactedUsers
-			await userService.updateUser(user?.id, { contactedUsers: newContactedUsers });
-		}
-		navigate('Chats');
+		navigate("Messages",{ receiverId: landlordID})
 
-		console.log(contactedUsers);
 	}
 
 	return (
