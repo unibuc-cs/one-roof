@@ -15,8 +15,10 @@ export const MessageService = {
                 { senderId: receiverId, receiverId: senderId },
             ],
         });
-        // .populate('senderId', '_id name'); // Populate only necessary sender fields
-
         return messages;
     },
+
+    updateMessage: async(id, update) =>{
+        return Message.findOneAndUpdate({_id: id}, update);
+    }
 }

@@ -15,6 +15,7 @@ import {Image} from "expo-image";
 import {useCustomFonts} from "../hooks/useCustomFonts";
 import {white} from "react-native-paper/lib/typescript/styles/themes/v2/colors";
 import userService from "../services/internal/userService";
+import RenderMessages from "../components/renderMessages";
 
 type ChatMessagesScreenRouteProps = RouteProp<RootStackParamList, 'Message'>;
 
@@ -35,12 +36,14 @@ export const ChatMessagesScreen: React.FC = () => {
         const data = await messageService.getConversationMessages(userId, receiverId);
         setMessages(data);
     }
+
     useEffect(() => {
         getConversationMessages();
     }, []);
 
-
     const handleSend = async () =>{
+        if(message.length == 0)
+            return;
         if(messages.length == 0){
 
             if (!receiverUser.contactedUsers.includes(userId)) {
@@ -80,14 +83,7 @@ export const ChatMessagesScreen: React.FC = () => {
                         )}
                     </View>
 
-                    <ScrollView>
-                        {messages.map((msg, index) => (
-                            <Text style={[styles.message, msg.senderId === userId ? styles.senderMsg : styles.receiverMsg]}>
-                                {msg.content}
-                            </Text>
-
-                        ))}
-                    </ScrollView>
+                    <RenderMessages initialMessages={messages} userId={userId}/>
                     <View style={styles.inputBarContainer}>
                         <Entypo name="camera" size={24} color="gray" />
                         <TextInput
@@ -136,8 +132,8 @@ const styles = StyleSheet.create({
         fontSize: 20,
     },
     nameWrapper: {
-        flex: 1, // Allow wrapper to grow and push image right
-        justifyContent: 'center', // Center text horizontally within the wrapper
+        flex: 1,
+        justifyContent: 'center',
         alignItems: 'center',
         paddingLeft: 40,
     },
@@ -155,17 +151,25 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         borderRadius: 10,
     },
-    senderMsg: {
+    senderMsgBubble: {
         alignItems: "center",
         alignSelf:"flex-end",
         backgroundColor: theme.colors.primary,
-        color: 'white',
     },
-    receiverMsg: {
+    senderMsg:{
+        color: 'white',
+        alignSelf: 'flex-start',
+
+    },
+    receiverMsgBubble: {
         backgroundColor: theme.colors.background,
         alignItems: "center",
         alignSelf: "flex-start",
         color: 'black',
+    },
+    receiverMsg:{
+        color: 'black',
+        alignSelf: 'flex-end',
     },
     inputBarContainer:{
         alignItems: 'center',
