@@ -44,14 +44,13 @@ const RenderMessages = ({ initialMessages, userId}) => {
             const messageDate = new Date(msg.createdAt).toDateString();
             const showDate = messageDate !== lastDate;
             const showListing = msg.referenceId != null;
-            const [listing, setListing] = useState<IListing>();
+            // const [listing, setListing] = useState<IListing>();
             lastDate = messageDate;
 
-            if (showListing) {
-
-                setListing()
-
-            }
+            // if (showListing) {
+            //     setListing()
+            //
+            // }
 
             return (
                 <React.Fragment key={index}>
@@ -62,7 +61,7 @@ const RenderMessages = ({ initialMessages, userId}) => {
                     )}
                     {showListing && (
                         //here
-                        <Text> {listing.name} </Text>
+                        <Text> {msg.referenceId} </Text>
                     )}
                     <Pressable
                         style={[
