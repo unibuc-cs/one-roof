@@ -44,13 +44,14 @@ const RenderMessages = ({ initialMessages, userId}) => {
             const messageDate = new Date(msg.createdAt).toDateString();
             const showDate = messageDate !== lastDate;
             const showListing = msg.referenceId != null;
-            // const [listing, setListing] = useState<IListing>();
+            const [listing, setListing] = useState<IListing>();
             lastDate = messageDate;
 
-            // if (showListing) {
-            //     setListing()
-            //
-            // }
+            if (showListing) {
+                const {listing} = listingService.getListing()
+                setListing()
+
+            }
 
             return (
                 <React.Fragment key={index}>

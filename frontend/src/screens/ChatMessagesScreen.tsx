@@ -16,8 +16,11 @@ import {useCustomFonts} from "../hooks/useCustomFonts";
 import {white} from "react-native-paper/lib/typescript/styles/themes/v2/colors";
 import userService from "../services/internal/userService";
 import RenderMessages from "../components/renderMessages";
+import {io} from "socket.io-client";
 
 type ChatMessagesScreenRouteProps = RouteProp<RootStackParamList, 'Message'>;
+
+
 
 export const ChatMessagesScreen: React.FC = () => {
     useCustomFonts();
@@ -34,10 +37,23 @@ export const ChatMessagesScreen: React.FC = () => {
     const [referenceId, setReferenceId] = useState(initialReferenceId);
     const [type, setType] = useState(initialType);
 
+    const ENDPOINT = "http://192.168.191.187:3000";
+    let socket, selectedChatCompare;
+
     const getConversationMessages = async () => {
         const data = await messageService.getConversationMessages(userId, receiverId);
         setMessages(data);
     };
+
+    useEffect(() => {
+        console.log("In chatMessagesScreen use effect");
+        socket = io(ENDPOINT, {transports: ['websocket']});
+        socket.emit('setup',receiverUser)
+        socket.on('connection',()=>{
+            console.log("Received connection");
+        })
+        console.log(socket);
+    }, []);
 
     useEffect(() => {
         getConversationMessages();

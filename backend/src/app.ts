@@ -5,7 +5,6 @@ import { config } from './configure';
 import {userRouter, reviewRouter, listingRouter, searchRouter, messageRouter} from './routes';
 
 const app: Express = express();
-
 app.set('port', config.port);
 
 app.use(express.json());
