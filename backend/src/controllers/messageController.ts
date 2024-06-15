@@ -15,7 +15,6 @@ export const MessageController = {
     },
 
     async getConversationMessages(req: Request, res: Response) {
-        console.log("In messageController");
         try {
             const {senderId, receiverId} = req.params;
             const messages = await MessageService.getConversationMessages(senderId, receiverId);
@@ -26,5 +25,18 @@ export const MessageController = {
         } catch (error) {
             res.status(500).json({ error: 'Failed to get conversation messages' });
         }
+    },
+
+    async updateMessage(req: Request, res: Response) {
+        try{
+            const messageId = req.params.id;
+            const updates = req.body;
+            const updatedMessage = await MessageService.updateMessage(req.params.id, updates);
+            updatedMessage ? res.json(updatedMessage) : res.status(404).json({ error: 'Failed to update message' });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Error updating message' });
+        }
+
     }
 }

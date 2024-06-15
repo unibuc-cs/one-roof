@@ -15,90 +15,101 @@ import {Image} from "expo-image";
 import {useCustomFonts} from "../hooks/useCustomFonts";
 import {white} from "react-native-paper/lib/typescript/styles/themes/v2/colors";
 import userService from "../services/internal/userService";
+import RenderMessages from "../components/renderMessages";
 
 type ChatMessagesScreenRouteProps = RouteProp<RootStackParamList, 'Message'>;
 
 export const ChatMessagesScreen: React.FC = () => {
     useCustomFonts();
-    const {navigate} = useNavigation();
+    const { navigate } = useNavigation();
     const route = useRoute<ChatMessagesScreenRouteProps>();
-    const {receiverId} = route.params;
+    const { receiverId, referenceId: initialReferenceId, type: initialType } = route.params;
     const screenWidth = Dimensions.get('window').width;
     const screenHeight = Dimensions.get('window').height;
-    const {userId, contactedUsers: currUserContactedUsers} = useUserDetails();
-    const {userId: clerkUserId} = useUserDetails();
+    const { userId, contactedUsers: currUserContactedUsers } = useUserDetails();
+    const { userId: clerkUserId } = useUserDetails();
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]);
-    const {user: receiverUser} = useUserData(receiverId);
+    const { user: receiverUser } = useUserData(receiverId);
+    const [referenceId, setReferenceId] = useState(initialReferenceId);
+    const [type, setType] = useState(initialType);
 
-    const getConversationMessages = async () =>{
+    const getConversationMessages = async () => {
         const data = await messageService.getConversationMessages(userId, receiverId);
         setMessages(data);
-    }
+    };
+
     useEffect(() => {
         getConversationMessages();
-    }, []);
+        setType(initialType);
+        setReferenceId(initialReferenceId);
+    }, [receiverId, initialReferenceId]);
 
+    const handleSend = async () => {
+        if (message.length === 0) return;
 
-    const handleSend = async () =>{
-        if(messages.length == 0){
-
+        if (messages.length === 0) {
             if (!receiverUser.contactedUsers.includes(userId)) {
                 const newContactedUsers = [...receiverUser.contactedUsers, userId];
-                // Update the user model with newContactedUsers
                 await userService.updateUser(receiverUser?.clerkId, { contactedUsers: newContactedUsers });
             }
-            if(currUserContactedUsers.includes(receiverId)){
+            if (!currUserContactedUsers.includes(receiverId)) {
                 const newContactedUsers = [...currUserContactedUsers, receiverId];
-                // Update the user model with newContactedUsers
                 await userService.updateUser(clerkUserId, { contactedUsers: newContactedUsers });
             }
         }
+        console.log("Inainte sa incarcam mesajul");
+        console.log("ReferenceId", referenceId);
+        console.log("Type", type);
+
         await messageService.uploadMessage(
-            {senderId: userId,
+            {
+                senderId: userId,
                 receiverId: receiverId,
                 content: message,
                 isRead: false,
-                referenceId: '665368dd1698312a5705708c', // TODO: fix hardcode
-                type: 'listing',
-            },userId);
+                referenceId: referenceId,
+                type: type,
+            },
+            userId
+        );
+
+        // After the first message is sent, set referenceId and type to null
+        if (referenceId !== null || type !== null) {
+            setReferenceId(null);
+            setType(null);
+        }
+
         setMessage('');
         getConversationMessages();
-    }
+    };
+
     return (
         <KeyboardAvoidingView style={styles.container}>
             <Background>
-                <View style={{width: screenWidth, flex: 1, height: screenHeight,}}>
+                <View style={{ width: screenWidth, flex: 1, height: screenHeight }}>
                     <View style={styles.topBar}>
                         {receiverUser && (
                             <>
                                 <View style={styles.nameWrapper}>
-                                    <Text style={styles.receiverName}>{receiverUser.firstName} {receiverUser.lastName}</Text>
+                                    <Text style={styles.receiverName}>
+                                        {receiverUser.firstName} {receiverUser.lastName}
+                                    </Text>
                                 </View>
-                                <Image style={styles.receiverProfilePicture} source={receiverUser?.profilePicture}/>
+                                <Image style={styles.receiverProfilePicture} source={receiverUser?.profilePicture} />
                             </>
                         )}
                     </View>
 
-                    <ScrollView>
-                        {messages.map((msg, index) => (
-                            <Text style={[styles.message, msg.senderId === userId ? styles.senderMsg : styles.receiverMsg]}>
-                                {msg.content}
-                            </Text>
-
-                        ))}
-                    </ScrollView>
+                    <RenderMessages initialMessages={messages} userId={userId} />
                     <View style={styles.inputBarContainer}>
-                        <Entypo name="camera" size={24} color="gray" />
                         <TextInput
                             style={styles.inputBar}
                             placeholder="Type your message..."
                             value={message}
-                            onChangeText={(text: string) => setMessage(text)}
+                            onChangeText={(text) => setMessage(text)}
                         />
-                        <Entypo name="mic" size={24} color="gray" />
-                        <Pressable
-                            onPress={() => handleSend()}>
+                        <Pressable onPress={handleSend}>
                             <Ionicons name="send" size={24} color={theme.colors.primary} />
                         </Pressable>
                     </View>
@@ -136,8 +147,8 @@ const styles = StyleSheet.create({
         fontSize: 20,
     },
     nameWrapper: {
-        flex: 1, // Allow wrapper to grow and push image right
-        justifyContent: 'center', // Center text horizontally within the wrapper
+        flex: 1,
+        justifyContent: 'center',
         alignItems: 'center',
         paddingLeft: 40,
     },
@@ -155,17 +166,25 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         borderRadius: 10,
     },
-    senderMsg: {
+    senderMsgBubble: {
         alignItems: "center",
         alignSelf:"flex-end",
         backgroundColor: theme.colors.primary,
-        color: 'white',
     },
-    receiverMsg: {
+    senderMsg:{
+        color: 'white',
+        alignSelf: 'flex-start',
+
+    },
+    receiverMsgBubble: {
         backgroundColor: theme.colors.background,
         alignItems: "center",
         alignSelf: "flex-start",
         color: 'black',
+    },
+    receiverMsg:{
+        color: 'black',
+        alignSelf: 'flex-end',
     },
     inputBarContainer:{
         alignItems: 'center',

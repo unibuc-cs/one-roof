@@ -33,7 +33,7 @@ const UserChatCard: React.FC<any> = ({userId, index}) => {
     }
 
     return (
-      <Pressable style={styles.container} onPress={() => navigate("Messages",{ receiverId: user._id})}>
+      <Pressable style={styles.container} onPress={() => navigate("Messages",{ receiverId: user._id, referenceId: null, type: null})}>
           <Image style={styles.profilePicture} source={{ uri: user.profilePicture }} />
           <View style={{gap:5, flex:1}}>
               <Text style={styles.name}>{user.firstName} {user.lastName}</Text>

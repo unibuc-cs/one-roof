@@ -12,7 +12,7 @@ import userService from "../services/internal/userService";
 
 // TODO: add loading
 
-const LandlordDetails: React.FC<any> = ({ landlordID }) => {
+const LandlordDetails: React.FC<any> = ({ landlordID , referenceId}) => {
 	const customFont = useCustomFonts();
 	const { navigate } = useNavigation();
 	const { user: landlord } =  useUserData(landlordID);
@@ -32,7 +32,8 @@ const LandlordDetails: React.FC<any> = ({ landlordID }) => {
 	const yearMonth = `${monthName} ${year}`;
 
 	const handleSendMessage = async () => {
-		navigate("Messages",{ receiverId: landlordID})
+		console.log("In landlordDetails", referenceId);
+		navigate("Messages",{ receiverId: landlordID, referenceId: referenceId, type: 'listing' })
 
 	}
 
