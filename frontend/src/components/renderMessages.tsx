@@ -2,9 +2,10 @@ import React, {useEffect, useState} from 'react';
 import {ScrollView, Text, Pressable, View, StyleSheet} from 'react-native';
 import {theme} from "../theme";
 import { Ionicons } from '@expo/vector-icons';
-import {messageService} from "../services";
+import {listingService, messageService} from "../services";
+import {IListing} from "../models";
 
-const RenderMessages = ({ initialMessages, userId }) => {
+const RenderMessages = ({ initialMessages, userId}) => {
     const [messages, setMessages] = useState(initialMessages);
 
     useEffect(() => {
@@ -42,7 +43,15 @@ const RenderMessages = ({ initialMessages, userId }) => {
         return messages.map((msg, index) => {
             const messageDate = new Date(msg.createdAt).toDateString();
             const showDate = messageDate !== lastDate;
+            const showListing = msg.referenceId != null;
+            const [listing, setListing] = useState<IListing>();
             lastDate = messageDate;
+
+            if (showListing) {
+
+                setListing()
+
+            }
 
             return (
                 <React.Fragment key={index}>
@@ -50,6 +59,10 @@ const RenderMessages = ({ initialMessages, userId }) => {
                         <View style={styles.dateLabelContainer}>
                             <Text style={styles.dateLabel}>{formatDate(msg.createdAt)}</Text>
                         </View>
+                    )}
+                    {showListing && (
+                        //here
+                        <Text> {listing.name} </Text>
                     )}
                     <Pressable
                         style={[
@@ -60,7 +73,7 @@ const RenderMessages = ({ initialMessages, userId }) => {
                         <Text style={msg.senderId === userId ? styles.senderMsg : styles.receiverMsg}>
                             {msg.content}
                         </Text>
-                        <View style={{ flexDirection: 'row', gap: 5 }}>
+                        <View style={{ flexDirection: 'row', gap: 5, display: 'flex'  }}>
                             <Text style={msg.senderId === userId ? styles.senderMsg : styles.receiverMsg}>
                                 {formatTime(msg.createdAt)}
                             </Text>
@@ -107,7 +120,6 @@ const styles = StyleSheet.create({
     senderMsg:{
         color: 'white',
         alignSelf: 'flex-start',
-
     },
     receiverMsgBubble: {
         backgroundColor: theme.colors.background,

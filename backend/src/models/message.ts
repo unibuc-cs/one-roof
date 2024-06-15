@@ -6,8 +6,8 @@ interface IMessage extends Document {
     receiverId: IUser['_id'],
     content: string,
     isRead: boolean,
-    referenceId: SchemaDefinitionProperty<IListing['_id']> | SchemaDefinitionProperty<IReview['_id']>,
-    type: 'listing' | 'review',
+    referenceId: SchemaDefinitionProperty<IListing['_id']> | SchemaDefinitionProperty<IReview['_id']>|null,
+    type: 'listing' | 'review'|null,
     createdAt: Date,
     updatedAt: Date,
 }
@@ -17,8 +17,8 @@ const MessageSchema = new Schema<IMessage>({
 	receiverId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
 	content: { type: String, required: true },
 	isRead: { type: Boolean, required: true },
-	referenceId: { type: Schema.Types.ObjectId, required: true },
-	type: { type: String, required: true, enum: ['listing', 'review'] }
+	referenceId: { type: Schema.Types.ObjectId, required: false },
+	type: { type: String, required: false, enum: ['listing', 'review'] }
 }, { timestamps: true });
 
 const Message = model<IMessage>('Message', MessageSchema);
