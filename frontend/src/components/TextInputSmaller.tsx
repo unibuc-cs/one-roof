@@ -6,16 +6,19 @@ import { useCustomFonts } from '../hooks/useCustomFonts';
 
 type Props = React.ComponentProps<typeof Input> & { errorText?: string, marginVertical ?: number};
 
-export const TextInput = ({ errorText, marginVertical, ...props }: Props) => {
+export const TextInputSmaller = ({ errorText, marginVertical, ...props }: Props) => {
 	useCustomFonts();
-	const customMargin = marginVertical !== undefined ? marginVertical : 12;
+	const customPadding = props.multiline ? 8 : 0;
 	return  (
-		<View style={[styles.container, {marginVertical : customMargin }]}>
+		<View style={[styles.container]}>
 			<Input
-				style={[styles.input]}
+				style={[styles.inputContainer, {paddingVertical: customPadding}]}
+				contentStyle={styles.input}
 				selectionColor={theme.colors.secondary}
 				underlineColor="transparent"
-				mode="outlined"
+				mode='outlined'
+				numberOfLines={2}
+				dense={true}
 				{...props}
 			/>
 			{errorText ? <Text style={styles.error}>{errorText}</Text> : null}
@@ -26,18 +29,19 @@ export const TextInput = ({ errorText, marginVertical, ...props }: Props) => {
 const styles = StyleSheet.create({
 	container: {
 		width: '100%',
-		marginVertical: 0,
+		display: 'flex',
+		justifyContent: 'center',
+		alignContent: 'center',
+	},
+	inputContainer: {
+		backgroundColor: theme.colors.secondary,
 	},
 	input: {
-		color: 'red',
+		paddingTop: 4,
 		fontFamily: 'ProximaNova-Regular',
-		backgroundColor: theme.colors.secondary
 	},
 	error: {
 		fontSize: 14,
 		color: theme.colors.error,
-		paddingHorizontal: 4,
 	}
 });
-
-export default memo(TextInput);

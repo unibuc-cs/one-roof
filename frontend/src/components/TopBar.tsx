@@ -49,6 +49,7 @@ const TopBar: React.FC<TopBarProps> = ({ navigation }) => {
 		/>
 	);
 
+	// TODO: REMOVE THIS HARDCODING
 	if (routeName === 'Home') {
 		return (
 			<View style={styles.container}>
@@ -82,7 +83,8 @@ const TopBar: React.FC<TopBarProps> = ({ navigation }) => {
 				</View>
 			</View>
 		);
-	} else if (routeName === 'Filters') {
+	} else if (routeName === 'Filters' || routeName === 'ReviewGeneralDetails' || routeName === 'BuildingFeedback'
+		|| routeName === 'AreaFeedback') {
 		return null;
 	} else {
 		return (

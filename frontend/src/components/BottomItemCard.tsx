@@ -1,8 +1,9 @@
 import React, { useRef, useState } from 'react';
 import BottomSheet from '@gorhom/bottom-sheet';
 import { PropertyCard } from './PropertyCard';
+import { ReviewCard } from './ReviewCard';
 
-export const BottomListingCard: React.FC<any> = ({ item, onClose }) => {
+export const BottomItemCard: React.FC<any> = ({ item, onClose, type}) => {
 	const [isOpen, setIsOpen] = useState(true);
 	const bottomSheetRef = useRef<BottomSheet>(null);
 
@@ -20,7 +21,7 @@ export const BottomListingCard: React.FC<any> = ({ item, onClose }) => {
 			snapPoints={[400]}
 			index={isOpen ? 0 : -1}
 		>
-			<PropertyCard mode={'contained'} backgroundColor={'white'} canOpen={true} listing={item} />
+			{type === 'review' ? <ReviewCard review={item}/> : <PropertyCard mode={'contained'} backgroundColor={'white'} canOpen={true} listing={item} />}
 		</BottomSheet>
 	);
 };

@@ -4,7 +4,7 @@ import { theme } from '../theme';
 import React from 'react';
 
 // TODO: fix any
-export const CustomSwitchSelector: React.FC<any> = ({ options, mode, value, onPress, disabled }) => {
+export const CustomSwitchSelector: React.FC<any> = ({ options, mode, value, onPress, disabled, width }) => {
 	const buttonColor = mode === 'green' ? theme.colors.inverseSurface : theme.colors.text;
 	const borderColor = mode === 'green' ? theme.colors.text : theme.colors.secondary;
 	const backgroundColor = mode === 'green' ? theme.colors.inversePrimary : '';
@@ -20,6 +20,9 @@ export const CustomSwitchSelector: React.FC<any> = ({ options, mode, value, onPr
 			height={50}
 			touchableProps={{height:200}}
 			initial={0}
+			style={{
+				width: width
+			}}
 			textContainerStyle={{height: '100%'}}
 			value={options.map(entry => entry.value).indexOf(value)}
 			onPress={onPress}

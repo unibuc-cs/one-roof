@@ -2,9 +2,17 @@ import { Review, IReview } from '../models';
 import { FilterQuery, UpdateQuery } from 'mongoose';
 
 export const ReviewService = {
-	createReview: async (reviewData: IReview): Promise<IReview> => {
+	createReview: async (reviewData: IReview): Promise<IReview | null> => {
+		console.log('get here')
 		const review = new Review(reviewData);
-		return review.save();
+		try {
+			const saved = await review.save();
+			console.log('no errors', saved);
+			return saved;
+		} catch (error) {
+			console.error(error);
+			return null;
+		}
 	},
 
 	getReviewById: async (id: string): Promise<IReview | null> => {

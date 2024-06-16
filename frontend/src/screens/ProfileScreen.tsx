@@ -17,41 +17,41 @@ export const ProfileScreen: React.FC = () => {
 
 	return (
 		<Background>
-					<ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollView}>
-						<View style={{ marginBottom: 7, alignItems: 'center' }}>
-							<ProfilePicture canEdit={true} source={{ uri: profilePictureUrl }}/>
-						</View>
-						<HeaderText size={19}>
-							Role: <Text style={{ color: theme.colors.primary }}>{role}</Text>
-						</HeaderText>
-						<EditableField
-							isEditable={true}
-							label="First Name"
-							value={user.firstName || ''}
-							onSave={(newValue) => user.update({ firstName: newValue })}
-						/>
-						<Divider/>
-						<EditableField
-							isEditable={true}
-							label="Last Name"
-							value={user.lastName || ''}
-							onSave={(newValue) => user.update({ lastName: newValue })}
-						/>
-						<Divider/>
-						<EditableField
-							isEditable={true}
-							label="Username"
-							value={user.username || ''}
-							onSave={(newValue) => user.update({ username: newValue })}
-						/>
-						<Divider/>
-						<EditableField
-							isEditable={false}
-							label="Email"
-							value={user.primaryEmailAddress?.emailAddress || ''}
-							onSave={(newValue) => console.log(newValue)}
-						/>
-					</ScrollView>
+			<ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollView}>
+				<View style={{ marginBottom: 7, alignItems: 'center' }}>
+					<ProfilePicture canEdit={true} source={{ uri: profilePictureUrl }}/>
+				</View>
+				<HeaderText size={19}>
+					Role: <Text style={{ color: theme.colors.primary }}>{role}</Text>
+				</HeaderText>
+				<EditableField
+					isEditable={true}
+					label="First Name"
+					value={user.firstName || ''}
+					onSave={(newValue) => user.update({ firstName: newValue })}
+				/>
+				<Divider/>
+				<EditableField
+					isEditable={true}
+					label="Last Name"
+					value={user.lastName || ''}
+					onSave={(newValue) => user.update({ lastName: newValue })}
+				/>
+				<Divider/>
+				<EditableField
+					isEditable={true}
+					label="Username"
+					value={user.username || ''}
+					onSave={(newValue) => user.update({ username: newValue })}
+				/>
+				<Divider/>
+				<EditableField
+					isEditable={false}
+					label="Email"
+					value={user.primaryEmailAddress?.emailAddress || ''}
+					onSave={(newValue) => console.log(newValue)}
+				/>
+			</ScrollView>
 		</Background>
 	);
 };
