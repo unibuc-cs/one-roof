@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
 	},
 	input: {
 		paddingTop: 4,
-		fontFamily: 'ProximaNova-Regular',
+		fontFamily: 'Proxima-Nova/Regular',
 	},
 	error: {
 		fontSize: 14,

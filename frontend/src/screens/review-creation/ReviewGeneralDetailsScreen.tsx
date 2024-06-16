@@ -27,7 +27,6 @@ export const ReviewGeneralDetailsScreen = ({ navigation }) => {
 		<Background>
 			<Card style={styles.card} contentStyle={styles.container}>
 				<KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
-					<Button onPress={() => navigation.navigate('BuildingFeedback', { generalDetails: {} })}>Go</Button>
 					<Formik
 						initialValues={{
 							latitude: BUCHAREST_COORDINATES.latitude,

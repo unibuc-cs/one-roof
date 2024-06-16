@@ -9,6 +9,7 @@ import { Card } from 'react-native-paper';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { reviewService } from '../../services';
+import { useUser } from '@clerk/clerk-expo';
 
 const AreaFeedbackSchema = Yup.object().shape({
 	transport: Yup.object().shape({
@@ -39,6 +40,7 @@ type AreaFeedbackScreenProps = {
 
 export const AreaFeedbackScreen: React.FC<AreaFeedbackScreenProps> = ({ route, navigation }) => {
 	const { generalDetails, buildingFeedback } = route.params;
+	const { user } = useUser();
 	const handleDiscard = () => {
 		navigation.navigate('Home');
 	}
@@ -55,7 +57,7 @@ export const AreaFeedbackScreen: React.FC<AreaFeedbackScreenProps> = ({ route, n
 			address: generalDetails.livingSituation,
 			areaFeedback: values,
 			buildingFeedback: buildingFeedback,
-			reviewerId: '664c96989d32dae8d13aba37',
+			reviewerId: user?.id as string,
 		}
 
 		console.log('reviewData', reviewData);

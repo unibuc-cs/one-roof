@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
 	},
 	input: {
 		color: 'red',
-		fontFamily: 'ProximaNova-Regular',
+		fontFamily: 'Proxima-Nova/Regular',
 		backgroundColor: theme.colors.secondary
 	},
 	error: {
