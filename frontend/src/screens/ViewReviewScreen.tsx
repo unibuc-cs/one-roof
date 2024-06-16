@@ -1,15 +1,49 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, ScrollView } from 'react-native';
-import { Card } from 'react-native-paper';
+import { ActivityIndicator, Card } from 'react-native-paper';
 import { Background, CustomMarker, HeaderText, ReviewDetailsSection, RootStackParamList } from '../components';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import ReachOutToUser from '../components/ReachOutToUser';
+import { reviewService } from '../services';
+import { IReview } from '../models';
+import { useUser } from '@clerk/clerk-expo';
 
 type ViewReviewScreenProps = RouteProp<RootStackParamList, 'ViewReview'>;
 
 export const ViewReviewScreen: React.FC<any> = () => {
 	const route = useRoute<ViewReviewScreenProps>();
-	const { review } = route.params;
+	const { user } = useUser();
+
+
+	const [review, setReview] = useState<IReview>(null);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState(null);
+
+	const fetchReview = async (reviewId) => {
+		try {
+			const fetchedReview = await reviewService.getReview(reviewId, user?.id as string);
+			setReview(fetchedReview);
+			setLoading(false);
+		} catch (err) {
+			console.error('Error fetching review:', err);
+			setError(err);
+			setLoading(false);
+		}
+	};
+
+
+	useEffect(() => {
+		const reviewId = route.params?.id;
+		if (reviewId) {
+			fetchReview(reviewId);
+		}
+	}, [route.params]);
+
+	if (loading || !review) {
+		return <ActivityIndicator size="large" />;
+	}
+
+
 	const areaFeedback = review?.areaFeedback;
 	const buildingFeedback = review?.buildingFeedback;
 

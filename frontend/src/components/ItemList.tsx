@@ -18,7 +18,7 @@ export const ItemList = () => {
 
 	const renderReview = useCallback(
 		(review: IReview) => (
-			<ReviewCard review={review}/>
+			<ReviewCard key={review._id} review={review}/>
 		), []
 	);
 

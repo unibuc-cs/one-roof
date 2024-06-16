@@ -22,7 +22,7 @@ export const ReviewCard: React.FC<ReviewCardProps> = ({review}) => {
 				<View style={styles.recommendContainer}>
 					<HeaderText size={18} textAlign={"left"} style={styles.recommendText}>Recommend: {review.recommend}/5</HeaderText>
 				</View>
-				<Button mode={'contained'} onPress={() => navigate('ViewReview', {review: review})}> Go to Full Review! </Button>
+				<Button mode={'contained'} onPress={() => navigate('ViewReview', {id: review._id})}> Go to Full Review! </Button>
 			</Card.Content>
 		</Card>
 	);

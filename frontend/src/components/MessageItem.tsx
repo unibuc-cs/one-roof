@@ -2,15 +2,13 @@ import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { theme } from '../theme';
+import { Button } from './Button';
+import { useNavigation } from '@react-navigation/native';
 
 export const MessageItem = ({ msg, index, listings, reviews, userId }) => {
-	const messageDate = new Date(msg.createdAt).toDateString();
-	// const showDate = messageDate !== lastDate;
 	const showListing = msg.referenceId != null && msg.type === 'listing';
 	const showReview = msg.referenceId != null && msg.type === 'review';
-
-	const lastDate = messageDate;
-
+	const { navigate } = useNavigation();
 	const formatTime = (time) => {
 		const options = { hour: 'numeric', minute: 'numeric' };
 		return new Date(time).toLocaleString('en-US', options);
@@ -42,7 +40,7 @@ export const MessageItem = ({ msg, index, listings, reviews, userId }) => {
 						</Text>
 					</View>
 					<Pressable style={styles.openButton}>
-						<Text style={styles.openButtonText}>Open</Text>
+						<Button mode={'contained'} onPress={() => navigate('Listing', { id: listings[msg.referenceId]._id })}>Open</Button>
 					</Pressable>
 				</View>
 			)}
@@ -57,7 +55,7 @@ export const MessageItem = ({ msg, index, listings, reviews, userId }) => {
 						</Text>
 					</View>
 					<Pressable style={styles.openButton}>
-						<Text style={styles.openButtonText}>Open</Text>
+						<Button mode={'contained'} onPress={() => navigate('ViewReview', { id: reviews[msg.referenceId]._id })}>Open</Button>
 					</Pressable>
 				</View>
 			)}

@@ -6,6 +6,7 @@ export const reviewService = {
 	},
 
 	getReview: (id: string, userId: string) => {
+		console.log('HERE IN REVIEWS', id, userId);
 		return callApi(`reviews/${id}`, {}, userId);
 	},
 
