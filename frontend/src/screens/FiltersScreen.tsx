@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { FlatList, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Checkbox } from 'react-native-paper';
 import { Button, HeaderText } from '../components';
 import { NumberOfBathroomsEnum, NumberOfBedroomsEnum, PropertyTypeEnum, TypeOfProviderEnum } from '../enums';
@@ -200,6 +200,7 @@ export const FiltersScreen = ({ navigation }) => {
 	/>
 
 	<HeaderText textAlign="left" size={17}>Amenities (only for internal listings):</HeaderText>
+
 	<ScrollView>
 		{amenitiesArray.map((amenity, index) => (
 			<Checkbox.Item
@@ -213,7 +214,7 @@ export const FiltersScreen = ({ navigation }) => {
 		))}
 	</ScrollView>
 		</View>
-	);
+			);
 
 	const buttons = (
 		<View style={[styles.buttonsContainer]}>
@@ -236,11 +237,11 @@ export const FiltersScreen = ({ navigation }) => {
 	)
 
 	return (
-		<View style={styles.container}>
+		<React.Fragment>
 			{state.searchType === 'listings' ? propertyFilters : reviewFilters}
 			<View style={{height: 100}}/>
 			{buttons}
-		</View>
+		</React.Fragment>
 	);
 };
 
