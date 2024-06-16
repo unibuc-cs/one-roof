@@ -3,11 +3,9 @@ import {ScrollView, Text, Pressable, View, StyleSheet} from 'react-native';
 import {theme} from "../theme";
 import { Ionicons } from '@expo/vector-icons';
 import {listingService, messageService} from "../services";
-import {IListing} from "../models";
-import {PropertyCard} from "./PropertyCard";
 import {io} from "socket.io-client";
+import {API_HOST} from '@env';
 
-const ENDPOINT = "http://192.168.191.187:3000"; // TODO fix hardcoding
 let socket;
 
 const RenderMessages = ({ initialMessages, userId }) => {
@@ -41,7 +39,7 @@ const RenderMessages = ({ initialMessages, userId }) => {
     }, [initialMessages, userId]);
 
     useEffect(() => {
-        socket = io(ENDPOINT, {transports: ['websocket']});
+        socket = io(API_HOST, {transports: ['websocket']});
         const roomId = userId < receiverId ?
             `${userId}-${receiverId}` :
             `${receiverId}-${userId}`;
