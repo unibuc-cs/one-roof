@@ -64,13 +64,6 @@ export function DrawerContent(props: DrawerContentComponentProps) {
 					/>
 					<DrawerItem
 						icon={({ color, size }) => (
-							<MaterialCommunityIcons name="bell-outline" color={color} size={size} />
-						)}
-						label="Alerts"
-						onPress={() => { props.navigation.navigate('Alerts'); }}
-					/>
-					<DrawerItem
-						icon={({ color, size }) => (
 							<MaterialCommunityIcons name="message-outline" color={color} size={size} />
 						)}
 						label="Chats"

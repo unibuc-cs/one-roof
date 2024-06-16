@@ -5,6 +5,7 @@ import { theme } from '../theme';
 import { useUserData, useUserDataByClerkId } from '../hooks/useUserData';
 import Button from '../components/Button';
 import { useNavigation } from '@react-navigation/native';
+import { useUser } from '@clerk/clerk-expo';
 
 const ReachOutToUser: React.FC<any> = ({ message, userToReachOutToId, referenceId, type }) => {
 	const { navigate } = useNavigation();
@@ -23,6 +24,8 @@ const ReachOutToUser: React.FC<any> = ({ message, userToReachOutToId, referenceI
 	const monthName = monthNames[userCreatedAt.getMonth()];
 	const yearMonth = `${monthName} ${year}`;
 
+	const { user } = useUser();
+
 	const handleSendMessage = async () => {
 		console.log('In landlordDetails', referenceId);
 		console.log('message type', type);
@@ -39,7 +42,7 @@ const ReachOutToUser: React.FC<any> = ({ message, userToReachOutToId, referenceI
 					<Text style={styles.date}>With us since: {yearMonth}</Text>
 				</View>
 			</View>
-			<Button mode={'elevated'} onPress={handleSendMessage}>Send a message</Button>
+			<Button mode={'elevated'} disabled={user?.id === landlord.clerkId} onPress={handleSendMessage}>Send a message</Button>
 		</Card>
 	);
 };

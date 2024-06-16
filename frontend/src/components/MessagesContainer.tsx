@@ -58,7 +58,7 @@ export const MessagesContainer = ({ initialMessages, userId }) => {
     useEffect(() => {
         const fetchListings = async () => {
             const messagesWithListing = initialMessages.filter(msg => msg.type == 'listing' && msg.referenceId != null);
-            const listingPromises = messagesWithListing.map(msg => listingService.getListing(msg.referenceId));
+            const listingPromises = messagesWithListing.map(msg => listingService.getListing(msg.referenceId, clerkId as string));
             const listingsArray = await Promise.all(listingPromises);
             const listingsMap = listingsArray.reduce((acc, listing, index) => {
                 acc[messagesWithListing[index].referenceId] = listing;

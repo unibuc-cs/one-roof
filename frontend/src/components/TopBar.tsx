@@ -18,7 +18,7 @@ type TopBarProps = {
 
 
 const TopBar: React.FC<TopBarProps> = ({ navigation }) => {
-	const { setSearchType, triggerSearch } = useSearchContext();
+	const { state, setSearchType, triggerSearch } = useSearchContext();
 	const routeName = navigation.getState().routes[navigation.getState().index].name;
 	const [searchQuery, setSearchQuery] = React.useState('');
 
@@ -49,7 +49,6 @@ const TopBar: React.FC<TopBarProps> = ({ navigation }) => {
 		/>
 	);
 
-	// TODO: REMOVE THIS HARDCODING
 	if (routeName === 'Home') {
 		return (
 			<View style={styles.container}>
@@ -73,7 +72,7 @@ const TopBar: React.FC<TopBarProps> = ({ navigation }) => {
 							backgroundColor={theme.colors.inversePrimary}
 							borderColor={theme.colors.text}
 							borderWidth={10}
-							initial={0}
+							initial={state.searchType === 'listings' ? 0 : 1}
 							bold={true}
 							onPress={(value) => {
 								changeSearchType(value);

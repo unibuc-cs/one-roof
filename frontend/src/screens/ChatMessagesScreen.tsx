@@ -43,6 +43,7 @@ export const ChatMessagesScreen: React.FC = () => {
     const [referenceId, setReferenceId] = useState(initialReferenceId);
     const [type, setType] = useState(initialType);
 
+    console.log('TIP DIN SCREEN', type, initialReferenceId, referenceId);
     useEffect(() => {
         socket = io(API_HOST, {transports: ['websocket']});
         const roomId = userId < receiverId ?
@@ -71,10 +72,10 @@ export const ChatMessagesScreen: React.FC = () => {
     }, []);
 
     const checkIfIncludeType = () => {
-        console.log(referenceId);
         const alreadyDiscussed = messages.filter((msg: IMessage) => msg.referenceId === referenceId);
-        console.log(alreadyDiscussed, messages);
-        return alreadyDiscussed.length == 0 ? initialType : null;
+        const verdict = alreadyDiscussed.length == 0 ? initialType : null;
+        console.log(verdict, 'INCLUDE MESSAGE');
+        return verdict;
     }
 
     const getConversationMessages = async () => {
@@ -107,11 +108,11 @@ export const ChatMessagesScreen: React.FC = () => {
             userId
         );
         socket.emit('newMessage', newMessage);
-        // After the first message is sent, set referenceId and type to null
-        if (referenceId !== null || type !== null) {
-            setReferenceId(null);
-            setType(null);
-        }
+        // // After the first message is sent, set referenceId and type to null
+        // if (referenceId !== null || type !== null) {
+        //     setReferenceId(null);
+        //     setType(null);
+        // }
 
         setMessage('');
         getConversationMessages();
