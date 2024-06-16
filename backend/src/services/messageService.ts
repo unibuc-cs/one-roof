@@ -17,7 +17,6 @@ export const MessageService = {
         });
         return messages;
     },
-
     updateMessage: async(id, update) =>{
         return Message.findOneAndUpdate({_id: id}, update);
     }

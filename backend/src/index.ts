@@ -1,9 +1,7 @@
 import { connect, seedDatabase } from './database';
 import app from './app';
 import {Server} from "socket.io";
-import cors from "./middleware/cors";
 import {createServer} from "node:http";
-import corsMiddleware from "./middleware/cors";
 
 const port = app.get('port');
 
@@ -14,6 +12,28 @@ const io = new Server(server, {
 
 io.on('connection', (socket) => {
 	console.log('Client connected');
+
+	socket.on('join', (roomId) => {
+		socket.join(roomId);
+		console.log("Socket joined room ", roomId);
+	})
+
+	socket.on('newMessage', (msg) => {
+		const roomId = msg.senderId < msg.receiverId ?
+			`${msg.senderId}-${msg.receiverId}` :
+			`${msg.receiverId}-${msg.senderId}`;
+		console.log(`New message sent to ${roomId}`);
+		socket.in(roomId).emit('messageReceived', msg);
+	})
+
+	socket.on('updateMessages', (msg) =>{
+		const roomId = msg.senderId < msg.receiverId ?
+			`${msg.senderId}-${msg.receiverId}` :
+			`${msg.receiverId}-${msg.senderId}`;
+		console.log("Mesaje actualizate");
+		socket.in(roomId).emit('updateMessages', msg);
+
+	})
 
 })
 

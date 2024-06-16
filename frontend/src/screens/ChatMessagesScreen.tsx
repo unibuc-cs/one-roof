@@ -17,10 +17,11 @@ import {white} from "react-native-paper/lib/typescript/styles/themes/v2/colors";
 import userService from "../services/internal/userService";
 import RenderMessages from "../components/renderMessages";
 import {io} from "socket.io-client";
+import {update} from "lodash";
 
 type ChatMessagesScreenRouteProps = RouteProp<RootStackParamList, 'Message'>;
-
-
+const ENDPOINT = "http://192.168.191.187:3000"; // TODO fix hardcoding
+let socket;
 
 export const ChatMessagesScreen: React.FC = () => {
     useCustomFonts();
@@ -37,22 +38,12 @@ export const ChatMessagesScreen: React.FC = () => {
     const [referenceId, setReferenceId] = useState(initialReferenceId);
     const [type, setType] = useState(initialType);
 
-    const ENDPOINT = "http://192.168.191.187:3000";
-    let socket, selectedChatCompare;
-
-    const getConversationMessages = async () => {
-        const data = await messageService.getConversationMessages(userId, receiverId);
-        setMessages(data);
-    };
-
     useEffect(() => {
-        console.log("In chatMessagesScreen use effect");
         socket = io(ENDPOINT, {transports: ['websocket']});
-        socket.emit('setup',receiverUser)
-        socket.on('connection',()=>{
-            console.log("Received connection");
-        })
-        console.log(socket);
+        const roomId = userId < receiverId ?
+            `${userId}-${receiverId}` :
+            `${receiverId}-${userId}`;
+        socket.emit('join', {roomId: roomId});
     }, []);
 
     useEffect(() => {
@@ -60,6 +51,22 @@ export const ChatMessagesScreen: React.FC = () => {
         setType(initialType);
         setReferenceId(initialReferenceId);
     }, [receiverId, initialReferenceId]);
+
+    useEffect(() => {
+        socket.on('messageReceived', (msg)=>{
+            if(msg.receiverId === userId){
+                setMessages([...messages, msg]);
+            }
+        })
+        socket.on("updateMessages", (msg) =>{
+            getConversationMessages();
+        })
+    }, []);
+
+    const getConversationMessages = async () => {
+        const data = await messageService.getConversationMessages(userId, receiverId);
+        setMessages(data);
+    };
 
     const handleSend = async () => {
         if (message.length === 0) return;
@@ -74,11 +81,7 @@ export const ChatMessagesScreen: React.FC = () => {
                 await userService.updateUser(clerkUserId, { contactedUsers: newContactedUsers });
             }
         }
-        console.log("Inainte sa incarcam mesajul");
-        console.log("ReferenceId", referenceId);
-        console.log("Type", type);
-
-        await messageService.uploadMessage(
+        const newMessage = await messageService.uploadMessage(
             {
                 senderId: userId,
                 receiverId: receiverId,
@@ -89,7 +92,7 @@ export const ChatMessagesScreen: React.FC = () => {
             },
             userId
         );
-
+        socket.emit('newMessage', newMessage);
         // After the first message is sent, set referenceId and type to null
         if (referenceId !== null || type !== null) {
             setReferenceId(null);

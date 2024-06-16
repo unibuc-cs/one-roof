@@ -2,12 +2,8 @@ import React, {useContext, useEffect} from 'react';
 import {Pressable, ScrollView, StyleSheet, Text, View} from 'react-native';
 import {useNavigation} from "@react-navigation/native";
 import {useUserDetails} from "../contexts/UserDetailsContext";
-import userService from "../services/internal/userService";
-import {useUser} from "@clerk/clerk-expo";
 import {useUserData} from "../hooks/useUserData";
-import Background from "../components/Background";
 import UserChatCard from "../components/UserChatCard";
-import {Card} from "react-native-paper";
 import {useCustomFonts} from "../hooks/useCustomFonts";
 import {theme} from "../theme";
 
