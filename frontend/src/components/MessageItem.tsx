@@ -3,10 +3,12 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { theme } from '../theme';
 
-export const MessageItem = ({ msg, index, listings, userId }) => {
+export const MessageItem = ({ msg, index, listings, reviews, userId }) => {
 	const messageDate = new Date(msg.createdAt).toDateString();
 	// const showDate = messageDate !== lastDate;
-	const showListing = msg.referenceId != null;
+	const showListing = msg.referenceId != null && msg.type === 'listing';
+	const showReview = msg.referenceId != null && msg.type === 'review';
+
 	const lastDate = messageDate;
 
 	const formatTime = (time) => {
@@ -29,11 +31,6 @@ export const MessageItem = ({ msg, index, listings, userId }) => {
 
 	return (
 		<React.Fragment key={index}>
-			{/*{showDate && (*/}
-			{/*	<View style={styles.dateLabelContainer}>*/}
-			{/*		<Text style={styles.dateLabel}>{formatDate(msg.createdAt)}</Text>*/}
-			{/*	</View>*/}
-			{/*)}*/}
 			{showListing && (
 				<View style={[styles.listingContainer, msg.senderId === userId ? {alignSelf: 'flex-end'}: {alignSelf: 'flex-start'}]}>
 					<View style={{ flex: 1 }}>
@@ -42,6 +39,21 @@ export const MessageItem = ({ msg, index, listings, userId }) => {
 						</Text>
 						<Text style={styles.listingDescription}>
 							{listings[msg.referenceId] ? truncateText(listings[msg.referenceId].description, 100) : ''}
+						</Text>
+					</View>
+					<Pressable style={styles.openButton}>
+						<Text style={styles.openButtonText}>Open</Text>
+					</Pressable>
+				</View>
+			)}
+			{showReview && (
+				<View style={[styles.listingContainer, msg.senderId === userId ? {alignSelf: 'flex-end'}: {alignSelf: 'flex-start'}]}>
+					<View style={{ flex: 1 }}>
+						<Text style={styles.listingTitle}>
+							{reviews[msg.referenceId] ? reviews[msg.referenceId].title : 'Loading review...'}
+						</Text>
+						<Text style={styles.listingDescription}>
+							{reviews[msg.referenceId] ? truncateText(reviews[msg.referenceId].description, 100) : ''}
 						</Text>
 					</View>
 					<Pressable style={styles.openButton}>

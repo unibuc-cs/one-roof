@@ -5,7 +5,6 @@ import { FilterQuery } from 'mongoose';
 class ListingFiltersStrategy implements ISearchStrategy {
 	getQuery({ filters }: ISearchParams): FilterQuery<IListing> {
 		const query: FilterQuery<IListing> = {};
-		console.error(filters);
 
 		if (filters.roomType && filters.roomType !== 'any') {
 			query.type = filters.roomType;

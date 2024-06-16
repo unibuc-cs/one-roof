@@ -1,18 +1,22 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { FlatList, Text, StyleSheet } from 'react-native';
 import { theme } from "../theme";
-import { listingService, messageService } from "../services";
+import { listingService, messageService, reviewService } from '../services';
 import { io } from "socket.io-client";
 import { MessageItem } from './MessageItem';
+import { useUser } from '@clerk/clerk-expo';
 
 const API_HOST = 'http://192.168.191.115:3000';
 
 export const MessagesContainer = ({ initialMessages, userId }) => {
     const [messages, setMessages] = useState(initialMessages);
     const [listings, setListings] = useState({});
+    const [reviews, setReviews] = useState({});
     const [receiverId, setReceiverId] = useState("");
     const flatListRef = useRef(null);
     const socket = useRef(null);
+    const { user: clerkUser } = useUser();
+    const clerkId = clerkUser?.id;
 
     useEffect(() => {
         socket.current = io(API_HOST, { transports: ['websocket'] });
@@ -53,7 +57,7 @@ export const MessagesContainer = ({ initialMessages, userId }) => {
 
     useEffect(() => {
         const fetchListings = async () => {
-            const messagesWithListing = initialMessages.filter(msg => msg.referenceId != null);
+            const messagesWithListing = initialMessages.filter(msg => msg.type == 'listing' && msg.referenceId != null);
             const listingPromises = messagesWithListing.map(msg => listingService.getListing(msg.referenceId));
             const listingsArray = await Promise.all(listingPromises);
             const listingsMap = listingsArray.reduce((acc, listing, index) => {
@@ -66,8 +70,24 @@ export const MessagesContainer = ({ initialMessages, userId }) => {
         fetchListings();
     }, [initialMessages]);
 
+    useEffect(() => {
+        const fetchReviews = async () => {
+            const messagesWithReviews = initialMessages.filter(msg => msg.type == 'review' && msg.referenceId != null);
+            const reviewPromises = messagesWithReviews.map(msg => reviewService.getReview(msg.referenceId, clerkId as string));
+            const reviewsArray = await Promise.all(reviewPromises);
+            const reviewsMap = reviewsArray.reduce((acc, review, index) => {
+                acc[messagesWithReviews[index].referenceId] = review;
+                return acc;
+            }, {});
+            setReviews(reviewsMap);
+        };
+
+        fetchReviews();
+    }, [initialMessages]);
+
+
     const renderItem = ({ item, index }) => (
-        <MessageItem msg={item} index={index} listings={listings} userId={userId} />
+        <MessageItem msg={item} index={index} listings={listings} reviews={reviews} userId={userId} />
     );
 
     const keyExtractor = (item, index) => item._id || index.toString();

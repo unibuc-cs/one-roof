@@ -10,7 +10,7 @@ import { useUser } from '@clerk/clerk-expo';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 export const ChatsScreen: React.FC = () => {
-	useCustomFonts();
+	const LoadFonts = async () => { await useCustomFonts(); };
 	const navigation = useNavigation();
 	// const {userId, } = useUserDetails();
 	// const {user: currentUser} = useUserData(userId)

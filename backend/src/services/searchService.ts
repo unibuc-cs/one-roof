@@ -64,7 +64,6 @@ export const SearchService = {
 		const geoQuery = getGeospatialQuery(searchParams);
 		const filterQuery = getFilterQuery(searchParams.filters);
 		const combinedQuery = { ...geoQuery, ...filterQuery };
-		console.error('combined', combinedQuery);
 
 		try {
 			const restrictedListings = await Listing.find(combinedQuery);

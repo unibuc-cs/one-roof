@@ -15,7 +15,7 @@ interface PreferenceSliderProps {
 }
 
 export const PreferenceSlider: React.FC<PreferenceSliderProps> = ({ question, leftText, rightText, onValueChange }) => {
-	useCustomFonts();
+	const LoadFonts = async () => { await useCustomFonts(); };
 	const [value, setValue] = useState(3);
 
 	const handleValueChange = (newValue: number) => {

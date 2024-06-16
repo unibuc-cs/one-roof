@@ -1,27 +1,28 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Card, Title, Paragraph } from 'react-native-paper';
-import { theme } from '../theme'; // Ensure you have a theme file or adjust the colors accordingly
+import { theme } from '../theme';
+import { HeaderText } from './HeaderText';
+import { Button } from './Button';
+import { IReview } from '../models';
+import { useNavigation } from '@react-navigation/native';
 
-interface ReviewCardProps {
-	review: {
-		title: string;
-		livingSituation: string;
-		description: string;
-		recommend: 1 | 2 | 3 | 4 | 5;
-	}
+type ReviewCardProps = {
+	review: IReview,
 }
 
-export const ReviewCard: React.FC<ReviewCardProps> = ({review: { title, livingSituation, description, recommend }}) => {
+export const ReviewCard: React.FC<ReviewCardProps> = ({review}) => {
+	const { navigate } = useNavigation();
 	return (
-		<Card style={styles.card}>
+		<Card key={review._id} style={styles.card}>
 			<Card.Content>
-				<Title style={styles.title}>{title}</Title>
-				<Paragraph style={styles.livingSituation}>{livingSituation}</Paragraph>
-				<Paragraph style={styles.description}>{description}</Paragraph>
+				<HeaderText size={30} style={styles.title}>{review.title}</HeaderText>
+				<Paragraph>{review.livingSituation}</Paragraph>
+				<Paragraph style={styles.description}>{review.description}</Paragraph>
 				<View style={styles.recommendContainer}>
-					<Text style={styles.recommendText}>Recommend: {recommend}/5</Text>
+					<HeaderText size={18} textAlign={"left"} style={styles.recommendText}>Recommend: {review.recommend}/5</HeaderText>
 				</View>
+				<Button mode={'contained'} onPress={() => navigate('ViewReview', {review: review})}> Go to Full Review! </Button>
 			</Card.Content>
 		</Card>
 	);
@@ -39,11 +40,6 @@ const styles = StyleSheet.create({
 		fontSize: 18,
 		fontWeight: 'bold',
 		color: theme.colors.primary,
-		marginBottom: 8,
-	},
-	livingSituation: {
-		fontSize: 16,
-		color: theme.colors.text,
 		marginBottom: 8,
 	},
 	description: {

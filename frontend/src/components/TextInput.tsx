@@ -7,7 +7,7 @@ import { useCustomFonts } from '../hooks/useCustomFonts';
 type Props = React.ComponentProps<typeof Input> & { errorText?: string, marginVertical ?: number};
 
 export const TextInput = ({ errorText, marginVertical, ...props }: Props) => {
-	useCustomFonts();
+	const LoadFonts = async () => { await useCustomFonts(); };
 	const customMargin = marginVertical !== undefined ? marginVertical : 12;
 	return  (
 		<View style={[styles.container, {marginVertical : customMargin }]}>

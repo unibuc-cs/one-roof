@@ -16,10 +16,7 @@ type HeaderTextProps = {
 } & TextProps;
 
 export const HeaderText = ({ children, color, size, paddingBottom, paddingTop, textAlign, marginTop, ...props }: HeaderTextProps) => {
-	const customFonts = useCustomFonts();
-	if (!customFonts) {
-		return <ActivityIndicator size="large"/>;
-	}
+	const LoadFonts = async () => { await useCustomFonts(); };
 
 	color = color || theme.colors.text;
 	paddingTop = paddingTop ? paddingTop : 15;

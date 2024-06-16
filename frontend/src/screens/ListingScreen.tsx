@@ -4,12 +4,12 @@ import { useRoute, RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../components';
 import { useUser } from '@clerk/clerk-expo';
 import { useListing } from '../hooks';
-import Background from '../components/Background';
+import { Background } from '../components';
 import Carousel from 'react-native-reanimated-carousel';
 import PropertyDetails from '../components/PropertyDetails';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Card } from 'react-native-paper';
-import LandlordDetails from '../components/LandlordDetails';
+import ReachOutToUser from '../components/ReachOutToUser';
 import { useCustomFonts } from '../hooks/useCustomFonts';
 
 type ListingScreenRouteProp = RouteProp<RootStackParamList, 'Listing'>;
@@ -20,7 +20,6 @@ export const ListingScreen: React.FC = ({navigation}) => {
 	const { user } = useUser();
 	const { listing } = useListing(id, user?.id as string);
 	const width = Dimensions.get('window').width;
-	const customFont = useCustomFonts();
 	if (listing == null) {
 		return <Text>Error - listing not found</Text>;
 	}
@@ -58,15 +57,13 @@ export const ListingScreen: React.FC = ({navigation}) => {
 					/>
 					<PropertyDetails listing = {listing}/>
 					<Text style={styles.description}>{listing.description}</Text>
-					<LandlordDetails landlordID = {listing.landlordId} referenceId = {listing._id}/>
+					<ReachOutToUser message={'Contact the Landlord!'} userToReachOutToId = {listing.landlordId} referenceId = {listing._id}/>
 				</Card>
 			</ScrollView>
 
 		</Background>
 	);
 };
-// TODO: add landlord information
-// TODO: Include map?
 
 const styles = StyleSheet.create({
 	container: {

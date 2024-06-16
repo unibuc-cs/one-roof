@@ -1,10 +1,9 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useUserDetails } from '../../contexts/UserDetailsContext';
-import { useAuth, useUser } from '@clerk/clerk-expo';
+import { useUser } from '@clerk/clerk-expo';
 import userService from '../../services/internal/userService';
-import Background from '../../components/Background';
-import { Button, HeaderText } from '../../components';
+import { Button, HeaderText, Background } from '../../components';
 import { Card } from 'react-native-paper';
 import { theme } from '../../theme';
 import Logo from '../../components/Logo';

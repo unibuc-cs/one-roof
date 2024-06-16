@@ -1,46 +1,39 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, Text } from 'react-native-paper';
 import { Image, StyleSheet, View } from 'react-native';
 import { theme } from '../theme';
 import { useUserData, useUserDataByClerkId } from '../hooks/useUserData';
 import Button from '../components/Button';
-import { useCustomFonts } from '../hooks/useCustomFonts';
-import {useUser} from "@clerk/clerk-expo";
-import {useUserDetails} from "../contexts/UserDetailsContext";
-import {useNavigation} from "@react-navigation/native";
-import userService from "../services/internal/userService";
-import { IUser } from '../models';
+import { useNavigation } from '@react-navigation/native';
 
-// TODO: add loading
-
-const LandlordDetails: React.FC<any> = ({ landlordID: landlordClerkId , referenceId}) => {
-	const customFont = useCustomFonts();
+const ReachOutToUser: React.FC<any> = ({ message, userToReachOutToId, referenceId, type }) => {
 	const { navigate } = useNavigation();
-	const { user: landlord} =  useUserDataByClerkId(landlordClerkId);
 
-	if(landlord == null){
+	const { user: landlord } = useUserDataByClerkId(userToReachOutToId);
+	if (landlord == null) {
 		return <Text>Error - landlord not found</Text>;
 	}
+
 	const userCreatedAt = new Date(landlord.createdAt);
 	const year = userCreatedAt.getFullYear();
 	const monthNames = [
-		"January", "February", "March", "April", "May", "June",
-		"July", "August", "September", "October", "November", "December"
+		'January', 'February', 'March', 'April', 'May', 'June',
+		'July', 'August', 'September', 'October', 'November', 'December'
 	];
 	const monthName = monthNames[userCreatedAt.getMonth()];
 	const yearMonth = `${monthName} ${year}`;
 
 	const handleSendMessage = async () => {
-		console.log("In landlordDetails", referenceId);
-		navigate("Messages",{ receiverId: landlord.clerkId, referenceId: referenceId, type: 'listing' })
-
+		console.log('In landlordDetails', referenceId);
+		console.log('message type', type);
+		navigate('Messages', { receiverId: landlord.clerkId, referenceId: referenceId, type: type })
 	}
 
 	return (
 		<Card style={styles.container}>
-			<Text style={styles.landlordTitle}>Contact the landlord</Text>
+			<Text style={styles.landlordTitle}>{message}</Text>
 			<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-				<Image style={styles.landlordProfilePicture} source={{ uri: landlord.profilePicture }} />
+				<Image style={styles.landlordProfilePicture} source={{ uri: landlord.profilePicture }}/>
 				<View>
 					<Text style={styles.landlordName}>{landlord.lastName} {landlord.firstName}</Text>
 					<Text style={styles.date}>With us since: {yearMonth}</Text>
@@ -72,7 +65,7 @@ const styles = StyleSheet.create({
 		width: 80,
 		height: 80,
 		borderRadius: 40,
-		marginRight:5,
+		marginRight: 5,
 	},
 	landlordName: {
 		fontSize: 20,
@@ -88,4 +81,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default LandlordDetails;
+export default ReachOutToUser;

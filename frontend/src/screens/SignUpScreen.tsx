@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useSignUp } from '@clerk/clerk-expo';
-import Background from '../components/Background';
+import { Background } from '../components';
 import { TextInput } from '../components';
 import Button from '../components/Button';
 import Logo from '../components/Logo';

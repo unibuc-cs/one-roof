@@ -26,7 +26,6 @@ export const useUserData = (userId: string) => {
 
 
 export const useUserDataByClerkId = (clerkId: string) => {
-	console.log('FROM USERUSERDATACLERKID', clerkId);
 	const [user, setUser] = useState<IUser | null>(null);
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState(null);

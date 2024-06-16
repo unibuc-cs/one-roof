@@ -5,7 +5,7 @@ import {
 	BUCHAREST_COORDINATES,
 	DEFAULT_LATITUDE_DELTA,
 	DEFAULT_LONGITUDE_DELTA,
-	getCoordinatesFromLocation,
+	getCoordinatesFromLocation, getShortenedString,
 	mapStyles
 } from '../utils';
 import { IListing, IReview } from '../models';
@@ -13,7 +13,7 @@ import { BottomItemCard } from './BottomItemCard';
 import { useSearchContext } from '../contexts/SearchContext';
 import { SearchTypeEnum } from '../enums';
 import { CustomMarker } from './CustomMarker';
-import { debounce } from 'lodash';
+import { capitalize, debounce } from 'lodash';
 import { theme } from '../theme';
 
 const EPSILON = 0.001;
@@ -87,7 +87,7 @@ export const Map: React.FC = () => {
 						key={index}
 						coordinate={getCoordinatesFromLocation(item.location)}
 						onPress={() => handleMarkerPress(item)}
-						text={state.searchType === SearchTypeEnum.Listings ? `${item.price} €` : 'review'}
+						text={state.searchType === SearchTypeEnum.Listings ? `${item.price} €` : getShortenedString(item.title, 10)}
 					/>
 				))}
 			</MapView>

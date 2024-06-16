@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Text, View, StyleSheet, KeyboardAvoidingView, Dimensions, Pressable} from 'react-native';
-import Background from "../components/Background";
+import { Background } from "../components";
 import { Ionicons } from '@expo/vector-icons';
 import {TextInput} from "react-native-paper";
 import {theme} from "../theme";
@@ -15,6 +15,7 @@ import userService from "../services/internal/userService";
 import { MessagesContainer } from "../components";
 import {io} from "socket.io-client";
 import { useUser } from '@clerk/clerk-expo';
+import { IMessage } from '../models/messageModel';
 
 const API_HOST = 'http://192.168.191.115:3000';
 
@@ -22,10 +23,11 @@ type ChatMessagesScreenRouteProps = RouteProp<RootStackParamList, 'Message'>;
 let socket;
 
 export const ChatMessagesScreen: React.FC = () => {
-    useCustomFonts();
+    const LoadFonts = async () => { await useCustomFonts(); };
     const { navigate } = useNavigation();
     const route = useRoute<ChatMessagesScreenRouteProps>();
-    const { receiverId, referenceId: initialReferenceId, type: initialType } = route.params;
+    const { receiverId, referenceId: initialReferenceId, type: initialType,  } = route.params;
+    console.log('initial type', initialType);
     const screenWidth = Dimensions.get('window').width;
     const screenHeight = Dimensions.get('window').height;
     const { contactedUsers: currUserContactedUsers } = useUserDetails();
@@ -35,9 +37,6 @@ export const ChatMessagesScreen: React.FC = () => {
     if (!userId) {
         return <Text> Error </Text>
     }
-    const { user } = useUser();
-    const clerkUserId = clerkUser?.id;
-    // const { userId: clerkUserId } = useUserDetails();
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]);
     const { user: receiverUser } = useUserDataByClerkId(receiverId);
@@ -71,6 +70,13 @@ export const ChatMessagesScreen: React.FC = () => {
         })
     }, []);
 
+    const checkIfIncludeType = () => {
+        console.log(referenceId);
+        const alreadyDiscussed = messages.filter((msg: IMessage) => msg.referenceId === referenceId);
+        console.log(alreadyDiscussed, messages);
+        return alreadyDiscussed.length == 0 ? initialType : null;
+    }
+
     const getConversationMessages = async () => {
         const data = await messageService.getConversationMessages(userId, receiverId);
         setMessages(data);
@@ -82,12 +88,10 @@ export const ChatMessagesScreen: React.FC = () => {
         if (messages.length === 0) {
             if (!receiverUser.contactedUsers.includes(userId)) {
                 const newContactedUsers = [...receiverUser.contactedUsers, userId];
-                console.log('before', receiverUser?.clerkId);
                 await userService.updateUser(receiverUser?.clerkId, { contactedUsers: newContactedUsers });
             }
             if (!currUserContactedUsers.includes(receiverId)) {
                 const newContactedUsers = [...currUserContactedUsers, receiverId];
-                console.log('before 2', clerkUserId);
                 await userService.updateUser(clerkUser?.id, { contactedUsers: newContactedUsers });
             }
         }
@@ -98,7 +102,7 @@ export const ChatMessagesScreen: React.FC = () => {
                 content: message,
                 isRead: false,
                 referenceId: referenceId,
-                type: type,
+                type: checkIfIncludeType(),
             },
             userId
         );

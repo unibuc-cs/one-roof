@@ -2,6 +2,7 @@ export * from './SignOutButton';
 export * from './TextInput';
 export * from './Background';
 export * from './TopBar';
+export * from './ReviewDetailsSection';
 export * from './Map';
 export * from './MenuIcon';
 export * from './ToggleButton';

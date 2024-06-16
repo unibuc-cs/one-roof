@@ -4,7 +4,7 @@ import React from 'react';
 interface BackgroundProps {
     children: React.ReactNode,
 }
-const Background = ({ children }: BackgroundProps) => (
+export const Background = ({ children }: BackgroundProps) => (
 	<View style={styles.main_container}>
 		<ImageBackground
 			source={require('../../assets/background_dot_bigger.png')}
@@ -40,4 +40,3 @@ const styles = StyleSheet.create({
 	}
 });
 
-export default Background;

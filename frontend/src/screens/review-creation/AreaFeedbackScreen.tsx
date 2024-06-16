@@ -4,12 +4,11 @@ import { Button, ReviewSection } from '../../components';
 import { RouteProp } from '@react-navigation/native';
 import { HeaderText } from '../../components';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import Background from '../../components/Background';
+import { Background } from '../../components';
 import { Card } from 'react-native-paper';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { reviewService } from '../../services';
-import { useUserDetails } from '../../contexts/UserDetailsContext';
 
 const AreaFeedbackSchema = Yup.object().shape({
 	transport: Yup.object().shape({

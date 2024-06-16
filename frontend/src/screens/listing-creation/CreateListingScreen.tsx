@@ -7,7 +7,7 @@ import { NumberOfBathroomsEnum, NumberOfBedroomsEnum, PropertyTypeEnum } from '.
 import { CustomSwitchSelector } from '../../components/CustomSwitchSelector';
 import { useCustomFonts } from '../../hooks/useCustomFonts';
 import * as Yup from 'yup';
-import Background from '../../components/Background';
+import { Background } from '../../components';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import {Formik} from "formik";
 import 'react-native-get-random-values';
@@ -45,7 +45,7 @@ const initialFormValues={
 // TODO: reset all values when discard is pressed
 
 export const CreateListingScreen: React.FC<any>= ({navigation}) => {
-	useCustomFonts();
+	const LoadFonts = async () => { await useCustomFonts(); };
 	const [formValues, setFormValues] = useState(initialFormValues);
 
 	useEffect(() => {

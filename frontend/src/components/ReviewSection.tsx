@@ -20,7 +20,7 @@ interface ReviewSectionSchema {
 		prompt: string;
 		options: Array<{
 			label: string,
-			value: stringw
+			value: string
 		}>
 	}>
 }

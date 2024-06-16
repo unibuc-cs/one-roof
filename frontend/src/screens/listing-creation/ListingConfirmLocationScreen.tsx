@@ -1,7 +1,7 @@
 import { RouteProp } from '@react-navigation/native';
 import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import Background from "../../components/Background";
+import { Background } from "../../components";
 import MapView, { Marker, MapPressEvent, Region } from "react-native-maps";
 import { BUCHAREST_COORDINATES, DEFAULT_LATITUDE_DELTA, DEFAULT_LONGITUDE_DELTA, mapStyles } from "../../utils";
 import { getCoordinatesFromAddress } from "../../services/external/googleMapsService";

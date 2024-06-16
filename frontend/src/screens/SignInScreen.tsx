@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { TextInput } from '../components';
 import { Text, StyleSheet } from 'react-native';
 import { useSignIn } from '@clerk/clerk-expo';
-import Background from '../components/Background';
+import { Background } from '../components';
 import Button from '../components/Button';
 import Logo from '../components/Logo';
 import { Formik } from 'formik';

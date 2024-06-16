@@ -5,7 +5,7 @@ import * as Location from "expo-location";
 import { Button, HeaderText } from "../../components";
 import { TextInput, Card } from "react-native-paper";
 import * as ImagePicker from 'expo-image-picker';
-import Background from "../../components/Background";
+import { Background } from "../../components";
 import Carousel from "react-native-reanimated-carousel";
 import { Ionicons } from '@expo/vector-icons';
 import {listingService} from "../../services";

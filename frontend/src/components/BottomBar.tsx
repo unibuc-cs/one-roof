@@ -9,7 +9,7 @@ import {useUserDetails} from "../contexts/UserDetailsContext";
 import { ActivityIndicator } from 'react-native-paper';
 
 export const BottomBar = () => {
-	useCustomFonts();
+	const LoadFonts = async () => { await useCustomFonts(); };
 	const { state } = useSearchContext();
 	const bottomSheetRef = useRef<BottomSheet>(null);
 

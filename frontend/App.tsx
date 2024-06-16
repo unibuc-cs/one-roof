@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ClerkProvider, SignedIn, SignedOut } from '@clerk/clerk-expo';
 import { tokenCache } from './src/auth/tokenCache';
 import { PaperProvider } from 'react-native-paper';
@@ -13,9 +13,27 @@ import { UserDetailsProvider } from './src/contexts/UserDetailsContext';
 import { AppNavigation } from './src/navigation';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import SignInScreen from './src/screens/SignInScreen';
+import AppLoading from 'expo-app-loading';
+import { useCustomFonts } from './src/hooks/useCustomFonts';
 
 const Stack = createNativeStackNavigator();
 export default function App() {
+	const [isReady, setIsReady] = useState<boolean>(false);
+	const loadFonts = async () => {
+		await useCustomFonts();
+	}
+
+	if (!isReady) {
+		return (
+			<AppLoading
+				startAsync={loadFonts}
+				autoHideSplash={true}
+				onFinish={() => setIsReady(true)}
+				onError={() => {}}
+			/>
+		)
+	}
+
 	return (
 		<ClerkProvider
 			tokenCache={tokenCache}

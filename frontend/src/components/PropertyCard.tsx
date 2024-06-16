@@ -21,7 +21,7 @@ type PropertyCardProps = {
 };
 
 export const PropertyCard: React.FC<PropertyCardProps> = ({ listing, canOpen, mode, backgroundColor, showCarousel = true }) => {
-	useCustomFonts();
+	const LoadFonts = async () => { await useCustomFonts(); };
 	const { navigate } = useNavigation();
 	const width = Dimensions.get('window').width;
 

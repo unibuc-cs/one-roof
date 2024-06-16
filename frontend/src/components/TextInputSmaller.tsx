@@ -7,7 +7,7 @@ import { useCustomFonts } from '../hooks/useCustomFonts';
 type Props = React.ComponentProps<typeof Input> & { errorText?: string, marginVertical ?: number};
 
 export const TextInputSmaller = ({ errorText, marginVertical, ...props }: Props) => {
-	useCustomFonts();
+	const LoadFonts = async () => { await useCustomFonts(); };
 	const customPadding = props.multiline ? 8 : 0;
 	return  (
 		<View style={[styles.container]}>

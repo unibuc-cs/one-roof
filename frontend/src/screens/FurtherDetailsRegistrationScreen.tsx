@@ -1,4 +1,4 @@
-import Background from '../components/Background';
+import { Background } from '../components';
 import { Divider } from 'react-native-paper';
 import Button from '../components/Button';
 import * as React from 'react';

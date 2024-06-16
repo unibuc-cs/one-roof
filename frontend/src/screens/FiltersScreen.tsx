@@ -13,7 +13,7 @@ import { useSearchContext } from '../contexts/SearchContext';
 import { debounce } from 'lodash';
 
 export const FiltersScreen = ({ navigation }) => {
-	useCustomFonts();
+	const LoadFonts = async () => { await useCustomFonts(); };
 	const [cleared, setCleared] = useState(false);
 	const { state, setFilters, triggerSearch } = useSearchContext();
 	const { filters } = state;

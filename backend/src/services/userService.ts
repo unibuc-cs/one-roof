@@ -21,7 +21,7 @@ class UserService {
 	}
 
 	async getUserByClerkId(clerkId: string): Promise<IUser | null> {
-		return User.findOne({ clerkId });
+		return User.findOne({clerkId} );
 	}
 
 	async getUserByUserId(userId: string): Promise<IUser | null> {
@@ -29,7 +29,9 @@ class UserService {
 	}
 
 	async getUserWithClerkDetails(clerkId: string): Promise<IUserWithClerk | null> {
+		console.log('here with ', clerkId);
 		const databaseUser = await this.getUserByClerkId(clerkId);
+		console.log('db', databaseUser);
 		if (!databaseUser) {
 			return null;
 		}
@@ -42,11 +44,12 @@ class UserService {
 			firstName: clerkUser.firstName,
 			lastName: clerkUser.lastName,
 			email: clerkUser.primaryEmailAddressId,
-			nickname: clerkUser.username
+			nickname: clerkUser.username,
 		} as IUserWithClerk;
 	}
 
 	async getUserWithClerkDetailsByUserId(userId: string): Promise<IUserWithClerk | null> {
+		console.log('here with ', userId);
 		const databaseUser = await this.getUserByUserId(userId);
 		if (!databaseUser) {
 			return null;

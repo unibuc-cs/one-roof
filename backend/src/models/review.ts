@@ -2,7 +2,7 @@ import { Schema, Document, model } from 'mongoose';
 import { IUser, ILocation } from '../models'
 
 interface IReview extends Document {
-	reviewerId: IUser['_id'],
+	reviewerId: string,
 	title: string,
 	recommend: 1 | 2 | 3 | 4 | 5,
 	description: string,
@@ -71,7 +71,7 @@ interface IReview extends Document {
 }
 
 const ReviewSchema = new Schema<IReview>({
-	reviewerId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+	reviewerId: { type: String },
 	title: { type: String, required: true },
 	recommend: { type: Number, enum: [1, 2, 3, 4, 5], required: true },
 	description: { type: String, required: true },

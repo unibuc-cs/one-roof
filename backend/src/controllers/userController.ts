@@ -19,7 +19,6 @@ export const UserController = {
 			const updates = req.body;
 			const updatedUser = await userService.updateUserByClerkId(clerkId, updates);
 			console.log(clerkId, updates)
-			console.error('updated user', updatedUser);
 			updatedUser ? res.json(updatedUser) : res.status(404).json({ error: 'User not found' });
 		} catch (error) {
 			console.error(error);
@@ -39,7 +38,6 @@ export const UserController = {
 
 	getUser: async (req, res) => {
 		try {
-			console.log('AICI');
 			const clerkId = req.params.clerkId;
 			const user = await userService.getUserByClerkId(clerkId);
 			user ? res.json(user) : res.status(404).json({ error: 'User not found' });
@@ -51,11 +49,8 @@ export const UserController = {
 
 	getFullUser: async (req, res) => {
 		try {
-			console.log('AICI 2');
 			const clerkId = req.params.clerkId;
-			console.log('the clerk id', clerkId);
 			const user = await userService.getUserWithClerkDetails(clerkId);
-			console.log('returned user from backend', user);
 			user ? res.json(user) : res.status(404).json({ error: 'User not found' });
 		} catch (error) {
 			console.error(error);

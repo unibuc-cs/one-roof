@@ -9,7 +9,7 @@ import {NumberOfBathroomsEnum, NumberOfBedroomsEnum, PropertyTypeEnum, TypeOfPro
 import { CustomSwitchSelector } from '../../components/CustomSwitchSelector';
 import { useCustomFonts } from '../../hooks/useCustomFonts';
 import * as Yup from 'yup';
-import Background from '../../components/Background';
+import { Background } from '../../components';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import {RouteProp} from "@react-navigation/native";
@@ -41,7 +41,7 @@ const initialFormValues = {
 };
 
 export const ListingFacilitiesScreen: React.FC<ListingFacilitiesScreenPops>= ({route,navigation}) => {
-    useCustomFonts();
+    const LoadFonts = async () => { await useCustomFonts(); };
     const {generalDetails, location} = route.params;
     const [formValues, setFormValues] = useState(initialFormValues);
 

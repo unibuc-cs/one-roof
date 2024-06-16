@@ -11,11 +11,8 @@ const userService = {
 		}, userId);
 	},
 	async getUserByClerkId(clerkId: string): Promise<IUser> {
-		console.log('before request');
 		const user: any = await callApi(`users/full/${clerkId}`, {}, clerkId);
-		console.log('after call Api', user);
 		user.role = getUserRoleEnumFromString(user.role);
-		console.log('returning user', user);
 		return user;
 	},
 	async getWithClerkDetails(userId: string): Promise<IUser> {

@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, KeyboardAvoidingView, ScrollView, Platform } fr
 import { useUser } from '@clerk/clerk-expo';
 import { useUserDetails } from '../contexts/UserDetailsContext';
 import { ProfilePicture } from '../components/ProfilePicture';
-import Background from '../components/Background';
+import { Background } from '../components';
 import { EditableField } from '../components/EditableField';
 import { Card, Divider } from 'react-native-paper';
 import { HeaderText } from '../components';

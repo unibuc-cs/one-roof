@@ -4,7 +4,7 @@ import {
 	BuildingFeedbackScreen,
 	DrawerContent,
 	OnboardingDecisionScreen,
-	ReviewGeneralDetailsScreen
+	ReviewGeneralDetailsScreen, ViewReviewScreen
 } from '../screens';
 import { CreateReviewScreen } from '../screens';
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -22,9 +22,9 @@ import { useUserDetails } from '../contexts/UserDetailsContext';
 import { SearchProvider } from '../contexts/SearchContext';
 import { FiltersScreen } from '../screens';
 import {ListingConfirmLocationScreen} from '../screens';
-import {ListingFacilitiesScreen} from "../screens/listing-creation";
-import {ListingDescriptionScreen} from "../screens/listing-creation";
+import {ListingFacilitiesScreen, ListingDescriptionScreen} from "../screens";
 import ChatMessagesScreen from "../screens/ChatMessagesScreen";
+import { IReview } from '../models';
 
 export type RootStackParamList = {
 	Home: undefined,
@@ -39,6 +39,8 @@ export type RootStackParamList = {
 	ReviewGeneralDetails: undefined,
 	BuildingFeedback: undefined,
 	AreaFeedback: undefined,
+	ViewReview: { review: IReview },
+	Messages: any,
 };
 
 export const AppNavigation = () => {
@@ -75,6 +77,7 @@ export const AppNavigation = () => {
 					<Drawer.Screen name="ReviewGeneralDetails" component={ReviewGeneralDetailsScreen}/>
 					<Drawer.Screen name="AreaFeedback" component={AreaFeedbackScreen}/>
 					<Drawer.Screen name="BuildingFeedback" component={BuildingFeedbackScreen}/>
+					<Drawer.Screen name="ViewReview" component={ViewReviewScreen}/>
 				</Drawer.Navigator>
 			</NavigationContainer>
 		</SearchProvider>

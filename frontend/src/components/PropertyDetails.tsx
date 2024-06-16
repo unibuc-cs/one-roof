@@ -5,7 +5,6 @@ import {theme} from "../theme";
 import {useCustomFonts} from "../hooks/useCustomFonts";
 
 const  PropertyDetails: React.FC<any> = ({listing}) => {
-    const customFont = useCustomFonts()
     return (
         <View style={styles.container}>
             <View style={styles.detailsContainer}>

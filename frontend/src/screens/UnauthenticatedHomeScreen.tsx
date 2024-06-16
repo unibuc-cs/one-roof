@@ -1,4 +1,4 @@
-import Background from '../components/Background';
+import { Background } from '../components';
 import React from 'react';
 import Logo from '../components/Logo';
 import { HeaderText } from '../components/';
