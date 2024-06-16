@@ -23,7 +23,7 @@ io.on('connection', (socket) => {
 			`${msg.senderId}-${msg.receiverId}` :
 			`${msg.receiverId}-${msg.senderId}`;
 		console.log(`New message sent to ${roomId}`);
-		socket.in(roomId).emit('messageReceived', msg);
+		socket.broadcast.emit('messageReceived', msg);
 	})
 
 	socket.on('updateMessages', (msg) =>{
@@ -31,7 +31,7 @@ io.on('connection', (socket) => {
 			`${msg.senderId}-${msg.receiverId}` :
 			`${msg.receiverId}-${msg.senderId}`;
 		console.log("Mesaje actualizate");
-		socket.in(roomId).emit('updateMessages', msg);
+		socket.broadcast.emit('updateMessages', msg);
 
 	})
 

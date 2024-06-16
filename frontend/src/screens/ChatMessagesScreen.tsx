@@ -54,12 +54,14 @@ export const ChatMessagesScreen: React.FC = () => {
 
     useEffect(() => {
         socket.on('messageReceived', (msg)=>{
-            if(msg.receiverId === userId){
+            if(msg.receiverId === userId && msg.senderId === receiverId){
                 setMessages([...messages, msg]);
             }
         })
         socket.on("updateMessages", (msg) =>{
-            getConversationMessages();
+            if(msg.receiverId === userId && msg.senderId === receiverId){
+                getConversationMessages();
+            }
         })
     }, []);
 

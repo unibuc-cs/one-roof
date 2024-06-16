@@ -42,8 +42,10 @@ const UserChatCard: React.FC<any> = ({ userId: receiverId, index }) => {
         });
 
         socket.on('updateMessages', (msg) =>{
-            setMessage(msg);
-            getLastConversationMessages();
+            if(msg.receiverId === userId && msg.senderId === receiverId){
+                setMessage(msg);
+                getLastConversationMessages();
+            }
         });
     }, []);
 
