@@ -22,3 +22,28 @@ export const useUserData = (userId: string) => {
 
 	return { user, error, isLoading};
 };
+
+
+
+export const useUserDataByClerkId = (clerkId: string) => {
+	console.log('FROM USERUSERDATACLERKID', clerkId);
+	const [user, setUser] = useState<IUser | null>(null);
+	const [isLoading, setIsLoading] = useState(false);
+	const [error, setError] = useState(null);
+
+	useEffect(() => {
+		setIsLoading(true);
+		userService.getUserByClerkId(clerkId)
+			.then(data => {
+				setUser(data);
+				console.log('new user', data);
+				setIsLoading(false);
+			})
+			.catch(err => {
+				setError(err);
+				setIsLoading(false);
+			});
+	}, [clerkId]);
+
+	return { user, isLoading, error };
+};

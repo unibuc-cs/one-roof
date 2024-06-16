@@ -4,7 +4,6 @@ export * from './Background';
 export * from './TopBar';
 export * from './Map';
 export * from './MenuIcon';
-export * from '../navigation/AppNavigation';
 export * from './ToggleButton';
 export * from './BottomBar';
 export * from './HeaderText';

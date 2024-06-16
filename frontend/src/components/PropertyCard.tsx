@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
 	address: {
 		marginBottom: 5,
 		fontSize: 16,
-		fontFamily: 'ProximaNova-Regular',
+		fontFamily: 'Proxima-Nova/Regular',
 		textAlign: 'center'
 	},
 	cardContainer: {

@@ -1,5 +1,5 @@
 import { callApi } from '../../utils';
-import { IUser, IUserDetails } from '../../models';
+import { IUser, IUserDetails, IUserWithClerk } from '../../models';
 import { getUserRoleEnumFromString, UserRoleEnum } from '../../enums';
 
 
@@ -11,8 +11,11 @@ const userService = {
 		}, userId);
 	},
 	async getUserByClerkId(clerkId: string): Promise<IUser> {
-		const user: any = await callApi(`users/${clerkId}`);
+		console.log('before request');
+		const user: any = await callApi(`users/full/${clerkId}`, {}, clerkId);
+		console.log('after call Api', user);
 		user.role = getUserRoleEnumFromString(user.role);
+		console.log('returning user', user);
 		return user;
 	},
 	async getWithClerkDetails(userId: string): Promise<IUser> {
@@ -22,7 +25,22 @@ const userService = {
 		return callApi(`users/fullByUserId/${userId}`);
 	},
 	async updateUser(userId: string, updates: Partial<IUserDetails>): Promise<IUser> {
+		console.log('before 3', userId);
 		return callApi(`users/${userId}`, {
+			method: 'PUT',
+			body: updates,
+		});
+	},
+
+	async updateUserWithClerk(updates: Partial<IUserDetails>): Promise<IUser> {
+		return callApi('users', {
+			method: 'PUT',
+			body: updates,
+		})
+	},
+
+	async updateUserByClerkId(clerkId: string, updates: Partial<IUserDetails>): Promise<IUser> {
+		return callApi(`clerk/users/${clerkId}`, {
 			method: 'PUT',
 			body: updates,
 		});

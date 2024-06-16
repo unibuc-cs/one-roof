@@ -2,22 +2,21 @@ import React, {useEffect, useState} from 'react';
 import { Card, Text } from 'react-native-paper';
 import { Image, StyleSheet, View } from 'react-native';
 import { theme } from '../theme';
-import { useUserData } from '../hooks/useUserData';
+import { useUserData, useUserDataByClerkId } from '../hooks/useUserData';
 import Button from '../components/Button';
 import { useCustomFonts } from '../hooks/useCustomFonts';
 import {useUser} from "@clerk/clerk-expo";
 import {useUserDetails} from "../contexts/UserDetailsContext";
 import {useNavigation} from "@react-navigation/native";
 import userService from "../services/internal/userService";
+import { IUser } from '../models';
 
 // TODO: add loading
 
-const LandlordDetails: React.FC<any> = ({ landlordID , referenceId}) => {
+const LandlordDetails: React.FC<any> = ({ landlordID: landlordClerkId , referenceId}) => {
 	const customFont = useCustomFonts();
 	const { navigate } = useNavigation();
-	const { user: landlord } =  useUserData(landlordID);
-	const { contactedUsers } = useUserDetails();
-	const {user} = useUser()
+	const { user: landlord} =  useUserDataByClerkId(landlordClerkId);
 
 	if(landlord == null){
 		return <Text>Error - landlord not found</Text>;
@@ -33,7 +32,7 @@ const LandlordDetails: React.FC<any> = ({ landlordID , referenceId}) => {
 
 	const handleSendMessage = async () => {
 		console.log("In landlordDetails", referenceId);
-		navigate("Messages",{ receiverId: landlordID, referenceId: referenceId, type: 'listing' })
+		navigate("Messages",{ receiverId: landlord.clerkId, referenceId: referenceId, type: 'listing' })
 
 	}
 
@@ -60,7 +59,7 @@ const styles = StyleSheet.create({
 		marginVertical: 5,
 		backgroundColor: theme.colors.primary,
 		color: 'white',
-		fontFamily: 'ProximaNova-Regular',
+		fontFamily: 'Proxima-Nova/Regular',
 	},
 	landlordTitle: {
 		fontFamily: 'ProximaNova-Bold',
@@ -84,7 +83,7 @@ const styles = StyleSheet.create({
 	date: {
 		fontSize: 16,
 		marginBottom: 5,
-		fontFamily: 'ProximaNova-Regular',
+		fontFamily: 'Proxima-Nova/Regular',
 		color: 'white',
 	},
 });

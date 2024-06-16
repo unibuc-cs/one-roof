@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
     message: {
         display: "flex",
         flexDirection: "column",
-        fontFamily: 'ProximaNova-Regular',
+        fontFamily: 'Proxima-Nova/Regular',
         fontSize: 17,
         color: 'black',
         maxWidth: '70%',

@@ -8,7 +8,7 @@ export interface IUser {
 	profilePicture: string,
 	role: UserRoleEnum,
 	onboardingStep: number,
-	contactedUsers: IUser['_id'][],
+	contactedUsers: string[], // modified to keep clerk ID's
 	createdAt?: Date,
 	updatedAt?: Date,
 }

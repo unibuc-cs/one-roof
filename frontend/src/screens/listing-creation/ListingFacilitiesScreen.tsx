@@ -114,7 +114,7 @@ export const ListingFacilitiesScreen: React.FC<ListingFacilitiesScreenPops>= ({r
                                 {Object.values(RentalAmenitiesEnum).map((amenity) => (
                                     <View key={amenity} style={styles.checkboxContainer}>
                                         <Checkbox.Item
-                                            labelStyle={{fontFamily: 'ProximaNova-Regular'}}
+                                            labelStyle={{fontFamily: 'Proxima-Nova/Regular'}}
                                             label={amenity.replace(/_/g, ' ')}
                                             status={values.amenities.includes(amenity) ? 'checked' : 'unchecked'}
                                             onPress={() => {

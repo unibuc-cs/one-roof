@@ -59,7 +59,6 @@ export const ListingScreen: React.FC = ({navigation}) => {
 					<PropertyDetails listing = {listing}/>
 					<Text style={styles.description}>{listing.description}</Text>
 					<LandlordDetails landlordID = {listing.landlordId} referenceId = {listing._id}/>
-
 				</Card>
 			</ScrollView>
 
@@ -76,7 +75,7 @@ const styles = StyleSheet.create({
 		paddingVertical: 20,
 		margin: 10,
 		backgroundColor: 'white',
-		fontFamily: 'ProximaNova-Regular',
+		fontFamily: 'Proxima-Nova/Regular',
 		flex: 1,
 		minHeight: 'fit-content',
 	},
@@ -96,7 +95,7 @@ const styles = StyleSheet.create({
 	description: {
 		marginTop: 5,
 		marginBottom: 10,
-		fontFamily: 'ProximaNova-Regular',
+		fontFamily: 'Proxima-Nova/Regular',
 	},
 	price: {
 		fontFamily: 'ProximaNova-Bold',

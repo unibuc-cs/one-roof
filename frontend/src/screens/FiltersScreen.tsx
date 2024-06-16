@@ -213,7 +213,7 @@ export const FiltersScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
 	checkbox: {
-		fontFamily: 'ProximaNova-Regular'
+		fontFamily: 'Proxima-Nova/Regular'
 	},
 	flexContainer: {
 		display: 'flex',
@@ -226,7 +226,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 	priceStyling: {
-		fontFamily: 'ProximaNova-Regular',
+		fontFamily: 'Proxima-Nova/Regular',
 		backgroundColor: 'lightgray',
 		fontSize: 18,
 		padding: 10,

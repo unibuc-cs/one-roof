@@ -1,6 +1,6 @@
 import { Listing } from '../../models';
 
-const landlordId = '663cb48ee88f928f9cb35f69';
+const landlordId = 'user_2gJiA9TGup3oCNP9xCdPmJdEYsr';
 
 const photos = [
 	'https://firebasestorage.googleapis.com/v0/b/one-roof-bb7ce.appspot.com/o/apart1.jpeg?alt=media&token=ef9567f0-aa4f-4370-a207-7afc1c22f022',

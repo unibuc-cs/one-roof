@@ -10,7 +10,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SignUpScreen from './src/screens/SignUpScreen';
 import { UnauthenticatedHomeScreen } from './src/screens';
 import { UserDetailsProvider } from './src/contexts/UserDetailsContext';
-import { AppNavigation } from './src/components';
+import { AppNavigation } from './src/navigation';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import SignInScreen from './src/screens/SignInScreen';
 

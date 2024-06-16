@@ -10,7 +10,7 @@ import {useUserDetails} from "../contexts/UserDetailsContext";
 import {messageService} from "../services";
 import {RouteProp, useNavigation, useRoute} from "@react-navigation/native";
 import {RootStackParamList} from "../navigation/AppNavigation";
-import {useUserData} from "../hooks/useUserData";
+import { useUserData, useUserDataByClerkId } from '../hooks/useUserData';
 import {Image} from "expo-image";
 import {useCustomFonts} from "../hooks/useCustomFonts";
 import {white} from "react-native-paper/lib/typescript/styles/themes/v2/colors";
@@ -18,9 +18,11 @@ import userService from "../services/internal/userService";
 import RenderMessages from "../components/renderMessages";
 import {io} from "socket.io-client";
 import {update} from "lodash";
+import { useUser } from '@clerk/clerk-expo';
+import { clerk } from '@clerk/clerk-expo/dist/singleton';
+import { API_HOST } from '@env';
 
 type ChatMessagesScreenRouteProps = RouteProp<RootStackParamList, 'Message'>;
-const ENDPOINT = "http://192.168.191.187:3000"; // TODO fix hardcoding
 let socket;
 
 export const ChatMessagesScreen: React.FC = () => {
@@ -30,16 +32,24 @@ export const ChatMessagesScreen: React.FC = () => {
     const { receiverId, referenceId: initialReferenceId, type: initialType } = route.params;
     const screenWidth = Dimensions.get('window').width;
     const screenHeight = Dimensions.get('window').height;
-    const { userId, contactedUsers: currUserContactedUsers } = useUserDetails();
-    const { userId: clerkUserId } = useUserDetails();
+    const { contactedUsers: currUserContactedUsers } = useUserDetails();
+    // const { userId, contactedUsers: currUserContactedUsers } = useUserDetails();
+    const { user: clerkUser } = useUser();
+    const userId = clerkUser?.id;
+    if (!userId) {
+        return <Text> Error </Text>
+    }
+    const { user } = useUser();
+    const clerkUserId = clerkUser?.id;
+    // const { userId: clerkUserId } = useUserDetails();
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]);
-    const { user: receiverUser } = useUserData(receiverId);
+    const { user: receiverUser } = useUserDataByClerkId(receiverId);
     const [referenceId, setReferenceId] = useState(initialReferenceId);
     const [type, setType] = useState(initialType);
 
     useEffect(() => {
-        socket = io(ENDPOINT, {transports: ['websocket']});
+        socket = io(API_HOST, {transports: ['websocket']});
         const roomId = userId < receiverId ?
             `${userId}-${receiverId}` :
             `${receiverId}-${userId}`;
@@ -76,11 +86,13 @@ export const ChatMessagesScreen: React.FC = () => {
         if (messages.length === 0) {
             if (!receiverUser.contactedUsers.includes(userId)) {
                 const newContactedUsers = [...receiverUser.contactedUsers, userId];
+                console.log('before', receiverUser?.clerkId);
                 await userService.updateUser(receiverUser?.clerkId, { contactedUsers: newContactedUsers });
             }
             if (!currUserContactedUsers.includes(receiverId)) {
                 const newContactedUsers = [...currUserContactedUsers, receiverId];
-                await userService.updateUser(clerkUserId, { contactedUsers: newContactedUsers });
+                console.log('before 2', clerkUserId);
+                await userService.updateUser(clerkUser?.id, { contactedUsers: newContactedUsers });
             }
         }
         const newMessage = await messageService.uploadMessage(
@@ -164,7 +176,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
     },
     receiverName:{
-        fontFamily: 'ProximaNova-Regular',
+        fontFamily: 'Proxima-Nova/Regular',
         fontSize: 20,
     },
     nameWrapper: {
@@ -176,7 +188,7 @@ const styles = StyleSheet.create({
     message: {
         display: "flex",
         flexDirection: "column",
-        fontFamily: 'ProximaNova-Regular',
+        fontFamily: 'Proxima-Nova/Regular',
         fontSize: 17,
         color: 'black',
         maxWidth: '70%',

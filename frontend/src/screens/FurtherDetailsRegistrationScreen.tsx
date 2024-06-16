@@ -8,7 +8,7 @@ import SwitchSelector from 'react-native-switch-selector';
 import { HeaderText } from '../components';
 import { theme } from '../theme';
 import { ProfilePicture } from '../components/ProfilePicture';
-import { useUser } from '@clerk/clerk-expo';
+import { useAuth, useUser } from '@clerk/clerk-expo';
 import userService from '../services/internal/userService';
 import { uploadProfilePicture } from '../services';
 import { IUserDetails } from '../models';
@@ -20,6 +20,8 @@ export const FurtherDetailsRegistrationScreen: React.FC = () => {
 		setProfilePictureUrl,
 		role,
 		setRole } = useUserDetails();
+
+	const { signOut } = useAuth();
 
 	const { user } = useUser();
 	const pickImageAndUpload = async () => {
@@ -35,6 +37,10 @@ export const FurtherDetailsRegistrationScreen: React.FC = () => {
 			console.error('Failed to upload profile picture');
 		}
 	};
+
+	const logout = () => {
+		signOut();
+	}
 
 	const submitDetails = async () => {
 		if (user === null || user === undefined) {
@@ -79,6 +85,9 @@ export const FurtherDetailsRegistrationScreen: React.FC = () => {
 			{profilePictureUrl && <ProfilePicture canEdit={true} source={{ uri: profilePictureUrl }}  />}
 			<Button mode="contained" onPress={submitDetails}>
 				Continue
+			</Button>
+			<Button mode="contained" onPress={logout}>
+				Discard
 			</Button>
 		</Background>
 	);

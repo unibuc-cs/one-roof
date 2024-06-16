@@ -2,7 +2,7 @@ import { Schema, type Document, model } from 'mongoose';
 import { AddressSchema, LocationSchema, type IAddress, type ILocation, type IUser } from '../models';
 
 interface IListing extends Document {
-    landlordId: IUser['_id'] | null,
+    landlordId: IUser['clerkId'] | null,
     title: string,
     description: string | null,
     photos: string[],
@@ -21,7 +21,7 @@ interface IListing extends Document {
 }
 
 const ListingSchema = new Schema<IListing>({
-	landlordId: { type: Schema.Types.ObjectId, ref: 'User', required: false },
+	landlordId: { type: String, required: false },
 	title: { type: String, required: true },
 	description: { type: String, required: false },
 	photos: { type: [String], required: true, default: []},

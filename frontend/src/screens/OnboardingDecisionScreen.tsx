@@ -20,7 +20,9 @@ export const OnboardingDecisionScreen = () => {
 	}, [user]);
 
 	const fetchAndStoreUserDetails = async (userId: string) => {
+		console.log('before fetchAndStoreUserDetails', userId);
 		const userDetails = await userService.getUserByClerkId(userId);
+		console.log('userdetails', userDetails);
 		setRole(userDetails.role);
 		setOnboardingStep(userDetails.onboardingStep);
 		setProfilePictureUrl(userDetails.profilePicture);
