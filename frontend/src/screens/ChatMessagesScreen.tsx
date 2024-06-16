@@ -1,26 +1,22 @@
 import React, {useEffect, useState} from 'react';
-import {Text, View, StyleSheet, KeyboardAvoidingView, ScrollView, Dimensions, Pressable} from 'react-native';
+import {Text, View, StyleSheet, KeyboardAvoidingView, Dimensions, Pressable} from 'react-native';
 import Background from "../components/Background";
-import {Entypo, Feather} from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import {TextInput} from "react-native-paper";
 import {theme} from "../theme";
-import EmojiSelector from "react-native-emoji-selector"
 import {useUserDetails} from "../contexts/UserDetailsContext";
 import {messageService} from "../services";
 import {RouteProp, useNavigation, useRoute} from "@react-navigation/native";
-import {RootStackParamList} from "../navigation/AppNavigation";
-import { useUserData, useUserDataByClerkId } from '../hooks/useUserData';
+import {RootStackParamList} from '../navigation';
+import { useUserDataByClerkId } from '../hooks/useUserData';
 import {Image} from "expo-image";
 import {useCustomFonts} from "../hooks/useCustomFonts";
-import {white} from "react-native-paper/lib/typescript/styles/themes/v2/colors";
 import userService from "../services/internal/userService";
-import RenderMessages from "../components/renderMessages";
+import { MessagesContainer } from "../components";
 import {io} from "socket.io-client";
-import {update} from "lodash";
 import { useUser } from '@clerk/clerk-expo';
-import { clerk } from '@clerk/clerk-expo/dist/singleton';
-import { API_HOST } from '@env';
+
+const API_HOST = 'http://192.168.191.115:3000';
 
 type ChatMessagesScreenRouteProps = RouteProp<RootStackParamList, 'Message'>;
 let socket;
@@ -134,7 +130,7 @@ export const ChatMessagesScreen: React.FC = () => {
                         )}
                     </View>
 
-                    <RenderMessages initialMessages={messages} userId={userId} />
+                    <MessagesContainer initialMessages={messages} userId={userId} />
                     <View style={styles.inputBarContainer}>
                         <TextInput
                             style={styles.inputBar}

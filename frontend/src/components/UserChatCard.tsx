@@ -8,8 +8,9 @@ import {useUserDetails} from "../contexts/UserDetailsContext";
 import {io} from "socket.io-client";
 import { useUser } from '@clerk/clerk-expo';
 import Spinner from 'react-native-loading-spinner-overlay';
-import { API_HOST } from '@env';
 import App from '../../App';
+
+const API_HOST = 'http://192.168.191.115:3000';
 
 let socket;
 
@@ -37,6 +38,7 @@ const UserChatCard: React.FC<any> = ({ userId: receiverId }) => {
     }, [userId, receiverId]);
 
     useEffect(() => {
+        console.log('init socket')
         socket = io(API_HOST, {transports: ['websocket']});
         const roomId = userId < receiverId ?
             `${userId}-${receiverId}` :
@@ -46,11 +48,13 @@ const UserChatCard: React.FC<any> = ({ userId: receiverId }) => {
 
     useEffect(() => {
         socket.on('messageReceived', (msg)=>{
+            console.log('update mess event')
             console.log("am orimit mesaj nou in userCard");
             setMessage(msg);
         });
 
         socket.on('updateMessages', (msg) =>{
+            console.log('update mess event')
             if(msg.receiverId === userId && msg.senderId === receiverId){
                 setMessage(msg);
                 getLastConversationMessages();

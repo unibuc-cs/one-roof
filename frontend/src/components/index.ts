@@ -5,6 +5,7 @@ export * from './TopBar';
 export * from './Map';
 export * from './MenuIcon';
 export * from './ToggleButton';
+export * from './MessagesContainer';
 export * from './BottomBar';
 export * from './HeaderText';
 export * from './DetailBox';
