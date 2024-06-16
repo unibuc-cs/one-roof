@@ -15,7 +15,7 @@ import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 
 
 type ListingDescriptionScreenProps = {
-    route: RouteProp<{ params: { generalDetails: any, location: Location.LocationObject, facilities: any } }, 'params'>;
+    route: RouteProp<{ params: { generalDetails: any, location: any, facilities: any } }, 'params'>;
     navigation: any;
 };
 
@@ -32,7 +32,7 @@ const initialFormValues = {
 export const ListingDescriptionScreen: React.FC<ListingDescriptionScreenProps> = ({ route, navigation }) => {
     const { generalDetails, location, facilities } = route.params;
     const [description, setDescription] = useState("");
-    const [photos, setPhotos] = useState<string[]>([null]);
+    const [photos, setPhotos] = useState<string[]>([]);
     const {userId} = useUserDetails()
     const width = Dimensions.get('window').width;
     const  height = Dimensions.get('window').height;
@@ -48,7 +48,6 @@ export const ListingDescriptionScreen: React.FC<ListingDescriptionScreenProps> =
     };
 
     const handleCreate = async () => {
-        console.log('userId', userId);
         const listingData ={
             landlordId: userId,
             title: generalDetails.title,
@@ -57,7 +56,7 @@ export const ListingDescriptionScreen: React.FC<ListingDescriptionScreenProps> =
             address: `${generalDetails.address.country} ${generalDetails.address.stateOrProvince} ${generalDetails.address.city} ${generalDetails.address.street} ${generalDetails.address.streetNumber}`,
             location: {
                 type: 'Point',
-                coordinates: [generalDetails.longitude, generalDetails.latitude],
+                coordinates: [location.longitude, location.latitude],
             },
             type: generalDetails.type,
             price: generalDetails.price,

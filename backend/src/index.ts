@@ -30,7 +30,6 @@ io.on('connection', (socket) => {
 		const roomId = msg.senderId < msg.receiverId ?
 			`${msg.senderId}-${msg.receiverId}` :
 			`${msg.receiverId}-${msg.senderId}`;
-		console.log("Mesaje actualizate");
 		socket.broadcast.emit('updateMessages', msg);
 
 	})

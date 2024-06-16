@@ -10,7 +10,8 @@ import * as Yup from 'yup';
 import Background from '../../components/Background';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import {Formik} from "formik";
-
+import 'react-native-get-random-values';
+import {v4 as uuidv4} from 'uuid';
 
 const GeneralDetailsSchema = Yup.object().shape({
 		title: Yup.string().required('Title is required'),
@@ -62,7 +63,7 @@ export const CreateListingScreen: React.FC<any>= ({navigation}) => {
 					initialValues={formValues}
 					validationSchema={GeneralDetailsSchema}
 					onSubmit={(values) => {
-						navigation.navigate('ConfirmLocation', {generalDetails: values})
+						navigation.navigate('ConfirmLocation', {generalDetails: values, id: uuidv4()})
 					}}
 				>
 					{({ handleChange, handleBlur, handleSubmit, setFieldValue, values, errors, touched }) => (
