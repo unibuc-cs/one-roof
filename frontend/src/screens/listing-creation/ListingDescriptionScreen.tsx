@@ -77,7 +77,7 @@ export const ListingDescriptionScreen: React.FC<ListingDescriptionScreenProps> =
             .catch(error => {
                 console.error('Failed to create listing', error);
             });
-        // navigation.navigate('Home');
+        navigation.navigate('Home');
         // Navigate to the next screen or save the data
     };
 

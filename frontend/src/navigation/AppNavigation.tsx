@@ -25,6 +25,7 @@ import {ListingConfirmLocationScreen} from '../screens';
 import {ListingFacilitiesScreen, ListingDescriptionScreen} from "../screens";
 import ConversationScreen from "../screens/ConversationScreen";
 import { IReview } from '../models';
+import { FavoriteScreen } from '../screens/FavoriteScreens';
 
 export type RootStackParamList = {
 	Home: undefined,
@@ -63,9 +64,9 @@ export const AppNavigation = () => {
 					<Drawer.Screen name="SignIn" component={SignInScreen}/>
 					<Drawer.Screen name="SignUp" component={SignUpScreen}/>
 					<Drawer.Screen name="Chats" component={ChatsScreen} />
+					<Drawer.Screen name="Favorites" component={FavoriteScreen} />
 					<Drawer.Screen name="CreateReview" component={CreateReviewScreen} />
 					<Drawer.Screen name="CreateListing" component={CreateListingScreen} />
-					<Drawer.Screen name="Favorites" component={FavoritesScreen} />
 					<Drawer.Screen name="Profile" component={ProfileScreen} />
 					<Drawer.Screen name="Listing" component={ListingScreen}/>
 					<Drawer.Screen name="Filters" component={FiltersScreen}/>
