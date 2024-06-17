@@ -33,7 +33,7 @@ const userService = {
 		return callApi('users', {
 			method: 'PUT',
 			body: updates,
-		})
+		});
 	},
 
 	async updateUserByClerkId(clerkId: string, updates: Partial<IUserDetails>): Promise<IUser> {

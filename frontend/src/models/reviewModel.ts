@@ -28,7 +28,7 @@ export interface IReview {
 			cleanliness: number,
 			greenSpaces: number,
 			pollutionLevels: number,
-		}
+		},
 	},
 	buildingFeedback: {
 		pestIssues: {

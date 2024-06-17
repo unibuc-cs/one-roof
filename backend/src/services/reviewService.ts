@@ -3,7 +3,7 @@ import { FilterQuery, UpdateQuery } from 'mongoose';
 
 export const ReviewService = {
 	createReview: async (reviewData: IReview): Promise<IReview | null> => {
-		console.log('get here')
+		console.log('get here');
 		const review = new Review(reviewData);
 		try {
 			const saved = await review.save();

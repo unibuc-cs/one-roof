@@ -2,8 +2,8 @@ import { Schema, type Document, model, type SchemaDefinitionProperty } from 'mon
 import { type IUser, type IListing, type IReview } from '../models';
 
 interface IMessage extends Document {
-    senderId: String,
-    receiverId: String,
+    senderId: string,
+    receiverId: string,
     content: string,
     isRead: boolean,
     referenceId: SchemaDefinitionProperty<IListing['_id']> | SchemaDefinitionProperty<IReview['_id']>|null,

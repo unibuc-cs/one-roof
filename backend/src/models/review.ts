@@ -1,5 +1,5 @@
 import { Schema, Document, model } from 'mongoose';
-import { IUser, ILocation } from '../models'
+import { IUser, ILocation } from '../models';
 
 interface IReview extends Document {
 	reviewerId: string,
@@ -26,7 +26,7 @@ interface IReview extends Document {
 			cleanliness: number,
 			greenSpaces: number,
 			pollutionLevels: number,
-		}
+		},
 	},
 	buildingFeedback: {
 		pestIssues: {

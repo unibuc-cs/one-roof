@@ -18,7 +18,7 @@ export const UserController = {
 			const clerkId = req.params.clerkId;
 			const updates = req.body;
 			const updatedUser = await userService.updateUserByClerkId(clerkId, updates);
-			console.log(clerkId, updates)
+			console.log(clerkId, updates);
 			updatedUser ? res.json(updatedUser) : res.status(404).json({ error: 'User not found' });
 		} catch (error) {
 			console.error(error);

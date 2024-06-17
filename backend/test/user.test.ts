@@ -2,7 +2,7 @@ import chai from 'chai';
 import sinon from 'sinon';
 import mongoose from 'mongoose';
 import { User } from '../src/models';
-import {USERS} from "../src/database";
+import {USERS} from '../src/database';
 
 const { expect } = chai;
 

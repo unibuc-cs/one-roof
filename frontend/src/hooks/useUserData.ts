@@ -20,7 +20,7 @@ export const useUserData = (userId: string) => {
 			});
 	}, [userId]);
 
-	return { user, error, isLoading};
+	return { user, error, isLoading };
 };
 
 
