@@ -10,7 +10,7 @@ export const TextInput = ({ errorText, marginVertical, ...props }: Props) => {
 	const LoadFonts = async () => { await useCustomFonts(); };
 	const customMargin = marginVertical !== undefined ? marginVertical : 12;
 	return  (
-		<View style={[styles.container, {marginVertical : customMargin }]}>
+		<View style={[styles.container, { marginVertical : customMargin }]}>
 			<Input
 				style={[styles.input]}
 				selectionColor={theme.colors.secondary}
@@ -22,7 +22,7 @@ export const TextInput = ({ errorText, marginVertical, ...props }: Props) => {
 		</View>
 	);
 
-}
+};
 const styles = StyleSheet.create({
 	container: {
 		width: '100%',

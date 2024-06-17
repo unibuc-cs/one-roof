@@ -4,8 +4,8 @@ import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { ItemList } from './ItemList';
 import { useSearchContext } from '../contexts/SearchContext';
 import { useCustomFonts } from '../hooks/useCustomFonts';
-import {useNavigation} from "@react-navigation/native";
-import {useUserDetails} from "../contexts/UserDetailsContext";
+import { useNavigation } from '@react-navigation/native';
+import { useUserDetails } from '../contexts/UserDetailsContext';
 import { ActivityIndicator } from 'react-native-paper';
 
 export const BottomBar = () => {
@@ -22,7 +22,7 @@ export const BottomBar = () => {
 				enableContentPanningGesture={!state.isWaitingForSearch}
 			>
 				{state.isWaitingForSearch ? (
-					<ActivityIndicator size="small" color={"grey"}/>
+					<ActivityIndicator size="small" color={'grey'}/>
 				) : (
 					<BottomSheetScrollView contentContainerStyle={styles.contentContainer}>
 						<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>

@@ -23,7 +23,7 @@ type PropertyCardProps = {
 	mode?: string,
 	backgroundColor?: string,
 	showCarousel?: boolean,
-	showFavorite: boolean
+	showFavorite: boolean,
 };
 
 
@@ -71,7 +71,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ listing,
 	};
 
 	if (!user?.id) {
-		return <Spinner></Spinner>
+		return <Spinner></Spinner>;
 	}
 
 	const toggleFavorite = useCallback(async () => {

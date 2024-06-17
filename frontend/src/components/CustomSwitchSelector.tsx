@@ -18,12 +18,12 @@ export const CustomSwitchSelector: React.FC<any> = ({ options, mode, value, onPr
 			animationDuration={150}
 			borderWidth={10}
 			height={50}
-			touchableProps={{height:200}}
+			touchableProps={{ height:200 }}
 			initial={0}
 			style={{
 				width: width
 			}}
-			textContainerStyle={{height: '100%'}}
+			textContainerStyle={{ height: '100%' }}
 			value={options.map(entry => entry.value).indexOf(value)}
 			onPress={onPress}
 			bold={true}

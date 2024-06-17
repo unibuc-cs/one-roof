@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
 import MapView, { MapPressEvent, Marker, Region } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { DEFAULT_LATITUDE_DELTA, DEFAULT_LONGITUDE_DELTA, mapStyles } from '../utils';
 
 interface MapInputProps {
-	onLocationChange: (latitude: number, longitude: number) => void;
+	onLocationChange: (latitude: number, longitude: number) => void,
 }
 
 export const MapInput: React.FC<MapInputProps> = ({ onLocationChange }) => {	const [location, setLocation] = useState<Location.LocationObject | null>(null);
@@ -14,13 +14,13 @@ export const MapInput: React.FC<MapInputProps> = ({ onLocationChange }) => {	con
 
 	useEffect(() => {
 		(async () => {
-			let { status } = await Location.requestForegroundPermissionsAsync();
+			const { status } = await Location.requestForegroundPermissionsAsync();
 			if (status !== 'granted') {
 				setErrorMsg('Permission to access location was denied');
 				return;
 			}
 
-			let location = await Location.getCurrentPositionAsync({});
+			const location = await Location.getCurrentPositionAsync({});
 			setLocation(location);
 			setRegion({
 				latitude: location.coords.latitude,

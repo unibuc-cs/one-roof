@@ -39,7 +39,7 @@ export interface SearchContextState {
 		bathrooms?: number,
 		amenities?: RentalAmenitiesEnum[],
 		provider?: TypeOfProviderEnum,
-		recommend?: number
+		recommend?: number,
 	},
 }
 
@@ -53,8 +53,8 @@ const SearchContext = createContext<{
 	setFilters: React.Dispatch<React.SetStateAction<SearchContextState['filters']>>,
 	setIsWaitingForSearch: React.Dispatch<React.SetStateAction<boolean>>,
 	setWasExternalSearchPerformed: React.Dispatch<React.SetStateAction<boolean>>,
-	setRecommend: React.Dispatch<React.SetStateAction<number>>
-}>(null!);
+	setRecommend: React.Dispatch<React.SetStateAction<number>>,
+		}>(null!);
 
 export const useSearchContext = () => useContext(SearchContext);
 
@@ -118,7 +118,7 @@ export const SearchProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 			if (wasExternal) {
 				setWasExternalSearchPerformed(true);
 			}
-		})
+		});
 	}, [fetchFilteredData]);
 
 	const contextValue = useMemo(() => ({

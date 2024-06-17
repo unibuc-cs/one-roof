@@ -8,10 +8,10 @@ import { HeaderText } from './HeaderText';
 import { theme } from '../theme';
 
 interface PreferenceSliderProps {
-	question: string;
-	leftText: string;
-	rightText: string;
-	onValueChange?: (value: number) => void;
+	question: string,
+	leftText: string,
+	rightText: string,
+	onValueChange?: (value: number) => void,
 }
 
 export const PreferenceSlider: React.FC<PreferenceSliderProps> = ({ question, leftText, rightText, onValueChange }) => {

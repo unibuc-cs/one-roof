@@ -8,21 +8,21 @@ import { useCustomFonts } from '../hooks/useCustomFonts';
 interface ReviewSectionSchema {
 	title: string,
 	questions?: Array<{
-		prompt: string;
-		leftText: string;
-		rightText: string;
-		value: number;
-	}>;
+		prompt: string,
+		leftText: string,
+		rightText: string,
+		value: number,
+	}>,
 	isLast?: boolean,
 	binaryQuestions?: Array<{
-		question: string;
-		value: boolean;
-	}>;
+		question: string,
+		value: boolean,
+	}>,
 	multiOptionQuestions?: Array<{
-		prompt: string;
-		value: string;
-	}>;
-	additional?: string;
+		prompt: string,
+		value: string,
+	}>,
+	additional?: string,
 }
 
 export const ReviewDetailsSection: React.FC<ReviewSectionSchema> = ({ title, questions, isLast, binaryQuestions, multiOptionQuestions, additional }) => {

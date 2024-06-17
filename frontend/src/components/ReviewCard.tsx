@@ -9,9 +9,9 @@ import { useNavigation } from '@react-navigation/native';
 
 type ReviewCardProps = {
 	review: IReview,
-}
+};
 
-export const ReviewCard: React.FC<ReviewCardProps> = ({review}) => {
+export const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
 	const { navigate } = useNavigation();
 	return (
 		<Card key={review._id} style={styles.card}>
@@ -20,9 +20,9 @@ export const ReviewCard: React.FC<ReviewCardProps> = ({review}) => {
 				<Paragraph>{review.livingSituation}</Paragraph>
 				<Paragraph style={styles.description}>{review.description}</Paragraph>
 				<View style={styles.recommendContainer}>
-					<HeaderText size={18} textAlign={"left"} style={styles.recommendText}>Recommend: {review.recommend}/5</HeaderText>
+					<HeaderText size={18} textAlign={'left'} style={styles.recommendText}>Recommend: {review.recommend}/5</HeaderText>
 				</View>
-				<Button mode={'contained'} onPress={() => navigate('ViewReview', {id: review._id})}> Go to Full Review! </Button>
+				<Button mode={'contained'} onPress={() => navigate('ViewReview', { id: review._id })}> Go to Full Review! </Button>
 			</Card.Content>
 		</Card>
 	);

@@ -21,9 +21,9 @@ import SignUpScreen from '../screens/SignUpScreen';
 import { useUserDetails } from '../contexts/UserDetailsContext';
 import { SearchProvider } from '../contexts/SearchContext';
 import { FiltersScreen } from '../screens';
-import {ListingConfirmLocationScreen} from '../screens';
-import {ListingFacilitiesScreen, ListingDescriptionScreen} from "../screens";
-import ConversationScreen from "../screens/ConversationScreen";
+import { ListingConfirmLocationScreen } from '../screens';
+import { ListingFacilitiesScreen, ListingDescriptionScreen } from '../screens';
+import ConversationScreen from '../screens/ConversationScreen';
 import { IReview } from '../models';
 import { FavoriteScreen } from '../screens/FavoriteScreens';
 

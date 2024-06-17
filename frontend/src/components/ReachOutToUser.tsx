@@ -29,8 +29,8 @@ const ReachOutToUser: React.FC<any> = ({ message, userToReachOutToId, referenceI
 	const handleSendMessage = async () => {
 		console.log('In landlordDetails', referenceId);
 		console.log('message type', type);
-		navigate('Messages', { receiverId: landlord.clerkId, referenceId: referenceId, type: type })
-	}
+		navigate('Messages', { receiverId: landlord.clerkId, referenceId: referenceId, type: type });
+	};
 
 	return (
 		<Card style={styles.container}>

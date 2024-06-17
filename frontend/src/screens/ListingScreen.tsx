@@ -14,7 +14,7 @@ import { useCustomFonts } from '../hooks/useCustomFonts';
 
 type ListingScreenRouteProp = RouteProp<RootStackParamList, 'Listing'>;
 
-export const ListingScreen: React.FC = ({navigation}) => {
+export const ListingScreen: React.FC = ({ navigation }) => {
 	const route = useRoute<ListingScreenRouteProp>();
 	const { id } = route.params;
 	const { user } = useUser();
@@ -26,7 +26,7 @@ export const ListingScreen: React.FC = ({navigation}) => {
 
 	return (
 		<Background>
-			<ScrollView contentContainerStyle={{alignItems: 'center', justifyContent: 'center' }} showsVerticalScrollIndicator={false}>
+			<ScrollView contentContainerStyle={{ alignItems: 'center', justifyContent: 'center' }} showsVerticalScrollIndicator={false}>
 				<Card style={styles.container}>
 					<View style={styles.titleContainer}>
 						<Text style={styles.title}>{listing.title}</Text>

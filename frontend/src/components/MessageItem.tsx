@@ -30,7 +30,7 @@ export const MessageItem = ({ msg, index, listings, reviews, userId }) => {
 	return (
 		<React.Fragment key={index}>
 			{showListing && (
-				<View style={[styles.listingContainer, msg.senderId === userId ? {alignSelf: 'flex-end'}: {alignSelf: 'flex-start'}]}>
+				<View style={[styles.listingContainer, msg.senderId === userId ? { alignSelf: 'flex-end' }: { alignSelf: 'flex-start' }]}>
 					<View style={{ flex: 1 }}>
 						<Text style={styles.listingTitle}>
 							{listings[msg.referenceId] ? listings[msg.referenceId].title : 'Loading listing...'}
@@ -45,7 +45,7 @@ export const MessageItem = ({ msg, index, listings, reviews, userId }) => {
 				</View>
 			)}
 			{showReview && (
-				<View style={[styles.listingContainer, msg.senderId === userId ? {alignSelf: 'flex-end'}: {alignSelf: 'flex-start'}]}>
+				<View style={[styles.listingContainer, msg.senderId === userId ? { alignSelf: 'flex-end' }: { alignSelf: 'flex-start' }]}>
 					<View style={{ flex: 1 }}>
 						<Text style={styles.listingTitle}>
 							{reviews[msg.referenceId] ? reviews[msg.referenceId].title : 'Loading review...'}
@@ -83,13 +83,13 @@ export const MessageItem = ({ msg, index, listings, reviews, userId }) => {
 			</Pressable>
 		</React.Fragment>
 	);
-}
+};
 
 
 const styles = StyleSheet.create({
 	message: {
-		display: "flex",
-		flexDirection: "column",
+		display: 'flex',
+		flexDirection: 'column',
 		fontFamily: 'Proxima-Nova/Regular',
 		fontSize: 17,
 		color: 'black',
@@ -102,8 +102,8 @@ const styles = StyleSheet.create({
 		borderRadius: 10,
 	},
 	senderMsgBubble: {
-		alignItems: "center",
-		alignSelf:"flex-end",
+		alignItems: 'center',
+		alignSelf:'flex-end',
 		backgroundColor: theme.colors.primary,
 	},
 	senderMsg:{
@@ -112,8 +112,8 @@ const styles = StyleSheet.create({
 	},
 	receiverMsgBubble: {
 		backgroundColor: theme.colors.background,
-		alignItems: "center",
-		alignSelf: "flex-start",
+		alignItems: 'center',
+		alignSelf: 'flex-start',
 		color: 'black',
 	},
 	receiverMsg:{

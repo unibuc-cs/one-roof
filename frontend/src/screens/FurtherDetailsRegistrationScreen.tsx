@@ -40,7 +40,7 @@ export const FurtherDetailsRegistrationScreen: React.FC = () => {
 
 	const logout = () => {
 		signOut();
-	}
+	};
 
 	const submitDetails = async () => {
 		if (user === null || user === undefined) {

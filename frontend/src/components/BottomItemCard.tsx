@@ -3,7 +3,7 @@ import BottomSheet from '@gorhom/bottom-sheet';
 import { PropertyCard } from './PropertyCard';
 import { ReviewCard } from './ReviewCard';
 
-export const BottomItemCard: React.FC<any> = ({ item, onClose, type}) => {
+export const BottomItemCard: React.FC<any> = ({ item, onClose, type }) => {
 	const [isOpen, setIsOpen] = useState(true);
 	const bottomSheetRef = useRef<BottomSheet>(null);
 

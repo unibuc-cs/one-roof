@@ -34,8 +34,8 @@ const AreaFeedbackSchema = Yup.object().shape({
 });
 
 type AreaFeedbackScreenProps = {
-	route: RouteProp<{ params: { generalDetails: any; buildingFeedback: any } }, 'params'>;
-	navigation: any;
+	route: RouteProp<{ params: { generalDetails: any, buildingFeedback: any } }, 'params'>,
+	navigation: any,
 };
 
 export const AreaFeedbackScreen: React.FC<AreaFeedbackScreenProps> = ({ route, navigation }) => {
@@ -43,7 +43,7 @@ export const AreaFeedbackScreen: React.FC<AreaFeedbackScreenProps> = ({ route, n
 	const { user } = useUser();
 	const handleDiscard = () => {
 		navigation.navigate('Home');
-	}
+	};
 	const handleSubmit = (values: any) => {
 		const reviewData = {
 			title: generalDetails.title,
@@ -58,7 +58,7 @@ export const AreaFeedbackScreen: React.FC<AreaFeedbackScreenProps> = ({ route, n
 			areaFeedback: values,
 			buildingFeedback: buildingFeedback,
 			reviewerId: user?.id as string,
-		}
+		};
 
 		console.log('reviewData', reviewData);
 
@@ -126,11 +126,11 @@ export const AreaFeedbackScreen: React.FC<AreaFeedbackScreenProps> = ({ route, n
 									{
 										prompt: 'What is your primary mode of transportation in the area?',
 										options: [
-											{ label: 'Metro', value: 'metro'},
+											{ label: 'Metro', value: 'metro' },
 											{ label: 'Bus', value: 'bus' },
 											{ label: 'Tram', value: 'tram' },
 											{ label: 'Car', value: 'car' },
-											{ label: 'Bike', value: 'bike'},
+											{ label: 'Bike', value: 'bike' },
 											{ label: 'Walking', value: 'walking' }
 										]
 									},
@@ -142,10 +142,10 @@ export const AreaFeedbackScreen: React.FC<AreaFeedbackScreenProps> = ({ route, n
 									{
 										prompt: 'What is the predominant demographic in your area?', options: [
 											{ label: 'Can\'t tell', value: 'all' },
-											{ label: 'Students', value: 'students'},
-											{ label: 'Young Adults', value: 'young'},
+											{ label: 'Students', value: 'students' },
+											{ label: 'Young Adults', value: 'young' },
 											{ label: 'Families', value: 'families' },
-											{ label: 'Retirees', value: 'retirees'},
+											{ label: 'Retirees', value: 'retirees' },
 										]
 									},
 								]}

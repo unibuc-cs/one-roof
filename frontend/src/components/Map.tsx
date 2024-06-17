@@ -96,7 +96,7 @@ export const Map: React.FC = () => {
 					{state.searchType === SearchTypeEnum.Listings ?
 						<BottomItemCard item={selectedItem as IListing} onClose={handleClose} /> :
 						<BottomItemCard item={selectedItem as IReview} type={'review'} onClose={handleClose} />
-						}
+					}
 				</View>
 			)}
 		</View>

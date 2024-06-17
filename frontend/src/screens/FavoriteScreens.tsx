@@ -53,4 +53,4 @@ const styles = StyleSheet.create({
 		marginTop: 50,
 		width: '100%'
 	}
-})
+});

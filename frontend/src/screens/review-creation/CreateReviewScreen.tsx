@@ -8,7 +8,7 @@ import { Card } from 'react-native-paper';
 import { theme } from '../../theme';
 import Logo from '../../components/Logo';
 
-export const CreateReviewScreen: React.FC<any> = ({navigation}) => {
+export const CreateReviewScreen: React.FC<any> = ({ navigation }) => {
 	const { onboardingStep, setOnboardingStep } = useUserDetails();
 	const { user } = useUser();
 
@@ -26,7 +26,7 @@ export const CreateReviewScreen: React.FC<any> = ({navigation}) => {
 	};
 
 	const callToAction = 'Share your thoughts about your current living place and surroundings!';
-	const firstTimeMessage = 'Welcome!\n To benefit from the community\'s knowledge, we first ask you to leave a review of your current or past place of residence.\nYour review will help others make informed decisions.'
+	const firstTimeMessage = 'Welcome!\n To benefit from the community\'s knowledge, we first ask you to leave a review of your current or past place of residence.\nYour review will help others make informed decisions.';
 	const additionalReviewMessage = 'We appreciate your willingness to share your experiences and help the community by leaving additional reviews!';
 	const welcomingMessage = isFirstTimeUser ? firstTimeMessage : additionalReviewMessage;
 

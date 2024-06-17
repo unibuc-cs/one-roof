@@ -12,7 +12,7 @@ export const TextInputSmaller = ({ errorText, marginVertical, ...props }: Props)
 	return  (
 		<View style={[styles.container]}>
 			<Input
-				style={[styles.inputContainer, {paddingVertical: customPadding}]}
+				style={[styles.inputContainer, { paddingVertical: customPadding }]}
 				contentStyle={styles.input}
 				selectionColor={theme.colors.secondary}
 				underlineColor="transparent"
@@ -25,7 +25,7 @@ export const TextInputSmaller = ({ errorText, marginVertical, ...props }: Props)
 		</View>
 	);
 
-}
+};
 const styles = StyleSheet.create({
 	container: {
 		width: '100%',

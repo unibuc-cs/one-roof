@@ -50,8 +50,8 @@ const BuildingFeedbackSchema = Yup.object().shape({
 });
 
 type BuildingFeedbackScreenProps = {
-	route: RouteProp<{ params: { generalDetails: any } }, 'params'>;
-	navigation: any;
+	route: RouteProp<{ params: { generalDetails: any } }, 'params'>,
+	navigation: any,
 };
 
 export const BuildingFeedbackScreen: React.FC<BuildingFeedbackScreenProps> = ({ route, navigation }) => {
@@ -59,7 +59,7 @@ export const BuildingFeedbackScreen: React.FC<BuildingFeedbackScreenProps> = ({ 
 
 	const handleDiscard = () => {
 		navigation.navigate('Home');
-	}
+	};
 
 	const handleSubmit = (values: any) => {
 		console.log('General Details:', generalDetails);

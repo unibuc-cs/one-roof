@@ -1,11 +1,11 @@
-import React, {useContext, useEffect} from 'react';
-import {Pressable, ScrollView, StyleSheet, Text, View} from 'react-native';
-import {useNavigation} from "@react-navigation/native";
-import {useUserDetails} from "../contexts/UserDetailsContext";
+import React, { useContext, useEffect } from 'react';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { useUserDetails } from '../contexts/UserDetailsContext';
 import { useUserData, useUserDataByClerkId } from '../hooks/useUserData';
-import UserChatCard from "../components/UserChatCard";
-import {useCustomFonts} from "../hooks/useCustomFonts";
-import {theme} from "../theme";
+import UserChatCard from '../components/UserChatCard';
+import { useCustomFonts } from '../hooks/useCustomFonts';
+import { theme } from '../theme';
 import { useUser } from '@clerk/clerk-expo';
 import Spinner from 'react-native-loading-spinner-overlay';
 
@@ -21,12 +21,12 @@ export const ChatsScreen: React.FC = () => {
 	console.log('CURRENT USER FROM CLERK', currentUser);
 
 	if (isLoading) {
-		return <Spinner></Spinner>
+		return <Spinner></Spinner>;
 	}
 
 	if(!currentUser){
 		return (
-			<View style={{justifyContent: 'center'}}>
+			<View style={{ justifyContent: 'center' }}>
 				<Text>Loading..</Text>
 			</View>
 		);
@@ -35,7 +35,7 @@ export const ChatsScreen: React.FC = () => {
 	return (
 		<ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
 			<View style={styles.title}>
-				<Text style={{fontSize:25}}> Chats</Text>
+				<Text style={{ fontSize:25 }}> Chats</Text>
 			</View>
 			<Pressable>
 				{currentUser?.contactedUsers.map((clerkUserId, index) =>(
@@ -49,7 +49,7 @@ export const ChatsScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
 	title:{
-		alignItems: "center",
+		alignItems: 'center',
 		borderBottomWidth: 1,
 		borderColor: theme.colors.primary,
 		paddingVertical: 15,

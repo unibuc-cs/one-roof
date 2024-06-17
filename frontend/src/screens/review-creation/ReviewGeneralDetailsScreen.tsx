@@ -22,7 +22,7 @@ const GeneralDetailsSchema = Yup.object().shape({
 export const ReviewGeneralDetailsScreen = ({ navigation }) => {
 	const handleDiscard = () => {
 		navigation.navigate('Home');
-	}
+	};
 	return (
 		<Background>
 			<Card style={styles.card} contentStyle={styles.container}>

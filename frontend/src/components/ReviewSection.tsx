@@ -10,19 +10,19 @@ import { CustomSwitchSelector } from './CustomSwitchSelector';
 interface ReviewSectionSchema {
 	title: string,
 	questions?: Array<{
-		prompt: string;
-		leftText: string;
-		rightText: string;
-	}>;
+		prompt: string,
+		leftText: string,
+		rightText: string,
+	}>,
 	isLast?: boolean,
-	binaryQuestions?: Array<string>;
+	binaryQuestions?: Array<string>,
 	multiOptionQuestions?: Array<{
-		prompt: string;
+		prompt: string,
 		options: Array<{
 			label: string,
-			value: string
-		}>
-	}>
+			value: string,
+		}>,
+	}>,
 }
 
 export const ReviewSection: React.FC<ReviewSectionSchema> = ({ title, questions, isLast, binaryQuestions, multiOptionQuestions }) => {
@@ -75,8 +75,8 @@ export const ReviewSection: React.FC<ReviewSectionSchema> = ({ title, questions,
 				<Icon size={20} color={theme.colors.primary} name={'cards-diamond-outline'}></Icon>
 			</View>}
 		</View>
-	)
-}
+	);
+};
 
 const styles = StyleSheet.create({
 	input: {
@@ -87,4 +87,4 @@ const styles = StyleSheet.create({
 		display: 'flex',
 		alignItems: 'center',
 	}
-})
+});

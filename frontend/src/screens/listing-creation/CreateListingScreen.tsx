@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import {Picker} from "@react-native-picker/picker";
+import { Picker } from '@react-native-picker/picker';
 import { Card, Checkbox, TextInput } from 'react-native-paper';
 import { Button, HeaderText } from '../../components';
 import { NumberOfBathroomsEnum, NumberOfBedroomsEnum, PropertyTypeEnum } from '../../enums';
@@ -9,41 +9,41 @@ import { useCustomFonts } from '../../hooks/useCustomFonts';
 import * as Yup from 'yup';
 import { Background } from '../../components';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import {Formik} from "formik";
+import { Formik } from 'formik';
 import 'react-native-get-random-values';
-import {v4 as uuidv4} from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 
 const GeneralDetailsSchema = Yup.object().shape({
-		title: Yup.string().required('Title is required'),
-		type: Yup.mixed().oneOf(Object.values(PropertyTypeEnum)).required("Type is required"),
-		address: Yup.object().shape({
-			country: Yup.string().required('Country is required'),
-			stateOrProvince: Yup.string().required('State/Province is required'),
-			city: Yup.string().required('City is required'),
-			postalCode: Yup.string(),
-			street: Yup.string().required('Street is required'),
-			streetNumber: Yup.number().required('Street number is required'),
-		}),
-		price: Yup.number().required('Price is required'),
+	title: Yup.string().required('Title is required'),
+	type: Yup.mixed().oneOf(Object.values(PropertyTypeEnum)).required('Type is required'),
+	address: Yup.object().shape({
+		country: Yup.string().required('Country is required'),
+		stateOrProvince: Yup.string().required('State/Province is required'),
+		city: Yup.string().required('City is required'),
+		postalCode: Yup.string(),
+		street: Yup.string().required('Street is required'),
+		streetNumber: Yup.number().required('Street number is required'),
+	}),
+	price: Yup.number().required('Price is required'),
 
-	});
+});
 
 const initialFormValues={
 	title: '',
-		type: 'studio',
-		address: {
+	type: 'studio',
+	address: {
 		country: '',
-			stateOrProvince: '',
-			city: '',
-			postalCode: '',
-			street: '',
-			streetNumber: '204',
+		stateOrProvince: '',
+		city: '',
+		postalCode: '',
+		street: '',
+		streetNumber: '204',
 	},
 	price: '200',
 };
 
 
-export const CreateListingScreen: React.FC<any>= ({navigation}) => {
+export const CreateListingScreen: React.FC<any>= ({ navigation }) => {
 	const LoadFonts = async () => { await useCustomFonts(); };
 	const [formValues, setFormValues] = useState(initialFormValues);
 
@@ -52,7 +52,7 @@ export const CreateListingScreen: React.FC<any>= ({navigation}) => {
 	}, []);
 	const handleDiscard = () => {
 		navigation.navigate('Home');
-	}
+	};
 
 
 	return (
@@ -62,7 +62,7 @@ export const CreateListingScreen: React.FC<any>= ({navigation}) => {
 					initialValues={formValues}
 					validationSchema={GeneralDetailsSchema}
 					onSubmit={(values) => {
-						navigation.navigate('ConfirmLocation', {generalDetails: values, id: uuidv4()})
+						navigation.navigate('ConfirmLocation', { generalDetails: values, id: uuidv4() });
 					}}
 				>
 					{({ handleChange, handleBlur, handleSubmit, setFieldValue, values, errors, touched }) => (
