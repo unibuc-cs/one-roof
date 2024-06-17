@@ -29,20 +29,19 @@ const GeneralDetailsSchema = Yup.object().shape({
 	});
 
 const initialFormValues={
-	title: 'Titlu',
-		type: '',
+	title: '',
+		type: 'studio',
 		address: {
-		country: 'Romania',
-			stateOrProvince: 'Bucuresti',
-			city: 'Bucuresti',
-			postalCode: '060025',
-			street: 'Splaiul Independentei',
+		country: '',
+			stateOrProvince: '',
+			city: '',
+			postalCode: '',
+			street: '',
 			streetNumber: '204',
 	},
 	price: '200',
 };
 
-// TODO: reset all values when discard is pressed
 
 export const CreateListingScreen: React.FC<any>= ({navigation}) => {
 	const LoadFonts = async () => { await useCustomFonts(); };

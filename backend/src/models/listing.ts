@@ -2,7 +2,7 @@ import { Schema, type Document, model } from 'mongoose';
 import { AddressSchema, LocationSchema, type IAddress, type ILocation, type IUser } from '../models';
 
 interface IListing extends Document {
-    landlordId: IUser['clerkId'] | null,
+    landlordId: string,
     title: string,
     description: string | null,
     photos: string[],

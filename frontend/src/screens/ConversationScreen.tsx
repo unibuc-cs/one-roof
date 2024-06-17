@@ -22,7 +22,7 @@ const API_HOST = 'http://192.168.191.115:3000';
 type ChatMessagesScreenRouteProps = RouteProp<RootStackParamList, 'Message'>;
 let socket;
 
-export const ChatMessagesScreen: React.FC = () => {
+export const ConversationScreen: React.FC = () => {
     const LoadFonts = async () => { await useCustomFonts(); };
     const { navigate } = useNavigation();
     const route = useRoute<ChatMessagesScreenRouteProps>();
@@ -50,7 +50,7 @@ export const ChatMessagesScreen: React.FC = () => {
             `${userId}-${receiverId}` :
             `${receiverId}-${userId}`;
         socket.emit('join', {roomId: roomId});
-    }, []);
+    }, [receiverId, userId]);
 
     useEffect(() => {
         getConversationMessages();
@@ -86,15 +86,13 @@ export const ChatMessagesScreen: React.FC = () => {
     const handleSend = async () => {
         if (message.length === 0) return;
 
-        if (messages.length === 0) {
-            if (!receiverUser.contactedUsers.includes(userId)) {
-                const newContactedUsers = [...receiverUser.contactedUsers, userId];
-                await userService.updateUser(receiverUser?.clerkId, { contactedUsers: newContactedUsers });
-            }
-            if (!currUserContactedUsers.includes(receiverId)) {
-                const newContactedUsers = [...currUserContactedUsers, receiverId];
-                await userService.updateUser(clerkUser?.id, { contactedUsers: newContactedUsers });
-            }
+        if (!receiverUser.contactedUsers.includes(userId)) {
+            const newContactedUsers = [...receiverUser.contactedUsers, userId];
+            await userService.updateUser(receiverUser?.clerkId, { contactedUsers: newContactedUsers });
+        }
+        if (!currUserContactedUsers.includes(receiverId)) {
+            const newContactedUsers = [...currUserContactedUsers, receiverId];
+            await userService.updateUser(clerkUser?.id, { contactedUsers: newContactedUsers });
         }
         const newMessage = await messageService.uploadMessage(
             {
@@ -153,7 +151,7 @@ export const ChatMessagesScreen: React.FC = () => {
     );
 };
 
-export default ChatMessagesScreen;
+export default ConversationScreen;
 
 const styles = StyleSheet.create({
     container: {

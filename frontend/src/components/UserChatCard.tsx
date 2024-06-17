@@ -49,10 +49,11 @@ const UserChatCard: React.FC<any> = ({ userId: receiverId }) => {
     useEffect(() => {
         socket.on('messageReceived', (msg)=>{
             console.log('update mess event')
-            console.log("am orimit mesaj nou in userCard");
-            setMessage(msg);
+            if(msg.receiverId === receiverId && msg.senderId === userId) {
+                console.log("am orimit mesaj nou in userCard");
+                setMessage(msg);
+            }
         });
-
         socket.on('updateMessages', (msg) =>{
             console.log('update mess event')
             if(msg.receiverId === userId && msg.senderId === receiverId){

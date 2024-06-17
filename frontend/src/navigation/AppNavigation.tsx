@@ -23,7 +23,7 @@ import { SearchProvider } from '../contexts/SearchContext';
 import { FiltersScreen } from '../screens';
 import {ListingConfirmLocationScreen} from '../screens';
 import {ListingFacilitiesScreen, ListingDescriptionScreen} from "../screens";
-import ChatMessagesScreen from "../screens/ChatMessagesScreen";
+import ConversationScreen from "../screens/ConversationScreen";
 import { IReview } from '../models';
 
 export type RootStackParamList = {
@@ -72,7 +72,7 @@ export const AppNavigation = () => {
 					<Drawer.Screen name="ListingFacilities" component={ListingFacilitiesScreen}/>
 					<Drawer.Screen name="ConfirmLocation" component={ListingConfirmLocationScreen}/>
 					<Drawer.Screen name="ListingDescription" component={ListingDescriptionScreen}/>
-					<Drawer.Screen name="Messages" component={ChatMessagesScreen}/>
+					<Drawer.Screen name="Messages" component={ConversationScreen}/>
 					<Drawer.Screen name="ReviewGeneralDetails" component={ReviewGeneralDetailsScreen}/>
 					<Drawer.Screen name="AreaFeedback" component={AreaFeedbackScreen}/>
 					<Drawer.Screen name="BuildingFeedback" component={BuildingFeedbackScreen}/>

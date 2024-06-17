@@ -12,6 +12,7 @@ import {listingService} from "../../services";
 import {useUserDetails} from "../../contexts/UserDetailsContext";
 import * as Yup from 'yup';
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
+import { useUser } from '@clerk/clerk-expo';
 
 
 type ListingDescriptionScreenProps = {
@@ -33,7 +34,7 @@ export const ListingDescriptionScreen: React.FC<ListingDescriptionScreenProps> =
     const { generalDetails, location, facilities } = route.params;
     const [description, setDescription] = useState("");
     const [photos, setPhotos] = useState<string[]>([]);
-    const {userId} = useUserDetails()
+    const { user } = useUser();
     const width = Dimensions.get('window').width;
     const  height = Dimensions.get('window').height;
     const currentDate = new Date();
@@ -49,7 +50,7 @@ export const ListingDescriptionScreen: React.FC<ListingDescriptionScreenProps> =
 
     const handleCreate = async () => {
         const listingData ={
-            landlordId: userId,
+            landlordId: user?.id as string,
             title: generalDetails.title,
             description: description,
             photos: photos,
@@ -67,7 +68,6 @@ export const ListingDescriptionScreen: React.FC<ListingDescriptionScreenProps> =
             external: false,
             createdAt: currentDate,
             updatedAt: currentDate,
-
         }
         console.log('listingData', listingData);
         listingService.createListing(listingData, listingData.landlordId)

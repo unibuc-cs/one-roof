@@ -2,9 +2,23 @@ import { Listing, IListing } from '../models';
 import { FilterQuery, UpdateQuery } from 'mongoose';
 
 export const ListingService = {
-	createListing: async (listingData: IListing): Promise<IListing> => {
+	createListing: async (listingData: IListing): Promise<IListing | undefined> => {
 		const listing = new Listing(listingData);
-		return listing.save();
+		try {
+			const savedListing = await listing.save();
+			return savedListing;
+		} catch (error) {
+			console.error(error);
+			return undefined;
+		}
+		// try {
+		// 	console.log('listing', listing);
+		// 	const toReturn = listing.save();
+		// 	return toReturn;
+		// } catch (err) {
+		// 	console.error(err);
+		// 	return listing;
+		// }
 	},
 
 	getListingById: async (id: string): Promise<IListing | null> => {

@@ -5,7 +5,8 @@ import { LISTINGS } from '../database';
 export const ListingController = {
 	async createListing(req: Request, res: Response) {
 		try {
-			const listing = await ListingService.createListing(req.body);
+			const listing = ListingService.createListing(req.body);
+			console.log('listing contr', listing);
 			res.status(201).json(listing);
 		} catch (error) {
 			res.status(500).json({ error: 'Failed to create listing' });
