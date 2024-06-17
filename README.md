@@ -28,5 +28,8 @@ Am generat logul cu ajutorul Dall-e
 
 ![WhatsApp Image 2024-06-17 at 15 14 02](https://github.com/annna7/one-roof/assets/96103743/42a7ac95-00a6-4b4a-9efb-02e4aed41d1d)
 
+## Design patterns
+_Observer design pattern_ - Pentru implememnatrea chatului am folosit socker.io, o librarie care faciliteaza comincarea in timp real. Cu ajutorul ei am realizat design pattern-ul observer, in implementarea noastra serverul joaca rolul de subiect, iar socket-urile sunt observatorii. In momentul in care exista o schimbare in baza de date subiectul anunta observatorii.
+
 
 
