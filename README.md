@@ -1,8 +1,12 @@
 # One Roof
 
 ## Product vison
-Aplicatia noastra este destinata chiriașilor și proprietarilor care au nevoie de o platformă transparentă, bazată pe comunitate și ușor de utilizat pentru a găsi, evalua și închiria proprietăți. One Roof este o platforma de închirieri care le permite chiriașilor să descopere proprietăți prin anunturi detaliate, hărți interactive și recenzii lasate de utilizatori, în timp ce proprietarii își pot prezenta eficient proprietățile și pot intra în contact cu potențiali chiriași.
-Spre deosebire de platformele tradiționale de închirieri care se concentrează în principal pe listări și filtre de bază, One Roof oferă o experiență de căutare îmbunătățită, cu hărți de tip heatmap, informații despre cartiere și comunicare directă între chiriași, recenzori și proprietari.
+▎**FOR** renters and landlords  
+▎**WHO** need a transparent, community-driven, and user-friendly platform to find, evaluate, and rent properties  
+▎**One Roof** is a rental marketplace  
+▎**THAT** allows renters to discover properties through detailed listings, interactive maps, and community-generated reviews, while enabling landlords to effectively showcase properties and connect with potential tenants  
+▎**UNLIKE** traditional rental platforms that primarily focus on listings and basic filters  
+▎**OUR PRODUCT** provides an enhanced search experience with heat maps, neighborhood insights, and direct communication between renters, reviewers, and landlords.
 
 ## User stories
 User Stories - https://github.com/annna7/one-roof/wiki/User-Stories
