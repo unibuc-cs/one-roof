@@ -10,8 +10,8 @@
 
 ## User stories
 Requirements -  
-Features - https://github.com/unibuc-cs/software-engineering-product-vISe-trISte.wiki.git  
-User Stories - https://github.com/unibuc-cs/software-engineering-product-vISe-trISte.wiki.git  
+Features - https://github.com/unibuc-cs/software-engineering-product-vISe-trISte/wiki/Features  
+User Stories - https://github.com/unibuc-cs/software-engineering-product-vISe-trISte/wiki/User-stories  
 Backlog - 
 
 ## 
