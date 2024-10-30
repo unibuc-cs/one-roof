@@ -9,8 +9,10 @@
 ▎**OUR PRODUCT** offers an enhanced search experience with features such as heat maps, neighborhood insights, direct communication between renters, reviewers, and landlords, as well as tools like notifications, shared lists, roommate matching, appointment scheduling,  while maintaining a comprehensive database of rental options.
 
 ## User stories
-User Stories - https://github.com/annna7/one-roof/wiki/User-Stories
-Backlog - https://github.com/users/annna7/projects/1
+Requirements -  
+Features - https://github.com/unibuc-cs/software-engineering-product-vISe-trISte.wiki.git  
+User Stories - https://github.com/unibuc-cs/software-engineering-product-vISe-trISte.wiki.git  
+Backlog - 
 
 ## 
 ## Diagrame
