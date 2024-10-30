@@ -14,10 +14,10 @@ Features - https://github.com/unibuc-cs/software-engineering-product-vISe-trISte
 User Stories - https://github.com/unibuc-cs/software-engineering-product-vISe-trISte/wiki/User-stories  
 Backlog - 
 
-## 
 ## Diagrame
 ### Diagrama workflow
-![Workflow drawio](https://github.com/annna7/one-roof/assets/96103743/65f7929d-2e33-4e3f-bd15-63075456913d)
+![Workflow drawio](https://github.com/user-attachments/assets/431b8f4a-33c6-452a-b09a-cecbb921282a)
+
 
 ### Diagrama E/R
 ![E_R drawio](https://github.com/annna7/one-roof/assets/96103743/fffb7a9c-8e02-4050-9bbe-8c53308939a4)
