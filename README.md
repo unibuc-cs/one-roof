@@ -6,7 +6,7 @@
 ▎**One Roof** is a rental marketplace  
 ▎**THAT** allows renters to discover properties through detailed listings, interactive maps, and community-generated reviews, while enabling landlords to effectively showcase properties and connect with potential tenants  
 ▎**UNLIKE** traditional rental platforms that primarily focus on listings and basic filters  
-▎**OUR PRODUCT** provides an enhanced search experience with heat maps, neighborhood insights, and direct communication between renters, reviewers, and landlords.
+▎**OUR PRODUCT** offers an enhanced search experience with features such as heat maps, neighborhood insights, direct communication between renters, reviewers, and landlords, as well as tools like notifications, shared lists, roommate matching, appointment scheduling,  while maintaining a comprehensive database of rental options.
 
 ## User stories
 User Stories - https://github.com/annna7/one-roof/wiki/User-Stories
