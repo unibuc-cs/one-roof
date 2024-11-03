@@ -14,6 +14,10 @@ Requirements & User Stories - https://github.com/unibuc-cs/software-engineering-
 Backlog - 
 
 ## Diagrame
+### Container diagram
+![container_diagram](https://github.com/unibuc-cs/software-engineering-product-vISe-trISte/blob/main/container_diagram.png)
+
+
 ### Diagrama workflow
 ![Workflow drawio](https://github.com/user-attachments/assets/431b8f4a-33c6-452a-b09a-cecbb921282a)
 
