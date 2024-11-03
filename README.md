@@ -10,8 +10,9 @@
 
 ## User stories
 Features - https://github.com/unibuc-cs/software-engineering-product-vISe-trISte/wiki/Features  
-Requirements & User Stories - https://github.com/unibuc-cs/software-engineering-product-vISe-trISte/wiki/User-stories  
-Backlog - 
+User Stories - https://github.com/unibuc-cs/software-engineering-product-vISe-trISte/wiki/User-stories  
+Requirements - https://github.com/unibuc-cs/software-engineering-product-vISe-trISte/wiki/Requirements
+Backlog - https://github.com/orgs/unibuc-cs/projects/63
 
 ## Diagrame
 ### Container diagram
