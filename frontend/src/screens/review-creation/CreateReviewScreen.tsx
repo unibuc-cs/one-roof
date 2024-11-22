@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useUserDetails } from '../../contexts/UserDetailsContext';
 import { useUser } from '@clerk/clerk-expo';
@@ -7,8 +7,10 @@ import { Button, HeaderText, Background } from '../../components';
 import { Card } from 'react-native-paper';
 import { theme } from '../../theme';
 import Logo from '../../components/Logo';
+import {useNavigation} from "@react-navigation/native";
 
-export const CreateReviewScreen: React.FC<any> = ({ navigation }) => {
+export const CreateReviewScreen: React.FC<any> = () => {
+	const navigation = useNavigation();
 	const { onboardingStep, setOnboardingStep } = useUserDetails();
 	const { user } = useUser();
 

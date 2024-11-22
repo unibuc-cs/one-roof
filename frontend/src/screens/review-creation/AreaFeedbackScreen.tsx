@@ -10,6 +10,7 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { reviewService } from '../../services';
 import { useUser } from '@clerk/clerk-expo';
+import {useUserDetails} from "../../contexts/UserDetailsContext";
 
 const AreaFeedbackSchema = Yup.object().shape({
 	transport: Yup.object().shape({
@@ -41,6 +42,7 @@ type AreaFeedbackScreenProps = {
 export const AreaFeedbackScreen: React.FC<AreaFeedbackScreenProps> = ({ route, navigation }) => {
 	const { generalDetails, buildingFeedback } = route.params;
 	const { user } = useUser();
+	const { onboardingStep, setOnboardingStep} = useUserDetails();
 	const handleDiscard = () => {
 		navigation.navigate('Home');
 	};
@@ -65,6 +67,7 @@ export const AreaFeedbackScreen: React.FC<AreaFeedbackScreenProps> = ({ route, n
 		reviewService.createReview(reviewData, generalDetails.reviewerId)
 			.then(response => {
 				console.log('Review submitted successfully', response);
+				setOnboardingStep(onboardingStep + 1);
 				navigation.navigate('Home');
 			})
 			.catch(error => {
