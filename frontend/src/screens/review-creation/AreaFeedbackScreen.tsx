@@ -11,6 +11,7 @@ import * as Yup from 'yup';
 import { reviewService } from '../../services';
 import { useUser } from '@clerk/clerk-expo';
 import {useUserDetails} from "../../contexts/UserDetailsContext";
+import userService from "../../services/internal/userService";
 
 const AreaFeedbackSchema = Yup.object().shape({
 	transport: Yup.object().shape({
@@ -46,7 +47,7 @@ export const AreaFeedbackScreen: React.FC<AreaFeedbackScreenProps> = ({ route, n
 	const handleDiscard = () => {
 		navigation.navigate('Home');
 	};
-	const handleSubmit = (values: any) => {
+	const handleSubmit = async (values: any) => {
 		const reviewData = {
 			title: generalDetails.title,
 			recommend: generalDetails.recommend,
@@ -64,15 +65,22 @@ export const AreaFeedbackScreen: React.FC<AreaFeedbackScreenProps> = ({ route, n
 
 		console.log('reviewData', reviewData);
 
-		reviewService.createReview(reviewData, generalDetails.reviewerId)
-			.then(response => {
-				console.log('Review submitted successfully', response);
-				setOnboardingStep(onboardingStep + 1);
-				navigation.navigate('Home');
-			})
-			.catch(error => {
-				console.error('Error submitting review', error);
-			});
+		try {
+			const response = await reviewService.createReview(reviewData, generalDetails.reviewerId);
+			console.log('response', response);
+			if (!user || !user.id) {
+				throw new Error('User not initialized properly');
+			}
+			const nextOnboardingStep = onboardingStep + 1;
+			await userService.updateUser(user.id, {onboardingStep: nextOnboardingStep});
+			setOnboardingStep(onboardingStep + 1);
+
+			console.log('Review submitted successfully', response);
+			navigation.navigate('Home');
+		} catch(error){
+					console.error('Error submitting review', error);
+
+		}
 	};
 
 	return (

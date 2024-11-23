@@ -5,8 +5,8 @@ import { listingService, messageService, reviewService } from '../services';
 import { io } from 'socket.io-client';
 import { MessageItem } from './MessageItem';
 import { useUser } from '@clerk/clerk-expo';
+import {config} from "../config/configure";
 
-const API_HOST = 'http://192.168.191.115:3000';
 
 export const MessagesContainer = ({ initialMessages, userId }) => {
 	const [messages, setMessages] = useState(initialMessages);
@@ -19,7 +19,7 @@ export const MessagesContainer = ({ initialMessages, userId }) => {
 	const clerkId = clerkUser?.id;
 
 	useEffect(() => {
-		socket.current = io(API_HOST, { transports: ['websocket'] });
+		socket.current = io(config.api.baseUrl, { transports: ['websocket'] });
 		return () => {
 			if (socket.current) {
 				socket.current.disconnect();

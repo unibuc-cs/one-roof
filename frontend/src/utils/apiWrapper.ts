@@ -1,9 +1,6 @@
 import { AxiosRequestConfig } from 'axios';
 import axios from 'axios';
-import { API_HOST, API_PORT } from '@env';
-
-
-const baseUrl = `http://${API_HOST}:${API_PORT}/api`;
+import {config} from "../config/configure";
 
 export interface CallApiOptions {
 	method?: 'GET' | 'POST' | 'PUT' | 'DELETE',
@@ -14,9 +11,9 @@ export interface CallApiOptions {
 export async function callApi(endpoint: string, options: CallApiOptions = {}, userId: string = ''): Promise<any> {
 	const { method = 'GET', body = null, headers = {} } = options;
 
-	const config: AxiosRequestConfig = {
+	const axiosConfig: AxiosRequestConfig = {
 		method,
-		url: `${baseUrl}/${endpoint}`,
+		url: `${config.api.baseUrl}/api/${endpoint}`,
 		headers: {
 			'Content-Type': 'application/json',
 			...headers,
@@ -24,15 +21,15 @@ export async function callApi(endpoint: string, options: CallApiOptions = {}, us
 		data: body,
 	};
 
-	if (userId && config.headers) {
-		config.headers['X-Clerk-User-Id'] = userId;
+	if (userId && axiosConfig.headers) {
+		axiosConfig.headers['X-Clerk-User-Id'] = userId;
 	}
 
-	config.data = body;
+	axiosConfig.data = body;
 
-	console.log(`Calling API with config: ${JSON.stringify(config)}`);
+	console.log(`Calling API with config: ${JSON.stringify(axiosConfig)}`);
 	try {
-		const response = await axios(config);
+		const response = await axios(axiosConfig);
 		console.log(`API call succeeded with response: ${JSON.stringify(response.data)}`);
 		return response.data;
 	} catch (error) {

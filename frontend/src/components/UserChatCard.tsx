@@ -9,8 +9,8 @@ import { io } from 'socket.io-client';
 import { useUser } from '@clerk/clerk-expo';
 import Spinner from 'react-native-loading-spinner-overlay';
 import App from '../../App';
+import {config} from "../config/configure";
 
-const API_HOST = 'http://192.168.191.115:3000';
 
 let socket;
 
@@ -39,7 +39,7 @@ const UserChatCard: React.FC<any> = ({ userId: receiverId }) => {
 
 	useEffect(() => {
 		console.log('init socket');
-		socket = io(API_HOST, { transports: ['websocket'] });
+		socket = io(config.api.baseUrl, { transports: ['websocket'] });
 		const roomId = userId < receiverId ?
 			`${userId}-${receiverId}` :
 			`${receiverId}-${userId}`;

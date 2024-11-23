@@ -17,7 +17,6 @@ import { io } from 'socket.io-client';
 import { useUser } from '@clerk/clerk-expo';
 import { IMessage } from '../models/messageModel';
 
-const API_HOST = 'http://192.168.191.115:3000';
 
 type ChatMessagesScreenRouteProps = RouteProp<RootStackParamList, 'Message'>;
 let socket;
@@ -45,7 +44,7 @@ export const ConversationScreen: React.FC = () => {
 
 	console.log('TIP DIN SCREEN', type, initialReferenceId, referenceId);
 	useEffect(() => {
-		socket = io(API_HOST, { transports: ['websocket'] });
+		socket = io(config.api.baseUrl, { transports: ['websocket'] });
 		const roomId = userId < receiverId ?
 			`${userId}-${receiverId}` :
 			`${receiverId}-${userId}`;
