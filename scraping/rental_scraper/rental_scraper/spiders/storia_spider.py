@@ -22,16 +22,26 @@ class StoriaSpider(scrapy.Spider):
         geckodriver_path = '/snap/bin/geckodriver'
         self.driver = webdriver.Firefox(service=Service(geckodriver_path))
         self.mongo_service = MongoService()
-
+    
     @staticmethod
-    def get_nested_text_by_aria_label(response, aria_label, rooms_fallback=True):
-        divs = response.css(f'div[aria-label="{aria_label}"] > div')
-        try:
-            return divs[1].css('div::text').get().strip().split()[0]
-        except Exception as e:
-            if rooms_fallback:
-                return divs[1].css('a[data-cy="ad-information-link"]::text').get().strip()
-            return e
+    def get_element_from_button_list(response, surface = False):
+
+        icon_type = 'M21 10.958h-7.958v-8l-1-1h-9l-1 1v18l1 1H21l1-1v-9l-1-1Zm-1 9h-6.958v-2H11v2H4.042v-7h2v-2h-2v-7h7v7h-2v2H11v2h2.042v-2H20v7Z'
+        if surface:
+            icon_type = 'M19.983 18.517 5.439 3.973h2.544v-2H2.025V8h2V5.387L18.638 20h-2.614v2h5.959v-6.028h-2v2.544ZM3.996 12.001h-2v2h2v-2ZM1.996 16.001h2v2h-2v-2ZM3.996 20.001h-2v2h2v-2ZM5.997 20.001h2v2h-2v-2ZM11.99 20.001h-2v2h2v-2ZM20.003 10.001h2v2h-2v-2ZM22.003 6.001h-2v2h2v-2ZM20.003 2.001h2v2h-2v-2ZM18.003 2.001h-2v2h2v-2ZM11.989 2.001h2v2h-2v-2Z'
+
+        div = response.xpath("//h4[contains(text(), 'Apartament')]/following-sibling::div[1]")
+        button_list = div.css('button')
+
+        for button in button_list:
+                icon = button.css('path')
+                if icon.css('::attr(d)').get() == icon_type:
+                    if surface:
+                        return button.css('div:nth-of-type(2)::text').get().strip()[:-2]
+                    return button.css('div:nth-of-type(2)::text').get().strip().split()[0]
+
+        
+        return None
 
 
     @staticmethod
@@ -52,7 +62,9 @@ class StoriaSpider(scrapy.Spider):
     def parse(self, response):
         # collects all links to listings we want to scrape next
         listing_urls = response.css('a[data-cy="listing-item-link"]::attr(href)').getall()
+        # TODO: uncomment this line to scrape all listings
         for url in listing_urls:
+        # url = listing_urls[0]
             full_url = response.urljoin(url)
             yield scrapy.Request(full_url, callback=self.parse_listing)
 
@@ -76,10 +88,9 @@ class StoriaSpider(scrapy.Spider):
 
         title = response.css('h1[data-cy="adPageAdTitle"]::text').get().strip()
         price = response.css('strong[data-cy="adPageHeaderPrice"]::text').get().strip()
-        address = response.css('div[data-testid="map-link-container"] > a::text').get().strip()
-        surface = StoriaSpider.get_nested_text_by_aria_label(response, 'Suprafață utilă')
-        rooms = StoriaSpider.get_nested_text_by_aria_label(response, 'Numărul de camere')
-
+        address = response.css('main a:first-of-type::text').get().strip()
+        surface = StoriaSpider.get_element_from_button_list(response, surface = True)
+        rooms = StoriaSpider.get_element_from_button_list(response, surface = False)        
         data = {
             'title': title,
             'price': StoriaSpider.process_price(price),
