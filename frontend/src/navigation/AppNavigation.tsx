@@ -12,6 +12,7 @@ import { ProfileScreen } from '../screens';
 import { AlertsScreen } from '../screens';
 import { CreateListingScreen } from '../screens';
 import { ChatsScreen }  from '../screens';
+//import { FriendsScreen }  from '../screens';
 import { FavoritesScreen } from '../screens';
 import { ListingScreen } from '../screens';
 import TopBar from '../components/TopBar';
@@ -26,6 +27,7 @@ import { ListingFacilitiesScreen, ListingDescriptionScreen } from '../screens';
 import ConversationScreen from '../screens/ConversationScreen';
 import { IReview } from '../models';
 import { FavoriteScreen } from '../screens/FavoriteScreens';
+import { FriendsScreen } from '../screens/FriendsScreen';
 
 export type RootStackParamList = {
 	Home: undefined,
@@ -78,6 +80,8 @@ export const AppNavigation = () => {
 					<Drawer.Screen name="AreaFeedback" component={AreaFeedbackScreen}/>
 					<Drawer.Screen name="BuildingFeedback" component={BuildingFeedbackScreen}/>
 					<Drawer.Screen name="ViewReview" component={ViewReviewScreen}/>
+					<Drawer.Screen name="Friends" component={FriendsScreen}/>
+
 				</Drawer.Navigator>
 			</NavigationContainer>
 		</SearchProvider>

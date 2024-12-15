@@ -8,6 +8,8 @@ interface IUser extends Document {
     contactedUsers: string[],
     createdAt: Date,
     updatedAt: Date,
+    friendRequests: string[],
+    friends: string[],
 }
 
 type IUserWithClerk = IUser & {
@@ -23,6 +25,8 @@ const UserSchema = new Schema<IUser>({
 	onboardingStep: { type: Number, required: true, default: 1, min: 1, max: 3},
 	role: { type: String, required: true, enum: ['regularUser', 'landlord'] },
 	contactedUsers: [{type: String}],
+	friendRequests: [{ type: String }], // Incoming friend requests
+	friends: [{ type: String }], // Established friendships
 },
 { timestamps: true });
 
