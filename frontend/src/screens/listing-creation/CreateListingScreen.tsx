@@ -37,7 +37,7 @@ const initialFormValues={
 		city: '',
 		postalCode: '',
 		street: '',
-		streetNumber: '204',
+		streetNumber: '',
 	},
 	price: '200',
 };
@@ -166,7 +166,7 @@ export const CreateListingScreen: React.FC<any>= ({ navigation }) => {
 								onChangeText={handleChange('price')}
 								onBlur={handleBlur('price')}
 								value={values.price}
-								 keyboardType="numeric"
+								keyboardType="numeric"
 							/>
 							{touched.price && errors.price && <Text style={styles.error}>{errors.price}</Text>}
 							<View style={styles.buttonsContainer}>

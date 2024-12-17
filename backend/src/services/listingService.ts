@@ -5,8 +5,7 @@ export const ListingService = {
 	createListing: async (listingData: IListing): Promise<IListing | undefined> => {
 		const listing = new Listing(listingData);
 		try {
-			const savedListing = await listing.save();
-			return savedListing;
+			return await listing.save();
 		} catch (error) {
 			console.error(error);
 			return undefined;
