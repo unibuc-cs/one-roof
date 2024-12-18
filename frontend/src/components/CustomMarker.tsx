@@ -1,11 +1,9 @@
 import { Marker } from 'react-native-maps';
-import { View, Text, StyleSheet } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { theme } from '../theme';
-import { useCustomFonts } from '../hooks/useCustomFonts';
 
-export const CustomMarker: React.FC<any> = ({ coordinate, onPress, text, tracks=false }) => {
-	const LoadFonts = async () => { await useCustomFonts(); };
+export const CustomMarker: React.FC<any> = ({ coordinate, onPress, text, tracks = false }) => {
 	return (
 		<Marker coordinate={coordinate} onPress={onPress} tracksViewChanges={tracks}>
 			<View style={styles.container}>

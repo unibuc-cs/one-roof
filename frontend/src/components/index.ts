@@ -16,5 +16,5 @@ export * from './Button';
 export * from './TextInputSmaller';
 export * from './MapInput';
 export * from './PreferenceSlider';
-export * from './ReviewSection';
+export * from './QuizSection';
 export * from './ReviewCard';

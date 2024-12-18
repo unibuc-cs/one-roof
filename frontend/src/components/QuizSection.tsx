@@ -1,5 +1,5 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { ReactNode } from 'react';
+import { StyleSheet, View } from 'react-native';
 import { HeaderText } from './HeaderText';
 import { PreferenceSlider } from './PreferenceSlider';
 import { TextInputSmaller } from './TextInputSmaller';
@@ -8,35 +8,50 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { CustomSwitchSelector } from './CustomSwitchSelector';
 
 interface ReviewSectionSchema {
-	title: string,
-	questions?: Array<{
-		prompt: string,
-		leftText: string,
-		rightText: string,
-	}>,
-	isLast?: boolean,
-	binaryQuestions?: Array<string>,
-	multiOptionQuestions?: Array<{
-		prompt: string,
-		options: Array<{
-			label: string,
-			value: string,
-		}>,
-	}>,
+    title: string,
+    questions?: Array<{
+        prompt: string,
+        leftText: string,
+        rightText: string,
+    }>,
+    hasAdditionalComments?: boolean,
+    isLast?: boolean,
+    binaryQuestions?: Array<string>,
+    multiOptionQuestions?: Array<{
+        prompt: string,
+        options: Array<{
+            label: string,
+            value: string,
+        }>,
+    }>,
+    additionalNodes?: ReactNode,
 }
 
-export const ReviewSection: React.FC<ReviewSectionSchema> = ({ title, questions, isLast, binaryQuestions, multiOptionQuestions }) => {
+export const QuizSection: React.FC<ReviewSectionSchema> = ({
+	title,
+	questions,
+	hasAdditionalComments = true,
+	isLast = false,
+	binaryQuestions,
+	multiOptionQuestions,
+	additionalNodes
+}) => {
 	return (
 		<View>
 			<HeaderText color={theme.colors.primary} textAlign={'left'} paddingTop={0} size={22}>{title}</HeaderText>
-			{questions?.map((q) =>
+			{additionalNodes}
+			{questions?.map((q, index) =>
 				<PreferenceSlider
+					key={`question-${index}`}
 					question={q.prompt}
 					leftText={q.leftText}
 					rightText={q.rightText}
 				/>)}
-			{binaryQuestions?.map((question) => (
-				<View style={styles.binaryQuestion}>
+			{binaryQuestions?.map((question, index) => (
+				<View
+					key={`binary-${index}`}
+					style={styles.binaryQuestion}
+				>
 					<HeaderText paddingBottom={16} size={16}>{question}</HeaderText>
 					<CustomSwitchSelector
 						mode={'green'}
@@ -49,8 +64,8 @@ export const ReviewSection: React.FC<ReviewSectionSchema> = ({ title, questions,
 				</View>
 			))
 			}
-			{multiOptionQuestions?.map((question) => (
-				<View style={styles.binaryQuestion}>
+			{multiOptionQuestions?.map((question, index) => (
+				<View style={styles.binaryQuestion} key={`multi-${index}`}>
 					<HeaderText paddingBottom={16} size={16}>{question.prompt}</HeaderText>
 					<CustomSwitchSelector
 						mode={'green'}
@@ -59,12 +74,12 @@ export const ReviewSection: React.FC<ReviewSectionSchema> = ({ title, questions,
 				</View>
 			))
 			}
-			<TextInputSmaller
+			{hasAdditionalComments && <TextInputSmaller
 				style={styles.input}
 				numberOfLines={2}
 				multiline={true}
 				placeholder={'Anything else you\'d like to add about the issue?'}
-			/>
+			/>}
 			{!isLast && <View style={{
 				height: 40,
 				display: 'flex',

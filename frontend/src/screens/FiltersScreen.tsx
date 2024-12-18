@@ -1,16 +1,15 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { FlatList, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import { Checkbox } from 'react-native-paper';
 import { Button, HeaderText } from '../components';
 import { NumberOfBathroomsEnum, NumberOfBedroomsEnum, PropertyTypeEnum, TypeOfProviderEnum } from '../enums';
 import { CustomSwitchSelector } from '../components/CustomSwitchSelector';
-import MultiSlider from '@ptomasroos/react-native-multi-slider';
-import { useCustomFonts } from '../hooks/useCustomFonts';
 import { theme } from '../theme';
 import RentalAmenitiesEnum from '../enums/RentalAmenitiesEnum';
 import { MAX_PRICE, MIN_PRICE } from '../utils';
 import { useSearchContext } from '../contexts/SearchContext';
 import { debounce } from 'lodash';
+import { PriceRangeSelector } from '../components/PriceRangeSelector';
 
 export const FiltersScreen = ({ navigation }) => {
 	const [cleared, setCleared] = useState(false);
@@ -43,6 +42,9 @@ export const FiltersScreen = ({ navigation }) => {
 			provider: TypeOfProviderEnum.Any,
 			recommend: -1,
 		});
+
+		priceRangeRef.current = [MIN_PRICE, MAX_PRICE];
+
 		setCleared(true);
 	};
 
@@ -151,23 +153,9 @@ export const FiltersScreen = ({ navigation }) => {
 
 			<HeaderText textAlign="left" size={17}>Price Range (monthly fee):</HeaderText>
 			<View style={styles.flexContainer}>
-				<View style={styles.priceContainer}>
-					<Text style={styles.priceStyling}>{priceRangeRef.current[0]} € </Text>
-					<Text> - </Text>
-					<Text style={styles.priceStyling}>{priceRangeRef.current[1]} € </Text>
-				</View>
-				<MultiSlider
-					trackStyle={{ height: 3 }}
-					values={priceRangeRef.current}
-					sliderLength={300}
-					onValuesChangeFinish={handlePriceChange}
-					min={MIN_PRICE}
-					max={MAX_PRICE}
-					step={1}
-					allowOverlap={false}
-					snapped
-					minMarkerOverlapDistance={40}
-				/>
+
+				<PriceRangeSelector priceRangeRef={priceRangeRef} minPrice={MIN_PRICE} maxPrice={MAX_PRICE}
+					onPriceChange={handlePriceChange}/>
 			</View>
 
 			<HeaderText paddingTop={0} paddingBottom={5} textAlign="left" size={17}>Number of Bedrooms:</HeaderText>
