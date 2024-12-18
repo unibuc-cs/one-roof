@@ -1,6 +1,6 @@
 import { AxiosRequestConfig } from 'axios';
 import axios from 'axios';
-import {config} from "../config/configure";
+import { config } from '../config/configure';
 
 export interface CallApiOptions {
 	method?: 'GET' | 'POST' | 'PUT' | 'DELETE',
@@ -30,7 +30,8 @@ export async function callApi(endpoint: string, options: CallApiOptions = {}, us
 	console.log(`Calling API with config: ${JSON.stringify(axiosConfig)}`);
 	try {
 		const response = await axios(axiosConfig);
-		console.log(`API call succeeded with response: ${JSON.stringify(response.data)}`);
+		const truncatedData = JSON.stringify(response.data).split(/\s+/).slice(0, 10).join(' ');
+		console.log(`API call succeeded with response: ${truncatedData}`);
 		return response.data;
 	} catch (error) {
 		console.error(error);

@@ -59,6 +59,13 @@ export function DrawerContent(props: DrawerContentComponentProps) {
 						icon={({ color, size }) => (
 							<MaterialCommunityIcons name="heart-outline" color={color} size={size} />
 						)}
+						label="Roommates"
+						onPress={() => { props.navigation.navigate('RoommateQuizScreen'); }}
+					/>
+					<DrawerItem
+						icon={({ color, size }) => (
+							<MaterialCommunityIcons name="heart-outline" color={color} size={size} />
+						)}
 						label="Favorites"
 						onPress={() => { props.navigation.navigate('Favorites'); }}
 					/>

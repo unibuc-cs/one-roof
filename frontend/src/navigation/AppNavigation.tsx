@@ -26,6 +26,7 @@ import { ListingFacilitiesScreen, ListingDescriptionScreen } from '../screens';
 import ConversationScreen from '../screens/ConversationScreen';
 import { IReview } from '../models';
 import { FavoriteScreen } from '../screens/FavoriteScreens';
+import { RoommateQuizScreen } from '../screens/RoommateQuizScreen';
 
 export type RootStackParamList = {
 	Home: undefined,
@@ -70,6 +71,7 @@ export const AppNavigation = () => {
 					<Drawer.Screen name="Profile" component={ProfileScreen} />
 					<Drawer.Screen name="Listing" component={ListingScreen}/>
 					<Drawer.Screen name="Filters" component={FiltersScreen}/>
+					<Drawer.Screen name="RoommateQuizScreen" component={RoommateQuizScreen}/>
 					<Drawer.Screen name="ListingFacilities" component={ListingFacilitiesScreen}/>
 					<Drawer.Screen name="ConfirmLocation" component={ListingConfirmLocationScreen}/>
 					<Drawer.Screen name="ListingDescription" component={ListingDescriptionScreen}/>

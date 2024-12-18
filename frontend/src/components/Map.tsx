@@ -15,6 +15,7 @@ import { SearchTypeEnum } from '../enums';
 import { CustomMarker } from './CustomMarker';
 import { capitalize, debounce } from 'lodash';
 import { theme } from '../theme';
+import { Polygon } from 'react-native-maps';
 
 const EPSILON = 0.001;
 
@@ -70,6 +71,13 @@ export const Map: React.FC = () => {
 	}, [state.wasExternalSearchPerformed]);
 
 
+	const polygonCoords = [
+		{ latitude: 44.9301, longitude: 26.0901 },
+		{ latitude: 44.9310, longitude: 26.0910 },
+		{ latitude: 44.9320, longitude: 26.0905 },
+		{ latitude: 44.9315, longitude: 26.0895 },
+	];
+
 	return (
 		<View style={styles.map}>
 			<MapView
@@ -82,6 +90,12 @@ export const Map: React.FC = () => {
 				customMapStyle={mapStyles}
 				onPress={() => setSelectedItem(undefined)}
 			>
+				<Polygon
+					coordinates={polygonCoords}
+					fillColor="rgba(255,0,0,0.3)" // semi-transparent red
+					strokeColor="#FF0000"        // solid red
+					strokeWidth={3}
+				/>
 				{(state.searchType === 'listings' ? state.filteredListings : state.filteredReviews).map((item, index) => (
 					<CustomMarker
 						key={index}
