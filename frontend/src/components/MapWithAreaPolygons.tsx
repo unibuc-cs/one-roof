@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useMemo, useCallback } from 'react';
 import { StyleSheet, View, Button, Alert } from 'react-native';
 import MapView, { MapPressEvent } from 'react-native-maps';
 import {
@@ -18,71 +18,79 @@ export const MapWithAreaPolygons: React.FC = () => {
 	const [isDrawing, setIsDrawing] = useState(false);
 	const [newPolygonKey, setNewPolygonKey] = useState<string | null>(null);
 
-	// Template for new polygons
 	const [strokeColor, fillColor] = getRandomPolygonColors();
-	const newPolygon: MapPolygonExtendedProps = {
-		key: newPolygonKey,
-		coordinates: [],
-		strokeWidth: 2,
-		strokeColor,
-		fillColor,
-	};
 
-	const handleDrawArea = () => {
+	// Memoize the new polygon template to prevent unnecessary recalculations
+	const newPolygon = useMemo(
+		() => ({
+			key: newPolygonKey,
+			coordinates: [],
+			strokeWidth: 2,
+			strokeColor,
+			fillColor,
+		}),
+		[newPolygonKey, strokeColor, fillColor]
+	);
+
+	const handleDrawArea = useCallback(() => {
 		if (isDrawing) {
 			Alert.alert('Already Drawing', 'Finish the current polygon first.');
 			return;
 		}
-		// Start drawing a new polygon
 		polygonEditorRef.current?.startPolygon();
 		setNewPolygonKey(uuidv4());
 		setIsDrawing(true);
-	};
+	}, [isDrawing]);
 
-	const handleFinishDrawing = () => {
+	const handleFinishDrawing = useCallback(() => {
 		if (!isDrawing) {
 			Alert.alert('Not Drawing', 'Start drawing a polygon first.');
 			return;
 		}
-		// Finalize the polygon
 		setIsDrawing(false);
 		setNewPolygonKey(null);
-		polygonEditorRef.current?.selectPolygonByKey(-1);
-	};
+		polygonEditorRef.current?.selectPolygonByKey(-1); // Finalize the current polygon
+	}, [isDrawing]);
 
-	const clickOnMap = ({ nativeEvent: { coordinate } }: MapPressEvent) => {
-		if (isDrawing) {
-			// Add a coordinate to the polygon being drawn
-			polygonEditorRef.current?.setCoordinate(coordinate);
-		}
-	};
-
-	const onPolygonCreate = (polygon: MapPolygonExtendedProps) => {
-		// Generate a unique key for the polygon
-		const uniqueKey = uuidv4();
-		const polygonClone = { ...polygon, key: uniqueKey };
-		setPolygons((prev) => [...prev, polygonClone]);
-		polygonEditorRef.current?.selectPolygonByKey(uniqueKey);
-	};
-
-	const onPolygonChange = (
-		index: number,
-		polygon: MapPolygonExtendedProps,
-	): void => {
-		if (newPolygonKey !== polygon.key) {
-			return;
-		}
-		const polygonsClone = [...polygons];
-		polygonsClone[index] = polygon;
-		setPolygons(polygonsClone);
-	};
-
-	const handleResetArea = () => {
+	const handleResetArea = useCallback(() => {
 		polygonEditorRef.current?.resetAll();
 		setPolygons([]);
 		setIsDrawing(false);
 		setNewPolygonKey(null);
+	}, []);
+
+	const clickOnMap = useCallback(
+		({ nativeEvent: { coordinate } }: MapPressEvent) => {
+			if (isDrawing) {
+				polygonEditorRef.current?.setCoordinate(coordinate);
+			}
+		},
+		[isDrawing]
+	);
+
+	const onPolygonRemove = (index: number): void => {
+		const polygonsClone = [...polygons];
+		polygonsClone.splice(index, 1);
+		setPolygons(polygonsClone);
 	};
+
+	const onPolygonCreate =
+		(polygon: MapPolygonExtendedProps) => {
+			const polygonClone = { ...polygon, key: newPolygonKey };
+			setPolygons((prev) => [...prev, polygonClone]);
+			polygonEditorRef.current?.selectPolygonByKey(newPolygonKey);
+		};
+
+	const onPolygonChange = useCallback(
+		(index: number, polygon: MapPolygonExtendedProps) => {
+			setPolygons((prev) => {
+				const polygonsClone = [...prev];
+				polygonsClone[index] = polygon;
+				return polygonsClone;
+			});
+		},
+		[]
+	);
 
 	return (
 		<View style={styles.container}>
@@ -102,7 +110,8 @@ export const MapWithAreaPolygons: React.FC = () => {
 					polygons={polygons}
 					onPolygonCreate={onPolygonCreate}
 					onPolygonChange={onPolygonChange}
-					onPolygonSelect={() => setIsDrawing(false)}
+					onPolygonSelect={() => {}}
+					onPolygonRemove={onPolygonRemove}
 				/>
 			</MapView>
 
