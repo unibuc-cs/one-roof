@@ -14,7 +14,6 @@ import * as Yup from 'yup';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useUser } from '@clerk/clerk-expo';
 
-
 type ListingDescriptionScreenProps = {
     route: RouteProp<{ params: { generalDetails: any, location: any, facilities: any } }, 'params'>,
     navigation: any,
@@ -84,24 +83,15 @@ export const ListingDescriptionScreen: React.FC<ListingDescriptionScreenProps> =
 	const pickImage = async () => {
 		const response = await ImagePicker.launchImageLibraryAsync({
 			allowsMultipleSelection: true,
-		}
-		);
+		});
+
 		if (response.assets) {
-			const newPhotos = response.assets.map(asset => ({
-				uri: asset.uri,
-				fileName: asset.fileName,
-			}));
-
-			const uniquePhotos = [...photos];
-
-			newPhotos.forEach(newPhoto => {
-				if (!uniquePhotos.some(photo => photo.fileName === newPhoto.fileName)) {
-					uniquePhotos.push(newPhoto);
-				}
-			});
-			setPhotos(uniquePhotos);
+			const newPhotos = response.assets.map(asset => asset.uri);
+			const photosAfterUpdate = [... new Set([...photos, ...newPhotos])];
+			setPhotos(photosAfterUpdate);
 		}
 	};
+
 	const deletePhoto = (uri: string) => {
 		setPhotos(photos.filter(photo => photo !== uri));
 	};
@@ -131,7 +121,7 @@ export const ListingDescriptionScreen: React.FC<ListingDescriptionScreenProps> =
                                 ( <Image
                                 	style={styles.image}
                                 	source={{
-                                		uri: photos[index].uri
+                                		uri: photos[index]
                                 	}}
                                 />)}
 								<TouchableOpacity
