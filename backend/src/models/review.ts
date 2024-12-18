@@ -74,7 +74,7 @@ const ReviewSchema = new Schema<IReview>({
 	reviewerId: { type: String },
 	title: { type: String, required: true },
 	recommend: { type: Number, enum: [1, 2, 3, 4, 5], required: true },
-	description: { type: String, required: true },
+	description: { type: String, required: false },
 	location: { type: Schema.Types.Mixed, required: true },
 	areaFeedback: {
 		transport: {

@@ -5,7 +5,7 @@ export interface IReview {
 	reviewerId: string,
 	title: string,
 	recommend: 1 | 2 | 3 | 4 | 5,
-	description: string,
+	description?: string,
 	livingSituation: string,
 	location: ILocation,
 	address: IAddress,
