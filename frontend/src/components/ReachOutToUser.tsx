@@ -11,6 +11,8 @@ const ReachOutToUser: React.FC<any> = ({ message, userToReachOutToId, referenceI
 	const { navigate } = useNavigation();
 
 	const { user: landlord } = useUserDataByClerkId(userToReachOutToId);
+	const { user } = useUser();
+
 	if (landlord == null) {
 		return <Text>Error - landlord not found</Text>;
 	}
@@ -24,11 +26,7 @@ const ReachOutToUser: React.FC<any> = ({ message, userToReachOutToId, referenceI
 	const monthName = monthNames[userCreatedAt.getMonth()];
 	const yearMonth = `${monthName} ${year}`;
 
-	const { user } = useUser();
-
 	const handleSendMessage = async () => {
-		console.log('In landlordDetails', referenceId);
-		console.log('message type', type);
 		navigate('Messages', { receiverId: landlord.clerkId, referenceId: referenceId, type: type });
 	};
 

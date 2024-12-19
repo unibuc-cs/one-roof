@@ -10,8 +10,8 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { reviewService } from '../../services';
 import { useUser } from '@clerk/clerk-expo';
-import {useUserDetails} from "../../contexts/UserDetailsContext";
-import userService from "../../services/internal/userService";
+import { useUserDetails } from '../../contexts/UserDetailsContext';
+import userService from '../../services/internal/userService';
 
 const AreaFeedbackSchema = Yup.object().shape({
 	transport: Yup.object().shape({
@@ -43,7 +43,7 @@ type AreaFeedbackScreenProps = {
 export const AreaFeedbackScreen: React.FC<AreaFeedbackScreenProps> = ({ route, navigation }) => {
 	const { generalDetails, buildingFeedback } = route.params;
 	const { user } = useUser();
-	const { onboardingStep, setOnboardingStep} = useUserDetails();
+	const { onboardingStep, setOnboardingStep } = useUserDetails();
 	const handleDiscard = () => {
 		navigation.navigate('Home');
 	};
@@ -71,14 +71,15 @@ export const AreaFeedbackScreen: React.FC<AreaFeedbackScreenProps> = ({ route, n
 			if (!user || !user.id) {
 				throw new Error('User not initialized properly');
 			}
-			const nextOnboardingStep = onboardingStep + 1;
-			await userService.updateUser(user.id, {onboardingStep: nextOnboardingStep});
-			setOnboardingStep(onboardingStep + 1);
 
-			console.log('Review submitted successfully', response);
+			if (onboardingStep == 2) {
+				const nextOnboardingStep = onboardingStep + 1;
+				await userService.updateUser(user.id, { onboardingStep: nextOnboardingStep });
+				setOnboardingStep(nextOnboardingStep);
+			}
 			navigation.navigate('Home');
 		} catch(error){
-					console.error('Error submitting review', error);
+			console.error('Error submitting review', error);
 
 		}
 	};
