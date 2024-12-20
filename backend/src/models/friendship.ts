@@ -10,4 +10,5 @@ const FriendshipSchema = new Schema<IFriendship>({
 	secondUser: { type: String, required: true }, //received the request
 });
 
-export const Friendship = mongoose.model<IFriendship>('Friendship', FriendshipSchema);
+const Friendship = mongoose.model<IFriendship>('Friendship', FriendshipSchema);
+export {FriendshipSchema, IFriendship, Friendship};

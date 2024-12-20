@@ -1,81 +1,59 @@
-import React, { useState } from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity, Button, Alert } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, Button, Alert, ActivityIndicator } from 'react-native';
+import { friendService } from '../services/internal/friendService';
+import { IFriendship } from '../models/friendshipModel';
+import { useUser } from '@clerk/clerk-expo';
 
 export const FriendsScreen: React.FC = () => {
 	const [selectedTab, setSelectedTab] = useState<'All' | 'Requests'>('All');
+	const [friends, setFriends] = useState<IFriendship[]>([]);
+	const [loading, setLoading] = useState(false);
 
-	// Mock data for friends and friend requests
-	const [friendRequests, setFriendRequests] = useState([
-		{ id: '1', name: 'Alice' },
-		{ id: '2', name: 'Bob' },
-	]);
+	// Simulated logged-in user ID (replace with actual logic to get user ID)
+	const { user } = useUser();
+	const userId = user?.id as string;
 
-	const [friends, setFriends] = useState([
-		{ id: '3', name: 'Charlie' },
-		{ id: '4', name: 'Diana' },
-	]);
+	useEffect(() => {
+		if (selectedTab === 'All') {
+			const fetchFriends = async () => {
+				try {
+					setLoading(true);
+					const fetchedFriends = await friendService.getAllFriends(userId);
+					setFriends(fetchedFriends);
+				} catch (error) {
+					console.error('Error fetching friends:', error);
+					Alert.alert('Error', 'Failed to fetch friends');
+				} finally {
+					setLoading(false);
+				}
+			};
 
-	// Handle accepting a friend request
-	const handleAccept = (requestId: string) => {
-		const acceptedRequest = friendRequests.find((request) => request.id === requestId);
-		if (acceptedRequest) {
-			setFriends([...friends, acceptedRequest]); // Add to friends list
-			setFriendRequests(friendRequests.filter((request) => request.id !== requestId)); // Remove from requests
-			Alert.alert('Friend Request', `${acceptedRequest.name} is now your friend!`);
+			fetchFriends();
 		}
-	};
-
-	// Handle rejecting a friend request
-	const handleReject = (requestId: string) => {
-		const rejectedRequest = friendRequests.find((request) => request.id === requestId);
-		if (rejectedRequest) {
-			setFriendRequests(friendRequests.filter((request) => request.id !== requestId)); // Remove from requests
-			Alert.alert('Friend Request', `You rejected ${rejectedRequest.name}'s friend request.`);
-		}
-	};
+	}, [selectedTab]);
 
 	const renderSegmentContent = () => {
+		if (loading) {
+			return <ActivityIndicator size="large" color="#0000ff" />;
+		}
+
 		if (selectedTab === 'All') {
 			return (
 				<FlatList
 					data={friends}
-					keyExtractor={(item) => item.id}
+					keyExtractor={(item) => item.firstUser + item.secondUser} // Unique key for each friendship
 					renderItem={({ item }) => (
 						<View style={styles.card}>
-							<Text style={styles.friendName}>{item.name}</Text>
+							<Text style={styles.friendName}>
+								{item.firstUser === userId ? item.secondUser : item.firstUser}
+							</Text>
 						</View>
 					)}
 					ListEmptyComponent={<Text style={styles.emptyText}>You have no friends yet</Text>}
 				/>
 			);
-		} else if (selectedTab === 'Requests') {
-			return (
-				<FlatList
-					data={friendRequests}
-					keyExtractor={(item) => item.id}
-					renderItem={({ item }) => (
-						<View style={styles.card}>
-							<Text style={styles.friendName}>{item.name} sent you a friend request</Text>
-							<View style={styles.buttonContainer}>
-								<TouchableOpacity
-									style={styles.acceptButton}
-									onPress={() => handleAccept(item.id)}
-								>
-									<Text style={styles.buttonText}>Accept</Text>
-								</TouchableOpacity>
-								<TouchableOpacity
-									style={styles.rejectButton}
-									onPress={() => handleReject(item.id)}
-								>
-									<Text style={styles.buttonText}>Reject</Text>
-								</TouchableOpacity>
-							</View>
-						</View>
-					)}
-					ListEmptyComponent={<Text style={styles.emptyText}>No friend requests</Text>}
-				/>
-			);
 		}
+		return null; // Handle 'Requests' tab separately
 	};
 
 	return (
@@ -90,7 +68,6 @@ export const FriendsScreen: React.FC = () => {
 				>
 					<Text style={[styles.tabText, selectedTab === 'All' && styles.activeTabText]}>All</Text>
 				</TouchableOpacity>
-
 				<TouchableOpacity
 					style={[styles.tab, selectedTab === 'Requests' && styles.activeTab]}
 					onPress={() => setSelectedTab('Requests')}
@@ -106,6 +83,9 @@ export const FriendsScreen: React.FC = () => {
 		</View>
 	);
 };
+
+
+
 
 const styles = StyleSheet.create({
 	container: {
