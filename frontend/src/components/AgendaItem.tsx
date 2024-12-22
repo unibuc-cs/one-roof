@@ -55,8 +55,7 @@ const styles = StyleSheet.create({
   itemDurationText: {
     color: 'grey',
     fontSize: 12,
-    marginTop: 4,
-    marginLeft: 4
+    marginTop: 4
   },
   itemTitleText: {
     color: 'black',

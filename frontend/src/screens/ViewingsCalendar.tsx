@@ -28,28 +28,17 @@ export const ViewingsCalendar: React.FC = (props: Props) => {
         return <AgendaItem item={item}/>;
     }, []);
 
-    /*
-    const renderItem = useCallback(({item}: any) => {
-        return (
-            <View>
-                <Text>{item.title}</Text>
-                <Text>{item.hour}</Text>
-            </View>
-        );
-    }, []);
-    */
-
     const todayString = new Date().toISOString().split('T')[0];
     const tommorowString = new Date(new Date().getTime() + 24 * 60 * 60 * 1000).toISOString().split('T')[0];
     const yesterdayString = new Date(new Date().getTime() - 24 * 60 * 60 * 1000).toISOString().split('T')[0];
     agendaItems = [
         {title: todayString, 
             data: [
-                {hour: '18:30', duration: '30min', title: 'Iesire', address: 'Kaufland Tiglina'}, 
-                {hour: '19:30', duration: '1h30min', title: 'Ziua Andradei', address: 'Bodega'}]
+                {hour: '18:30', duration: '30 min', title: 'Test1', address: 'Kaufland Tiglina'}, 
+                {hour: '19:30', duration: '1.5h', title: 'Test2', address: 'Bodega'}]
         },
         {title: tommorowString,
-            data: [{hour: '13:00', duration: '30min', title: 'test', address: 'Tiglina 1'}]}
+            data: [{hour: '13:00', duration: '30 min', title: 'Test3', address: 'Tiglina 1'}]}
     ];
 
     const ITEMS: any[] = agendaItems;
