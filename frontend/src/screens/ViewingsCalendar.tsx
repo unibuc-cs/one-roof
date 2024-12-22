@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { Text, View } from 'react-native';
-import { ExpandableCalendar, AgendaList, CalendarProvider, LocaleConfig, WeekCalendar } from 'react-native-calendars';
+import { StyleSheet } from 'react-native';
+import { ExpandableCalendar, AgendaList, CalendarProvider, WeekCalendar } from 'react-native-calendars';
 import { useUser } from '@clerk/clerk-expo';
 import { useConfirmedViewings } from '../hooks/useConfirmedViewings';
-import { todayString } from 'react-native-calendars/src/expandableCalendar/commons';
+import { AgendaItem } from '../components';
+import { HeaderText } from '../components';
 
 interface Props {
     weekView?: boolean;
@@ -12,11 +13,7 @@ interface Props {
 export const ViewingsCalendar: React.FC = (props: Props) => {
     const { weekView } = props;
     const { user } = useUser();
-    const { viewings, isLoading, error } = useConfirmedViewings(user?.id as string);
-    
-    if (isLoading) {
-        return <Text>Loading...</Text>;
-    }
+    let { viewings, isLoading, error } = useConfirmedViewings(user?.id as string);
 
     let marked = {};
     let agendaItems = {};
@@ -27,8 +24,11 @@ export const ViewingsCalendar: React.FC = (props: Props) => {
         agendaItems[viewing.viewingDate.toString()]["data"] += [{ hour: viewing.viewingHour, duration: '30min' , title: viewing.listingId}];
     }
 
-    const ITEMS: any[] = agendaItems;
+    const renderItem = useCallback(({item}: any) => {
+        return <AgendaItem item={item}/>;
+    }, []);
 
+    /*
     const renderItem = useCallback(({item}: any) => {
         return (
             <View>
@@ -37,23 +37,61 @@ export const ViewingsCalendar: React.FC = (props: Props) => {
             </View>
         );
     }, []);
-    
+    */
+
+    const todayString = new Date().toISOString().split('T')[0];
+    const tommorowString = new Date(new Date().getTime() + 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+    const yesterdayString = new Date(new Date().getTime() - 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+    agendaItems = [
+        {title: todayString, 
+            data: [
+                {hour: '18:30', duration: '30min', title: 'Iesire', address: 'Kaufland Tiglina'}, 
+                {hour: '19:30', duration: '1h30min', title: 'Ziua Andradei', address: 'Bodega'}]
+        },
+        {title: tommorowString,
+            data: [{hour: '13:00', duration: '30min', title: 'test', address: 'Tiglina 1'}]}
+    ];
+
+    const ITEMS: any[] = agendaItems;
+
+    //if (isLoading) 
+        //return <Text>Loading...</Text>;
+
     return (
         <CalendarProvider
         date = {todayString}
         showTodayButton
         >
-        { weekView ? (<WeekCalendar firstDay={1} markedDates = {marked} />) :
+        <HeaderText size={40}>
+            Viewings
+        </HeaderText>
+        { weekView ? (<WeekCalendar firstDay={1} markedDates = {marked}/>) :
         (<ExpandableCalendar
             firstDay={1}
             markedDates={marked}
-            leftArrowImageSource={require('../assets/left-arrow.png')}
-            rightArrowImageSource={require('../assets/right-arrow.png')}
+            leftArrowImageSource={require('../../assets/previous.png')}
+            rightArrowImageSource={require('../../assets/next.png')}
         />)}
         <AgendaList
-        sections = {ITEMS}
-        renderItem = {renderItem}
+            sections = {ITEMS}
+            renderItem = {renderItem}
+            style = {styles.section}
         />
         </CalendarProvider>
-    )
+    );
 };
+
+const styles = StyleSheet.create({
+    calendar: {
+      paddingLeft: 20,
+      paddingRight: 20,
+    },
+    header: {
+      backgroundColor: 'lightgrey'
+    },
+    section: {
+      backgroundColor: 'grey',
+      color: 'grey',
+      textTransform: 'capitalize'
+    }
+});
