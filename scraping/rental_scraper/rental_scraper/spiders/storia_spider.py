@@ -1,8 +1,10 @@
 import json
 import logging
+import time
 import scrapy
 import re
 from selenium import webdriver
+from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.support.ui import WebDriverWait
@@ -63,10 +65,10 @@ class StoriaSpider(scrapy.Spider):
         # collects all links to listings we want to scrape next
         listing_urls = response.css('a[data-cy="listing-item-link"]::attr(href)').getall()
         # TODO: uncomment this line to scrape all listings
-        for url in listing_urls:
-        # url = listing_urls[0]
-            full_url = response.urljoin(url)
-            yield scrapy.Request(full_url, callback=self.parse_listing)
+        # for url in listing_urls:
+        url = listing_urls[0]
+        full_url = response.urljoin(url)
+        yield scrapy.Request(full_url, callback=self.parse_listing)
 
     def parse_listing(self, response):
         # parse an individual listing
@@ -80,11 +82,23 @@ class StoriaSpider(scrapy.Spider):
             self.logger.info("No cookie acceptance button found or an error occurred.")
 
         div = WebDriverWait(self.driver, 20).until(
-            EC.visibility_of_element_located((By.CSS_SELECTOR, 'div.image-gallery-swipe'))
+            EC.visibility_of_element_located((By.CSS_SELECTOR, 'div.image-gallery-slides'))
         )
 
-        photos = div.find_elements(By.CSS_SELECTOR, 'img.image-gallery-image')
+         # Scroll through the div to trigger lazy loading
+        self.driver.execute_script("arguments[0].scrollIntoView(true);", div)
+        ActionChains(self.driver).move_to_element(div).perform()
+
+        time.sleep(5)
+        
+        print(div.get_attribute('innerHTML'))
+
+        # TDOD: verificat de ce ia doar 3 poze
+        photos = div.find_elements(By.TAG_NAME, 'img')
         photo_urls = [img.get_attribute('src') for img in photos]
+        print("divul cu poze:")
+        print("cate elemete sunt in photos: " + str(photos.__len__()))
+        print("CATE POzE EXISTA: " + str(photo_urls.__len__()))
 
         title = response.css('h1[data-cy="adPageAdTitle"]::text').get().strip()
         price = response.css('strong[data-cy="adPageHeaderPrice"]::text').get().strip()
@@ -95,7 +109,7 @@ class StoriaSpider(scrapy.Spider):
             'title': title,
             'price': StoriaSpider.process_price(price),
             'address': address,
-            'surface': int(surface),
+            'surface': int(surface), 
             'rooms': int(rooms),
             'photos': photo_urls,
             'url': response.url,
