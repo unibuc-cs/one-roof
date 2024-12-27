@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { Dimensions, StyleSheet, View } from 'react-native';
 import { Button, Card, Text } from 'react-native-paper';
-import { IListing } from '../models';
+import { IListing, ISavedList } from '../models';
 import { DetailBox, HeaderText } from '.';
 import { useNavigation } from '@react-navigation/native';
 import { theme } from '../theme';
@@ -13,9 +13,10 @@ import * as Linking from 'expo-linking';
 import { Image } from 'expo-image';
 import { useUser } from '@clerk/clerk-expo';
 import { useUserDetails } from '../contexts/UserDetailsContext';
-import { includes } from 'lodash';
+import { drop, includes } from 'lodash';
 import userService from '../services/internal/userService';
 import Spinner from 'react-native-loading-spinner-overlay';
+import { TouchableOpacity, Modal, FlatList } from 'react-native';
 
 type PropertyCardProps = {
 	listing: IListing,
@@ -53,6 +54,10 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ listing,
 	const [pressed, setPressed] = useState(isFavorite); // State to manage pressed state of the button
 
 	const { user } = useUser();
+
+	const [dropdownVisible, setDropdownVisible] = useState(false);
+	const {savedLists, setSavedLists} = useUserDetails(); // from where?
+
 	const open = useCallback(() => {
 		if (!listing.external) {
 			navigate('Listing', { id: listing._id });
@@ -60,6 +65,22 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ listing,
 			Linking.openURL(listing.url as string);
 		}
 	}, [listing, navigate]);
+
+	const toggleDropdown = () => {
+		setDropdownVisible(!dropdownVisible);
+	}
+
+	const selectList = (list : ISavedList, listing: IListing) => { // to see type of list
+		
+		if (!list.savedListings.includes(listing._id)) // is not already in list
+		{
+			console.log(`Adding to ${list.name}`);
+			list.savedListings.push(listing._id);
+		}
+		else
+			console.log(`Already exists in list`);
+		setDropdownVisible(!dropdownVisible);
+	}
 
 	const updateFavoriteListings = async (updatedFavorites: string[]) => {
 		try {
@@ -99,7 +120,10 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ listing,
 			<View style={styles.contentContainer}>
 				<View style={styles.imageContainer}>
 					{canOpen && (
-						<Button mode="elevated" style={styles.openButton} onPress={() => open()}>{getOpenMessage()}</Button>
+						<View style={styles.buttonContainer}>
+							<Button mode="elevated" style={styles.openButton} onPress={() => open()}>{getOpenMessage()}</Button>
+							<Button mode="elevated" style={styles.addToListButton} onPress={toggleDropdown}> Save </Button>
+						</View>
 					)}
 					{showCarousel ? (
 						<Carousel
@@ -174,6 +198,18 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ listing,
 					)}
 				</View>
 			</View>
+
+			<Modal visible={dropdownVisible} transparent={true} animationType="slide" onRequestClose={toggleDropdown}>
+				<View style= {styles.modalContainer}>
+					<View style={styles.modalContent}>
+						<FlatList data={savedLists} keyExtractor={(item: ISavedList)=>item.id.toString()} renderItem={({item})=>(
+							<TouchableOpacity style={styles.listItem} onPress={() => selectList(item, listing)}>
+								<Text style = {styles.listItemText}> {item.name} </Text>
+							</TouchableOpacity>
+						)} />
+					</View>
+				</View>
+			</Modal>
 		</Card>
 	);
 };
@@ -233,6 +269,33 @@ const styles = StyleSheet.create({
 		bottom: 0,
 		right: 40,
 	},
+	buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    addToListButton: {
+        zIndex: 100,
+    },
+    modalContainer: {
+        flex: 1,
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    modalContent: {
+        backgroundColor: 'white',
+        width: '80%',
+        padding: 20,
+        borderRadius: 10,
+    },
+    listItem: {
+        padding: 15,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
+    },
+    listItemText: {
+        fontSize: 16,
+    },
 });
 
 export default PropertyCard;

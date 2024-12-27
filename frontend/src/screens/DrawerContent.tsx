@@ -64,6 +64,13 @@ export function DrawerContent(props: DrawerContentComponentProps) {
 					/>
 					<DrawerItem
 						icon={({ color, size }) => (
+							<MaterialCommunityIcons name="heart-outline" color={color} size={size} />
+						)}
+						label="SavedLists"
+						onPress={() => { props.navigation.navigate('SavedLists'); }}
+					/>
+					<DrawerItem
+						icon={({ color, size }) => (
 							<MaterialCommunityIcons name="message-outline" color={color} size={size} />
 						)}
 						label="Chats"

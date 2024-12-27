@@ -3,3 +3,4 @@ export * from './listingModel';
 export * from './locationModel';
 export * from './reviewModel';
 export * from './userModel';
+export * from './savedListModel';
