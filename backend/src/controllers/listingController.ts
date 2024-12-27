@@ -5,6 +5,7 @@ import { LISTINGS } from '../database';
 export const ListingController = {
 	async createListing(req: Request, res: Response) {
 		try {
+			console.log('Listing request body: ', req.body);
 			const listing = await ListingService.createListing(req.body);
 			console.log('listing contr', listing);
 			res.status(201).json(listing);

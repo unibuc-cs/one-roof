@@ -32,8 +32,7 @@ export const SavedListsScreen: React.FC = () => {
 
 	const handleAddNewList = (listName: string) => {
 		if (listName.trim() !== '') {
-			const newList: ISavedList = {
-				//id: `${uniqueId}`, // Generate a unique ID
+			const newList = {  
 				name: listName.trim(),
 				ownerId: user?.id || '',
 				sharedWith: [],
@@ -44,6 +43,17 @@ export const SavedListsScreen: React.FC = () => {
 			const updatedLists = [...lists, newList];
 			setLists(updatedLists);
 			setSavedLists(updatedLists); // Update the context state for the user
+
+			console.log('list to be added', newList);
+
+			savedListService.createSavedList(newList, user?.id)
+				.then(response =>{
+					console.log('List successfully created', response);
+				})
+				.catch(error => {
+					console.error('Failed to create list', error);
+				});
+			//navigation.navigate('Home');
 
 			// Clear the new list name field
 			setNewListName('');
