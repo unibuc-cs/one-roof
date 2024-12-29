@@ -15,7 +15,9 @@ const ViewingSchema = new Schema<IViewing>({
     listingId: { type: String, required: true },
     landlordId: { type: String, required: true },
     viewingDate: { type: Date, required: true },
-    status: { type: String, required: false, enum: ['confirmed', 'not confirmed'] }
+    status: { type: String, required: false, enum: ['confirmed', 'not confirmed'] },
+    createdAt: { type: Date, default: Date.now },
+	updatedAt: { type: Date, default: Date.now },
 }, { timestamps: true });
 
 const Viewing = model<IViewing>('Viewing', ViewingSchema);

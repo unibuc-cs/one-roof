@@ -9,7 +9,7 @@ export const useConfirmedViewings = (userId: string) => {
 
     useEffect(() => {
         setIsLoading(true);
-        viewingService.getConfirmedViewings(userId)
+        viewingService.getUserViewings(userId)
             .then(data => {
                 setViewings(data);
                 setIsLoading(false);

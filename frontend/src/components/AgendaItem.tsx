@@ -8,6 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Button } from '../components/';
 import { acceptViewing, deleteViewing } from '../hooks';
 import { useUser } from '@clerk/clerk-expo';
+import { viewingService } from '../services';
 
 interface ItemProps {
     item: any;
@@ -19,17 +20,29 @@ export const AgendaItem = (props: ItemProps) => {
     const { user } = useUser();
     const { navigate } = useNavigation();
 
-    const acceptButtonPressed = useCallback(() => {
-        acceptViewing(item.id, user?.id as string);
-    }, []);
-
-    const rejectButtonPressed = useCallback(() => {
-        deleteViewing(item.id, user?.id as string);
-    }, []);
-
     const itemPressed = useCallback(() => {
         navigate('Listing', { id: item.listingId });
     }, []);
+
+    const handleAccept = async (values: any) => {
+        try {
+            const response = await viewingService.confirmViewing(item.viewingId, user?.id as string);
+            console.log('response', response);
+        }
+        catch(error) {
+            console.error('Error accepting viewing', error);
+        }
+    };
+
+    const handleReject = async (values: any) => {
+        try {
+            const response = await viewingService.deleteViewing(item.viewingId, user?.id as string);
+            console.log('response', response);
+        }
+        catch(error) {
+            console.error('Error rejecting viewing', error);
+        }
+    };
 
     if (isEmpty(item)) {
         return (
@@ -56,10 +69,10 @@ export const AgendaItem = (props: ItemProps) => {
             </View>
             { acceptable ? 
             (<View style={styles.itemButtonContainer}>
-                <Button style={styles.buttonAccept} onPress={acceptButtonPressed}>
+                <Button style={styles.buttonAccept} onPress={handleAccept}>
                     <Text style={styles.buttonText}>Accept</Text>
                 </Button>
-                <Button style={styles.buttonReject} onPress={rejectButtonPressed}>
+                <Button style={styles.buttonReject} onPress={handleReject}>
                     <Text style={styles.buttonText}>Reject</Text>
                 </Button>
             </View>) : null }

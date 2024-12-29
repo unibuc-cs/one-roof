@@ -5,3 +5,5 @@
 .flaskenv*
 **/.env.project
 **/.env.vault
+
+frontend/android
