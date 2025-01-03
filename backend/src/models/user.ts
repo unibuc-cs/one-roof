@@ -10,6 +10,8 @@ interface IUser extends Document {
     savedLists: string[],
     createdAt: Date,
     updatedAt: Date,
+    friendRequests: string[],
+    friends: string[],
 }
 
 type IUserWithClerk = IUser & {
@@ -26,7 +28,9 @@ const UserSchema = new Schema<IUser>({
 	role: { type: String, required: true, enum: ['regularUser', 'landlord'] },
 	contactedUsers: [{type: String}],
     favoriteListings: [{type: String}],
-    savedLists: [{type: String}]
+    savedLists: [{type: String}],
+	friendRequests: [{ type: String }], // Incoming friend requests
+	friends: [{ type: String }], // Established friendships
 },
 { timestamps: true });
 

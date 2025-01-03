@@ -63,10 +63,10 @@ export const UserController = {
 			console.log('AICI 3');
 			const userId = req.params.userId;
 			const user = await userService.getUserWithClerkDetailsByUserId(userId);
-			user ? res.json(user) : res.status(404).json({ error: 'User not found' });
-		} catch (error){
+			user ? res.json(user) : res.status(404).json({error: 'User not found'});
+		} catch (error) {
 			console.error(error);
-			res.status(500).json({ error: 'Error fetching user' });
+			res.status(500).json({error: 'Error fetching user'});
 		}
-	}
+	},
 };

@@ -1,5 +1,7 @@
 import {User, type IUser, IUserWithClerk} from '../models';
 import {clerkClient} from '@clerk/clerk-sdk-node';
+import {FriendshipRequest} from '../models/friendshipRequest';
+import {Friendship} from '../models/friendship';
 
 class UserService {
 	public async createUser(clerkId: string, role: string, onboardingStep: number,  profilePicture?: string): Promise<IUser | undefined> {

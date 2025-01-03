@@ -8,6 +8,7 @@ import { useAuth, useUser } from '@clerk/clerk-expo';
 import { useUserDetails } from '../contexts/UserDetailsContext';
 import { capitalize } from '../utils';
 import Button from '../components/Button';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 import { UserRoleEnum } from '../enums';
 
 export function DrawerContent(props: DrawerContentComponentProps) {
@@ -75,6 +76,13 @@ export function DrawerContent(props: DrawerContentComponentProps) {
 						)}
 						label="Chats"
 						onPress={() => { props.navigation.navigate('Chats'); }}
+					/>
+					<DrawerItem
+						icon={({ color, size }) => (
+							<Icon name="user-friends" size={18} color= {color}/>
+						)}
+						label="Friends"
+						onPress={() => { props.navigation.navigate('Friends'); }}
 					/>
 					<Button
 						mode="elevated"
