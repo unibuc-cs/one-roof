@@ -4,7 +4,7 @@ interface ISavedList extends Document {
     // saved list id??
     ownerId: string,
     name: string, 
-    listings: string[],
+    savedListings: string[],
     sharedWith: string[],
     createdAt: Date,
     updatedAt: Date,
@@ -13,9 +13,9 @@ interface ISavedList extends Document {
 const SavedListSchema = new Schema<ISavedList>({
     ownerId: {type: String, required: true},
     name: {type: String, required: true},
-    listings: { type: [String], required: true, default: []},
+    savedListings: { type: [String], required: true, default: []},
     sharedWith:{ type: [String], required: true, default: []}
-})
+}, {timestamps : true});
 
 const SavedList = model<ISavedList>('SavedList', SavedListSchema);
 

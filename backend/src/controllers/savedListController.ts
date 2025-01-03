@@ -13,7 +13,7 @@ export const SavedListController = {
     }, 
 
     async getAllSavedLists(req: Request, res:Response) {
-        const savedLists = await SavedListService.getAllSavedLists({});
+        const savedLists = await SavedListService.getAllSavedLists();
         res.status(200).json(savedLists);
     },
 
