@@ -30,7 +30,13 @@ export async function callApi(endpoint: string, options: CallApiOptions = {}, us
 	console.log(`Calling API with config: ${JSON.stringify(axiosConfig)}`);
 	try {
 		const response = await axios(axiosConfig);
-		console.log(`API call succeeded with response: ${JSON.stringify(response.data)}`);
+		if (endpoint !== 'search' && endpoint !== 'listings')
+		{
+			console.log(`API call succeeded with response : ${JSON.stringify(response.data)}`);
+		}
+		else {
+			console.log ('Api call succeeded, response too long to display');
+		}
 		return response.data;
 	} catch (error) {
 		console.error(error);

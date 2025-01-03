@@ -3,16 +3,48 @@ import { StyleSheet, View } from 'react-native';
 import { Button, Card, Text } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { ISavedList } from '../models'; 
+import { savedListService } from '../services/internal/savedListService';
+import { useSavedListDetails } from '../contexts/SavedListDetailsContext';
+import { NavigatorScreenParams } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../navigation'; // Adjust the import path
+import { useUserDetails } from '../contexts/UserDetailsContext';
+import { useUserData } from '../hooks/useUserData';
+import { useUser } from '@clerk/clerk-expo';
+
+export type SavedListNavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  'SavedListDetails'
+>;
 
 type SavedListCardProps = {
   savedList: ISavedList; 
 };
 
 const SavedListCard: React.FC<SavedListCardProps> = ({ savedList }) => {
-  const { navigate } = useNavigation();
+  const { navigate } = useNavigation<SavedListNavigationProp>();
+  const { user } = useUser();
+
+  const {setSharedWith, setSavedListings} = useSavedListDetails();
+
+  const getContext = async () => {
+    console.log('before loading context from database', savedList._id);
+    const listDetails = await savedListService.getSavedList(savedList._id, user?.id ?? '');
+    console.log('list details: ', listDetails);
+    setSharedWith(listDetails.sharedWith);
+    setSavedListings(listDetails.savedListings);
+  }
+
+  getContext();
+
+  const { savedListId, sharedWith, savedListings} = useSavedListDetails();
 
   const openSavedList = () => {
-    navigate('SavedListDetails', { savedList: savedList });
+    navigate('SavedListDetails', {
+      savedListId: savedListId || savedList._id,
+      sharedWith: sharedWith,
+      savedListings: savedListings,
+    });
   };
 
   return (

@@ -15,8 +15,11 @@ import { useUser } from '@clerk/clerk-expo';
 import { useUserDetails } from '../contexts/UserDetailsContext';
 import { drop, includes } from 'lodash';
 import userService from '../services/internal/userService';
+import { savedListService } from '../services/internal/savedListService';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { TouchableOpacity, Modal, FlatList } from 'react-native';
+import { useEffect } from 'react';
+import { SavedListDetailsProvider, useSavedListDetails } from '../contexts/SavedListDetailsContext';
 
 type PropertyCardProps = {
 	listing: IListing,
@@ -52,11 +55,27 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ listing,
 	const { navigate } = useNavigation();
 	const width = Dimensions.get('window').width;
 	const [pressed, setPressed] = useState(isFavorite); // State to manage pressed state of the button
+	const [loading, setLoading] = useState<boolean>(true);
 
 	const { user } = useUser();
 
 	const [dropdownVisible, setDropdownVisible] = useState(false);
-	const {savedLists, setSavedLists} = useUserDetails(); // from where?
+	const {savedLists} = useUserDetails(); // from where?
+	const [ lists, setLists] = useState<any[]>([]);
+
+    if (savedLists) {
+        useEffect(() => {
+			const getLists = async () => {
+				console.log('SAVED LISTS ARE UPDATED');
+				const existingLists = savedLists.filter(id => id !== null && id !== undefined)
+				const fetchedLists = await Promise.all(existingLists.map(list_id => savedListService.getSavedList(list_id, user?.id ?? '')));
+				setLists(fetchedLists);
+				setLoading(false);
+			}; 
+
+			getLists();
+        }, [savedLists]);
+    }
 
 	const open = useCallback(() => {
 		if (!listing.external) {
@@ -70,12 +89,19 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ listing,
 		setDropdownVisible(!dropdownVisible);
 	}
 
-	const selectList = (list : ISavedList, listing: IListing) => { // to see type of list
-		
-		if (!list.savedListings.includes(listing._id)) // is not already in list
+	const selectList = async (list : ISavedList, listing: IListing) => { // to see type of list
+		console.log('Inside select list ', list);
+
+		if (list.savedListings === null || (list.savedListings !== null &&!list.savedListings.includes(listing._id))) // is not already in list
 		{
-			console.log(`Adding to ${list.name}`);
-			list.savedListings.push(listing._id);
+			try{
+				console.log(`Adding to ${list.name}`);
+				const updatedSavedListings = [...list.savedListings, listing._id];
+				await savedListService.updateSavedList(list._id, {savedListings: updatedSavedListings}, user?.id ?? '');
+				//setSavedListings(updatedSavedListings);
+			}catch (error) {
+				console.error('Failed to update list of listings:', error);
+			}
 		}
 		else
 			console.log(`Already exists in list`);
@@ -85,6 +111,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ listing,
 	const updateFavoriteListings = async (updatedFavorites: string[]) => {
 		try {
 			await userService.updateUser(user?.id ?? '', { favoriteListings: updatedFavorites });
+			//setFavoriteListings(updatedFavorites); 
 			// useUserDetails().favoriteListings = updatedFavorites;
 		} catch (error) {
 			console.error('Failed to update favorite listings:', error);
@@ -202,10 +229,12 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ listing,
 			<Modal visible={dropdownVisible} transparent={true} animationType="slide" onRequestClose={toggleDropdown}>
 				<View style= {styles.modalContainer}>
 					<View style={styles.modalContent}>
-						<FlatList data={savedLists} keyExtractor={(item: ISavedList)=>item.id.toString()} renderItem={({item})=>(
-							<TouchableOpacity style={styles.listItem} onPress={() => selectList(item, listing)}>
-								<Text style = {styles.listItemText}> {item.name} </Text>
-							</TouchableOpacity>
+						<FlatList data={lists} keyExtractor={(item: ISavedList)=>item._id.toString()} renderItem={({item})=>(
+							<SavedListDetailsProvider savedListId={item._id}>
+								<TouchableOpacity style={styles.listItem} onPress={() => selectList(item, listing)}>
+									<Text style = {styles.listItemText}> {item.name} </Text>
+								</TouchableOpacity>
+							</SavedListDetailsProvider>
 						)} />
 					</View>
 				</View>

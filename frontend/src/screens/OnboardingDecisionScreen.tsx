@@ -5,10 +5,13 @@ import userService from '../services/internal/userService';
 import { FurtherDetailsRegistrationScreen } from './FurtherDetailsRegistrationScreen';
 import { CreateReviewScreen } from './review-creation';
 import { HomeScreen } from './HomeScreen';
+import { savedListService } from '../services/internal/savedListService';
+import { useSavedListDetails } from '../contexts/SavedListDetailsContext';
 
 export const OnboardingDecisionScreen = () => {
-	const { onboardingStep, setContactedUsers, setOnboardingStep, setProfilePictureUrl, setRole, setUserId } = useUserDetails();
+	const { onboardingStep, setContactedUsers, setOnboardingStep, setProfilePictureUrl, setRole, setUserId, setFavoriteListings, setSavedLists } = useUserDetails();
 	const { user } = useUser();
+	const {savedLists} = useUserDetails();
 
 	useEffect(() => {
 		if (user) {
@@ -19,6 +22,13 @@ export const OnboardingDecisionScreen = () => {
 		}
 	}, [user]);
 
+	// useEffect(() => {
+	// 	if (savedLists) {
+			
+
+	// 	}
+	// }, [savedLists])
+
 	const fetchAndStoreUserDetails = async (userId: string) => {
 		console.log('before fetchAndStoreUserDetails', userId);
 		const userDetails = await userService.getUserByClerkId(userId);
@@ -28,7 +38,18 @@ export const OnboardingDecisionScreen = () => {
 		setProfilePictureUrl(userDetails.profilePicture);
 		setUserId(userDetails._id);
 		setContactedUsers(userDetails.contactedUsers);
+		setFavoriteListings(userDetails.favoriteListings);
+		setSavedLists(userDetails.savedLists);
 	};
+
+	// const fetchAndStoreSavedListDetails = async (listId: string, userId:string) => {
+	// 	const {setSharedWith, setSavedListings} = useSavedListDetails();
+	// 	console.log('before fetchAndStoreSavedListDetails ', listId);
+	// 	const listDetails = await savedListService.getSavedList(listId, userId);
+	// 	console.log('list details: ', listDetails);
+	// 	setSharedWith(listDetails.sharedWith);
+	// 	setSavedListings(listDetails.savedListings);
+	// }
 
 	switch (onboardingStep) {
 	case 1:

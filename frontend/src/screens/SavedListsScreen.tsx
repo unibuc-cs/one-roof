@@ -8,29 +8,32 @@ import { ISavedList } from '../models';
 import { uniqueId } from 'lodash';
 import { EditableField } from '../components/EditableField';
 import { savedListService } from '../services/internal/savedListService';
+import userService from '../services/internal/userService';
+import { SavedListDetailsProvider } from '../contexts/SavedListDetailsContext';
 
 export const SavedListsScreen: React.FC = () => {
 	const { user } = useUser();
-    const { savedLists, setSavedLists } = useUserDetails(); // a list of elements of string (not anymore of type ISavedList)
-	const [lists, setLists] = useState<any[]>([]);
+    const { savedLists, setSavedLists} = useUserDetails(); 
 	const [loading, setLoading] = useState<boolean>(true);
+	const [newListName, setNewListName] = useState<string>('');
+	const [ lists, setLists] = useState<any[]>([]);
 
-    const [newListName, setNewListName] = useState<string>('');
-
+	console.log('Already saved lists: ' , savedLists);
     if (savedLists) {
         useEffect(() => {
 			const getLists = async () => {
-				const fetchedLists = await Promise.all(savedLists.map(list_id => savedListService.getSavedList(list_id)));
-				setSavedLists(fetchedLists);
+				const existingLists = savedLists.filter(id => id !== null && id !== undefined)
+				const fetchedLists = await Promise.all(existingLists.map(list_id => savedListService.getSavedList(list_id, user?.id ?? '')));
+				setLists(fetchedLists);
 				setLoading(false);
-			}; // important to wrap it like this because we have await
+			}; 
 
 			getLists();
         }, [savedLists]);
     }
 
 
-	const handleAddNewList = (listName: string) => {
+	const handleAddNewList = async (listName: string) => {
 		if (listName.trim() !== '') {
 			const newList = {  
 				name: listName.trim(),
@@ -39,24 +42,34 @@ export const SavedListsScreen: React.FC = () => {
 				savedListings: [],
 			};
 
-			// Update the savedLists both locally and in the context
-			const updatedLists = [...lists, newList];
-			setLists(updatedLists);
-			setSavedLists(updatedLists); // Update the context state for the user
+			let created_listing_id;
+			//create list in database
+			const saveToDatabase = async () => {
+				try{
+				const response = await savedListService.createSavedList(newList, user?.id ?? '')
+				console.log('List successfully created', response);
+				created_listing_id = response._id; // or _id??
+				
+				} catch(error) {
+						console.error('Failed to create list', error);
+				};
+			}
 
-			console.log('list to be added', newList);
+			await saveToDatabase();
 
-			savedListService.createSavedList(newList, user?.id)
-				.then(response =>{
-					console.log('List successfully created', response);
-				})
-				.catch(error => {
-					console.error('Failed to create list', error);
-				});
-			//navigation.navigate('Home');
+			console.log('After adding list ', savedLists, /*user?.savedLists*/ created_listing_id);
+			const updatedLists = [...savedLists, created_listing_id]; 
+			const updateUserWithList = async () => {
+				await userService.updateUser(user?.id ?? '', {savedLists: updatedLists}); //update user in database
+			}
 
-			// Clear the new list name field
-			setNewListName('');
+			await updateUserWithList();
+			
+			setSavedLists(updatedLists); // update the user context
+
+			console.log('list added', created_listing_id);
+			
+			setNewListName(''); // Clear the new list name field
 		}
 	};
 
@@ -72,11 +85,13 @@ export const SavedListsScreen: React.FC = () => {
                     isEditable={true}
                 />
 
-				{!loading && savedLists.length === 0 && (
+				{!loading && lists.length === 0 && (
 					<HeaderText size={20}>No saved lists found!</HeaderText>
 				)}
 				{lists.map((savedList) => (
-					<SavedListCard key={savedList.id} savedList={savedList} />
+					<SavedListDetailsProvider key={savedList._id} savedListId={savedList._id}>
+						<SavedListCard savedList={savedList} />
+					</SavedListDetailsProvider>
 				))}
 			</ScrollView>
 		</View>

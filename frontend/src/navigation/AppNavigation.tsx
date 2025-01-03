@@ -44,6 +44,11 @@ export type RootStackParamList = {
 	AreaFeedback: undefined,
 	ViewReview: { review: IReview },
 	Messages: any,
+	SavedListDetails: {
+		savedListId: string;
+		sharedWith: string[];
+		savedListings: string[];
+	  };
 };
 
 export const AppNavigation = () => {

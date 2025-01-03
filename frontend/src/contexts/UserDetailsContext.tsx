@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { UserRoleEnum } from '../enums';
-import { string } from '../models';
 
 interface UserDetails {
 	onboardingStep: number,

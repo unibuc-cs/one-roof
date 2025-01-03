@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, Dimensions, ScrollView } from 'react-native';
 import { useRoute, RouteProp } from '@react-navigation/native';
-import { RootStackParamList } from '../components';
+import { RootStackParamList } from '../navigation';
 import { useUser } from '@clerk/clerk-expo';
 import { useListing } from '../hooks';
 import { Background } from '../components';
