@@ -7,17 +7,18 @@ import { useUser } from '@clerk/clerk-expo';
 import { useUserDataByClerkId } from '../hooks/useUserData';
 import { viewingService } from '../services';
 
-export const ScheduleViewing: React.FC = ( { listingId, landlordId } ) => {
+export const ScheduleViewing: React.FC = ( { listingId, landlordId, listingTitle, listingAddress } ) => {
     const [date, setDate] = useState(new Date());
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const { user } = useUser();
     const { user: landlord } = useUserDataByClerkId(landlordId);
 
-
     const handleSubmit = async (values: any) => {
         const viewingData = {
             userId: user?.id as string,
             listingId: listingId,
+            title: listingTitle,
+            address: listingAddress,
             landlordId: landlord?.clerkId as string,
             viewingDate: date,
             status: 'not confirmed'

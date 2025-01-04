@@ -60,7 +60,7 @@ export const ListingScreen: React.FC = ({ navigation }) => {
 					<Text style={styles.description}>{listing.description}</Text>
 					<ReachOutToUser message={'Contact the Landlord!'} userToReachOutToId = {listing.landlordId} type={'listing'} referenceId = {listing._id}/>
 
-					<ScheduleViewing listingId={listing._id} landlordId={listing.landlordId} />
+					<ScheduleViewing listingId={listing._id} landlordId={listing.landlordId} listingTitle={listing.title} listingAddress={listing.address} />
 				</Card>
 			</ScrollView>
 

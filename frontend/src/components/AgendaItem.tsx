@@ -54,8 +54,8 @@ export const AgendaItem = (props: ItemProps) => {
 
     const status = item.status === 'confirmed';
 
-    const acceptable = item.status === 'not confirmed';
-    //const acceptable = item.status === 'not confirmed' && role === UserRoleEnum.Landlord;
+    //const acceptable = item.status === 'not confirmed';
+    const acceptable = item.status === 'not confirmed' && role === UserRoleEnum.Landlord;
 
     return (
         <TouchableOpacity onPress={itemPressed} style={styles.item}>
@@ -64,8 +64,8 @@ export const AgendaItem = (props: ItemProps) => {
                 { status ? <Text style={styles.itemConfirmText}>Confirmed       </Text> : <Text style={styles.itemNotConfirmText}>Not Confirmed</Text> }
             </View>
             <View>
-                <Text style={styles.itemTitleText}>{item.title}</Text>
-                <Text style={styles.itemAddressText}>{item.address}</Text>
+                <Text style={styles.itemTitleText} width = {acceptable ? 200 : 300}>{item.title}</Text>
+                <Text style={styles.itemAddressText} width = {acceptable ? 200 : 300}>{item.address}</Text>
             </View>
             { acceptable ? 
             (<View style={styles.itemButtonContainer}>

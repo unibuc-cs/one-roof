@@ -1,11 +1,13 @@
-import React, { useCallback } from 'react';
-import { StyleSheet } from 'react-native';
+import React, { useCallback, useMemo } from 'react';
+import { StyleSheet, Text } from 'react-native';
 import { ExpandableCalendar, AgendaList, CalendarProvider, WeekCalendar } from 'react-native-calendars';
 import { useUser } from '@clerk/clerk-expo';
 import { useConfirmedViewings, useListing } from '../hooks';
 import { AgendaItem } from '../components';
 import { HeaderText } from '../components';
 import { theme } from '../theme';
+import { viewingService } from '../services';
+import { useFocusEffect } from '@react-navigation/native';
 
 interface Props {
     weekView?: boolean;
@@ -14,10 +16,28 @@ interface Props {
 export const ViewingsCalendar: React.FC = (props: Props) => {
     const { weekView } = props;
     const { user } = useUser();
-    let { viewings, isLoading, error } = useConfirmedViewings(user?.id as string);
+    let { viewings, isLoading, error, refetch } = useConfirmedViewings(user?.id as string);
 
     let marked = {};
     let agendaItems = {};
+
+    const todayString = new Date().toISOString().split('T')[0];
+
+    const handleReject = async (viewingId) => {
+        try {
+            const response = await viewingService.deleteViewing(viewingId, user?.id as string);
+            console.log('response', response);
+        }
+        catch(error) {
+            console.error('Error rejecting viewing', error);
+        }
+    };
+
+    useFocusEffect(
+        useCallback(() => {
+            refetch?.();
+        }, [refetch])
+    );
 
     for(let viewing of viewings) {
         const viewingDate = new Date(viewing.viewingDate).toISOString().split('T')[0];
@@ -25,30 +45,38 @@ export const ViewingsCalendar: React.FC = (props: Props) => {
 
         marked[viewingDate] = { marked: true };
 
-        if (!agendaItems[viewingDate])
-            agendaItems[viewingDate] = { title: viewingDate, data: [] };
+        if(viewingDate.localeCompare(todayString) < 0) {
+            handleReject(viewing._id);
+        }
 
-        //let { listing } = useListing(viewing.listingId, user?.id as string);
-        let listing = { title: 'Test', address: 'Tiglina 1' };
-        const viewingData = { hour: viewingHour, title: listing?.title, address: listing?.address, listingId: viewing.listingId, status: viewing.status, viewingId: viewing._id };
-        agendaItems[viewingDate].data.push(viewingData);
+        else {
+            if (!agendaItems[viewingDate])
+                agendaItems[viewingDate] = { title: viewingDate, data: [] };
+
+            const viewingData = { 
+                hour: viewingHour, 
+                title: viewing.title, 
+                address: viewing.address, 
+                listingId: viewing.listingId, 
+                status: viewing.status, 
+                viewingId: viewing._id 
+            };
+            agendaItems[viewingDate].data.push(viewingData);
+        }
     }
 
     const renderItem = useCallback(({item}: any) => {
         return <AgendaItem item={item}/>;
     }, []);
 
-    const todayString = new Date().toISOString().split('T')[0];
-
     let formatAgendaItems = [];
     for (let key in agendaItems) {
-        formatAgendaItems.push({title: agendaItems[key].title, data: agendaItems[key].data});
+        formatAgendaItems.push({title: agendaItems[key].title, data: agendaItems[key].data.sort((a: any, b: any) => a.hour.localeCompare(b.hour))});
     }
 
-    const ITEMS: any[] = formatAgendaItems;
+    formatAgendaItems.sort((a: any, b: any) => a.title.localeCompare(b.title));
 
-    //if (isLoading) 
-        //return <Text>Loading...</Text>;
+    const ITEMS: any[] = formatAgendaItems;
 
     return (
         <CalendarProvider
