@@ -3,64 +3,176 @@ import { View, Text, FlatList, StyleSheet, TouchableOpacity, Button, Alert, Acti
 import { friendService } from '../services/internal/friendService';
 import { IFriendship } from '../models/friendshipModel';
 import { useUser } from '@clerk/clerk-expo';
+import userService from '../services/internal/userService';
+import { IFriendRequest } from '../models/friendRequestModel';
+
+
 
 export const FriendsScreen: React.FC = () => {
 	const [selectedTab, setSelectedTab] = useState<'All' | 'Requests'>('All');
-	const [friends, setFriends] = useState<IFriendship[]>([]);
+	const [friends, setFriends] = useState<any[]>([]);
+	const [friendRequests, setFriendRequests] = useState<IFriendRequest[]>([]);
 	const [loading, setLoading] = useState(false);
 
-	// Simulated logged-in user ID (replace with actual logic to get user ID)
 	const { user } = useUser();
 	const userId = user?.id as string;
 
 	useEffect(() => {
-		if (selectedTab === 'All') {
-			const fetchFriends = async () => {
-				try {
-					setLoading(true);
-					const fetchedFriends = await friendService.getAllFriends(userId);
-					setFriends(fetchedFriends);
-				} catch (error) {
-					console.error('Error fetching friends:', error);
-					Alert.alert('Error', 'Failed to fetch friends');
-				} finally {
-					setLoading(false);
-				}
-			};
+		const fetchFriends = async () => {
+			try {
+				setLoading(true);
+				const fetchedFriends = await friendService.getAllFriends(userId);
+				const friendsWithNames = await Promise.all(
+					fetchedFriends.map(async (friend) => {
+						const otherUserId =
+							friend.firstUser === userId ? friend.secondUser : friend.firstUser;
+						const otherUser = await userService.getUserByClerkId(otherUserId);
+						const otherUserWithName = await  userService.getWithClerkDetailsByUserId(otherUser._id);
+						return {
+							...friend,
+							otherUserFirstName: otherUserWithName?.firstName || 'Unknown',
+							otherUserSecondName: otherUserWithName?.lastName || '',
+						};
+					})
+				);
+				setFriends(friendsWithNames);
+			} catch (error) {
+				console.error('Error fetching friends:', error);
+				Alert.alert('Error', 'Failed to fetch friends');
+			} finally {
+				setLoading(false);
+			}
+		};
 
+		const fetchFriendRequests = async () => {
+			try {
+				setLoading(true);
+				const fetchedRequests = await friendService.getAllFriendRequests(userId);
+				const requestsWithNames = await Promise.all(
+					fetchedRequests.map(async (request) => {
+						const otherUserId = request.requestedUser;
+						const otherUser = await userService.getUserByClerkId(otherUserId);
+						const otherUserWithName = await  userService.getWithClerkDetailsByUserId(otherUser._id);
+						return {
+							...request,
+							otherUserRequestFirstName: otherUserWithName?.firstName || 'Unknown',
+							otherUserRequestSecondName: otherUserWithName?.lastName || '',
+						};
+					})
+				);
+				setFriendRequests(requestsWithNames);
+			} catch (error) {
+				console.error('Error fetching friend requests:', error);
+				Alert.alert('Error', 'Failed to fetch friend requests');
+			} finally {
+				setLoading(false);
+			}
+		};
+
+		if (selectedTab === 'All') {
 			fetchFriends();
+		} else if (selectedTab === 'Requests') {
+			fetchFriendRequests();
 		}
 	}, [selectedTab]);
 
+	const acceptFriendRequest = async (requestId: string) => {
+		try {
+			setLoading(true);
+
+			// Call the API to accept the friend request
+			await friendService.acceptRequest({ userId }, requestId); // Assuming data needed in the body is { userId }
+
+			// Remove the accepted request from the state
+			setFriendRequests(prevRequests => prevRequests.filter(req => req._id !== requestId));
+
+			// Optionally, add the new friendship to the state (depending on how your API works)
+			// Add it to the friends list, assuming we get it from the API or know the second user's ID
+			const acceptedRequest = friendRequests.find(req => req._id === requestId);
+			if (acceptedRequest) {
+				setFriends(prevFriends => [
+					...prevFriends,
+					{
+						firstUser: acceptedRequest.requestedUser,
+						secondUser: acceptedRequest.pendingUser,
+						// Include first and last names if needed
+						otherUserFirstName: acceptedRequest.otherUserRequestFirstName,
+						otherUserSecondName: acceptedRequest.otherUserRequestSecondName,
+					},
+				]);
+			}
+
+			Alert.alert('Success', 'Friend request accepted!');
+		} catch (error) {
+			console.error('Error accepting friend request:', error);
+			Alert.alert('Error', 'Failed to accept friend request');
+		} finally {
+			setLoading(false);
+		}
+	};
 	const renderSegmentContent = () => {
 		if (loading) {
 			return <ActivityIndicator size="large" color="#0000ff" />;
 		}
 
+		const capitalize = (str: string): string =>
+			str
+				.toLowerCase()
+				.split(' ')
+				.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+				.join(' ');
+
 		if (selectedTab === 'All') {
 			return (
 				<FlatList
 					data={friends}
-					keyExtractor={(item) => item.firstUser + item.secondUser} // Unique key for each friendship
+					keyExtractor={(item) => `${item.firstUser}-${item.secondUser}`}
 					renderItem={({ item }) => (
 						<View style={styles.card}>
 							<Text style={styles.friendName}>
-								{item.firstUser === userId ? item.secondUser : item.firstUser}
+								{capitalize(`${item.otherUserFirstName} ${item.otherUserSecondName}`.trim())}
 							</Text>
 						</View>
 					)}
 					ListEmptyComponent={<Text style={styles.emptyText}>You have no friends yet</Text>}
 				/>
 			);
+		} else if (selectedTab === 'Requests') {
+			return (
+				<FlatList
+					data={friendRequests}
+					keyExtractor={(item) => `${item.requestedUser}-${item.pendingUser}`}
+					renderItem={({ item }) => (
+						<View style={styles.card}>
+							<Text style={styles.friendName}>
+								{capitalize(`${item.otherUserRequestFirstName} ${item.otherUserRequestSecondName}`.trim())}
+							</Text>
+							<View style={styles.buttonContainer}>
+								<TouchableOpacity
+									style={styles.acceptButton}
+									onPress={() => console.log('Accept', item)}
+								>
+									<Text style={styles.buttonText}>Accept</Text>
+								</TouchableOpacity>
+								<TouchableOpacity
+									style={styles.rejectButton}
+									onPress={() => console.log('Reject', item)}
+								>
+									<Text style={styles.buttonText}>Reject</Text>
+								</TouchableOpacity>
+							</View>
+						</View>
+					)}
+					ListEmptyComponent={<Text style={styles.emptyText}>No friend requests</Text>}
+				/>
+			);
 		}
-		return null; // Handle 'Requests' tab separately
+		return null;
 	};
 
 	return (
 		<View style={styles.container}>
 			<Text style={styles.title}>Friends</Text>
-
-			{/* Segmented Control */}
 			<View style={styles.segmentedControl}>
 				<TouchableOpacity
 					style={[styles.tab, selectedTab === 'All' && styles.activeTab]}
@@ -77,13 +189,10 @@ export const FriendsScreen: React.FC = () => {
 					</Text>
 				</TouchableOpacity>
 			</View>
-
-			{/* Render selected tab content */}
 			{renderSegmentContent()}
 		</View>
 	);
 };
-
 
 
 

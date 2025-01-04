@@ -53,6 +53,7 @@ class UserService {
 	async getUserWithClerkDetailsByUserId(userId: string): Promise<IUserWithClerk | null> {
 		console.log('here with ', userId);
 		const databaseUser = await this.getUserByUserId(userId);
+		console.log('aicea');
 		if (!databaseUser) {
 			return null;
 		}
