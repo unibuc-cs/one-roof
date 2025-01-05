@@ -12,7 +12,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cron": "^3.3.2",
+    "expo-server-sdk": "^3.13.0",
     "express": "^4.19.2",
+    "firebase": "^11.1.0",
     "mongodb": "^6.5.0"
   },
   "devDependencies": {
