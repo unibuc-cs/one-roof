@@ -7,29 +7,7 @@ import { CreateReviewScreen } from './review-creation';
 import { HomeScreen } from './HomeScreen';
 
 export const OnboardingDecisionScreen = () => {
-	const { onboardingStep, setContactedUsers, setOnboardingStep, setProfilePictureUrl, setRole, setUserId, setPushTokens } = useUserDetails();
-	const { user } = useUser();
-
-	useEffect(() => {
-		if (user) {
-			const userId = user.id;
-			fetchAndStoreUserDetails(userId)
-				.then((res) => console.log(res))
-				.catch((err) => console.log(err));
-		}
-	}, [user]);
-
-	const fetchAndStoreUserDetails = async (userId: string) => {
-		console.log('before fetchAndStoreUserDetails', userId);
-		const userDetails = await userService.getUserByClerkId(userId);
-		console.log('userdetails', userDetails);
-		setRole(userDetails.role);
-		setOnboardingStep(userDetails.onboardingStep);
-		setProfilePictureUrl(userDetails.profilePicture);
-		setUserId(userDetails._id);
-		setContactedUsers(userDetails.contactedUsers);
-		setPushTokens(userDetails.pushTokens);
-	};
+	const { onboardingStep } = useUserDetails();
 
 	switch (onboardingStep) {
 	case 1:

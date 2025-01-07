@@ -1,5 +1,7 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, {createContext, useContext, useState, ReactNode, useEffect} from 'react';
 import { UserRoleEnum } from '../enums';
+import {useUser} from "@clerk/clerk-expo";
+import userService from "../services/internal/userService";
 
 interface UserDetails {
 	onboardingStep: number,
@@ -49,6 +51,30 @@ export const UserDetailsProvider: React.FC<UserDetailsProviderProps> = ({ childr
 	const [contactedUsers, setContactedUsers] = useState<string[]>([]);
 	const [pushTokens, setPushTokens] = useState<string[]>([]);
 	const [favoriteListings, setFavoriteListings] = useState<string[]>([]);
+
+	const { user } = useUser();
+
+	useEffect(() => {
+		if (user) {
+			const userId = user.id;
+			fetchAndStoreUserDetails(userId)
+				.then((res) => console.log(res))
+				.catch((err) => console.log(err));
+		}
+	}, [user]);
+
+	const fetchAndStoreUserDetails = async (userId: string) => {
+		console.log('before fetchAndStoreUserDetails', userId);
+		const userDetails = await userService.getUserByClerkId(userId);
+		console.log('userdetails', userDetails);
+		setPushTokens(userDetails.pushTokens);
+		setRole(userDetails.role);
+		setOnboardingStep(userDetails.onboardingStep);
+		setProfilePicture(userDetails.profilePicture);
+		setUserId(userDetails._id);
+		setContactedUsers(userDetails.contactedUsers);
+	};
+
 	return (
 		<UserDetailsContext.Provider value={{ favoriteListings, setFavoriteListings, onboardingStep, setOnboardingStep, profilePictureUrl: profilePicture, setProfilePictureUrl: setProfilePicture, role, setRole, userId, setUserId, contactedUsers, setContactedUsers, pushTokens, setPushTokens }}>
 			{children}

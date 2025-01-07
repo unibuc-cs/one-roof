@@ -5,7 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { TextInput } from 'react-native-paper';
 import { theme } from '../theme';
 import { useUserDetails } from '../contexts/UserDetailsContext';
-import { messageService } from '../services';
+import { messageService, notificationService } from '../services';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { RootStackParamList } from '../navigation';
 import { useUserDataByClerkId } from '../hooks/useUserData';
@@ -16,6 +16,7 @@ import { MessagesContainer } from '../components';
 import { io } from 'socket.io-client';
 import { useUser } from '@clerk/clerk-expo';
 import { IMessage } from '../models/messageModel';
+import {config} from "../config/configure";
 
 
 type ChatMessagesScreenRouteProps = RouteProp<RootStackParamList, 'Message'>;
@@ -61,6 +62,8 @@ export const ConversationScreen: React.FC = () => {
 		socket.on('messageReceived', (msg)=>{
 			if(msg.receiverId === userId && msg.senderId === receiverId){
 				setMessages([...messages, msg]);
+				sendNewMessageNotification(msg);
+
 			}
 		});
 		socket.on('updateMessages', (msg) =>{
@@ -75,6 +78,10 @@ export const ConversationScreen: React.FC = () => {
 		const verdict = alreadyDiscussed.length == 0 ? initialType : null;
 		console.log(verdict, 'INCLUDE MESSAGE');
 		return verdict;
+	};
+
+	const sendNewMessageNotification = async (msg) => {
+		await notificationService.sendNotification("New message", msg.content, userId);
 	};
 
 	const getConversationMessages = async () => {

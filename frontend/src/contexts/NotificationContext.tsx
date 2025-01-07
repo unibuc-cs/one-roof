@@ -85,23 +85,10 @@ export const NotificationDataProvider: React.FC<NotificationContextProviderProps
     const notificationListener = useRef<Notifications.Subscription>();
     const responseListener = useRef<Notifications.Subscription>();
     const {isLoaded, user: clerkUser} = useUser();
-    const {pushTokens: currPushTokens, setPushTokens} = useUserDetails();
+    const {pushTokens: currPushTokens, setPushTokens, userId} = useUserDetails();
+
 
     useEffect(() => {
-        registerForPushNotificationsAsync().then(async (token : Notifications.ExpoPushToken) => {
-            setExpoPushToken(token);
-            if(!isLoaded){
-                return;
-            }
-            const clerkId = clerkUser!.id; // TODO: Check for null
-
-            if (!currPushTokens.includes(token.data)) {
-                const newPushTokens = [...currPushTokens, token.data];
-                await userService.updateUser(clerkId, {pushTokens: newPushTokens});
-                setPushTokens(newPushTokens);
-            }
-        });
-
         notificationListener.current =
             Notifications.addNotificationReceivedListener((notification) => {
                 setNotification(notification);
@@ -119,7 +106,24 @@ export const NotificationDataProvider: React.FC<NotificationContextProviderProps
 
             Notifications.removeNotificationSubscription(responseListener.current!);
         };
-    }, [isLoaded, currPushTokens]);
+    }, []);
+    useEffect(() => {
+        if(!isLoaded || userId == ''){
+            return;
+        }
+        registerForPushNotificationsAsync().then(async (token : Notifications.ExpoPushToken) => {
+            setExpoPushToken(token);
+            const clerkId = clerkUser!.id; // TODO: Check for null
+            if (!currPushTokens.includes(token.data)) {
+                const newPushTokens = [...currPushTokens, token.data];
+                await userService.updateUser(clerkId, {pushTokens: newPushTokens});
+                console.log("Added new push token:", token.data);
+                setPushTokens(newPushTokens);
+            }
+        });
+
+
+    }, [isLoaded, currPushTokens, userId]);
 
     return (
         <NotificationContext.Provider value={{

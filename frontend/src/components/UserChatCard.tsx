@@ -10,13 +10,10 @@ import { useUser } from '@clerk/clerk-expo';
 import Spinner from 'react-native-loading-spinner-overlay';
 import App from '../../App';
 import {config} from "../config/configure";
-
-
 let socket;
 
 const UserChatCard: React.FC<any> = ({ userId: receiverId }) => {
 	const { user: recvUser, isLoading, error } = useUserDataByClerkId(receiverId);
-	console.log('recvUser', recvUser);
 	const { user: clerkUser } = useUser();
 	const { navigate } = useNavigation();
 	const userId = clerkUser?.id;
