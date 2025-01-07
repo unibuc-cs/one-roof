@@ -10,12 +10,12 @@ import userService from "../services/internal/userService";
 
 interface NotificationData {
     notification: Notifications.Notification | null | undefined;
-    token : Notifications.ExpoPushToken | undefined;
+    token: Notifications.ExpoPushToken | undefined;
 }
 
 const defaultNotificationContext: NotificationData = {
-    notification : undefined,
-    token : undefined,
+    notification: undefined,
+    token: undefined,
 }
 
 const NotificationContext = createContext<NotificationData>(defaultNotificationContext);
@@ -32,12 +32,12 @@ export interface PushNotificationState {
 const registerForPushNotificationsAsync = async () => {
     let token;
     if (Device.isDevice) {
-        const { status: existingStatus } =
+        const {status: existingStatus} =
             await Notifications.getPermissionsAsync();
         let finalStatus = existingStatus;
 
         if (existingStatus !== "granted") {
-            const { status } = await Notifications.requestPermissionsAsync();
+            const {status} = await Notifications.requestPermissionsAsync();
             finalStatus = status;
         }
         if (finalStatus !== "granted") {
@@ -65,7 +65,7 @@ const registerForPushNotificationsAsync = async () => {
 }
 
 
-export const NotificationDataProvider: React.FC<NotificationContextProviderProps> = ({ children }) => {
+export const NotificationDataProvider: React.FC<NotificationContextProviderProps> = ({children}) => {
     Notifications.setNotificationHandler({
         handleNotification: async () => ({
             shouldPlaySound: true,
@@ -84,31 +84,22 @@ export const NotificationDataProvider: React.FC<NotificationContextProviderProps
 
     const notificationListener = useRef<Notifications.Subscription>();
     const responseListener = useRef<Notifications.Subscription>();
-    const { isLoaded, user: clerkUser} = useUser();
+    const {isLoaded, user: clerkUser} = useUser();
+    const {pushTokens: currPushTokens, setPushTokens} = useUserDetails();
 
     useEffect(() => {
-        registerForPushNotificationsAsync().then((token) => {
+        registerForPushNotificationsAsync().then(async (token : Notifications.ExpoPushToken) => {
             setExpoPushToken(token);
-            console.log("Created push token", token);
-            const uploadPushToken = async () => {
-                if(!isLoaded){
-                    return;
-                }
-                // TODO: see if i can use useUserDetails
-                // const {pushTokens: currPushTokens, setPushTokens} = useUserDetails();
-                // console.log("Push token", currPushTokens);
-                const clerkId = clerkUser?.id;
-
-                const userDetails = await userService.getUserByClerkId(clerkId);
-                const currPushTokens = userDetails.pushTokens;
-                if (!currPushTokens.includes(token.data)) {
-                    const newPushTokens = [...currPushTokens, token.data];
-                    await userService.updateUser(clerkId, {pushTokens: newPushTokens});
-                    // setPushTokens(newPushTokens);
-                }
+            if(!isLoaded){
+                return;
             }
-            uploadPushToken();
-            console.log("Uploaded push token",);
+            const clerkId = clerkUser!.id; // TODO: Check for null
+
+            if (!currPushTokens.includes(token.data)) {
+                const newPushTokens = [...currPushTokens, token.data];
+                await userService.updateUser(clerkId, {pushTokens: newPushTokens});
+                setPushTokens(newPushTokens);
+            }
         });
 
         notificationListener.current =
@@ -128,7 +119,7 @@ export const NotificationDataProvider: React.FC<NotificationContextProviderProps
 
             Notifications.removeNotificationSubscription(responseListener.current!);
         };
-    }, [isLoaded]);
+    }, [isLoaded, currPushTokens]);
 
     return (
         <NotificationContext.Provider value={{

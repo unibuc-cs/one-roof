@@ -15,6 +15,7 @@ interface UserDetails {
 	pushTokens: string[],
 	setContactedUsers: React.Dispatch<React.SetStateAction<string[]>>,
 	setFavoriteListings: React.Dispatch<React.SetStateAction<string[]>>,
+	setPushTokens: React.Dispatch<React.SetStateAction<string[]>>,
 }
 
 const defaultUserDetails: UserDetails = {
