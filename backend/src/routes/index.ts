@@ -3,3 +3,4 @@ export * from './userRoutes';
 export * from './reviewRoutes';
 export * from './searchRoutes';
 export * from './messageRoutes';
+export * from './notificationRoutes';

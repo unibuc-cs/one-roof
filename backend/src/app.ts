@@ -2,7 +2,7 @@ import express, { Express } from 'express';
 import corsMiddleware from './middleware/cors';
 import loggerMiddleware from './middleware/logger';
 import { config } from './configure';
-import {userRouter, reviewRouter, listingRouter, searchRouter, messageRouter} from './routes';
+import {userRouter, reviewRouter, listingRouter, searchRouter, messageRouter, notificationRouter} from './routes';
 
 const app: Express = express();
 app.set('port', config.port);
@@ -20,5 +20,6 @@ app.use('/api/reviews', reviewRouter);
 app.use('/api/listings', listingRouter);
 app.use('/api/search', searchRouter);
 app.use('/api/messages', messageRouter);
+app.use('/api/notifications', notificationRouter);
 
 export default app;
