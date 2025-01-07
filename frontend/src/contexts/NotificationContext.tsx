@@ -4,6 +4,9 @@ import {UserRoleEnum} from "../enums";
 import * as Device from "expo-device";
 import Constants from "expo-constants";
 import {Platform} from "react-native";
+import {useUserDetails} from "./UserDetailsContext";
+import {useUser} from "@clerk/clerk-expo";
+import userService from "../services/internal/userService";
 
 interface NotificationData {
     notification: Notifications.Notification | null | undefined;
@@ -81,12 +84,31 @@ export const NotificationDataProvider: React.FC<NotificationContextProviderProps
 
     const notificationListener = useRef<Notifications.Subscription>();
     const responseListener = useRef<Notifications.Subscription>();
-
-
+    const { isLoaded, user: clerkUser} = useUser();
 
     useEffect(() => {
         registerForPushNotificationsAsync().then((token) => {
             setExpoPushToken(token);
+            console.log("Created push token", token);
+            const uploadPushToken = async () => {
+                if(!isLoaded){
+                    return;
+                }
+                // TODO: see if i can use useUserDetails
+                // const {pushTokens: currPushTokens, setPushTokens} = useUserDetails();
+                // console.log("Push token", currPushTokens);
+                const clerkId = clerkUser?.id;
+
+                const userDetails = await userService.getUserByClerkId(clerkId);
+                const currPushTokens = userDetails.pushTokens;
+                if (!currPushTokens.includes(token.data)) {
+                    const newPushTokens = [...currPushTokens, token.data];
+                    await userService.updateUser(clerkId, {pushTokens: newPushTokens});
+                    // setPushTokens(newPushTokens);
+                }
+            }
+            uploadPushToken();
+            console.log("Uploaded push token",);
         });
 
         notificationListener.current =
@@ -106,7 +128,7 @@ export const NotificationDataProvider: React.FC<NotificationContextProviderProps
 
             Notifications.removeNotificationSubscription(responseListener.current!);
         };
-    }, []);
+    }, [isLoaded]);
 
     return (
         <NotificationContext.Provider value={{

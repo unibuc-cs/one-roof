@@ -9,6 +9,7 @@ export interface IUser {
 	role: UserRoleEnum,
 	onboardingStep: number,
 	contactedUsers: string[], // modified to keep clerk ID's
+	pushTokens: string[],
 	createdAt?: Date,
 	updatedAt?: Date,
 }

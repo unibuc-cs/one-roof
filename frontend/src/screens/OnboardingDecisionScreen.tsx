@@ -7,7 +7,7 @@ import { CreateReviewScreen } from './review-creation';
 import { HomeScreen } from './HomeScreen';
 
 export const OnboardingDecisionScreen = () => {
-	const { onboardingStep, setContactedUsers, setOnboardingStep, setProfilePictureUrl, setRole, setUserId } = useUserDetails();
+	const { onboardingStep, setContactedUsers, setOnboardingStep, setProfilePictureUrl, setRole, setUserId, setPushTokens } = useUserDetails();
 	const { user } = useUser();
 
 	useEffect(() => {
@@ -28,6 +28,7 @@ export const OnboardingDecisionScreen = () => {
 		setProfilePictureUrl(userDetails.profilePicture);
 		setUserId(userDetails._id);
 		setContactedUsers(userDetails.contactedUsers);
+		setPushTokens(userDetails.pushTokens);
 	};
 
 	switch (onboardingStep) {

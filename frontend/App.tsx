@@ -117,26 +117,26 @@ export default function App() {
 
     return (
         <ClerkProvider tokenCache={tokenCache} publishableKey={EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY}>
-            <NotificationDataProvider>
-                <PaperProvider theme={theme}>
-                    <SignedIn>
-                        <UserDetailsProvider>
+            <PaperProvider theme={theme}>
+                <SignedIn>
+                    <UserDetailsProvider>
+                        <NotificationDataProvider>
                             <AppNavigation/>
-                        </UserDetailsProvider>
-                    </SignedIn>
-                    <SignedOut>
-                        <GestureHandlerRootView style={{flex: 1}}>
-                            <NavigationContainer>
-                                <Stack.Navigator initialRouteName={'Home'} screenOptions={{headerShown: false}}>
-                                    <Stack.Screen name="Home" component={UnauthenticatedHomeScreen}/>
-                                    <Stack.Screen name="SignIn" component={SignInScreen}/>
-                                    <Stack.Screen name="SignUp" component={SignUpScreen}/>
-                                </Stack.Navigator>
-                            </NavigationContainer>
-                        </GestureHandlerRootView>
-                    </SignedOut>
-                </PaperProvider>
-            </NotificationDataProvider>
+                        </NotificationDataProvider>
+                    </UserDetailsProvider>
+                </SignedIn>
+                <SignedOut>
+                    <GestureHandlerRootView style={{flex: 1}}>
+                        <NavigationContainer>
+                            <Stack.Navigator initialRouteName={'Home'} screenOptions={{headerShown: false}}>
+                                <Stack.Screen name="Home" component={UnauthenticatedHomeScreen}/>
+                                <Stack.Screen name="SignIn" component={SignInScreen}/>
+                                <Stack.Screen name="SignUp" component={SignUpScreen}/>
+                            </Stack.Navigator>
+                        </NavigationContainer>
+                    </GestureHandlerRootView>
+                </SignedOut>
+            </PaperProvider>
         </ClerkProvider>
     );
 }

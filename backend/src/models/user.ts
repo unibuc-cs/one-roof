@@ -6,6 +6,7 @@ interface IUser extends Document {
     role: 'regularUser' | 'landlord',
     onboardingStep: number,
     contactedUsers: string[],
+    pushTokens: string[],
     createdAt: Date,
     updatedAt: Date,
 }
@@ -23,6 +24,7 @@ const UserSchema = new Schema<IUser>({
 	onboardingStep: { type: Number, required: true, default: 1, min: 1, max: 3},
 	role: { type: String, required: true, enum: ['regularUser', 'landlord'] },
 	contactedUsers: [{type: String}],
+    pushTokens: [{ type: String}],
 },
 { timestamps: true });
 
