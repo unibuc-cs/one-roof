@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	scrollView: {
-		backgroundColor: 'white',
+		backgroundColor: theme.colors.background,
 		elevation: 20,
 		flexGrow: 1,
 		justifyContent: 'center',

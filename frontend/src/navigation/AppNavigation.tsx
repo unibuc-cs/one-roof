@@ -2,7 +2,7 @@ import React from 'react';
 import {
 	AreaFeedbackScreen,
 	BuildingFeedbackScreen,
-	DrawerContent,
+	DrawerContent, NotificationsScreen,
 	OnboardingDecisionScreen,
 	ReviewGeneralDetailsScreen, ViewReviewScreen
 } from '../screens';
@@ -63,6 +63,7 @@ export const AppNavigation = () => {
 					<Drawer.Screen name="Home" component={OnboardingDecisionScreen} />
 					<Drawer.Screen name="SignIn" component={SignInScreen}/>
 					<Drawer.Screen name="SignUp" component={SignUpScreen}/>
+					<Drawer.Screen name="Notifications" component={NotificationsScreen} />
 					<Drawer.Screen name="Chats" component={ChatsScreen} />
 					<Drawer.Screen name="Favorites" component={FavoriteScreen} />
 					<Drawer.Screen name="CreateReview" component={CreateReviewScreen} />

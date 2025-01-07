@@ -1,5 +1,5 @@
 import React, {createContext, useContext, useState, ReactNode, useEffect} from 'react';
-import { UserRoleEnum } from '../enums';
+import {NotificationTypesEnum, UserRoleEnum} from '../enums';
 import {useUser} from "@clerk/clerk-expo";
 import userService from "../services/internal/userService";
 
@@ -15,9 +15,11 @@ interface UserDetails {
 	setUserId: React.Dispatch<React.SetStateAction<string>>,
 	contactedUsers: string[],
 	pushTokens: string[],
+	setPushTokens: React.Dispatch<React.SetStateAction<string[]>>,
+	allowedNotifications: NotificationTypesEnum[],
+	setAllowedNotifications: React.Dispatch<React.SetStateAction<NotificationTypesEnum[]>>,
 	setContactedUsers: React.Dispatch<React.SetStateAction<string[]>>,
 	setFavoriteListings: React.Dispatch<React.SetStateAction<string[]>>,
-	setPushTokens: React.Dispatch<React.SetStateAction<string[]>>,
 }
 
 const defaultUserDetails: UserDetails = {
@@ -35,6 +37,8 @@ const defaultUserDetails: UserDetails = {
 	setPushTokens: () => {},
 	favoriteListings: [],
 	setFavoriteListings: () => {},
+	allowedNotifications: [],
+	setAllowedNotifications: () => {},
 };
 
 const UserDetailsContext = createContext<UserDetails>(defaultUserDetails);
@@ -51,6 +55,7 @@ export const UserDetailsProvider: React.FC<UserDetailsProviderProps> = ({ childr
 	const [contactedUsers, setContactedUsers] = useState<string[]>([]);
 	const [pushTokens, setPushTokens] = useState<string[]>([]);
 	const [favoriteListings, setFavoriteListings] = useState<string[]>([]);
+	const [allowedNotifications, setAllowedNotifications] = useState<NotificationTypesEnum[]>([]);
 
 	const { user } = useUser();
 
@@ -73,10 +78,19 @@ export const UserDetailsProvider: React.FC<UserDetailsProviderProps> = ({ childr
 		setProfilePicture(userDetails.profilePicture);
 		setUserId(userDetails._id);
 		setContactedUsers(userDetails.contactedUsers);
+		setAllowedNotifications(userDetails.allowedNotifications);
 	};
 
 	return (
-		<UserDetailsContext.Provider value={{ favoriteListings, setFavoriteListings, onboardingStep, setOnboardingStep, profilePictureUrl: profilePicture, setProfilePictureUrl: setProfilePicture, role, setRole, userId, setUserId, contactedUsers, setContactedUsers, pushTokens, setPushTokens }}>
+		<UserDetailsContext.Provider value={{
+			favoriteListings, setFavoriteListings,
+			onboardingStep, setOnboardingStep,
+			profilePictureUrl: profilePicture, setProfilePictureUrl: setProfilePicture,
+			role, setRole,
+			userId, setUserId,
+			contactedUsers, setContactedUsers,
+			pushTokens, setPushTokens,
+			allowedNotifications, setAllowedNotifications }}>
 			{children}
 		</UserDetailsContext.Provider>
 	);

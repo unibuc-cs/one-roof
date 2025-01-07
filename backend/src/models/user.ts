@@ -7,6 +7,7 @@ interface IUser extends Document {
     onboardingStep: number,
     contactedUsers: string[],
     pushTokens: string[],
+    allowedNotifications: string[],
     createdAt: Date,
     updatedAt: Date,
 }
@@ -25,6 +26,7 @@ const UserSchema = new Schema<IUser>({
 	role: { type: String, required: true, enum: ['regularUser', 'landlord'] },
 	contactedUsers: [{type: String}],
     pushTokens: [{ type: String}],
+    allowedNotifications: [{ type: String}],
 },
 { timestamps: true });
 
