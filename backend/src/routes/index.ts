@@ -5,3 +5,4 @@ export * from './searchRoutes';
 export * from './messageRoutes';
 export * from './savedListRoutes';
 export * from './friendRoutes';
+export * from './viewingRoutes';

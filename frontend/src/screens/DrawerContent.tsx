@@ -79,10 +79,17 @@ export function DrawerContent(props: DrawerContentComponentProps) {
 					/>
 					<DrawerItem
 						icon={({ color, size }) => (
+<<<<<<< HEAD
 							<Icon name="user-friends" size={18} color= {color}/>
 						)}
 						label="Friends"
 						onPress={() => { props.navigation.navigate('Friends'); }}
+=======
+							<MaterialCommunityIcons name="calendar-account-outline" color={color} size={size} />
+						)}
+						label="Viewings"
+						onPress={() => { props.navigation.navigate('Viewings'); }}
+>>>>>>> origin/viewings-task
 					/>
 					<Button
 						mode="elevated"

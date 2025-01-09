@@ -4,7 +4,7 @@ import {
 	BuildingFeedbackScreen,
 	DrawerContent,
 	OnboardingDecisionScreen,
-	ReviewGeneralDetailsScreen, ViewReviewScreen
+	ReviewGeneralDetailsScreen, ViewingsCalendar, ViewReviewScreen
 } from '../screens';
 import { CreateReviewScreen } from '../screens';
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -89,8 +89,12 @@ export const AppNavigation = () => {
 					<Drawer.Screen name="AreaFeedback" component={AreaFeedbackScreen}/>
 					<Drawer.Screen name="BuildingFeedback" component={BuildingFeedbackScreen}/>
 					<Drawer.Screen name="ViewReview" component={ViewReviewScreen}/>
+<<<<<<< HEAD
 					<Drawer.Screen name="Friends" component={FriendsScreen}/>
 
+=======
+					<Drawer.Screen name="Viewings" component={ViewingsCalendar}/>
+>>>>>>> origin/viewings-task
 				</Drawer.Navigator>
 			</NavigationContainer>
 		</SearchProvider>

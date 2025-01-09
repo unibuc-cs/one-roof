@@ -6,3 +6,6 @@ export * from './review';
 export * from './user';
 export * from './searchParams';
 export * from './savedList';
+export * from './viewing';
+export * from './friendship';
+export * from './friendshipRequest';
