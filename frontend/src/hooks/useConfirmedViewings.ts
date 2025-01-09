@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { viewingService } from '../services';
 import { IViewing } from '../models';
 
@@ -7,9 +7,9 @@ export const useConfirmedViewings = (userId: string) => {
     const [ isLoading, setIsLoading ] = useState(false);
     const [ error, setError ] = useState(null);
 
-    useEffect(() => {
+    const fetchViewings = useCallback(async () => {
         setIsLoading(true);
-        viewingService.getConfirmedViewings(userId)
+        viewingService.getUserViewings(userId)
             .then(data => {
                 setViewings(data);
                 setIsLoading(false);
@@ -20,5 +20,9 @@ export const useConfirmedViewings = (userId: string) => {
             });
     }, [userId]);
 
-    return { viewings, isLoading, error };
+    useEffect(() => {
+        if (userId) fetchViewings();
+    }, [userId, fetchViewings]);
+
+    return { viewings, isLoading, error, refetch: fetchViewings };
 };

@@ -22,7 +22,7 @@ export const viewingService = {
     },
 
     confirmViewing : (id: string, userId: string) => {
-        return callApi(`viewings/confirm/${id}`, { method: 'PUT' }, userId);
+        return callApi(`viewings/confirm/${id}`, { method: 'PUT', body: {status: 'confirmed'}}, userId);
     },
 
     rejectViewing : (id: string, userId: string) => {
@@ -30,6 +30,6 @@ export const viewingService = {
     },
 
     deleteViewing : (id: string, userId: string) => {
-        return callApi(`viewings/${id}`, { method: 'DELETE' }, userId);
+        return callApi(`viewings/${id}`, { method: 'DELETE', body: {status: 'rejected'} }, userId);
     }
 };

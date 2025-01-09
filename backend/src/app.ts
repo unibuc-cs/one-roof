@@ -2,7 +2,7 @@ import express, { Express } from 'express';
 import corsMiddleware from './middleware/cors';
 import loggerMiddleware from './middleware/logger';
 import { config } from './configure';
-import {userRouter, reviewRouter, listingRouter, searchRouter, messageRouter, savedListRouter, friendRouter} from './routes';
+import {userRouter, reviewRouter, listingRouter, searchRouter, messageRouter, savedListRouter, friendRouter, viewingRouter} from './routes';
 
 const app: Express = express();
 app.set('port', config.port);
@@ -22,5 +22,6 @@ app.use('/api/search', searchRouter);
 app.use('/api/messages', messageRouter);
 app.use('/api/savedlists', savedListRouter);
 app.use('/api/friends', friendRouter);
+app.use('/api/viewings', viewingRouter);
 
 export default app;

@@ -1,11 +1,13 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { StyleSheet } from 'react-native';
+import React, { useCallback, useMemo } from 'react';
+import { StyleSheet, Text } from 'react-native';
 import { ExpandableCalendar, AgendaList, CalendarProvider, WeekCalendar } from 'react-native-calendars';
 import { useUser } from '@clerk/clerk-expo';
 import { useConfirmedViewings, useListing } from '../hooks';
 import { AgendaItem } from '../components';
 import { HeaderText } from '../components';
 import { theme } from '../theme';
+import { viewingService } from '../services';
+import { useFocusEffect } from '@react-navigation/native';
 
 interface Props {
     weekView?: boolean;
@@ -14,54 +16,67 @@ interface Props {
 export const ViewingsCalendar: React.FC = (props: Props) => {
     const { weekView } = props;
     const { user } = useUser();
-    let { viewings, isLoading, error } = useConfirmedViewings(user?.id as string);
+    let { viewings, isLoading, error, refetch } = useConfirmedViewings(user?.id as string);
 
     let marked = {};
     let agendaItems = {};
 
+    const todayString = new Date().toISOString().split('T')[0];
+
+    const handleReject = async (viewingId) => {
+        try {
+            const response = await viewingService.deleteViewing(viewingId, user?.id as string);
+            console.log('response', response);
+        }
+        catch(error) {
+            console.error('Error rejecting viewing', error);
+        }
+    };
+
+    useFocusEffect(
+        useCallback(() => {
+            refetch?.();
+        }, [refetch])
+    );
+
     for(let viewing of viewings) {
-        const viewingDate = viewing.viewingDate.toISOString().split('T')[0];
+        const viewingDate = new Date(viewing.viewingDate).toISOString().split('T')[0];
+        const viewingHour = new Date(viewing.viewingDate).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', hour12: false});
 
         marked[viewingDate] = { marked: true };
 
-        if (!agendaItems[viewingDate])
-            agendaItems[viewingDate] = { title: viewingDate, data: [] };
+        if(viewingDate.localeCompare(todayString) < 0) {
+            handleReject(viewing._id);
+        }
 
-        let { listing } = useListing(viewing.listingId, user?.id as string);
-        agendaItems[viewing.viewingDate.toString()]["data"] += [{ hour: "12:00", title: listing?.title, address: listing?.address, listingId: viewing.listingId, status: viewing.status }];
+        else {
+            if (!agendaItems[viewingDate])
+                agendaItems[viewingDate] = { title: viewingDate, data: [] };
+
+            const viewingData = { 
+                hour: viewingHour, 
+                title: viewing.title, 
+                address: viewing.address, 
+                listingId: viewing.listingId, 
+                status: viewing.status, 
+                viewingId: viewing._id 
+            };
+            agendaItems[viewingDate].data.push(viewingData);
+        }
     }
 
     const renderItem = useCallback(({item}: any) => {
         return <AgendaItem item={item}/>;
     }, []);
 
-    const todayString = new Date().toISOString().split('T')[0];
-    const tommorowString = new Date(new Date().getTime() + 24 * 60 * 60 * 1000).toISOString().split('T')[0];
-    const yesterdayString = new Date(new Date().getTime() - 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+    let formatAgendaItems = [];
+    for (let key in agendaItems) {
+        formatAgendaItems.push({title: agendaItems[key].title, data: agendaItems[key].data.sort((a: any, b: any) => a.hour.localeCompare(b.hour))});
+    }
 
-    marked[todayString] = {marked: true};
-    marked[tommorowString] = {marked: true};
-    
-    agendaItems = [
-        {title: yesterdayString, 
-            data: [
-                {hour: '12:00', title: 'Test0', address: 'Tiglina 1', status: 'confirmed', listingId: '6762b575bb262e29ef055ad9'},
-                {hour: '13:00', title: 'Test-1', address: 'Tiglina 2', status: 'not confirmed', listingId: '6762b575bb262e29ef055ad9'},
-                {hour: '14:00', title: 'Test-2', address: 'Tiglina 3', status: 'confirmed', listingId: '6762b575bb262e29ef055ad9'},
-                {hour: '15:00', title: 'Test-3', address: 'Tiglina 4', status: 'not confirmed', listingId: '6762b575bb262e29ef055ad9'}]},
-        {title: todayString, 
-            data: [
-                {hour: '18:30', title: 'Test1', address: 'Kaufland Tiglina', status: 'confirmed', listingId: '6762b575bb262e29ef055ad9'}, 
-                {hour: '19:30', title: 'Test2', address: 'Bodega', status: 'confirmed', listingId: '6762b575bb262e29ef055ad9'}]
-        },
-        {title: tommorowString,
-            data: [{hour: '13:00', title: 'Test3', address: 'Tiglina 1', status: 'not confirmed', listingId: '6762b575bb262e29ef055ad9'}]}
-    ];
+    formatAgendaItems.sort((a: any, b: any) => a.title.localeCompare(b.title));
 
-    const ITEMS: any[] = agendaItems;
-
-    //if (isLoading) 
-        //return <Text>Loading...</Text>;
+    const ITEMS: any[] = formatAgendaItems;
 
     return (
         <CalendarProvider
