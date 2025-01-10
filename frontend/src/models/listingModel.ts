@@ -18,4 +18,5 @@ export interface IListing {
     amenities: string[],
     createdAt: Date,
     updatedAt: Date,
+    views: Date[], // not viewings, just the dates at which users opened to see a listing
 }

@@ -15,7 +15,7 @@ import { ScheduleViewing } from '../components/ScheduleViewing';
 
 type ListingScreenRouteProp = RouteProp<RootStackParamList, 'Listing'>;
 
-export const ListingScreen: React.FC = ({ }) => { // maybe include navigation here 
+export const ListingScreen: React.FC = () => { // maybe include navigation here
 	const route = useRoute<ListingScreenRouteProp>();
 	const { id } = route.params;
 	const { user } = useUser();

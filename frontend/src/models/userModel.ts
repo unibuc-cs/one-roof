@@ -10,7 +10,7 @@ export interface IUser {
 	onboardingStep: number,
 	contactedUsers: string[], // modified to keep clerk ID's
 	favoriteListings: string[],
-	savedLists: string[], 
+	savedLists: string[],
 	createdAt?: Date,
 	updatedAt?: Date,
 }

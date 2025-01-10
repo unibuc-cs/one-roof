@@ -70,6 +70,15 @@ export function DrawerContent(props: DrawerContentComponentProps) {
 						label="SavedLists"
 						onPress={() => { props.navigation.navigate('SavedLists'); }}
 					/>
+					{role === UserRoleEnum.Landlord &&
+					<DrawerItem
+						icon={({ color, size }) => (
+							<MaterialCommunityIcons name="heart-outline" color={color} size={size} />
+						)}
+						label="Insights"
+						onPress={() => { props.navigation.navigate('Insights'); }}
+					/>
+					}
 					<DrawerItem
 						icon={({ color, size }) => (
 							<MaterialCommunityIcons name="message-outline" color={color} size={size} />
@@ -79,17 +88,17 @@ export function DrawerContent(props: DrawerContentComponentProps) {
 					/>
 					<DrawerItem
 						icon={({ color, size }) => (
-<<<<<<< HEAD
 							<Icon name="user-friends" size={18} color= {color}/>
 						)}
 						label="Friends"
 						onPress={() => { props.navigation.navigate('Friends'); }}
-=======
+					/>
+					<DrawerItem
+						icon={({ color, size }) => (
 							<MaterialCommunityIcons name="calendar-account-outline" color={color} size={size} />
 						)}
 						label="Viewings"
 						onPress={() => { props.navigation.navigate('Viewings'); }}
->>>>>>> origin/viewings-task
 					/>
 					<Button
 						mode="elevated"

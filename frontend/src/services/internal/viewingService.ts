@@ -13,6 +13,10 @@ export const viewingService = {
         return callApi(`viewings/user/${userId}`, {}, userId);
     },
 
+    getLandlordViewings : (userId:string) => {
+        return callApi(`viewings/landlord/${userId}`, {}, userId);
+    },
+
     getConfirmedViewings : (userId: string) => {
         return callApi(`viewings/confirmed/${userId}`, {}, userId);
     },

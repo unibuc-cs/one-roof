@@ -25,10 +25,10 @@ const SavedListCard: React.FC<SavedListCardProps> = ({ savedList }) => {
   const { navigate } = useNavigation<SavedListNavigationProp>();
   const { user } = useUser();
 
-  const {setSharedWith, setSavedListings} = useSavedListDetails();
+  const { setSharedWith, setSavedListings } = useSavedListDetails();
 
   const getContext = async () => {
-    console.log('before loading context from database', savedList._id);
+  console.log('before loading context from database', savedList._id);
     const listDetails = await savedListService.getSavedList(savedList._id, user?.id ?? '');
     console.log('list details: ', listDetails);
     setSharedWith(listDetails.sharedWith);

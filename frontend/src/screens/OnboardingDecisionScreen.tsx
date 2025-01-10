@@ -9,9 +9,9 @@ import { savedListService } from '../services/internal/savedListService';
 import { useSavedListDetails } from '../contexts/SavedListDetailsContext';
 
 export const OnboardingDecisionScreen = () => {
-	const { onboardingStep, setContactedUsers, setOnboardingStep, setProfilePictureUrl, setRole, setUserId, setFavoriteListings, setSavedLists } = useUserDetails();
+	const { onboardingStep, setContactedUsers, setOnboardingStep, setProfilePictureUrl, setRole, setUserId, setFavoriteListings } = useUserDetails(); //setSavedLists
 	const { user } = useUser();
-	const {savedLists} = useUserDetails();
+	//const { savedLists } = useUserDetails();
 
 	useEffect(() => {
 		if (user) {
@@ -22,12 +22,6 @@ export const OnboardingDecisionScreen = () => {
 		}
 	}, [user]);
 
-	// useEffect(() => {
-	// 	if (savedLists) {
-			
-
-	// 	}
-	// }, [savedLists])
 
 	const fetchAndStoreUserDetails = async (userId: string) => {
 		console.log('before fetchAndStoreUserDetails', userId);
@@ -39,7 +33,7 @@ export const OnboardingDecisionScreen = () => {
 		setUserId(userDetails._id);
 		setContactedUsers(userDetails.contactedUsers);
 		setFavoriteListings(userDetails.favoriteListings);
-		setSavedLists(userDetails.savedLists);
+		//setSavedLists(userDetails.savedLists);
 	};
 
 	// const fetchAndStoreSavedListDetails = async (listId: string, userId:string) => {

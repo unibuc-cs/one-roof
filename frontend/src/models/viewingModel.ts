@@ -6,5 +6,5 @@ export interface IViewing {
     address: string,
     landlordId: string,
     viewingDate: Date,
-    status: string
+    status: string,
 }

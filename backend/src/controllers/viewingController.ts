@@ -34,6 +34,16 @@ export const ViewingController = {
         }
     },
 
+    getLandlordViewings: async (req, res) => {
+        try {
+            const viewings = await ViewingService.getLandlordViewings(req.params.userId);
+            res.json(viewings);
+        }
+        catch (error) {
+            res.status(500).json({ error: 'Failed to retrieve viewings' });
+        }
+    },
+
     getUserConfirmedViewings: async (req, res) => {
         try {
             const viewings = await ViewingService.getUserConfirmedViewings(req.params.userId);

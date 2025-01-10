@@ -9,7 +9,7 @@ export const SavedListService = {
             console.error(error); 
             return undefined;
         }
-    }, 
+    },
 
     getSavedList: async (id: string): Promise<ISavedList | null> => {
         return SavedList.findById(id).exec();

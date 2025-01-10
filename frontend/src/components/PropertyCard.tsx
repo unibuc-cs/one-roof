@@ -20,6 +20,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { TouchableOpacity, Modal, FlatList } from 'react-native';
 import { useEffect } from 'react';
 import { SavedListDetailsProvider, useSavedListDetails } from '../contexts/SavedListDetailsContext';
+import { useSavedLists } from '../hooks';
 
 type PropertyCardProps = {
 	listing: IListing,
@@ -50,32 +51,39 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ listing,
 		}
 	}, []);
 
+	const { userId } = useUserDetails();
 	const { favoriteListings, setFavoriteListings } = useUserDetails();
 	const [isFavorite, setIsFavorite] = useState<boolean>(listing._id in favoriteListings);
 	const { navigate } = useNavigation();
 	const width = Dimensions.get('window').width;
 	const [pressed, setPressed] = useState(isFavorite); // State to manage pressed state of the button
 	const [loading, setLoading] = useState<boolean>(true);
+	const [dropdownVisible, setDropdownVisible] = useState(false);
 
 	const { user } = useUser();
+	const { savedLists } = useSavedLists();
 
-	const [dropdownVisible, setDropdownVisible] = useState(false);
-	const {savedLists} = useUserDetails(); // from where?
-	const [ lists, setLists] = useState<any[]>([]);
+	const usersSavedLists = savedLists.filter(list => list.ownerId === userId);
+	console.log(usersSavedLists);
 
-    if (savedLists) {
-        useEffect(() => {
-			const getLists = async () => {
-				console.log('SAVED LISTS ARE UPDATED');
-				const existingLists = savedLists.filter(id => id !== null && id !== undefined)
-				const fetchedLists = await Promise.all(existingLists.map(list_id => savedListService.getSavedList(list_id, user?.id ?? '')));
-				setLists(fetchedLists);
-				setLoading(false);
-			}; 
+	//const [lists, setLists] = useState<any[]>([]);
 
-			getLists();
-        }, [savedLists]);
-    }
+
+
+	// let lists;
+	// useEffect(() => {
+	// 	const getLists = async () => {
+	// 		console.log('Fetching saved lists');
+	// 		if (savedLists) {
+	// 			const existingLists = savedLists.filter(id => id !== null && id !== undefined);
+	// 			const fetchedLists = await Promise.all(existingLists.map(list_id => savedListService.getSavedList(list_id, user?.id ?? '')));
+	// 			setLists(fetchedLists);
+	// 		}
+	// 		setLoading(false);
+	// 	};
+
+	// 	getLists();
+	// }, []);
 
 	const open = useCallback(() => {
 		if (!listing.external) {
@@ -104,14 +112,14 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ listing,
 			}
 		}
 		else
-			console.log(`Already exists in list`);
+			console.log('Already exists in list');
 		setDropdownVisible(!dropdownVisible);
-	}
+	} 
 
 	const updateFavoriteListings = async (updatedFavorites: string[]) => {
 		try {
 			await userService.updateUser(user?.id ?? '', { favoriteListings: updatedFavorites });
-			//setFavoriteListings(updatedFavorites); 
+			//setFavoriteListings(updatedFavorites);
 			// useUserDetails().favoriteListings = updatedFavorites;
 		} catch (error) {
 			console.error('Failed to update favorite listings:', error);
@@ -229,7 +237,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ listing,
 			<Modal visible={dropdownVisible} transparent={true} animationType="slide" onRequestClose={toggleDropdown}>
 				<View style= {styles.modalContainer}>
 					<View style={styles.modalContent}>
-						<FlatList data={lists} keyExtractor={(item: ISavedList)=>item._id.toString()} renderItem={({item})=>(
+						<FlatList data={usersSavedLists} keyExtractor={(item: ISavedList)=>item._id.toString()} renderItem={({item})=>(
 							<SavedListDetailsProvider savedListId={item._id}>
 								<TouchableOpacity style={styles.listItem} onPress={() => selectList(item, listing)}>
 									<Text style = {styles.listItemText}> {item.name} </Text>
@@ -299,32 +307,32 @@ const styles = StyleSheet.create({
 		right: 40,
 	},
 	buttonContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-    },
-    addToListButton: {
-        zIndex: 100,
-    },
-    modalContainer: {
-        flex: 1,
-        backgroundColor: 'rgba(0,0,0,0.5)',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    modalContent: {
-        backgroundColor: 'white',
-        width: '80%',
-        padding: 20,
-        borderRadius: 10,
-    },
-    listItem: {
-        padding: 15,
-        borderBottomWidth: 1,
-        borderBottomColor: '#ccc',
-    },
-    listItemText: {
-        fontSize: 16,
-    },
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+	},
+	addToListButton: {
+		zIndex: 100,
+	},
+	modalContainer: {
+		flex: 1,
+		backgroundColor: 'rgba(0,0,0,0.5)',
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	modalContent: {
+		backgroundColor: 'white',
+		width: '80%',
+		padding: 20,
+		borderRadius: 10,
+	},
+	listItem: {
+		padding: 15,
+		borderBottomWidth: 1,
+		borderBottomColor: '#ccc',
+	},
+	listItemText: {
+		fontSize: 16,
+	},
 });
 
 export default PropertyCard;

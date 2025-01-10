@@ -16,15 +16,10 @@ type SavedListDetailsScreenRouteProp = RouteProp<
 >;
 
 export const SavedListDetailsScreen: React.FC = () => {
-  const { user } = useUser();
-  const route = useRoute<SavedListDetailsScreenRouteProp>(); // Use RouteProp to type the route
-  const { savedListId, sharedWith, savedListings } = route.params; // Extract route params
+	const { user } = useUser();
+	const route = useRoute<SavedListDetailsScreenRouteProp>(); // Use RouteProp to type the route
+	const { savedListId, sharedWith, savedListings } = route.params; // Extract route params
 
-
-	//const { savedList} = route.params;
-	//need to use a hook here
-	//const  savedListings = savedList.savedListings;
-	//const {savedListings} = useSavedListDetails();
 	const [listings, setListings] = useState<any[]>([]);
 	const [loading, setLoading] = useState<boolean>(true);
 
@@ -38,7 +33,7 @@ export const SavedListDetailsScreen: React.FC = () => {
 			};
 
 			fetchListings();
-		}, [savedListings]);
+		}, []);
 	}
 
 	return (

@@ -1,11 +1,11 @@
 import { callApi } from '../../utils';
 
 export const savedListService = {
-    createSavedList: (data: any, userId: string) => {
-        return callApi('savedlists', {method: 'POST', body: data}, userId);
-    },
+	createSavedList: (data: any, userId: string) => {
+		return callApi('savedlists', {method: 'POST', body: data}, userId);
+	},
 
-    getSavedList: (id: string, userId:string) => { // , ownerId: string
+	getSavedList: (id: string, userId:string) => { // , ownerId: string
 		return callApi(`savedlists/${id}`, {}, userId);
 	},
 

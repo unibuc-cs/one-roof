@@ -30,6 +30,17 @@ export const ViewingService = {
         return viewings;
     },
 
+    getLandlordViewings: async (landlordId:string) : Promise <IViewing[]> => {
+        const viewingsLandlord = await Viewing.find({
+            landlordId: landlordId,
+            $or: [
+                { status: 'confirmed' },
+                { status: 'not confirmed' }
+            ]
+        });
+        return viewingsLandlord;
+    },
+
     getUserConfirmedViewings: async (userId: string): Promise<IViewing[]> => {
         const viewings = await Viewing.find({
             status: 'confirmed',
