@@ -8,6 +8,7 @@ interface IUser extends Document {
     contactedUsers: string[],
     favoriteListings: string[],
     savedLists: string[],
+    viewedListings: string[],
     createdAt: Date,
     updatedAt: Date,
     friendRequests: string[],
@@ -29,6 +30,7 @@ const UserSchema = new Schema<IUser>({
 	contactedUsers: [{type: String}],
     favoriteListings: [{type: String}],
     savedLists: [{type: String}],
+    viewedListings: [{type: String}],
 	friendRequests: [{ type: String }], // Incoming friend requests
 	friends: [{ type: String }], // Established friendships
 },

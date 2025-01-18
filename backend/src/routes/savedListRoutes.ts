@@ -5,6 +5,7 @@ const savedListRouter = express.Router();
 
 savedListRouter.post('/', SavedListController.createSavedList);
 savedListRouter.get('/', SavedListController.getAllSavedLists);
+savedListRouter.get('/ownerId/:id', SavedListController.getUserSavedLists);
 savedListRouter.get('/:id', SavedListController.getSavedList);
 savedListRouter.put('/:id', SavedListController.updateSavedList);
 
