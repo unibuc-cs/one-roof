@@ -60,9 +60,10 @@ export const FriendController = {
 	getFriendRequest: async (req, res) => {
 		const { userId } = req.params;
 		const requests = await FriendshipRequest.find({
-			$or: [{ userRequested: userId }, { userPending: userId }],
+			pendingUser: userId,
 			status: 'pending',
 		});
+		console.log(requests);
 		res.json(requests);
 	},
 
