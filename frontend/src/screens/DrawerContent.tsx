@@ -10,6 +10,7 @@ import { capitalize } from '../utils';
 import Button from '../components/Button';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { UserRoleEnum } from '../enums';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 export function DrawerContent(props: DrawerContentComponentProps) {
 	const { user } = useUser();
@@ -65,15 +66,15 @@ export function DrawerContent(props: DrawerContentComponentProps) {
 					/>
 					<DrawerItem
 						icon={({ color, size }) => (
-							<MaterialCommunityIcons name="heart-outline" color={color} size={size} />
+							<MaterialCommunityIcons name="content-save-all-outline" size={size} color={color} />
 						)}
-						label="SavedLists"
+						label="Saved Lists"
 						onPress={() => { props.navigation.navigate('SavedLists'); }}
 					/>
 					{role === UserRoleEnum.Landlord &&
 					<DrawerItem
 						icon={({ color, size }) => (
-							<MaterialCommunityIcons name="heart-outline" color={color} size={size} />
+							<FontAwesome name="bar-chart" size={size} color={color} />
 						)}
 						label="Insights"
 						onPress={() => { props.navigation.navigate('Insights'); }}

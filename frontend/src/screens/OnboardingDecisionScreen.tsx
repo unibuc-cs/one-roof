@@ -6,10 +6,9 @@ import { FurtherDetailsRegistrationScreen } from './FurtherDetailsRegistrationSc
 import { CreateReviewScreen } from './review-creation';
 import { HomeScreen } from './HomeScreen';
 import { savedListService } from '../services/internal/savedListService';
-import { useSavedListDetails } from '../contexts/SavedListDetailsContext';
 
 export const OnboardingDecisionScreen = () => {
-	const { onboardingStep, setContactedUsers, setOnboardingStep, setProfilePictureUrl, setRole, setUserId, setFavoriteListings } = useUserDetails(); //setSavedLists
+	const { onboardingStep, setContactedUsers, setOnboardingStep, setProfilePictureUrl, setRole, setUserId, setFavoriteListings, setSavedLists } = useUserDetails(); //setSavedLists
 	const { user } = useUser();
 	//const { savedLists } = useUserDetails();
 
@@ -26,14 +25,14 @@ export const OnboardingDecisionScreen = () => {
 	const fetchAndStoreUserDetails = async (userId: string) => {
 		console.log('before fetchAndStoreUserDetails', userId);
 		const userDetails = await userService.getUserByClerkId(userId);
-		console.log('userdetails', userDetails);
+		console.log('userdetails type', typeof(userDetails));
 		setRole(userDetails.role);
 		setOnboardingStep(userDetails.onboardingStep);
 		setProfilePictureUrl(userDetails.profilePicture);
 		setUserId(userDetails._id);
 		setContactedUsers(userDetails.contactedUsers);
 		setFavoriteListings(userDetails.favoriteListings);
-		//setSavedLists(userDetails.savedLists);
+		setSavedLists(userDetails.savedLists);
 	};
 
 	// const fetchAndStoreSavedListDetails = async (listId: string, userId:string) => {

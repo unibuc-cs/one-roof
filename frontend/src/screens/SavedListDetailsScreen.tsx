@@ -4,11 +4,9 @@ import PropertyCard from '../components/PropertyCard';  // Assuming PropertyCard
 import { HeaderText } from '../components';
 import { listingService } from '../services';
 import { useUser } from '@clerk/clerk-expo';
-import { useSavedListDetails } from '../contexts/SavedListDetailsContext';
 import { useRoute, RouteProp } from '@react-navigation/native';
-import { NavigatorScreenParams } from '@react-navigation/native';
-import { SavedListNavigationProp } from '../components/SavedListCard';
 import { RootStackParamList } from '../navigation';
+import { IListing } from '../models';
 
 type SavedListDetailsScreenRouteProp = RouteProp<
   RootStackParamList,
@@ -18,23 +16,20 @@ type SavedListDetailsScreenRouteProp = RouteProp<
 export const SavedListDetailsScreen: React.FC = () => {
 	const { user } = useUser();
 	const route = useRoute<SavedListDetailsScreenRouteProp>(); // Use RouteProp to type the route
-	const { savedListId, sharedWith, savedListings } = route.params; // Extract route params
+	const { sharedWith, savedListings } = route.params; // Extract route params
 
-	const [listings, setListings] = useState<any[]>([]);
+	const [listings, setListings] = useState<IListing[]>([]);
 	const [loading, setLoading] = useState<boolean>(true);
 
-	if (savedListings)
-	{
-		useEffect(() => { // DOES USE EFFECT WORK HERE ANYMORE ??!!
-			const fetchListings = async () => {
-				const fetchedListings = await Promise.all(savedListings.map(id => listingService.getListing(id, user?.id ?? '')));
-				setListings(fetchedListings.filter(listing => listing !== null));
-				setLoading(false);
-			};
+	useEffect(() => {
+		const fetchListings = async () => {
+			const fetchedListings = await Promise.all(savedListings.map(id => listingService.getListing(id, user?.id ?? '')));
+			setListings(fetchedListings.filter(listing => listing !== null));
+			setLoading(false);
+		};
 
-			fetchListings();
-		}, []);
-	}
+		fetchListings();
+	}, []);
 
 	return (
 		<View style={styles.wrapper}>

@@ -25,11 +25,12 @@ import { FiltersScreen } from '../screens';
 import { ListingConfirmLocationScreen } from '../screens';
 import { ListingFacilitiesScreen, ListingDescriptionScreen } from '../screens';
 import ConversationScreen from '../screens/ConversationScreen';
-import { IReview } from '../models';
+import { IListing, IReview } from '../models';
 import { FavoriteScreen } from '../screens/FavoriteScreens';
 import { SavedListsScreen } from '../screens/SavedListsScreen';
 import { SavedListDetailsScreen } from '../screens/SavedListDetailsScreen';
 import { FriendsScreen } from '../screens/FriendsScreen';
+import { InsightsScreen } from '../screens/InsightsScreen';
 
 export type RootStackParamList = {
 	Home: undefined,
@@ -50,7 +51,8 @@ export type RootStackParamList = {
 		savedListId: string;
 		sharedWith: string[];
 		savedListings: string[];
-	  };
+	  },
+	ListingToBeAdded?: { listing?: IListing }
 };
 
 export const AppNavigation = () => {

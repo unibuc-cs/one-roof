@@ -9,11 +9,15 @@ export const savedListService = {
 		return callApi(`savedlists/${id}`, {}, userId);
 	},
 
+	getUserSavedLists: (userId: string) => {
+		return callApi(`savedlists/ownerId/${userId}`, {}, userId);
+	},
+
 	getAllSavedLists: () => {
-		return callApi('savedlists'); // implicit get?
+		return callApi('savedlists');
 	},
 
 	updateSavedList: (id: string, data: any, userId: string) => {
 		return callApi(`savedlists/${id}`, { method: 'PUT', body: data }, userId);
 	}
-}
+};

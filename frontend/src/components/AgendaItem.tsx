@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import isEmpty from 'lodash/isEmpty';
 import React, { useCallback, useEffect } from 'react';
 import { StyleSheet, Alert, View, Text, TouchableOpacity } from 'react-native';

@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { Dimensions, StyleSheet, View } from 'react-native';
 import { Button, Card, Text } from 'react-native-paper';
-import { IListing, ISavedList } from '../models';
+import { IListing } from '../models';
 import { DetailBox, HeaderText } from '.';
 import { useNavigation } from '@react-navigation/native';
 import { theme } from '../theme';
@@ -13,14 +13,9 @@ import * as Linking from 'expo-linking';
 import { Image } from 'expo-image';
 import { useUser } from '@clerk/clerk-expo';
 import { useUserDetails } from '../contexts/UserDetailsContext';
-import { drop, includes } from 'lodash';
 import userService from '../services/internal/userService';
-import { savedListService } from '../services/internal/savedListService';
 import Spinner from 'react-native-loading-spinner-overlay';
-import { TouchableOpacity, Modal, FlatList } from 'react-native';
-import { useEffect } from 'react';
-import { SavedListDetailsProvider, useSavedListDetails } from '../contexts/SavedListDetailsContext';
-import { useSavedLists } from '../hooks';
+import { ISchema } from 'yup';
 
 type PropertyCardProps = {
 	listing: IListing,
@@ -51,74 +46,40 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ listing,
 		}
 	}, []);
 
-	const { userId } = useUserDetails();
-	const { favoriteListings, setFavoriteListings } = useUserDetails();
-	const [isFavorite, setIsFavorite] = useState<boolean>(listing._id in favoriteListings);
 	const { navigate } = useNavigation();
 	const width = Dimensions.get('window').width;
+	const { user } = useUser();
+	const userId = user?.id ?? '';
+
+	const { favoriteListings, setFavoriteListings, viewedListings } = useUserDetails();
+
+	const [isFavorite, setIsFavorite] = useState<boolean>(listing._id in favoriteListings);
 	const [pressed, setPressed] = useState(isFavorite); // State to manage pressed state of the button
 	const [loading, setLoading] = useState<boolean>(true);
-	const [dropdownVisible, setDropdownVisible] = useState(false);
 
-	const { user } = useUser();
-	const { savedLists } = useSavedLists();
+	const open = useCallback(async () => {
+		// update user's history here
+		// const updatedHistory = [...viewedListings, listing._id];
+		// await userService.updateUser(userId, { viewedListings: updatedHistory });
 
-	const usersSavedLists = savedLists.filter(list => list.ownerId === userId);
-	console.log(usersSavedLists);
-
-	//const [lists, setLists] = useState<any[]>([]);
-
-
-
-	// let lists;
-	// useEffect(() => {
-	// 	const getLists = async () => {
-	// 		console.log('Fetching saved lists');
-	// 		if (savedLists) {
-	// 			const existingLists = savedLists.filter(id => id !== null && id !== undefined);
-	// 			const fetchedLists = await Promise.all(existingLists.map(list_id => savedListService.getSavedList(list_id, user?.id ?? '')));
-	// 			setLists(fetchedLists);
-	// 		}
-	// 		setLoading(false);
-	// 	};
-
-	// 	getLists();
-	// }, []);
-
-	const open = useCallback(() => {
 		if (!listing.external) {
+			// update listing's views here
+			// const updatedViews = [...listing.views, new Date()];
+			// await listingService.updateListing(listing._id, { views: updatedViews }, userId);
+
 			navigate('Listing', { id: listing._id });
 		} else {
 			Linking.openURL(listing.url as string);
 		}
 	}, [listing, navigate]);
 
-	const toggleDropdown = () => {
-		setDropdownVisible(!dropdownVisible);
-	}
-
-	const selectList = async (list : ISavedList, listing: IListing) => { // to see type of list
-		console.log('Inside select list ', list);
-
-		if (list.savedListings === null || (list.savedListings !== null &&!list.savedListings.includes(listing._id))) // is not already in list
-		{
-			try{
-				console.log(`Adding to ${list.name}`);
-				const updatedSavedListings = [...list.savedListings, listing._id];
-				await savedListService.updateSavedList(list._id, {savedListings: updatedSavedListings}, user?.id ?? '');
-				//setSavedListings(updatedSavedListings);
-			}catch (error) {
-				console.error('Failed to update list of listings:', error);
-			}
-		}
-		else
-			console.log('Already exists in list');
-		setDropdownVisible(!dropdownVisible);
-	} 
+	const goToListsScreen = () => {
+		navigate('SavedLists', { listing });
+	};
 
 	const updateFavoriteListings = async (updatedFavorites: string[]) => {
 		try {
-			await userService.updateUser(user?.id ?? '', { favoriteListings: updatedFavorites });
+			await userService.updateUser(userId, { favoriteListings: updatedFavorites });
 			//setFavoriteListings(updatedFavorites);
 			// useUserDetails().favoriteListings = updatedFavorites;
 		} catch (error) {
@@ -134,7 +95,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ listing,
 		console.log('toggle fav');
 		setPressed((prev) => !prev);
 		setIsFavorite(!isFavorite);
-		const id_ = user?.id;
+		//const id_ = user?.id;
 		setFavoriteListings((prevFavorites) => {
 			if (prevFavorites.includes(listing._id)) {
 				const list = prevFavorites.filter(id => id !== listing._id);
@@ -150,14 +111,15 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ listing,
 
 	}, [listing._id, setFavoriteListings]);
 
+	
 	return (
 		<Card mode={mode ?? 'elevated'} key={listing._id} style={[styles.cardContainer, { backgroundColor: backgroundColor ?? theme.colors.background }]}>
 			<View style={styles.contentContainer}>
 				<View style={styles.imageContainer}>
 					{canOpen && (
 						<View style={styles.buttonContainer}>
-							<Button mode="elevated" style={styles.openButton} onPress={() => open()}>{getOpenMessage()}</Button>
-							<Button mode="elevated" style={styles.addToListButton} onPress={toggleDropdown}> Save </Button>
+							<Button mode="elevated" style={styles.openButton} onPress={() => open()}>{getOpenMessage()}</Button> 
+							<Button mode="elevated" style={styles.addToListButton} onPress={goToListsScreen}> Save </Button> 
 						</View>
 					)}
 					{showCarousel ? (
@@ -234,19 +196,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ listing,
 				</View>
 			</View>
 
-			<Modal visible={dropdownVisible} transparent={true} animationType="slide" onRequestClose={toggleDropdown}>
-				<View style= {styles.modalContainer}>
-					<View style={styles.modalContent}>
-						<FlatList data={usersSavedLists} keyExtractor={(item: ISavedList)=>item._id.toString()} renderItem={({item})=>(
-							<SavedListDetailsProvider savedListId={item._id}>
-								<TouchableOpacity style={styles.listItem} onPress={() => selectList(item, listing)}>
-									<Text style = {styles.listItemText}> {item.name} </Text>
-								</TouchableOpacity>
-							</SavedListDetailsProvider>
-						)} />
-					</View>
-				</View>
-			</Modal>
+			
 		</Card>
 	);
 };
@@ -313,26 +263,7 @@ const styles = StyleSheet.create({
 	addToListButton: {
 		zIndex: 100,
 	},
-	modalContainer: {
-		flex: 1,
-		backgroundColor: 'rgba(0,0,0,0.5)',
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-	modalContent: {
-		backgroundColor: 'white',
-		width: '80%',
-		padding: 20,
-		borderRadius: 10,
-	},
-	listItem: {
-		padding: 15,
-		borderBottomWidth: 1,
-		borderBottomColor: '#ccc',
-	},
-	listItemText: {
-		fontSize: 16,
-	},
+	
 });
 
 export default PropertyCard;

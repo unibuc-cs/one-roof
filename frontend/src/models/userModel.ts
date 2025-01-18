@@ -11,6 +11,7 @@ export interface IUser {
 	contactedUsers: string[], // modified to keep clerk ID's
 	favoriteListings: string[],
 	savedLists: string[],
+	viewedListings: string[],
 	createdAt?: Date,
 	updatedAt?: Date,
 }

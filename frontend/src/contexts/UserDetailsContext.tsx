@@ -15,7 +15,9 @@ interface UserDetails {
 	favoriteListings: string[],
 	setFavoriteListings: React.Dispatch<React.SetStateAction<string[]>>,
 	savedLists: string[],
-	setSavedLists: React.Dispatch<React.SetStateAction<string[]>>
+	setSavedLists: React.Dispatch<React.SetStateAction<string[]>>,
+	viewedListings: string[],
+	setViewedListings: React.Dispatch<React.SetStateAction<string[]>>,
 }
 
 const defaultUserDetails: UserDetails = {
@@ -33,6 +35,8 @@ const defaultUserDetails: UserDetails = {
 	setFavoriteListings: () => {},
 	savedLists: [],
 	setSavedLists: () => {},
+	viewedListings: [],
+	setViewedListings: () => {},
 };
 
 const UserDetailsContext = createContext<UserDetails>(defaultUserDetails);
@@ -49,8 +53,9 @@ export const UserDetailsProvider: React.FC<UserDetailsProviderProps> = ({ childr
 	const [contactedUsers, setContactedUsers] = useState<string[]>([]);
 	const [favoriteListings, setFavoriteListings] = useState<string[]>([]);
 	const [savedLists, setSavedLists] = useState<string[]>([]);
+	const [viewedListings, setViewedListings] = useState<string[]>([]);
 	return (
-		<UserDetailsContext.Provider value={{ favoriteListings, setFavoriteListings, savedLists, setSavedLists, onboardingStep, setOnboardingStep, profilePictureUrl: profilePicture, setProfilePictureUrl: setProfilePicture, role, setRole, userId, setUserId, contactedUsers, setContactedUsers }}>
+		<UserDetailsContext.Provider value={{ viewedListings, setViewedListings, favoriteListings, setFavoriteListings, savedLists, setSavedLists, onboardingStep, setOnboardingStep, profilePictureUrl: profilePicture, setProfilePictureUrl: setProfilePicture, role, setRole, userId, setUserId, contactedUsers, setContactedUsers }}>
 			{children}
 		</UserDetailsContext.Provider>
 	);
