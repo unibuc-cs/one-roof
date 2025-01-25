@@ -1,8 +1,8 @@
 import React from 'react';
-import { Button, Card, Text } from 'react-native-paper';
-import { Image, StyleSheet, View } from 'react-native';
-import { theme } from '../theme';
-import { useCustomFonts } from '../hooks/useCustomFonts';
+import { Text } from 'react-native-paper';
+import {StyleSheet, View } from 'react-native';
+// import { theme } from '../theme';
+// import { useCustomFonts } from '../hooks/useCustomFonts';
 
 const  PropertyDetails: React.FC<any> = ({ listing }) => {
 	return (

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { FlatList, Text, StyleSheet } from 'react-native';
+import { FlatList, StyleSheet } from 'react-native';
 import { theme } from '../theme';
 import { listingService, messageService, reviewService } from '../services';
 import { io } from 'socket.io-client';

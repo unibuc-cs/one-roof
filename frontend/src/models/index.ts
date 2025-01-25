@@ -3,8 +3,8 @@ export * from './listingModel';
 export * from './locationModel';
 export * from './reviewModel';
 export * from './userModel';
-<<<<<<< HEAD
 export * from './savedListModel';
-=======
 export * from './viewingModel';
->>>>>>> origin/viewings-task
+export * from './friendRequestModel';
+export * from './friendshipModel';
+export * from './messageModel';

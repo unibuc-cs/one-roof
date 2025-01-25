@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity, Button, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import { friendService } from '../services/internal/friendService';
 import { IFriendship } from '../models/friendshipModel';
 import { useUser } from '@clerk/clerk-expo';

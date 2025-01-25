@@ -14,6 +14,7 @@ import { Image } from 'expo-image';
 import { useUser } from '@clerk/clerk-expo';
 import { useUserDetails } from '../contexts/UserDetailsContext';
 import userService from '../services/internal/userService';
+import { listingService } from '../services';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { ISchema } from 'yup';
 
@@ -51,21 +52,24 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ listing,
 	const { user } = useUser();
 	const userId = user?.id ?? '';
 
-	const { favoriteListings, setFavoriteListings, viewedListings } = useUserDetails();
+	const { favoriteListings, setFavoriteListings, viewedListings, setViewedListings } = useUserDetails();
 
 	const [isFavorite, setIsFavorite] = useState<boolean>(listing._id in favoriteListings);
 	const [pressed, setPressed] = useState(isFavorite); // State to manage pressed state of the button
 	const [loading, setLoading] = useState<boolean>(true);
 
 	const open = useCallback(async () => {
-		// update user's history here
-		// const updatedHistory = [...viewedListings, listing._id];
-		// await userService.updateUser(userId, { viewedListings: updatedHistory });
+		// update user's history
+		if (!viewedListings.includes(listing._id)) {
+			const updatedHistory = (viewedListings !== null) ? [...viewedListings, listing._id] : [listing._id];
+			await userService.updateUser(userId, { viewedListings: updatedHistory });
+			setViewedListings(updatedHistory);
+		}
 
 		if (!listing.external) {
-			// update listing's views here
-			// const updatedViews = [...listing.views, new Date()];
-			// await listingService.updateListing(listing._id, { views: updatedViews }, userId);
+			// update listing's views dates
+			const updatedViews = (listing.views !== null) ? [...listing.views, new Date()] : [new Date()];
+			await listingService.updateListing(listing._id, { views: updatedViews }, userId);
 
 			navigate('Listing', { id: listing._id });
 		} else {

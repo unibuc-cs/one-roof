@@ -24,7 +24,7 @@ export const SavedListsScreen: React.FC = () => {
 	const listing = route.params?.listing; // Extract route params
 
 	const { user  } = useUser(); //: clerkUser
-	const { savedLists } = useUserDetails();
+	const { savedLists, setSavedLists } = useUserDetails();
 	const [loading, setLoading] = useState<boolean>(true);
 	const [newListName, setNewListName] = useState<string>('');
 	const [myLists, setMyLists] = useState<ISavedList[]>([]);
@@ -90,6 +90,7 @@ export const SavedListsScreen: React.FC = () => {
 			// because of this the entire page will be re-rendered
 			setMyLists(updatedLists); // update the user context
 			setNewListName(''); // Clear the new list name field
+			setSavedLists(updatedLists);
 		}
 	};
 

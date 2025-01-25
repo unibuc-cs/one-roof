@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
+import { View, Text, StyleSheet, KeyboardAvoidingView, ScrollView} from 'react-native';
 import { useUser } from '@clerk/clerk-expo';
 import { useUserDetails } from '../contexts/UserDetailsContext';
 import { ProfilePicture } from '../components/ProfilePicture';
