@@ -38,7 +38,6 @@
     "lodash": "^4.17.21",
     "moment": "^2.30.1",
     "react": "18.2.0",
-    "react-dom": "^18.2.0",
     "react-native": "0.73.6",
     "react-native-awesome-slider": "^2.5.3",
     "react-native-calendars": "^1.1307.0",
@@ -59,21 +58,16 @@
     "react-native-slider-smile": "^1.0.3",
     "react-native-svg": "^15.11.0",
     "react-native-switch-selector": "^2.3.0",
-    "react-test-renderer": "^18.2.0",
     "socket.io-client": "^4.7.5",
     "uuid": "^10.0.0",
     "yup": "^1.4.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.26.7",
-    "@babel/preset-env": "^7.26.7",
-    "@babel/preset-react": "^7.26.3",
-    "@babel/preset-typescript": "^7.26.0",
+    "@babel/core": "^7.24.4",
     "@clerk/clerk-expo": "^0.20.16",
     "@eslint/js": "^9.18.0",
-    "@jest/globals": "^29.7.0",
     "@react-navigation/native-stack": "^6.9.26",
-    "@testing-library/react-native": "^13.0.1",
+    "@testing-library/react-native": "^12.4.5",
     "@types/base-64": "^1.0.2",
     "@types/jest": "^29.5.12",
     "@types/react": "~18.2.79",
@@ -82,8 +76,6 @@
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
     "axios": "^1.6.8",
-    "babel-jest": "^29.7.0",
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "base-64": "^1.0.0",
     "core-js": "^3.36.1",
     "eslint": "^8.57.1",
@@ -110,9 +102,8 @@
   },
   "jest": {
     "preset": "jest-expo",
-    "setupFiles": ["./__tests_files__/setupTests.js"],
     "transformIgnorePatterns": [
-      "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg|firebase|@firebase|firebase/.*|@gorhom|react-native-.*|.*||react-native-reanimated|@react-navigation)"
+      "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg)"
     ]
   },
   "private": true
