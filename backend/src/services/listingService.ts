@@ -1,5 +1,5 @@
-import { Listing, IListing } from '../models';
-import { FilterQuery, UpdateQuery } from 'mongoose';
+import {IListing, Listing} from '../models';
+import {FilterQuery, UpdateQuery} from 'mongoose';
 
 export const ListingService = {
 	createListing: async (listingData: IListing): Promise<IListing | undefined> => {
@@ -25,11 +25,11 @@ export const ListingService = {
 	},
 
 	getAllListings: async (filter: FilterQuery<IListing> = {}): Promise<IListing[]> => {
-		return Listing.find(filter).exec();
+		return Listing.find(filter).limit(50).exec();
 	},
 
 	updateListingById: async (id: string, updateData: UpdateQuery<IListing>): Promise<IListing | null> => {
-		return Listing.findByIdAndUpdate(id, updateData, { new: true }).exec();
+		return Listing.findByIdAndUpdate(id, updateData, {new: true}).exec();
 	},
 
 	deleteListingById: async (id: string): Promise<IListing | null> => {

@@ -3,7 +3,8 @@ import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { theme } from '../theme';
 
-export const CustomMarker: React.FC<any> = ({ coordinate, onPress, text, tracks = false }) => {
+
+export const CustomMarker: React.FC<any> = React.memo(({ coordinate, onPress, text, tracks = false }) => {
 	return (
 		<Marker coordinate={coordinate} onPress={onPress} tracksViewChanges={tracks}>
 			<View style={styles.container}>
@@ -11,7 +12,11 @@ export const CustomMarker: React.FC<any> = ({ coordinate, onPress, text, tracks 
 			</View>
 		</Marker>
 	);
-};
+}, (prevProps, nextProps) =>
+	prevProps.location === nextProps.location &&
+        prevProps.text === nextProps.text &&
+        prevProps.tracks === nextProps.tracks
+);
 
 const styles = StyleSheet.create({
 	text: {

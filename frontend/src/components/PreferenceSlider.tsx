@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
-import MultiSlider from '@ptomasroos/react-native-multi-slider';
+import { Dimensions, StyleSheet, Text, View } from 'react-native';
 import { Slider } from 'react-native-awesome-slider';
 import { useSharedValue } from 'react-native-reanimated';
 import { useCustomFonts } from '../hooks/useCustomFonts';
@@ -8,14 +7,16 @@ import { HeaderText } from './HeaderText';
 import { theme } from '../theme';
 
 interface PreferenceSliderProps {
-	question: string,
-	leftText: string,
-	rightText: string,
-	onValueChange?: (value: number) => void,
+    question: string,
+    leftText: string,
+    rightText: string,
+    onValueChange?: (value: number) => void,
 }
 
 export const PreferenceSlider: React.FC<PreferenceSliderProps> = ({ question, leftText, rightText, onValueChange }) => {
-	const LoadFonts = async () => { await useCustomFonts(); };
+	const LoadFonts = async () => {
+		await useCustomFonts();
+	};
 	const [value, setValue] = useState(3);
 
 	const handleValueChange = (newValue: number) => {
@@ -47,8 +48,12 @@ export const PreferenceSlider: React.FC<PreferenceSliderProps> = ({ question, le
 				style={styles.slider}
 			/>
 			<View style={styles.labels}>
-				<Text style={[styles.label, styles.leftText]}>{leftText}</Text>
-				<Text style={[styles.label, styles.rightText]}>{rightText}</Text>
+				<Text style={[styles.label, styles.leftText]} numberOfLines={2}>
+					{leftText}
+				</Text>
+				<Text style={[styles.label, styles.rightText]} numberOfLines={2}>
+					{rightText}
+				</Text>
 			</View>
 		</View>
 	);
@@ -59,24 +64,28 @@ const styles = StyleSheet.create({
 		marginVertical: 15,
 	},
 	leftText: {
-		position: 'relative',
-		left: 0
+		textAlign: 'left',
+		flex: 1,
+		marginRight: 5,
 	},
 	label: {
 		fontFamily: 'ProximaNova-Bold',
-		color: theme.colors.tertiary
+		color: theme.colors.tertiary,
 	},
 	rightText: {
-		position: 'absolute',
-		right: 0,
+		textAlign: 'right',
+		flex: 1,
+		marginLeft: 5,
 	},
 	labels: {
 		display: 'flex',
 		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center',
 	},
 	sliderContainer: {
 		display: 'flex',
 		justifyContent: 'center',
 		alignContent: 'center',
-	}
+	},
 });

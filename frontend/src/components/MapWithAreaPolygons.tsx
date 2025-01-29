@@ -1,16 +1,21 @@
-import React, { useRef, useState, useMemo, useCallback } from 'react';
-import { StyleSheet, View, Button, Alert } from 'react-native';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
+import { Alert, StyleSheet, View } from 'react-native';
+import { Button } from './Button';
 import MapView, { MapPressEvent } from 'react-native-maps';
 import {
+	getRandomPolygonColors,
+	MapPolygonExtendedProps,
 	PolygonEditor,
 	PolygonEditorRef,
-	MapPolygonExtendedProps,
-	getRandomPolygonColors,
 } from '@siposdani87/expo-maps-polygon-editor';
 import { v4 as uuidv4 } from 'uuid';
-import { BUCHAREST_COORDINATES, DEFAULT_LATITUDE_DELTA, DEFAULT_LONGITUDE_DELTA } from '../utils'; // Import UUID for unique keys
+import { BUCHAREST_COORDINATES, DEFAULT_LATITUDE_DELTA, DEFAULT_LONGITUDE_DELTA } from '../utils';
 
-export const MapWithAreaPolygons: React.FC = () => {
+interface MapWithAreaPolygonsProps {
+    onChangePolygons?: (polygons: Array<Array<{ latitude: number, longitude: number }>>) => void,
+}
+
+export const MapWithAreaPolygons: React.FC<MapWithAreaPolygonsProps> = ({ onChangePolygons }) => {
 	const mapRef = useRef<MapView>(null);
 	const polygonEditorRef = useRef<PolygonEditorRef>(null);
 
@@ -20,7 +25,6 @@ export const MapWithAreaPolygons: React.FC = () => {
 
 	const [strokeColor, fillColor] = getRandomPolygonColors();
 
-	// Memoize the new polygon template to prevent unnecessary recalculations
 	const newPolygon = useMemo(
 		() => ({
 			key: newPolygonKey,
@@ -49,7 +53,7 @@ export const MapWithAreaPolygons: React.FC = () => {
 		}
 		setIsDrawing(false);
 		setNewPolygonKey(null);
-		polygonEditorRef.current?.selectPolygonByKey(-1); // Finalize the current polygon
+		polygonEditorRef.current?.selectPolygonByKey(-1);
 	}, [isDrawing]);
 
 	const handleResetArea = useCallback(() => {
@@ -57,7 +61,8 @@ export const MapWithAreaPolygons: React.FC = () => {
 		setPolygons([]);
 		setIsDrawing(false);
 		setNewPolygonKey(null);
-	}, []);
+		onChangePolygons?.([]);
+	}, [onChangePolygons]);
 
 	const clickOnMap = useCallback(
 		({ nativeEvent: { coordinate } }: MapPressEvent) => {
@@ -72,24 +77,29 @@ export const MapWithAreaPolygons: React.FC = () => {
 		const polygonsClone = [...polygons];
 		polygonsClone.splice(index, 1);
 		setPolygons(polygonsClone);
+		onChangePolygons?.(polygonsClone.map((p) => p.coordinates));
 	};
 
-	const onPolygonCreate =
-		(polygon: MapPolygonExtendedProps) => {
-			const polygonClone = { ...polygon, key: newPolygonKey };
-			setPolygons((prev) => [...prev, polygonClone]);
-			polygonEditorRef.current?.selectPolygonByKey(newPolygonKey);
-		};
+	const onPolygonCreate = (polygon: MapPolygonExtendedProps) => {
+		const polygonClone = { ...polygon, key: newPolygonKey };
+		setPolygons((prev) => {
+			const updatedPolygons = [...prev, polygonClone];
+			onChangePolygons?.(updatedPolygons.map((p) => p.coordinates));
+			return updatedPolygons;
+		});
+		polygonEditorRef.current?.selectPolygonByKey(newPolygonKey);
+	};
 
 	const onPolygonChange = useCallback(
 		(index: number, polygon: MapPolygonExtendedProps) => {
 			setPolygons((prev) => {
 				const polygonsClone = [...prev];
 				polygonsClone[index] = polygon;
+				onChangePolygons?.(polygonsClone.map((p) => p.coordinates));
 				return polygonsClone;
 			});
 		},
-		[]
+		[onChangePolygons]
 	);
 
 	return (
@@ -100,7 +110,7 @@ export const MapWithAreaPolygons: React.FC = () => {
 				initialRegion={{
 					...BUCHAREST_COORDINATES,
 					latitudeDelta: DEFAULT_LATITUDE_DELTA,
-					longitudeDelta: DEFAULT_LONGITUDE_DELTA
+					longitudeDelta: DEFAULT_LONGITUDE_DELTA,
 				}}
 				onPress={clickOnMap}
 			>
@@ -110,18 +120,29 @@ export const MapWithAreaPolygons: React.FC = () => {
 					polygons={polygons}
 					onPolygonCreate={onPolygonCreate}
 					onPolygonChange={onPolygonChange}
-					onPolygonSelect={() => {}}
+					onPolygonSelect={() => {
+					}}
 					onPolygonRemove={onPolygonRemove}
 				/>
 			</MapView>
 
 			<View style={styles.actionsContainer}>
-				{!isDrawing ? (
-					<Button title="Draw Area" onPress={handleDrawArea} />
-				) : (
-					<Button title="Finish Current Area" onPress={handleFinishDrawing} />
-				)}
-				<Button title="Reset Everything" onPress={handleResetArea} />
+				<View style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+					{!isDrawing ? (
+						<Button mode='contained' onPress={handleDrawArea} marginVertical={0} fontSize={12}
+							lineHeight={18}>
+                            Draw Area
+						</Button>
+					) : (
+						<Button mode='contained' onPress={handleFinishDrawing} marginVertical={0} fontSize={12}
+							lineHeight={18}>
+                            Finish Current Area
+						</Button>
+					)}
+					<Button mode='contained' fontSize={12} lineHeight={18} onPress={handleResetArea}>
+                        Reset All Areas
+					</Button>
+				</View>
 			</View>
 		</View>
 	);
@@ -137,10 +158,7 @@ const styles = StyleSheet.create({
 	},
 	actionsContainer: {
 		position: 'absolute',
-		bottom: 50,
+		bottom: 20,
 		left: 10,
-		backgroundColor: '#fff',
-		padding: 10,
-		borderRadius: 5,
 	},
 });

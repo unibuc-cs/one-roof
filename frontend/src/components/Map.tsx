@@ -1,15 +1,15 @@
 import MapView from 'react-native-map-clustering';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { getCoordinatesFromLocation, getShortenedString, mapStyles } from '../utils';
 import { IListing, IReview } from '../models';
 import { BottomItemCard } from './BottomItemCard';
 import { useSearchContext } from '../contexts/SearchContext';
 import { SearchTypeEnum } from '../enums';
-import { CustomMarker } from './CustomMarker';
 import { debounce } from 'lodash';
 import { theme } from '../theme';
 import { Polygon } from 'react-native-maps';
+import { CustomMarker } from './CustomMarker';
 
 const EPSILON = 0.001;
 
@@ -37,7 +37,6 @@ export const Map: React.FC = () => {
 				setIsWaitingForSearch(true);
 				debouncedRegionUpdate(newRegion);
 			} else {
-				console.log('was illegal');
 				setLegalToUpdate(true);
 			}
 		}
@@ -57,7 +56,6 @@ export const Map: React.FC = () => {
 
 	useEffect(() => {
 		if (mapRef.current && state.wasExternalSearchPerformed) {
-			console.log('was external map');
 			mapRef.current.animateToRegion(state.region, 1000);
 			setWasExternalSearchPerformed(false);
 			setLegalToUpdate(false);
@@ -72,6 +70,10 @@ export const Map: React.FC = () => {
 		{ latitude: 44.9315, longitude: 26.0895 },
 	];
 
+	const items = useMemo(() => {
+		return state.searchType === 'listings' ? state.filteredListings : state.filteredReviews;
+	}, [state.searchType, state.filteredListings, state.filteredReviews]);
+
 	return (
 		<View style={styles.map}>
 			<MapView
@@ -83,6 +85,7 @@ export const Map: React.FC = () => {
 				onRegionChangeComplete={handleRegionChangeComplete}
 				customMapStyle={mapStyles}
 				onPress={() => setSelectedItem(undefined)}
+				tracksViewChanges={false}
 			>
 				<Polygon
 					coordinates={polygonCoords}
@@ -90,7 +93,7 @@ export const Map: React.FC = () => {
 					strokeColor="#FF0000"
 					strokeWidth={3}
 				/>
-				{(state.searchType === 'listings' ? state.filteredListings : state.filteredReviews).map((item, index) => (
+				{(state.searchType === 'listings' ? state.filteredListings : state.filteredReviews).map(item => (
 					<CustomMarker
 						key={`type${state.searchType}-item${item._id}`}
 						coordinate={getCoordinatesFromLocation(item.location)}
