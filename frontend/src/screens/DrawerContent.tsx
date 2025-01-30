@@ -71,6 +71,13 @@ export function DrawerContent(props: DrawerContentComponentProps) {
 						label="Saved Lists"
 						onPress={() => { props.navigation.navigate('SavedLists'); }}
 					/>
+					<DrawerItem
+						icon={({ color, size }) => (
+							<FontAwesome name="history" size={size} color={color} />
+						)}
+						label="History"
+						onPress={() => { props.navigation.navigate('History'); }}
+					/>
 					{role === UserRoleEnum.Landlord &&
 					<DrawerItem
 						icon={({ color, size }) => (

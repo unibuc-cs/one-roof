@@ -7,7 +7,7 @@ import { useUser } from '@clerk/clerk-expo';
 import { IListing } from '../models';
 import { useUserDetails } from '../contexts/UserDetailsContext';
 
-export const SavedListDetailsScreen: React.FC = () => {
+export const HistoryScreen: React.FC = () => {
 	const { user } = useUser();
     const {viewedListings} = useUserDetails();
 	const [listings, setListings] = useState<IListing[]>([]);

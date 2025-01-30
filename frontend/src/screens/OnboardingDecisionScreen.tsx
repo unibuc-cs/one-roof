@@ -8,7 +8,7 @@ import { HomeScreen } from './HomeScreen';
 import { savedListService } from '../services/internal/savedListService';
 
 export const OnboardingDecisionScreen = () => {
-	const { onboardingStep, setContactedUsers, setOnboardingStep, setProfilePictureUrl, setRole, setUserId, setFavoriteListings, setSavedLists } = useUserDetails(); //setSavedLists
+	const { onboardingStep, setContactedUsers, setOnboardingStep, setProfilePictureUrl, setRole, setUserId, setFavoriteListings, setSavedLists, setViewedListings } = useUserDetails(); //setSavedLists
 	const { user } = useUser();
 	//const { savedLists } = useUserDetails();
 
@@ -33,6 +33,7 @@ export const OnboardingDecisionScreen = () => {
 		setContactedUsers(userDetails.contactedUsers);
 		setFavoriteListings(userDetails.favoriteListings);
 		setSavedLists(userDetails.savedLists);
+		setViewedListings(userDetails.viewedListings);
 	};
 
 	// const fetchAndStoreSavedListDetails = async (listId: string, userId:string) => {

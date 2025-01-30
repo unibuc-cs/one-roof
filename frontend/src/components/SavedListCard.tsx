@@ -76,7 +76,7 @@ const SavedListCard: React.FC<SavedListCardProps> = ({ savedList , listingToBeAd
 
 			const friendSavedLists = friend.savedLists;
 			friendSavedLists.push(savedList._id);
-			await userService.updateUser(friend._id, { savedLists: friendSavedLists });
+			await userService.updateUser(friend.clerkId, { savedLists: friendSavedLists });
 			// here context of friend can't be updated
 		}
 	};

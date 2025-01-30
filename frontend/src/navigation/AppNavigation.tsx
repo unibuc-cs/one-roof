@@ -31,6 +31,7 @@ import { SavedListsScreen } from '../screens/SavedListsScreen';
 import { SavedListDetailsScreen } from '../screens/SavedListDetailsScreen';
 import { FriendsScreen } from '../screens/FriendsScreen';
 import { InsightsScreen } from '../screens/InsightsScreen';
+import { HistoryScreen } from '../screens/HistoryScreen';
 
 export type RootStackParamList = {
 	Home: undefined,
@@ -94,6 +95,7 @@ export const AppNavigation = () => {
 					<Drawer.Screen name="Friends" component={FriendsScreen}/>
 					<Drawer.Screen name="Viewings" component={ViewingsCalendar}/>
 					<Drawer.Screen name="Insights" component={InsightsScreen}/>
+					<Drawer.Screen name="History" component={HistoryScreen}/>
 				</Drawer.Navigator>
 			</NavigationContainer>
 		</SearchProvider>

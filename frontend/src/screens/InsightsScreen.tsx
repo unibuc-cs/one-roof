@@ -17,15 +17,54 @@ export const InsightsScreen: React.FC = () => {
 	const { userId } = useUserDetails();
 	const [timeUnit, setTimeUnit] = useState<'Day' | 'Hour'>('Hour');
 	const [displayed, setDisplayed] = useState<'Views' | 'Viewings'>('Views');
-	const [chartData, setChartData] = useState<{ labels: string[], values: number[] }> 
-	({
-		labels: ['Mock 1', 'Mock 2', 'Mock 3'],
-		values: [10, 20, 30], 
-	});
+	const [chartData, setChartData] = useState<{ labels: string[], values: number[] }>({labels: [],values: [], });
+	//const currDate = new Date();
+	const currDate = "2025-01-25 10:24:17";
+
+	useEffect(() => {
+		const updateChartData = async () => {
+			const aggregated = await handleData();
+			const agg_keys:string[] = Object.keys(aggregated);
+			const agg_values:number[] = Object.values(aggregated) as number[];
+			setChartData({labels: agg_keys, values: agg_values});
+			//setChartData(aggregated);
+		};
+
+		updateChartData();
+	}, [timeUnit, displayed]);
+
+
+	//console.log("CHART DATA!!!!!!!!", chartData);
+
+	async function handleData () {
+		let data;
+		console.log('Handling data; current pressed:', displayed, timeUnit);
+		if (displayed === 'Views') {
+			data =  fetchViews(); //await
+		} else {
+			console.log('cur')
+			data = fetchViewings(); //await 
+		}
+		console.log('Fetched data:', data);
+
+		let acc: { [key: string]: number }; //!!!
+		if (timeUnit === 'Hour') { // hour shows last day, day shows last month
+			data = data.filter(date => isAfter(date, subHours(currDate, 7)));
+			console.log('only last 24 hours:', data);
+			acc = aggregateByHour(data);
+			console.log('aggregated by hour : ', acc);
+		} else {
+			data = data.filter(date => isAfter(date, subDays(currDate, 7)));
+			acc = aggregateByDay(data);
+			console.log('aggregated by day: ', acc);
+		}
+
+		return acc;
+	};
 
 	const aggregateByDay = (data) => {
 		return data.reduce((acc, curr) => {
-			const day = format(parseISO(curr.date), 'yyyy-MM-dd');
+			const day = format(parseISO(curr), 'yyyy-MM-dd');
 			if (!acc[day]) {
 				acc[day] = 0;
 			}
@@ -36,7 +75,8 @@ export const InsightsScreen: React.FC = () => {
 
 	const aggregateByHour = (data) => {
 		return data.reduce((acc, curr) => {
-			const hour = format(parseISO(curr.date), 'yyyy-MM-dd HH:00');
+			const hour = format(parseISO(curr), 'yyyy-MM-dd HH:00');
+			//console.log('hour:', hour);
 			if (!acc[hour]) {
 				acc[hour] = 0;
 			}
@@ -56,16 +96,16 @@ export const InsightsScreen: React.FC = () => {
 		// }
 
 		const viewsDates = [
-			"2025-01-24 09:24:17",
-			"2025-01-24 15:50:49",
-			"2025-01-24 08:07:47",
-			"2025-01-24 11:19:17",
-			"2025-01-24 15:32:07",
-			"2025-01-24 06:26:34",
-			"2025-01-24 04:10:35",
-			"2025-01-24 16:49:35",
-			"2025-01-24 02:11:32",
-			"2025-01-24 13:08:39"
+			'2025-01-24 09:24:17',
+			'2025-01-24 15:50:49',
+			'2025-01-24 08:07:47',
+			'2025-01-24 11:19:17',
+			'2025-01-24 15:32:07',
+			'2025-01-24 06:26:34',
+			'2025-01-24 04:10:35',
+			'2025-01-24 16:49:35',
+			'2025-01-24 02:11:32',
+			'2025-01-24 13:08:39'
 		  ];
 
 		return viewsDates;
@@ -94,68 +134,20 @@ export const InsightsScreen: React.FC = () => {
 		return viewingsDates;
 	};
 
-	const currDate = new Date();
-
-	//button
-	const handleData = async () => {
-		let data;
-		if (displayed === 'Views') {
-			data =  fetchViews(); //await
-		} else {
-			data = fetchViewings(); //await 
-		}
-
-		let acc: { [key: string]: number }; //!!!
-		if (timeUnit === 'Hour') { // hour shows last day, day shows last month
-			data = data.filter(date => isAfter(date, subHours(currDate, 24)));
-			acc = aggregateByHour(data);
-			console.log('aggregated by hour : ', acc);
-		} else {
-			data = data.filter(date => isAfter(date, subDays(currDate, 7)));
-			acc = aggregateByDay(data);
-			console.log('aggregated by day: ', acc);
-		}
-
-		return acc;
-	};
-
-	const splitChartDataIntoRows = (data, rowSize) => {
-		const rows : { labels: string[], values: number[] }[] = [];
-		const noLabels = data.labels.length;
-		const noRows = noLabels / rowSize + (noLabels % rowSize ? 1 : 0);
-		for (let i = 0; i < noRows; i++) {
-			const row = {
-				labels: data.labels.slice(i * rowSize, (i + 1) * rowSize),
-				values: data.values.slice(i * rowSize, (i + 1) * rowSize),
-			}; // what happens in case of an incomplete row?
-			console.log("ROW", row);
-			rows.push(row);
-		}
-		return rows;
-	};
-
-
-	useEffect(() => {
-		const updateChartData = async () => {
-			const aggregated = await handleData();
-			const agg_keys:string[] = Object.keys(aggregated);
-			const agg_values:number[] = Object.values(aggregated) as number[];
-			setChartData({labels: agg_keys, values: agg_values});
-			//setChartData(aggregated);
-			if (!chartData)
-				setChartData({
-					labels: ['Mock 1', 'Mock 2', 'Mock 3'],
-					values: [10, 20, 30], 
-				});
-		};
-
-		updateChartData();
-	}, [timeUnit, displayed]);
-
-	if (! chartData)
-		setChartData({labels:[], values: []});
-
-	//console.log("CHART DATA!!!!!!!!", chartData);
+	// const splitChartDataIntoRows = (data, rowSize) => {
+	// 	const rows : { labels: string[], values: number[] }[] = [];
+	// 	const noLabels = data.labels.length;
+	// 	const noRows = Math.floor(noLabels / rowSize) + (noLabels % rowSize ? 1 : 0);
+	// 	for (let i = 0; i < noRows; i++) {
+	// 		const row = {
+	// 			labels: data.labels.slice(i * rowSize, (i + 1) * rowSize),
+	// 			values: data.values.slice(i * rowSize, (i + 1) * rowSize),
+	// 		}; 
+	// 		rows.push(row);
+	// 	}
+	// 	console.log('rows:', rows);
+	// 	return rows;
+	// };
 
 
 	return (
@@ -164,13 +156,13 @@ export const InsightsScreen: React.FC = () => {
 				<HeaderText size={40}>Your Insights</HeaderText>
 
 				<View style={styles.segmentedControl}>
-                    <TouchableOpacity
+                    <TouchableOpacity testID='views_button'
                         style={[styles.tab, displayed  === 'Views' && styles.activeTab]}
                         onPress={() => setDisplayed('Views')}
                     >
                         <Text style={[styles.tabText, displayed === 'Views' && styles.activeTabText]}> Views </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity
+                    <TouchableOpacity testID = 'viewings_button'
                         style={[styles.tab, displayed === 'Viewings' && styles.activeTab]}
                         onPress={() => setDisplayed('Viewings')}
                     >
@@ -178,13 +170,13 @@ export const InsightsScreen: React.FC = () => {
                     </TouchableOpacity>
                 </View>
 				<View style={styles.segmentedControl}>
-                    <TouchableOpacity
+                    <TouchableOpacity testID='hour_button'
                         style={[styles.tab, timeUnit  === 'Hour' && styles.activeTab]}
                         onPress={() => setTimeUnit('Hour')}
                     >
                         <Text style={[styles.tabText, timeUnit  === 'Hour' && styles.activeTabText]}> Hour </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity
+                    <TouchableOpacity testID='day_button'
                         style={[styles.tab, timeUnit  === 'Day' && styles.activeTab]}
                         onPress={() => setTimeUnit('Day')}
                     >
@@ -192,16 +184,18 @@ export const InsightsScreen: React.FC = () => {
                     </TouchableOpacity>
                 </View>
 
-				<View style={styles.chartContainer}>
+				<HeaderText size={25}>Displaying data for the last 7 ${timeUnit}</HeaderText>
+
+				<View style={styles.chartContainer} testID='chart container'>
 					<ScrollView>
-						{splitChartDataIntoRows(chartData, 8).map((row, index) => (
-							<BarChart
-								key={index}
+						<BarChart
+								key={'barchart'}
+								// testID=`rtow ${index}`
 								data={{
-									labels: row.labels,
+									labels: chartData.labels,
 									datasets: [
 										{
-											data: row.values,
+											data: chartData.values,
 										},
 									],
 								}}
@@ -217,8 +211,7 @@ export const InsightsScreen: React.FC = () => {
 									color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
 								}}
 								style={{ marginBottom: 16 }}
-							/>
-						))}
+						/>
 					</ScrollView>
 				</View>
 				
