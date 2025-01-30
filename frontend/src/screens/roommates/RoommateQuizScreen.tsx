@@ -6,8 +6,8 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { StyleSheet, View } from 'react-native';
 import * as Yup from 'yup';
 import { MAX_PRICE, MIN_PRICE } from '../../utils';
-import { PriceRangeSelector } from '../../components/PriceRangeSelector';
-import { MapWithAreaPolygons } from '../../components/MapWithAreaPolygons';
+import { PriceRangeSelector } from '../../components/base/PriceRangeSelector';
+import { MapWithAreaPolygons } from '../../components/map/MapWithAreaPolygons';
 import { useUser } from '@clerk/clerk-expo';
 import userService from '../../services/internal/userService';
 import { useNavigation } from '@react-navigation/native';

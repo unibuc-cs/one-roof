@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { ActivityIndicator, Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import UserChatCard from '../components/UserChatCard';
+import UserChatCard from '../components/chats/UserChatCard';
 import { theme } from '../theme';
 import { useUser } from '@clerk/clerk-expo';
 import userService from '../services/internal/userService';

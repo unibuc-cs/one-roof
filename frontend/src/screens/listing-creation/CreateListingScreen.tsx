@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { Card, TextInput } from 'react-native-paper';
 import { Background, Button, HeaderText } from '../../components';
 import { PropertyTypeEnum } from '../../enums';
-import { CustomSwitchSelector } from '../../components/CustomSwitchSelector';
+import { CustomSwitchSelector } from '../../components/base/CustomSwitchSelector';
 import * as Yup from 'yup';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Formik } from 'formik';

@@ -1,17 +1,15 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, Dimensions, ScrollView } from 'react-native';
-import { useRoute, RouteProp } from '@react-navigation/native';
-import { RootStackParamList } from '../components';
+import { Dimensions, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { RouteProp, useRoute } from '@react-navigation/native';
+import { Background, RootStackParamList } from '../components';
 import { useUser } from '@clerk/clerk-expo';
 import { useListing } from '../hooks';
-import { Background } from '../components';
 import Carousel from 'react-native-reanimated-carousel';
 import PropertyDetails from '../components/PropertyDetails';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Card } from 'react-native-paper';
 import ReachOutToUser from '../components/ReachOutToUser';
-import { useCustomFonts } from '../hooks/useCustomFonts';
-import { ScheduleViewing } from '../components/ScheduleViewing';
+import { ScheduleViewing } from '../components/calendar/ScheduleViewing';
 
 type ListingScreenRouteProp = RouteProp<RootStackParamList, 'Listing'>;
 
@@ -27,7 +25,8 @@ export const ListingScreen: React.FC = ({ navigation }) => {
 
 	return (
 		<Background>
-			<ScrollView contentContainerStyle={{ alignItems: 'center', justifyContent: 'center' }} showsVerticalScrollIndicator={false}>
+			<ScrollView contentContainerStyle={{ alignItems: 'center', justifyContent: 'center' }}
+				showsVerticalScrollIndicator={false}>
 				<Card style={styles.container}>
 					<View style={styles.titleContainer}>
 						<Text style={styles.title}>{listing.title}</Text>
@@ -42,7 +41,7 @@ export const ListingScreen: React.FC = ({ navigation }) => {
 						width={width - 100}
 						height={width / 2}
 						autoPlay={true}
-						data= {listing.photos}
+						data={listing.photos}
 						autoPlayInterval={5000}
 						scrollAnimationDuration={1000}
 						renderItem={({ index }) => (
@@ -56,11 +55,13 @@ export const ListingScreen: React.FC = ({ navigation }) => {
 							</View>
 						)}
 					/>
-					<PropertyDetails listing = {listing}/>
+					<PropertyDetails listing={listing}/>
 					<Text style={styles.description}>{listing.description}</Text>
-					<ReachOutToUser message={'Contact the Landlord!'} userToReachOutToId = {listing.landlordId} type={'listing'} referenceId = {listing._id}/>
+					<ReachOutToUser message={'Contact the Landlord!'} userToReachOutToId={listing.landlordId}
+						type={'listing'} referenceId={listing._id}/>
 
-					<ScheduleViewing listingId={listing._id} landlordId={listing.landlordId} listingTitle={listing.title} listingAddress={listing.address} />
+					<ScheduleViewing listingId={listing._id} landlordId={listing.landlordId}
+						listingTitle={listing.title} listingAddress={listing.address}/>
 				</Card>
 			</ScrollView>
 
@@ -85,7 +86,7 @@ const styles = StyleSheet.create({
 		resizeMode: 'cover',
 		borderRadius: 10,
 	},
-	titleContainer:{
+	titleContainer: {
 		paddingBottom: 20,
 	},
 	title: {

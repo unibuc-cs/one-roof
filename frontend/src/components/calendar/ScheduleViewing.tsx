@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Card, Text } from 'react-native-paper';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import { Button } from '../components';
-import { theme } from '../theme';
+import { Button } from '../index';
+import { theme } from '../../theme';
 import { useUser } from '@clerk/clerk-expo';
-import { useUserDataByClerkId } from '../hooks/useUserData';
-import { viewingService } from '../services';
+import { useUserDataByClerkId } from '../../hooks/useUserData';
+import { viewingService } from '../../services';
 
 export const ScheduleViewing: React.FC = ({ listingId, landlordId, listingTitle, listingAddress }) => {
 	const [date, setDate] = useState(new Date());

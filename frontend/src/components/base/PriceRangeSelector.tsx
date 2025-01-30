@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
-import { theme } from '../theme';
+import { theme } from '../../theme';
 
 interface PriceRangeSelectorProps {
     priceRangeRef: React.MutableRefObject<number[]>,

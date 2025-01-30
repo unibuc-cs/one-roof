@@ -1,15 +1,17 @@
-import React, { memo } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 import { TextInput as Input } from 'react-native-paper';
-import { theme } from '../theme';
-import { useCustomFonts } from '../hooks/useCustomFonts';
+import { theme } from '../../theme';
+import { useCustomFonts } from '../../hooks/useCustomFonts';
 
-type Props = React.ComponentProps<typeof Input> & { errorText?: string, marginVertical ?: number};
+type Props = React.ComponentProps<typeof Input> & { errorText?: string, marginVertical?: number };
 
 export const TextInputSmaller = ({ errorText, marginVertical, ...props }: Props) => {
-	const LoadFonts = async () => { await useCustomFonts(); };
+	const LoadFonts = async () => {
+		await useCustomFonts();
+	};
 	const customPadding = props.multiline ? 8 : 0;
-	return  (
+	return (
 		<View style={[styles.container]}>
 			<Input
 				style={[styles.inputContainer, { paddingVertical: customPadding }]}

@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
-import { Button } from './Button';
+import { Button } from '../base/Button';
 import MapView, { MapPressEvent } from 'react-native-maps';
 import {
 	getRandomPolygonColors,
@@ -9,7 +9,7 @@ import {
 	PolygonEditorRef,
 } from '@siposdani87/expo-maps-polygon-editor';
 import { v4 as uuidv4 } from 'uuid';
-import { BUCHAREST_COORDINATES, DEFAULT_LATITUDE_DELTA, DEFAULT_LONGITUDE_DELTA } from '../utils';
+import { BUCHAREST_COORDINATES, DEFAULT_LATITUDE_DELTA, DEFAULT_LONGITUDE_DELTA } from '../../utils';
 
 interface MapWithAreaPolygonsProps {
     onChangePolygons?: (polygons: Array<Array<{ latitude: number, longitude: number }>>) => void,

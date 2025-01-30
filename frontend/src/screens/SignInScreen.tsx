@@ -1,15 +1,12 @@
 import React, { useState } from 'react';
-import { TextInput } from '../components';
-import { Text, StyleSheet } from 'react-native';
+import { Background, TextInput } from '../components';
+import { Text } from 'react-native';
 import { useSignIn } from '@clerk/clerk-expo';
-import { Background } from '../components';
-import Button from '../components/Button';
-import Logo from '../components/Logo';
+import Button from '../components/base/Button';
+import Logo from '../components/base/Logo';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import Spinner from 'react-native-loading-spinner-overlay';
-import { FormikHelpers } from 'formik';
-
 
 
 const signInValidationSchema = Yup.object().shape({
@@ -50,8 +47,8 @@ export default function SignInScreen() {
 
 	return (
 		<Background>
-			<Spinner visible={spinnerVisible} textContent={'Loading....'} />
-			<Logo />
+			<Spinner visible={spinnerVisible} textContent={'Loading....'}/>
+			<Logo/>
 			<Formik
 				initialValues={{ emailAddress: '', password: '' }}
 				validationSchema={signInValidationSchema}
@@ -82,9 +79,10 @@ export default function SignInScreen() {
 							error={!!(touched.password && errors.password)}
 							errorText={errors.password as string}
 						/>
-						{invalidPassword && <Text style={{ color: 'red' }}>Invalid email or password. Please try again.</Text>}
+						{invalidPassword &&
+                            <Text style={{ color: 'red' }}>Invalid email or password. Please try again.</Text>}
 						<Button mode="contained" onPress={() => handleSubmit()}>
-							Sign In
+                            Sign In
 						</Button>
 					</>
 				)}

@@ -3,7 +3,7 @@ import { Card, Text } from 'react-native-paper';
 import { ActivityIndicator, Image, StyleSheet, View } from 'react-native';
 import { theme } from '../theme';
 import { useUserDataByClerkId } from '../hooks/useUserData';
-import Button from '../components/Button';
+import Button from './base/Button';
 import { useNavigation } from '@react-navigation/native';
 import { useUser } from '@clerk/clerk-expo';
 

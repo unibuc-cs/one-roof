@@ -1,15 +1,13 @@
-import { Pressable, StyleSheet, Text, View, Image } from 'react-native';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { useUserDataByClerkId } from '../hooks/useUserData';
-import { theme } from '../theme';
+import { useUserDataByClerkId } from '../../hooks/useUserData';
+import { theme } from '../../theme';
 import { useNavigation } from '@react-navigation/native';
-import { messageService } from '../services';
-import { useUserDetails } from '../contexts/UserDetailsContext';
+import { messageService } from '../../services';
 import { io } from 'socket.io-client';
 import { useUser } from '@clerk/clerk-expo';
 import Spinner from 'react-native-loading-spinner-overlay';
-import App from '../../App';
-import {config} from "../config/configure";
+import { config } from '../../config/configure';
 
 
 let socket;
@@ -47,16 +45,16 @@ const UserChatCard: React.FC<any> = ({ userId: receiverId }) => {
 	}, []);
 
 	useEffect(() => {
-		socket.on('messageReceived', (msg)=>{
+		socket.on('messageReceived', (msg) => {
 			console.log('update mess event');
-			if(msg.receiverId === receiverId && msg.senderId === userId) {
+			if (msg.receiverId === receiverId && msg.senderId === userId) {
 				console.log('am orimit mesaj nou in userCard');
 				setMessage(msg);
 			}
 		});
-		socket.on('updateMessages', (msg) =>{
+		socket.on('updateMessages', (msg) => {
 			console.log('update mess event');
-			if(msg.receiverId === userId && msg.senderId === receiverId){
+			if (msg.receiverId === userId && msg.senderId === receiverId) {
 				setMessage(msg);
 				getLastConversationMessages();
 			}
@@ -93,8 +91,9 @@ const UserChatCard: React.FC<any> = ({ userId: receiverId }) => {
 	const messageStyle = message && message.receiverId === userId && !message.isRead ? styles.unreadMessage : styles.readMessage;
 
 	return (
-		<Pressable style={styles.container} onPress={() => navigate('Messages', { receiverId: recvUser?.clerkId, referenceId: null, type: null })}>
-			<Image style={styles.profilePicture} source={{ uri: recvUser.profilePicture }} />
+		<Pressable style={styles.container}
+			onPress={() => navigate('Messages', { receiverId: recvUser?.clerkId, referenceId: null, type: null })}>
+			<Image style={styles.profilePicture} source={{ uri: recvUser.profilePicture }}/>
 			<View style={{ gap: 5, flex: 1 }}>
 				<Text style={styles.name}>{recvUser.firstName} {recvUser.lastName}</Text>
 				{message && (
@@ -115,11 +114,11 @@ const UserChatCard: React.FC<any> = ({ userId: receiverId }) => {
 export default UserChatCard;
 
 const styles = StyleSheet.create({
-	container:{
+	container: {
 		flexDirection: 'row',
 		alignItems: 'center',
 		gap: 10,
-		borderBottomWidth:0.75,
+		borderBottomWidth: 0.75,
 		borderColor: theme.colors.primary,
 		padding: 10,
 	},
@@ -127,13 +126,13 @@ const styles = StyleSheet.create({
 		width: 70,
 		height: 70,
 		borderRadius: 35,
-		marginRight:5,
+		marginRight: 5,
 	},
-	name:{
+	name: {
 		fontFamily: 'ProximaNova-Bold',
 		fontSize: 20,
 	},
-	lastMessage:{
+	lastMessage: {
 		fontFamily: 'Proxima-Nova/Regular',
 		color: 'gray'
 	},
@@ -141,7 +140,7 @@ const styles = StyleSheet.create({
 		fontFamily: 'ProximaNova-Bold',
 		color: 'black',
 	},
-	time:{
+	time: {
 		fontFamily: 'Proxima-Nova/Regular',
 		color: 'gray'
 	},

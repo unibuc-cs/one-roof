@@ -1,9 +1,9 @@
 import { Background } from '../components';
 import React from 'react';
-import Logo from '../components/Logo';
+import Logo from '../components/base/Logo';
 import { HeaderText } from '../components/';
 import { View } from 'react-native';
-import Button from '../components/Button';
+import Button from '../components/base/Button';
 import { useNavigation } from '@react-navigation/native';
 
 export const UnauthenticatedHomeScreen = () => {

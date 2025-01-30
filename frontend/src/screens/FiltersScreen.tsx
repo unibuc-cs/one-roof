@@ -3,13 +3,13 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 import { Checkbox } from 'react-native-paper';
 import { Button, HeaderText } from '../components';
 import { NumberOfBathroomsEnum, NumberOfBedroomsEnum, PropertyTypeEnum, TypeOfProviderEnum } from '../enums';
-import { CustomSwitchSelector } from '../components/CustomSwitchSelector';
+import { CustomSwitchSelector } from '../components/base/CustomSwitchSelector';
 import { theme } from '../theme';
 import RentalAmenitiesEnum from '../enums/RentalAmenitiesEnum';
 import { MAX_PRICE, MIN_PRICE } from '../utils';
 import { useSearchContext } from '../contexts/SearchContext';
 import { debounce } from 'lodash';
-import { PriceRangeSelector } from '../components/PriceRangeSelector';
+import { PriceRangeSelector } from '../components/base/PriceRangeSelector';
 
 export const FiltersScreen = ({ navigation }) => {
 	const [cleared, setCleared] = useState(false);

@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
-import { Card, TextInput } from 'react-native-paper';
-import { Checkbox } from 'react-native-paper';
+import { StyleSheet, Text, View } from 'react-native';
+import { Card, Checkbox, TextInput } from 'react-native-paper';
 
-import { Button, HeaderText } from '../../components';
-import { NumberOfBathroomsEnum, NumberOfBedroomsEnum, PropertyTypeEnum, TypeOfProviderEnum } from '../../enums';
-import { CustomSwitchSelector } from '../../components/CustomSwitchSelector';
-import { useCustomFonts } from '../../hooks/useCustomFonts';
+import { Background, Button, HeaderText } from '../../components';
+import { NumberOfBathroomsEnum, NumberOfBedroomsEnum } from '../../enums';
+import { CustomSwitchSelector } from '../../components/base/CustomSwitchSelector';
 import * as Yup from 'yup';
-import { Background } from '../../components';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { ErrorMessage, Field, Form, Formik } from 'formik';
+import { Formik } from 'formik';
 import { RouteProp } from '@react-navigation/native';
 import * as Location from 'expo-location';
 import RentalAmenitiesEnum from '../../enums/RentalAmenitiesEnum';
@@ -40,8 +36,7 @@ const initialFormValues = {
 	description: '',
 };
 
-export const ListingFacilitiesScreen: React.FC<ListingFacilitiesScreenPops>= ({ route,navigation }) => {
-	const LoadFonts = async () => { await useCustomFonts(); };
+export const ListingFacilitiesScreen: React.FC<ListingFacilitiesScreenPops> = ({ route, navigation }) => {
 	const { generalDetails, location } = route.params;
 	const [formValues, setFormValues] = useState(initialFormValues);
 
@@ -61,7 +56,11 @@ export const ListingFacilitiesScreen: React.FC<ListingFacilitiesScreenPops>= ({ 
 					initialValues={formValues}
 					validationSchema={FacilitiesSchema}
 					onSubmit={(values) => {
-						navigation.navigate('ListingDescription', { generalDetails: generalDetails, location: location, facilities: values });
+						navigation.navigate('ListingDescription', {
+							generalDetails: generalDetails,
+							location: location,
+							facilities: values
+						});
 					}}
 				>
 					{({ values, handleChange, handleBlur, handleSubmit, setFieldValue, errors, touched }) => (
@@ -94,7 +93,8 @@ export const ListingFacilitiesScreen: React.FC<ListingFacilitiesScreenPops>= ({ 
 								<Text style={styles.error}>{errors.numberOfRooms}</Text>
 							)}
 
-							<HeaderText paddingBottom={10} textAlign={'left'} size={17}>Number of Bathrooms:</HeaderText>
+							<HeaderText paddingBottom={10} textAlign={'left'} size={17}>Number of
+                                Bathrooms:</HeaderText>
 							<CustomSwitchSelector
 								options={[
 									{ label: '1', value: NumberOfBathroomsEnum.One },
@@ -110,7 +110,7 @@ export const ListingFacilitiesScreen: React.FC<ListingFacilitiesScreenPops>= ({ 
 							)}
 
 							<HeaderText paddingBottom={10} textAlign={'left'} size={17}>Amenities:</HeaderText>
-							<KeyboardAwareScrollView style={{ height:270 }}>
+							<KeyboardAwareScrollView style={{ height: 270 }}>
 								{Object.values(RentalAmenitiesEnum).map((amenity) => (
 									<View key={amenity} style={styles.checkboxContainer}>
 										<Checkbox.Item
@@ -133,8 +133,9 @@ export const ListingFacilitiesScreen: React.FC<ListingFacilitiesScreenPops>= ({ 
 							</KeyboardAwareScrollView>
 
 							<View style={styles.buttonsContainer}>
-								<Button style={styles.button} mode= "contained" onPress={handleDiscard}>Discard</Button>
-								<Button style={styles.button} mode="contained" onPress={() => handleSubmit()}>Next</Button>
+								<Button style={styles.button} mode="contained" onPress={handleDiscard}>Discard</Button>
+								<Button style={styles.button} mode="contained"
+									onPress={() => handleSubmit()}>Next</Button>
 							</View>
 						</View>
 					)}
@@ -147,13 +148,13 @@ export const ListingFacilitiesScreen: React.FC<ListingFacilitiesScreenPops>= ({ 
 
 const styles = StyleSheet.create({
 	card: {
-		flex:1,
+		flex: 1,
 		width: '100%',
 		backgroundColor: 'white',
 		padding: 16,
 		margin: 30,
 	},
-	textInput:{
+	textInput: {
 		borderWidth: 0,
 		borderRadius: 10,
 		height: 40,
@@ -174,7 +175,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 	},
-	button:{
+	button: {
 		width: 'fit-content',
 	}
 });

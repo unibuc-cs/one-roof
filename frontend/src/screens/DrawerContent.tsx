@@ -3,11 +3,11 @@ import { StyleSheet, View } from 'react-native';
 import { DrawerContentComponentProps, DrawerContentScrollView, DrawerItem, } from '@react-navigation/drawer';
 import { Caption, Drawer, Title, } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { ProfilePicture } from '../components/ProfilePicture';
+import { ProfilePicture } from '../components/base/ProfilePicture';
 import { useAuth, useUser } from '@clerk/clerk-expo';
 import { useUserDetails } from '../contexts/UserDetailsContext';
 import { capitalize } from '../utils';
-import Button from '../components/Button';
+import Button from '../components/base/Button';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { UserRoleEnum } from '../enums';
 

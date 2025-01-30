@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { HeaderText } from './HeaderText';
+import { HeaderText } from './base/HeaderText';
 import { theme } from '../theme';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 

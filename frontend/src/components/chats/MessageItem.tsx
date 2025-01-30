@@ -1,8 +1,8 @@
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { theme } from '../theme';
-import { Button } from './Button';
+import { theme } from '../../theme';
+import { Button } from '../base/Button';
 import { useNavigation } from '@react-navigation/native';
 
 export const MessageItem = ({ msg, index, listings, reviews, userId }) => {
@@ -30,7 +30,8 @@ export const MessageItem = ({ msg, index, listings, reviews, userId }) => {
 	return (
 		<React.Fragment key={index}>
 			{showListing && (
-				<View style={[styles.listingContainer, msg.senderId === userId ? { alignSelf: 'flex-end' }: { alignSelf: 'flex-start' }]}>
+				<View
+					style={[styles.listingContainer, msg.senderId === userId ? { alignSelf: 'flex-end' } : { alignSelf: 'flex-start' }]}>
 					<View style={{ flex: 1 }}>
 						<Text style={styles.listingTitle}>
 							{listings[msg.referenceId] ? listings[msg.referenceId].title : 'Loading listing...'}
@@ -40,12 +41,14 @@ export const MessageItem = ({ msg, index, listings, reviews, userId }) => {
 						</Text>
 					</View>
 					<Pressable style={styles.openButton}>
-						<Button mode={'contained'} onPress={() => navigate('Listing', { id: listings[msg.referenceId]._id })}>Open</Button>
+						<Button mode={'contained'}
+							onPress={() => navigate('Listing', { id: listings[msg.referenceId]._id })}>Open</Button>
 					</Pressable>
 				</View>
 			)}
 			{showReview && (
-				<View style={[styles.listingContainer, msg.senderId === userId ? { alignSelf: 'flex-end' }: { alignSelf: 'flex-start' }]}>
+				<View
+					style={[styles.listingContainer, msg.senderId === userId ? { alignSelf: 'flex-end' } : { alignSelf: 'flex-start' }]}>
 					<View style={{ flex: 1 }}>
 						<Text style={styles.listingTitle}>
 							{reviews[msg.referenceId] ? reviews[msg.referenceId].title : 'Loading review...'}
@@ -55,7 +58,8 @@ export const MessageItem = ({ msg, index, listings, reviews, userId }) => {
 						</Text>
 					</View>
 					<Pressable style={styles.openButton}>
-						<Button mode={'contained'} onPress={() => navigate('ViewReview', { id: reviews[msg.referenceId]._id })}>Open</Button>
+						<Button mode={'contained'}
+							onPress={() => navigate('ViewReview', { id: reviews[msg.referenceId]._id })}>Open</Button>
 					</Pressable>
 				</View>
 			)}
@@ -103,10 +107,10 @@ const styles = StyleSheet.create({
 	},
 	senderMsgBubble: {
 		alignItems: 'center',
-		alignSelf:'flex-end',
+		alignSelf: 'flex-end',
 		backgroundColor: theme.colors.primary,
 	},
-	senderMsg:{
+	senderMsg: {
 		color: 'white',
 		alignSelf: 'flex-start',
 	},
@@ -116,7 +120,7 @@ const styles = StyleSheet.create({
 		alignSelf: 'flex-start',
 		color: 'black',
 	},
-	receiverMsg:{
+	receiverMsg: {
 		color: 'black',
 		alignSelf: 'flex-end',
 	},
@@ -133,7 +137,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		width: '80%',
 		padding: 10,
-		paddingHorizontal:15,
+		paddingHorizontal: 15,
 		backgroundColor: theme.colors.background,
 		borderRadius: 10,
 		marginTop: 5,

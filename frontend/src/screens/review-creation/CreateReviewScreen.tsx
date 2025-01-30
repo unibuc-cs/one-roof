@@ -1,12 +1,12 @@
-import React, { useEffect } from 'react';
-import { View, StyleSheet } from 'react-native';
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
 import { useUserDetails } from '../../contexts/UserDetailsContext';
 import { useUser } from '@clerk/clerk-expo';
 import userService from '../../services/internal/userService';
-import { Button, HeaderText, Background } from '../../components';
+import { Background, Button, HeaderText } from '../../components';
 import { Card } from 'react-native-paper';
 import { theme } from '../../theme';
-import Logo from '../../components/Logo';
+import Logo from '../../components/base/Logo';
 import { useNavigation } from '@react-navigation/native';
 
 export const CreateReviewScreen: React.FC<any> = () => {
@@ -52,7 +52,7 @@ export const CreateReviewScreen: React.FC<any> = () => {
 					<Button
 						mode={'contained'}
 						onPress={() => navigation.navigate('ReviewGeneralDetails')}
-					>{isFirstTimeUser ? 'Start writing your first review!': 'Start writing another review!'}
+					>{isFirstTimeUser ? 'Start writing your first review!' : 'Start writing another review!'}
 					</Button>
 				</View>
 			</Card>

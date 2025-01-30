@@ -1,8 +1,16 @@
-import express, { Express } from 'express';
+import express, {Express} from 'express';
 import corsMiddleware from './middleware/cors';
 import loggerMiddleware from './middleware/logger';
-import { config } from './configure';
-import {userRouter, friendRouter, reviewRouter, listingRouter, searchRouter, messageRouter, viewingRouter} from './routes';
+import {config} from './configure';
+import {
+	friendRouter,
+	listingRouter,
+	messageRouter,
+	reviewRouter,
+	searchRouter,
+	userRouter,
+	viewingRouter
+} from './routes';
 
 const app: Express = express();
 app.set('port', config.port);

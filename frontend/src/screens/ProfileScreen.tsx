@@ -2,9 +2,9 @@ import React from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useUser } from '@clerk/clerk-expo';
 import { useUserDetails } from '../contexts/UserDetailsContext';
-import { ProfilePicture } from '../components/ProfilePicture';
+import { ProfilePicture } from '../components/base/ProfilePicture';
 import { Background, HeaderText } from '../components';
-import { EditableField } from '../components/EditableField';
+import { EditableField } from '../components/base/EditableField';
 import { Divider } from 'react-native-paper';
 import { theme } from '../theme';
 

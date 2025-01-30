@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { useSignIn, useSignUp } from '@clerk/clerk-expo';
-import { Background } from '../components';
-import { TextInput } from '../components';
-import Button from '../components/Button';
-import Logo from '../components/Logo';
+import { Background, TextInput } from '../components';
+import Button from '../components/base/Button';
+import Logo from '../components/base/Logo';
 
 export default function SignUpScreen() {
 	const { isLoaded, signUp, setActive } = useSignUp();
@@ -64,7 +63,7 @@ export default function SignUpScreen() {
 					}}
 				/>
 				<Button mode="contained" onPress={onSignUpPress}>
-					Continue
+                    Continue
 				</Button>
 			</Background>
 		);
@@ -82,7 +81,7 @@ export default function SignUpScreen() {
 					}}
 				/>
 				<Button mode="contained" onPress={onPressVerify}>
-					Verify Email
+                    Verify Email
 				</Button>
 			</Background>
 		);
@@ -110,7 +109,6 @@ export default function SignUpScreen() {
 			console.error(JSON.stringify(err, null, 2));
 		}
 	};
-
 
 
 	const onPressVerify = async () => {

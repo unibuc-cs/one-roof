@@ -1,10 +1,7 @@
 import React from 'react';
-import {
-	View,
-	StyleSheet
-} from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Searchbar } from 'react-native-paper';
-import { MenuIcon } from './MenuIcon';
+import { MenuIcon } from './base/MenuIcon';
 import { theme } from '../theme';
 import SwitchSelector from 'react-native-switch-selector';
 import { SearchTypeEnum } from '../enums';
@@ -13,7 +10,7 @@ import { getCoordinatesFromAddress } from '../services/external/googleMapsServic
 
 
 type TopBarProps = {
-	navigation: any,
+    navigation: any,
 };
 
 
@@ -54,7 +51,7 @@ const TopBar: React.FC<TopBarProps> = ({ navigation }) => {
 			<View style={styles.container}>
 				<View style={styles.rowContainer}>
 					<View style={[styles.smallerRowContainer, { marginTop: 40 }]}>
-						<MenuIcon iconName={'menu'} onPress={() => navigation.openDrawer()} />
+						<MenuIcon iconName={'menu'} onPress={() => navigation.openDrawer()}/>
 						<View style={styles.searchBarContainer}>
 							{searchBar}
 						</View>
@@ -83,12 +80,14 @@ const TopBar: React.FC<TopBarProps> = ({ navigation }) => {
 			</View>
 		);
 	} else if (routeName === 'Filters' || routeName === 'ReviewGeneralDetails' || routeName === 'BuildingFeedback'
-		|| routeName === 'AreaFeedback') {
+        || routeName === 'AreaFeedback') {
 		return null;
 	} else {
 		return (
 			<View style={styles.menuContainer}>
-				<MenuIcon iconName={'menu'} onPress={() => {navigation.openDrawer();}}/>
+				<MenuIcon iconName={'menu'} onPress={() => {
+					navigation.openDrawer();
+				}}/>
 			</View>
 		);
 	}

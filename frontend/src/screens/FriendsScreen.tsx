@@ -1,19 +1,19 @@
 import React, { useCallback, useState } from 'react';
-import { ActivityIndicator, Alert, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { friendService } from '../services/internal/friendService';
 import { useUser } from '@clerk/clerk-expo';
 import userService from '../services/internal/userService';
 import { IFullFriendRequest } from '../models/friendRequestModel';
 import { useFocusEffect } from '@react-navigation/native';
-import { capitalize } from 'lodash';
-import { FriendshipRequestsList } from '../components/FriendshipRequestsList';
+import { FriendshipRequestsList } from '../components/friends/FriendshipRequestsList';
 import { theme } from '../theme';
-import { HeaderText } from '../components';
+import { IUserWithClerk } from '../models';
+import { FriendsList } from '../components/friends/FriendshipsList';
 
 
 export const FriendsScreen: React.FC = () => {
 	const [selectedTab, setSelectedTab] = useState<'All' | 'Requests'>('All');
-	const [friends, setFriends] = useState<any[]>([]);
+	const [friends, setFriends] = useState<IUserWithClerk[]>([]);
 	const [friendRequests, setFriendRequests] = useState<IFullFriendRequest[]>([]);
 	const [loading, setLoading] = useState(false);
 
@@ -27,13 +27,7 @@ export const FriendsScreen: React.FC = () => {
 			const friendsWithNames = await Promise.all(
 				fetchedFriends.map(async (friend) => {
 					const otherUserId = friend.firstUser === currentUserId ? friend.secondUser : friend.firstUser;
-					const otherUser = await userService.getUserByClerkId(otherUserId);
-					const otherUserWithName = await userService.getWithClerkDetailsByUserId(otherUser._id);
-					return {
-						...friend,
-						otherUserFirstName: otherUserWithName?.firstName || 'Unknown',
-						otherUserSecondName: otherUserWithName?.lastName || '',
-					};
+					return await userService.getFullUserByClerkId(otherUserId);
 				})
 			);
 			setFriends(friendsWithNames);
@@ -121,20 +115,20 @@ export const FriendsScreen: React.FC = () => {
 		}
 
 		if (selectedTab === 'All') {
-			return (
-				<FlatList
-					data={friends}
-					keyExtractor={(item) => `${item.firstUser}-${item.secondUser}`}
-					renderItem={({ item }) => (
-						<View style={styles.card}>
-							<Text style={styles.friendName}>
-								{capitalize(`${item.otherUserFirstName} ${item.otherUserSecondName}`.trim())}
-							</Text>
-						</View>
-					)}
-					ListEmptyComponent={<HeaderText size={24}>You have no friends yet!</HeaderText>}
-				/>
-			);
+			return <FriendsList friends={friends}/>;
+			// return (
+			// 	<FlatList
+			// 		data={friends}
+			// 		keyExtractor={(item) => `${item.firstUser}-${item.secondUser}`}
+			// 		renderItem={({ item }) => (
+			// 			<View style={styles.card}>
+			// 				<Text style={styles.friendName}>
+			// 					{capitalize(`${item.otherUserFirstName} ${item.otherUserSecondName}`.trim())}
+			// 				</Text>
+			// 			</View>
+			// 		)}
+			// 		ListEmptyComponent={<HeaderText size={24}>You have no friends yet!</HeaderText>}
+			// 	/>
 		} else if (selectedTab === 'Requests') {
 			return (
 				<FriendshipRequestsList
@@ -142,15 +136,15 @@ export const FriendsScreen: React.FC = () => {
 					loading={loading}
 					onAccept={async (requestId: string) => {
 						try {
-							await acceptFriendRequest(requestId); // ✅ Use the updated function
+							await acceptFriendRequest(requestId);
 						} catch (error) {
 							console.error('Error accepting friend request:', error);
 						}
 					}}
 					onReject={async (requestId: string) => {
 						try {
-							await friendService.rejectRequest(requestId);
-							await fetchFriendRequests(); // ✅ Re-fetch to remove the rejected request
+							await rejectFriendRequest(requestId);
+							await fetchFriendRequests();
 						} catch (error) {
 							console.error('Error rejecting friend request:', error);
 						}

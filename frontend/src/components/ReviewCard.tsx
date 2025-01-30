@@ -1,14 +1,14 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { Card, Title, Paragraph } from 'react-native-paper';
+import { StyleSheet, View } from 'react-native';
+import { Card, Paragraph } from 'react-native-paper';
 import { theme } from '../theme';
-import { HeaderText } from './HeaderText';
-import { Button } from './Button';
+import { HeaderText } from './base/HeaderText';
+import { Button } from './base/Button';
 import { IReview } from '../models';
 import { useNavigation } from '@react-navigation/native';
 
 type ReviewCardProps = {
-	review: IReview,
+    review: IReview,
 };
 
 export const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
@@ -20,9 +20,11 @@ export const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
 				<Paragraph>{review.livingSituation}</Paragraph>
 				<Paragraph style={styles.description}>{review.description}</Paragraph>
 				<View style={styles.recommendContainer}>
-					<HeaderText size={18} textAlign={'left'} style={styles.recommendText}>Recommend: {review.recommend}/5</HeaderText>
+					<HeaderText size={18} textAlign={'left'}
+						style={styles.recommendText}>Recommend: {review.recommend}/5</HeaderText>
 				</View>
-				<Button mode={'contained'} onPress={() => navigate('ViewReview', { id: review._id })}> Go to Full Review! </Button>
+				<Button mode={'contained'} onPress={() => navigate('ViewReview', { id: review._id })}> Go to Full
+                    Review! </Button>
 			</Card.Content>
 		</Card>
 	);

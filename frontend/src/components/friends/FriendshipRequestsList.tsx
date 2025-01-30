@@ -1,8 +1,8 @@
 import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-native';
 import { useUser } from '@clerk/clerk-expo';
-import { IFullFriendRequest } from '../models/friendRequestModel';
+import { IFullFriendRequest } from '../../models/friendRequestModel';
 import * as React from 'react';
-import { HeaderText } from './HeaderText';
+import { HeaderText } from '../base/HeaderText';
 import { Button } from 'react-native-paper';
 
 

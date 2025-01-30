@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { FlatList, Text, StyleSheet } from 'react-native';
-import { theme } from '../theme';
-import { listingService, messageService, reviewService } from '../services';
+import { FlatList, StyleSheet } from 'react-native';
+import { theme } from '../../theme';
+import { listingService, messageService, reviewService } from '../../services';
 import { io } from 'socket.io-client';
 import { MessageItem } from './MessageItem';
 import { useUser } from '@clerk/clerk-expo';
-import {config} from "../config/configure";
+import { config } from '../../config/configure';
 
 
 export const MessagesContainer = ({ initialMessages, userId }) => {
@@ -87,7 +87,7 @@ export const MessagesContainer = ({ initialMessages, userId }) => {
 
 
 	const renderItem = ({ item, index }) => (
-		<MessageItem msg={item} index={index} listings={listings} reviews={reviews} userId={userId} />
+		<MessageItem msg={item} index={index} listings={listings} reviews={reviews} userId={userId}/>
 	);
 
 	const keyExtractor = (item, index) => item._id || index.toString();
@@ -122,10 +122,10 @@ const styles = StyleSheet.create({
 	},
 	senderMsgBubble: {
 		alignItems: 'center',
-		alignSelf:'flex-end',
+		alignSelf: 'flex-end',
 		backgroundColor: theme.colors.primary,
 	},
-	senderMsg:{
+	senderMsg: {
 		color: 'white',
 		alignSelf: 'flex-start',
 	},
@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
 		alignSelf: 'flex-start',
 		color: 'black',
 	},
-	receiverMsg:{
+	receiverMsg: {
 		color: 'black',
 		alignSelf: 'flex-end',
 	},
@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		width: '80%',
 		padding: 10,
-		paddingHorizontal:15,
+		paddingHorizontal: 15,
 		backgroundColor: theme.colors.background,
 		borderRadius: 10,
 		marginTop: 5,

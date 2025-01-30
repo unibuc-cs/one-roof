@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { CustomMarker } from './CustomMarker';
-import { getCoordinatesFromLocation, getShortenedString } from '../utils';
-import { SearchTypeEnum } from '../enums';
+import { getCoordinatesFromLocation, getShortenedString } from '../../utils';
+import { SearchTypeEnum } from '../../enums';
 
 const MarkerList = ({ state, handleMarkerPress }) => {
 	const items = useMemo(() => state.searchType === 'listings' ? state.filteredListings : state.filteredReviews, [state.searchType, state.filteredListings, state.filteredReviews]);

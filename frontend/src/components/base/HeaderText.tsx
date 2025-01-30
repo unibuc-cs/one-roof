@@ -1,6 +1,6 @@
 import React from 'react';
 import { ColorValue, StyleSheet, Text, TextProps } from 'react-native';
-import { theme } from '../theme';
+import { theme } from '../../theme';
 
 
 type HeaderTextProps = {

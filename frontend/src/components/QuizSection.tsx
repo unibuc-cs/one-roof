@@ -1,11 +1,11 @@
 import React, { ReactNode } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { HeaderText } from './HeaderText';
-import { PreferenceSlider } from './PreferenceSlider';
-import { TextInputSmaller } from './TextInputSmaller';
+import { HeaderText } from './base/HeaderText';
+import { PreferenceSlider } from './base/PreferenceSlider';
+import { TextInputSmaller } from './base/TextInputSmaller';
 import { theme } from '../theme';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { CustomSwitchSelector } from './CustomSwitchSelector';
+import { CustomSwitchSelector } from './base/CustomSwitchSelector';
 
 interface ReviewSectionSchema {
     title: string,

@@ -1,16 +1,14 @@
 import React, { memo } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { TextInput as Input } from 'react-native-paper';
-import { theme } from '../theme';
-import { useCustomFonts } from '../hooks/useCustomFonts';
+import { theme } from '../../theme';
 
-type Props = React.ComponentProps<typeof Input> & { errorText?: string, marginVertical ?: number};
+type Props = React.ComponentProps<typeof Input> & { errorText?: string, marginVertical?: number };
 
 export const TextInput = ({ errorText, marginVertical, ...props }: Props) => {
-	const LoadFonts = async () => { await useCustomFonts(); };
 	const customMargin = marginVertical !== undefined ? marginVertical : 12;
-	return  (
-		<View style={[styles.container, { marginVertical : customMargin }]}>
+	return (
+		<View style={[styles.container, { marginVertical: customMargin }]}>
 			<Input
 				style={[styles.input]}
 				selectionColor={theme.colors.secondary}

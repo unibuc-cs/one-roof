@@ -1,12 +1,12 @@
 import { Background, HeaderText } from '../components';
 import { Divider } from 'react-native-paper';
-import Button from '../components/Button';
+import Button from '../components/base/Button';
 import * as React from 'react';
 import { useUserDetails } from '../contexts/UserDetailsContext';
 import { UserRoleEnum } from '../enums';
 import SwitchSelector from 'react-native-switch-selector';
 import { theme } from '../theme';
-import { ProfilePicture } from '../components/ProfilePicture';
+import { ProfilePicture } from '../components/base/ProfilePicture';
 import { useAuth, useUser } from '@clerk/clerk-expo';
 import userService from '../services/internal/userService';
 import { uploadProfilePicture } from '../services';

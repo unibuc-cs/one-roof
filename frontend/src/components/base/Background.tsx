@@ -4,10 +4,11 @@ import React from 'react';
 interface BackgroundProps {
     children: React.ReactNode,
 }
+
 export const Background = ({ children }: BackgroundProps) => (
 	<View style={styles.main_container}>
 		<ImageBackground
-			source={require('../../assets/background_dot_bigger.png')}
+			source={require('../../../assets/background_dot_bigger.png')}
 			resizeMode={'repeat'}
 			style={{ height: '100%', width: '100%', flex: 1 }}>
 			<KeyboardAvoidingView style={styles.container} behavior="padding">

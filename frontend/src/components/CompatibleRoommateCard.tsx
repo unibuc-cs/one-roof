@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import { Card } from 'react-native-paper';
 import { theme } from '../theme';
-import { Button } from './Button';
+import { Button } from './base/Button';
 import { useUser } from '@clerk/clerk-expo';
 import { friendService } from '../services/internal/friendService';
+import { useNavigation } from '@react-navigation/native';
 
 interface CompatibleRoommateCardProps {
     roommate: {
@@ -21,6 +22,7 @@ export const CompatibleRoommateCard: React.FC<CompatibleRoommateCardProps> = ({
 	roommate,
 	compatibilityScore,
 }) => {
+	const navigation = useNavigation();
 	const { user: clerkUser } = useUser();
 	const [friendshipStatus, setFriendshipStatus] = useState<'none' | 'pending' | 'friends'>('none');
 	const [loading, setLoading] = useState<boolean>(false);
@@ -71,6 +73,10 @@ export const CompatibleRoommateCard: React.FC<CompatibleRoommateCardProps> = ({
 		}
 	};
 
+	const handleSendMessage = async () => {
+		navigation.navigate('Messages', { receiverId: roommate.clerkId, referenceId: null, type: null });
+	};
+
 	return (
 		<Card style={styles.container}>
 			<View style={styles.row}>
@@ -81,7 +87,7 @@ export const CompatibleRoommateCard: React.FC<CompatibleRoommateCardProps> = ({
 				</View>
 			</View>
 			<View style={{ paddingTop: 15 }}>
-				<Button marginVertical={0} onPress={() => console.log('Send message')} mode="elevated">
+				<Button marginVertical={0} onPress={handleSendMessage} mode="elevated">
                     Send a Message
 				</Button>
 				{renderFriendButton()}

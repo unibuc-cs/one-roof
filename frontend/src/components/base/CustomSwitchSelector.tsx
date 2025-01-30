@@ -1,6 +1,5 @@
 import SwitchSelector from 'react-native-switch-selector';
-import { SearchTypeEnum } from '../enums';
-import { theme } from '../theme';
+import { theme } from '../../theme';
 import React from 'react';
 
 // TODO: fix any
@@ -18,7 +17,7 @@ export const CustomSwitchSelector: React.FC<any> = ({ options, mode, value, onPr
 			animationDuration={150}
 			borderWidth={10}
 			height={50}
-			touchableProps={{ height:200 }}
+			touchableProps={{ height: 200 }}
 			initial={0}
 			style={{
 				width: width

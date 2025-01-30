@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import  Button from './Button';
+import Button from './base/Button';
 import { useAuth } from '@clerk/clerk-expo';
 
 export const SignOutButton = () => {

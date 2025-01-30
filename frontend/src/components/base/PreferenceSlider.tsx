@@ -3,7 +3,7 @@ import { Dimensions, StyleSheet, Text, View } from 'react-native';
 import { Slider } from 'react-native-awesome-slider';
 import { useSharedValue } from 'react-native-reanimated';
 import { HeaderText } from './HeaderText';
-import { theme } from '../theme';
+import { theme } from '../../theme';
 
 interface PreferenceSliderProps {
     question: string,

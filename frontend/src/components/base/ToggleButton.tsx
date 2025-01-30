@@ -1,12 +1,10 @@
-import Button from './Button';
+import Button, { ButtonProps } from './Button';
 import React from 'react';
 import { StyleSheet } from 'react-native';
 
-import { ButtonProps } from './Button';
-
 type ToggleButtonProps = Omit<ButtonProps, 'onPress'> & {
-	isActive: boolean,
-	onToggle?: () => void,
+    isActive: boolean,
+    onToggle?: () => void,
 };
 
 export const ToggleButton: React.FC<ToggleButtonProps> = ({ isActive, style, ...props }) => {

@@ -1,13 +1,13 @@
 import MapView from 'react-native-map-clustering';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { getCoordinatesFromLocation, getShortenedString, mapStyles } from '../utils';
-import { IListing, IReview } from '../models';
-import { BottomItemCard } from './BottomItemCard';
-import { useSearchContext } from '../contexts/SearchContext';
-import { SearchTypeEnum } from '../enums';
+import { getCoordinatesFromLocation, getShortenedString, mapStyles } from '../../utils';
+import { IListing, IReview } from '../../models';
+import { BottomItemCard } from '../BottomItemCard';
+import { useSearchContext } from '../../contexts/SearchContext';
+import { SearchTypeEnum } from '../../enums';
 import { debounce } from 'lodash';
-import { theme } from '../theme';
+import { theme } from '../../theme';
 import { Polygon } from 'react-native-maps';
 import { CustomMarker } from './CustomMarker';
 

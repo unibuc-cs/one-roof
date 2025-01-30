@@ -1,16 +1,16 @@
-import { Text, TextProps, View } from 'react-native';
+import { View } from 'react-native';
 import React, { ReactNode } from 'react';
-import { theme } from '../theme';
+import { theme } from '../../theme';
 
 
 type DetailBoxProps = {
-	children: ReactNode,
+    children: ReactNode,
 };
 
 export const DetailBox: React.FC<DetailBoxProps> = ({ children }) => {
 	return (
 		<View style={styles.detailBox}>
-			<View style={styles.flexContent}>{ children }</View>
+			<View style={styles.flexContent}>{children}</View>
 		</View>
 	);
 };

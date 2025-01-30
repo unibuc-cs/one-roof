@@ -1,14 +1,14 @@
-import React, { useState, useRef } from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { StyleSheet, View } from 'react-native';
 import { Text, TextInput } from 'react-native-paper';
-import Button from '../components/Button';
+import Button from './Button';
 import { HeaderText } from './HeaderText';
 
 type EditableFieldProps = {
-	label: string,
-	value: string,
-	isEditable: boolean,
-	onSave: (newValue: string) => void,
+    label: string,
+    value: string,
+    isEditable: boolean,
+    onSave: (newValue: string) => void,
 };
 
 export const EditableField: React.FC<EditableFieldProps> = ({ label, value, onSave, isEditable }) => {
@@ -46,9 +46,11 @@ export const EditableField: React.FC<EditableFieldProps> = ({ label, value, onSa
 					<Text style={styles.value}>{value}</Text>
 				)}
 				{isEditing ? (
-					<Button mode="elevated" width={'fit-content'} style={{ marginLeft: 10 }} onPress={handleSave}>Save</Button>
+					<Button mode="elevated" width={'fit-content'} style={{ marginLeft: 10 }}
+						onPress={handleSave}>Save</Button>
 				) : (
-					<Button mode="elevated" disabled={!isEditable} width={80} onPress={() => setIsEditing(true)}>Edit</Button>
+					<Button mode="elevated" disabled={!isEditable} width={80}
+						onPress={() => setIsEditing(true)}>Edit</Button>
 				)}
 			</View>
 		</View>
