@@ -9,6 +9,9 @@ export interface IUser {
     role: UserRoleEnum,
     onboardingStep: number,
     contactedUsers: string[], // modified to keep clerk ID's
+    favoriteListings: string[],
+	savedLists: string[],
+	viewedListings: string[],
     createdAt?: Date,
     updatedAt?: Date,
     roommateQuiz: any,

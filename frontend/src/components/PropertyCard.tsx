@@ -13,9 +13,10 @@ import * as Linking from 'expo-linking';
 import { Image } from 'expo-image';
 import { useUser } from '@clerk/clerk-expo';
 import { useUserDetails } from '../contexts/UserDetailsContext';
-import { includes } from 'lodash';
 import userService from '../services/internal/userService';
+import { listingService } from '../services';
 import Spinner from 'react-native-loading-spinner-overlay';
+import { ISchema } from 'yup';
 
 type PropertyCardProps = {
 	listing: IListing,
@@ -46,24 +47,44 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ listing,
 		}
 	}, []);
 
-	const { favoriteListings, setFavoriteListings } = useUserDetails();
-	const [isFavorite, setIsFavorite] = useState<boolean>(listing._id in favoriteListings);
 	const { navigate } = useNavigation();
 	const width = Dimensions.get('window').width;
-	const [pressed, setPressed] = useState(isFavorite); // State to manage pressed state of the button
-
 	const { user } = useUser();
-	const open = useCallback(() => {
+	const userId = user?.id ?? '';
+
+	const { favoriteListings, setFavoriteListings, viewedListings, setViewedListings } = useUserDetails();
+
+	const [isFavorite, setIsFavorite] = useState<boolean>(listing._id in favoriteListings);
+	const [pressed, setPressed] = useState(isFavorite); // State to manage pressed state of the button
+	const [loading, setLoading] = useState<boolean>(true);
+
+	const open = useCallback(async () => {
+		// update user's history
+		if (!viewedListings.includes(listing._id)) {
+			const updatedHistory = (viewedListings !== null) ? [...viewedListings, listing._id] : [listing._id];
+			await userService.updateUser(userId, { viewedListings: updatedHistory });
+			setViewedListings(updatedHistory);
+		}
+
 		if (!listing.external) {
+			// update listing's views dates
+			const updatedViews = (listing.views !== null) ? [...listing.views, new Date()] : [new Date()];
+			await listingService.updateListing(listing._id, { views: updatedViews }, userId);
+
 			navigate('Listing', { id: listing._id });
 		} else {
 			Linking.openURL(listing.url as string);
 		}
 	}, [listing, navigate]);
 
+	const goToListsScreen = () => {
+		navigate('SavedLists', { listing });
+	};
+
 	const updateFavoriteListings = async (updatedFavorites: string[]) => {
 		try {
-			await userService.updateUser(user?.id ?? '', { favoriteListings: updatedFavorites });
+			await userService.updateUser(userId, { favoriteListings: updatedFavorites });
+			//setFavoriteListings(updatedFavorites);
 			// useUserDetails().favoriteListings = updatedFavorites;
 		} catch (error) {
 			console.error('Failed to update favorite listings:', error);
@@ -78,7 +99,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ listing,
 		console.log('toggle fav');
 		setPressed((prev) => !prev);
 		setIsFavorite(!isFavorite);
-		const id_ = user?.id;
+		//const id_ = user?.id;
 		setFavoriteListings((prevFavorites) => {
 			if (prevFavorites.includes(listing._id)) {
 				const list = prevFavorites.filter(id => id !== listing._id);
@@ -94,12 +115,16 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ listing,
 
 	}, [listing._id, setFavoriteListings]);
 
+	
 	return (
 		<Card mode={mode ?? 'elevated'} key={listing._id} style={[styles.cardContainer, { backgroundColor: backgroundColor ?? theme.colors.background }]}>
 			<View style={styles.contentContainer}>
 				<View style={styles.imageContainer}>
 					{canOpen && (
-						<Button mode="elevated" style={styles.openButton} onPress={() => open()}>{getOpenMessage()}</Button>
+						<View style={styles.buttonContainer}>
+							<Button mode="elevated" style={styles.openButton} onPress={() => open()}>{getOpenMessage()}</Button> 
+							<Button mode="elevated" style={styles.addToListButton} onPress={goToListsScreen}> Save </Button> 
+						</View>
 					)}
 					{showCarousel ? (
 						<Carousel
@@ -174,6 +199,8 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ listing,
 					)}
 				</View>
 			</View>
+
+			
 		</Card>
 	);
 };
@@ -233,6 +260,14 @@ const styles = StyleSheet.create({
 		bottom: 0,
 		right: 40,
 	},
+	buttonContainer: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+	},
+	addToListButton: {
+		zIndex: 100,
+	},
+	
 });
 
 export default PropertyCard;

@@ -5,50 +5,59 @@
     },
     "extends": [
         "eslint:recommended",
-        "plugin:@typescript-eslint/recommended",
-        "plugin:react/recommended"
+        //"plugin:@typescript-eslint/recommended",
+        "plugin:react/recommended",
+        "plugin:react-hooks/recommended"
     ],
-    "parser": "@typescript-eslint/parser",
-    "parserOptions": {
-        "ecmaVersion": "latest",
-        "sourceType": "module"
-    },
+    // "parser": "@typescript-eslint/parser",
+    // "parserOptions": {
+    //     "ecmaVersion": "latest",
+    //     "sourceType": "module"
+    // },
     "plugins": [
         "@typescript-eslint",
-        "react"
+        "react",
+        "react-hooks"
     ],
     "rules": {
-        "indent": [
-            "error",
-            "tab"
-        ],
-        "quotes": [
-            "error",
-            "single"
-        ],
-        "@typescript-eslint/semi": ["error", "always"],
-        "@typescript-eslint/member-delimiter-style": ["error", {
-            "multiline": {
-                "delimiter": "comma",
-                "requireLast": true
-            },
-            "singleline": {
-                "delimiter": "comma",
-                "requireLast": false
-            }
-        }],
-        "@typescript-eslint/space-before-function-paren": ["error", {
-            "anonymous": "always",
-            "named": "never",
-            "asyncArrow": "always"
-        }],
-        "@typescript-eslint/explicit-function-return-type": "off",
-        "@typescript-eslint/strict-boolean-expressions": "off",
-        "@typescript-eslint/no-floating-promises": "off",
-        "@typescript-eslint/no-unused-vars": "off",
-        "@typescript-eslint/no-explicit-any": "off",
-        "no-trailing-spaces": "error",
-        "object-curly-spacing": ["error", "always"],
-        "array-bracket-spacing": ["error", "never"]
+        // "indent": [
+        //     "error",
+        //     "tab"
+        // ],
+        // "quotes": [
+        //     "error",
+        //     "single"
+        // ],
+        // "@typescript-eslint/semi": ["error", "always"],
+        // "@typescript-eslint/member-delimiter-style": ["error", {
+        //     "multiline": {
+        //         "delimiter": "comma",
+        //         "requireLast": true
+        //     },
+        //     "singleline": {
+        //         "delimiter": "comma",
+        //         "requireLast": false
+        //     }
+        // }],
+        // "@typescript-eslint/space-before-function-paren": ["error", {
+        //     "anonymous": "always",
+        //     "named": "never",
+        //     "asyncArrow": "always"
+        // }],
+        // "@typescript-eslint/explicit-function-return-type": "off",
+        // "@typescript-eslint/strict-boolean-expressions": "off",
+        // "@typescript-eslint/no-floating-promises": "off",
+        // "@typescript-eslint/no-unused-vars": "off",
+        // "@typescript-eslint/no-explicit-any": "off",
+        // "no-trailing-spaces": "error",
+        // "object-curly-spacing": ["error", "always"],
+        // "array-bracket-spacing": ["error", "never"],
+        "react-hooks/rules-of-hooks":"error",
+        "react-hooks/exhaustive-deps": "warn"
+    },
+    "settings": {
+        "react": {
+            "version": "detect"
+        }
     }
 }

@@ -6,6 +6,7 @@ const viewingRouter = express.Router();
 viewingRouter.post('/', ViewingController.createViewing);
 viewingRouter.get('/:id', ViewingController.getViewing);
 viewingRouter.get('/user/:userId', ViewingController.getUserViewings);
+viewingRouter.get('/landlord/:userId', ViewingController.getLandlordViewings);
 viewingRouter.get('/confirmed/:userId', ViewingController.getUserConfirmedViewings);
 viewingRouter.put('/:id', ViewingController.updateViewing);
 viewingRouter.put('/confirm/:id', ViewingController.confirmViewing);

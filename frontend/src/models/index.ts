@@ -3,4 +3,8 @@ export * from './listingModel';
 export * from './locationModel';
 export * from './reviewModel';
 export * from './userModel';
+export * from './savedListModel';
 export * from './viewingModel';
+export * from './friendRequestModel';
+export * from './friendshipModel';
+export * from './messageModel';

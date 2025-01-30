@@ -9,6 +9,9 @@ interface IUser extends Document {
     onboardingStep: number,
     contactedUsers: string[],
     roommateQuiz?: IRoommatePreferences,
+    favoriteListings: string[],
+    savedLists: string[],
+    viewedListings: string[],
     createdAt: Date,
     updatedAt: Date,
     friendRequests: string[],
@@ -34,6 +37,9 @@ const UserSchema = new Schema<IUser>({
 	role: {type: String, required: true, enum: ['regularUser', 'landlord']},
 	gender: {type: String, required: true, enum: ['male', 'female', 'other']},
 	contactedUsers: [{type: String}],
+    favoriteListings: [{type: String}],
+    savedLists: [{type: String}],
+    viewedListings: [{type: String}],
 	friendRequests: [{ type: String }], // Incoming friend requests
 	friends: [{ type: String }], // Established friendships
 	roommateQuiz: {type: RoommatePreferencesSchema, default: null}

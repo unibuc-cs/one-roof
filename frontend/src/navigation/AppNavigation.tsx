@@ -21,34 +21,44 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import TopBar from '../components/TopBar';
 import { useUserDetails } from '../contexts/UserDetailsContext';
 import ConversationScreen from '../screens/ConversationScreen';
-import { IReview } from '../models';
+import { IListing, IReview } from '../models';
 import { FavoriteScreen } from '../screens/FavoriteScreens';
 import { RoommateQuizScreen } from '../screens/roommates/RoommateQuizScreen';
 import { BrowseRoommatesScreen } from '../screens/roommates/BrowseRoommatesScreen';
 import { RoommateScreen } from '../screens/roommates/RoommateScreen';
+import { SavedListsScreen } from '../screens/SavedListsScreen';
+import { SavedListDetailsScreen } from '../screens/SavedListDetailsScreen';
 import { FriendsScreen } from '../screens/FriendsScreen';
+import { InsightsScreen } from '../screens/InsightsScreen';
+import { HistoryScreen } from '../screens/HistoryScreen';
 
 export type RootStackParamList = {
-    Home: undefined,
-    Alerts: undefined,
-    Chats: undefined,
-    CreateReview: undefined,
-    CreateListing: undefined,
-    Favorites: undefined,
-    Profile: undefined,
-    Listing: { id: string },
-    Filters: undefined,
-    ReviewGeneralDetails: undefined,
-    BuildingFeedback: undefined,
-    AreaFeedback: undefined,
-    ViewReview: { review: IReview },
-    Messages: any,
     RoommateQuiz: undefined,
     BrowseRoommates: undefined,
     Roommates: undefined,
     ConfirmLocation: undefined,
     ListingFacilities: undefined,
     ListingDescription: undefined,
+	Home: undefined,
+	Alerts: undefined,
+	Chats: undefined,
+	CreateReview: undefined,
+	CreateListing: undefined,
+	Favorites: undefined,
+	Profile: undefined,
+	Listing: { id: string },
+	Filters: undefined,
+	ReviewGeneralDetails: undefined,
+	BuildingFeedback: undefined,
+	AreaFeedback: undefined,
+	ViewReview: { review: IReview },
+	Messages: any,
+	SavedListDetails: {
+		savedListId: string;
+		sharedWith: string[];
+		savedListings: string[];
+	  },
+	ListingToBeAdded?: { listing?: IListing }
 };
 
 export const AppNavigation = () => {
@@ -87,6 +97,10 @@ export const AppNavigation = () => {
 			<Drawer.Screen name="BuildingFeedback" component={BuildingFeedbackScreen}/>
 			<Drawer.Screen name="ViewReview" component={ViewReviewScreen}/>
 			<Drawer.Screen name='Viewings' component={ViewingsCalendar}/>
+			<Drawer.Screen name="Insights" component={InsightsScreen}/>
+			<Drawer.Screen name="History" component={HistoryScreen}/>
+			<Drawer.Screen name="SavedLists" component={SavedListsScreen} />
+			<Drawer.Screen name="SavedListDetails" component={SavedListDetailsScreen} />
 		</Drawer.Navigator>
 	);
 };

@@ -2,19 +2,23 @@ import React, { createContext, ReactNode, useContext, useState } from 'react';
 import { UserRoleEnum } from '../enums';
 
 interface UserDetails {
-    onboardingStep: number,
-    setOnboardingStep: React.Dispatch<React.SetStateAction<number>>,
-    profilePictureUrl?: string,
-    setProfilePictureUrl: React.Dispatch<React.SetStateAction<string>>,
-    role: UserRoleEnum,
-    setRole: React.Dispatch<React.SetStateAction<UserRoleEnum>>,
-    userId: string,
-    favoriteListings: string[],
-    setUserId: React.Dispatch<React.SetStateAction<string>>,
-    contactedUsers: string[],
-    setContactedUsers: React.Dispatch<React.SetStateAction<string[]>>,
-    setFavoriteListings: React.Dispatch<React.SetStateAction<string[]>>,
     resetUserDetails: () => void,
+	onboardingStep: number,
+	setOnboardingStep: React.Dispatch<React.SetStateAction<number>>,
+	profilePictureUrl?: string,
+	setProfilePictureUrl: React.Dispatch<React.SetStateAction<string>>,
+	role: UserRoleEnum,
+	setRole: React.Dispatch<React.SetStateAction<UserRoleEnum>>,
+	userId: string,
+	setUserId: React.Dispatch<React.SetStateAction<string>>,
+	contactedUsers: string[],
+	setContactedUsers: React.Dispatch<React.SetStateAction<string[]>>,
+	favoriteListings: string[],
+	setFavoriteListings: React.Dispatch<React.SetStateAction<string[]>>,
+	savedLists: string[],
+	setSavedLists: React.Dispatch<React.SetStateAction<string[]>>,
+	viewedListings: string[],
+	setViewedListings: React.Dispatch<React.SetStateAction<string[]>>,
 }
 
 const defaultUserDetails: UserDetails = {
@@ -34,8 +38,11 @@ const defaultUserDetails: UserDetails = {
 	setContactedUsers: () => {
 	},
 	favoriteListings: [],
-	setFavoriteListings: () => {
-	},
+	setFavoriteListings: () => {},
+	savedLists: [],
+	setSavedLists: () => {},
+	viewedListings: [],
+	setViewedListings: () => {},
 	resetUserDetails: () => {
 	},
 };
@@ -53,6 +60,9 @@ export const UserDetailsProvider: React.FC<UserDetailsProviderProps> = ({ childr
 	const [userId, setUserId] = useState<string>('');
 	const [contactedUsers, setContactedUsers] = useState<string[]>([]);
 	const [favoriteListings, setFavoriteListings] = useState<string[]>([]);
+	const [savedLists, setSavedLists] = useState<string[]>([]);
+	const [viewedListings, setViewedListings] = useState<string[]>([]);
+
 	const resetUserDetails = () => {
 		setOnboardingStep(1);
 		setProfilePicture('');
@@ -61,22 +71,9 @@ export const UserDetailsProvider: React.FC<UserDetailsProviderProps> = ({ childr
 		setContactedUsers([]);
 		setFavoriteListings([]);
 	};
+	
 	return (
-		<UserDetailsContext.Provider value={{
-			favoriteListings,
-			setFavoriteListings,
-			onboardingStep,
-			setOnboardingStep,
-			profilePictureUrl: profilePicture,
-			setProfilePictureUrl: setProfilePicture,
-			role,
-			setRole,
-			userId,
-			setUserId,
-			contactedUsers,
-			setContactedUsers,
-			resetUserDetails
-		}}>
+		<UserDetailsContext.Provider value={{ viewedListings, setViewedListings, favoriteListings, setFavoriteListings, savedLists, setSavedLists, onboardingStep, setOnboardingStep, profilePictureUrl: profilePicture, setProfilePictureUrl: setProfilePicture, role, setRole, userId, setUserId, contactedUsers, setContactedUsers, resetUserDetails}}>
 			{children}
 		</UserDetailsContext.Provider>
 	);

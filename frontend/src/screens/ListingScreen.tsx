@@ -1,7 +1,8 @@
 import React from 'react';
 import { Dimensions, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { RouteProp, useRoute } from '@react-navigation/native';
-import { Background, RootStackParamList } from '../components';
+import { Background} from '../components';
+import { RootStackParamList } from '../navigation';
 import { useUser } from '@clerk/clerk-expo';
 import { useListing } from '../hooks';
 import Carousel from 'react-native-reanimated-carousel';
@@ -13,7 +14,7 @@ import { ScheduleViewing } from '../components/calendar/ScheduleViewing';
 
 type ListingScreenRouteProp = RouteProp<RootStackParamList, 'Listing'>;
 
-export const ListingScreen: React.FC = ({ navigation }) => {
+export const ListingScreen: React.FC = () => { // maybe include navigation here
 	const route = useRoute<ListingScreenRouteProp>();
 	const { id } = route.params;
 	const { user } = useUser();
