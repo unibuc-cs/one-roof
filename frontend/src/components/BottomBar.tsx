@@ -1,15 +1,11 @@
 import React, { useRef } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
-import { ItemList } from './ItemList';
 import { useSearchContext } from '../contexts/SearchContext';
-import { useCustomFonts } from '../hooks/useCustomFonts';
-import { useNavigation } from '@react-navigation/native';
-import { useUserDetails } from '../contexts/UserDetailsContext';
 import { ActivityIndicator } from 'react-native-paper';
+import { ItemList } from './ItemList';
 
 export const BottomBar = () => {
-	const LoadFonts = async () => { await useCustomFonts(); };
 	const { state } = useSearchContext();
 	const bottomSheetRef = useRef<BottomSheet>(null);
 
@@ -31,11 +27,11 @@ export const BottomBar = () => {
 							</Text>
 							<View style={{ height: 50 }}></View>
 						</View>
-						<ItemList />
+						<ItemList/>
 					</BottomSheetScrollView>
 				)}
 			</BottomSheet>
-		 </View>
+		</View>
 	);
 };
 
@@ -49,13 +45,12 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: 'flex-end',
 	},
-	contentContainer: {
-	},
+	contentContainer: {},
 	newListingButton: {
 		marginBottom: 80,
 		marginRight: 10, // TODO: Fix hardcoding?
 		width: 110,
-		alignSelf:'flex-end',
+		alignSelf: 'flex-end',
 	}
 });
 

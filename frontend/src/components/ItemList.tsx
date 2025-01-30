@@ -10,15 +10,16 @@ export const ItemList = () => {
 
 	const renderListing = useCallback(
 		(listing: IListing) => (
-			<View style={{ marginBottom: 20 }}>
-				<PropertyCard showFavorite={true} key={listing._id} listing={listing} canOpen={true} showCarousel={false}/>
+			<View key={`${listing._id}-${listing.url}`} style={{ marginBottom: 20 }}>
+				<PropertyCard showFavorite={true} listing={listing} canOpen={true}
+					showCarousel={false}/>
 			</View>
 		), []
 	);
 
 	const renderReview = useCallback(
 		(review: IReview) => (
-			<ReviewCard key={review._id} review={review}/>
+			<ReviewCard key={`${review._id}-${review.address}`} review={review}/>
 		), []
 	);
 

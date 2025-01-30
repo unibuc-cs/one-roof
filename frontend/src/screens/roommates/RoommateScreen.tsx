@@ -78,8 +78,8 @@ export const RoommateScreen: React.FC = () => {
 	return (
 		<Background>
 			<Card style={styles.card} contentStyle={styles.container}>
-				{takeQuizButton}
 				{hasTakenQuiz && browseRoommatesButton}
+				{takeQuizButton}
 			</Card>
 		</Background>
 	);

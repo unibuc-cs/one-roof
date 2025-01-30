@@ -49,6 +49,24 @@ export function DrawerContent(props: DrawerContentComponentProps) {
 							props.navigation.navigate('Profile');
 						}}
 					/>
+					<DrawerItem
+						icon={({ color, size }) => (
+							<Icon name="user-friends" size={18} color={color}/>
+						)}
+						label="Friends"
+						onPress={() => {
+							props.navigation.navigate('Friends');
+						}}
+					/>
+					{role === UserRoleEnum.RegularUser && <DrawerItem
+						icon={({ color, size }) => (
+							<MaterialCommunityIcons name="account-group-outline" color={color} size={size}/>
+						)}
+						label="Roommates"
+						onPress={() => {
+							props.navigation.navigate('Roommates');
+						}}
+					/>}
 					{role === UserRoleEnum.Landlord &&
                         <DrawerItem
                         	icon={({ color, size }) => (
@@ -71,15 +89,6 @@ export function DrawerContent(props: DrawerContentComponentProps) {
                         	}}
                         />
 					}
-					{role === UserRoleEnum.RegularUser && <DrawerItem
-						icon={({ color, size }) => (
-							<MaterialCommunityIcons name="account-group-outline" color={color} size={size}/>
-						)}
-						label="Roommates"
-						onPress={() => {
-							props.navigation.navigate('Roommates');
-						}}
-					/>}
 					<DrawerItem
 						icon={({ color, size }) => (
 							<MaterialCommunityIcons name="heart-outline" color={color} size={size}/>
@@ -100,17 +109,12 @@ export function DrawerContent(props: DrawerContentComponentProps) {
 					/>
 					<DrawerItem
 						icon={({ color, size }) => (
-							<MaterialCommunityIcons name="calendar-account-outline" color={color} size={size} />
+							<MaterialCommunityIcons name="calendar-account-outline" color={color} size={size}/>
 						)}
 						label="Viewings"
-						onPress={() => { props.navigation.navigate('Viewings'); }}
-					/>
-					<DrawerItem
-						icon={({ color, size }) => (
-							<Icon name="user-friends" size={18} color= {color}/>
-						)}
-						label="Friends"
-						onPress={() => { props.navigation.navigate('Friends'); }}
+						onPress={() => {
+							props.navigation.navigate('Viewings');
+						}}
 					/>
 					<Button
 						mode="elevated"

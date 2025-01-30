@@ -4,3 +4,4 @@ export * from './reviewRoutes';
 export * from './searchRoutes';
 export * from './messageRoutes';
 export * from './viewingRoutes';
+export * from './friendRoutes';

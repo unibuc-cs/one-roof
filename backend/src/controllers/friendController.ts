@@ -1,7 +1,6 @@
-
 import {friendService} from '../services/friendService';
-import {FriendshipRequest} from '../models/friendshipRequest';
 import {Friendship} from '../models/friendship';
+import {IFriendshipRequest} from '../models/friendshipRequest';
 
 
 export const FriendController = {
@@ -9,10 +8,10 @@ export const FriendController = {
 	createFriendRequest: async (req, res) => {
 		try {
 			const senderId = req.headers['x-clerk-user-id'] as string; // Extract sender (logged-in user) from headers
-			const { receiverId } = req.body; // Extract receiver (target user) from body
+			const {receiverId} = req.body; // Extract receiver (target user) from body
 
 			if (!senderId || !receiverId) {
-				res.status(400).json({ error: 'Sender and receiver IDs are required' });
+				res.status(400).json({error: 'Sender and receiver IDs are required'});
 				return;
 			}
 
@@ -21,57 +20,58 @@ export const FriendController = {
 
 			res.status(201).json(friendRequest); // Return the created friend request object
 		} catch (error) {
-			res.status(500).json({ error: 'Error creating friend request' });
+			res.status(500).json({error: 'Error creating friend request'});
 		}
 	},
 	acceptFriendRequest: async (req, res) => {
 		try {
-			const requestId = req.params.requestId; // Friend request ID from URL
-			const userId = req.headers['x-clerk-user-id'] as string; // The user accepting the request
+			const {requestId} = req.body; // ✅ Get requestId from body
 
-			if (!userId || !requestId) {
-				res.status(400).json({ error: 'User ID and request ID are required' });
-				return;
+			if (!requestId) {
+				return res.status(400).json({error: 'Request ID is required'});
 			}
 
-			const friendship = await friendService.acceptFriendRequest(requestId, userId);
-			res.status(200).json(friendship); // Return the created friendship
+			const friendship = await friendService.acceptFriendRequest(requestId);
+			res.status(200).json(friendship);
 		} catch (error) {
-			res.status(500).json({ error: 'Error accepting friend request' });
+			res.status(500).json({error: `Error accepting friend request ${error}`});
 		}
 	},
 
-	// Method to reject a Friend Request
 	rejectFriendRequest: async (req, res) => {
 		try {
-			const requestId = req.params.requestId; // Friend request ID from URL
+			const {requestId} = req.body; // ✅ Get requestId from body
 
 			if (!requestId) {
-				res.status(400).json({ error: 'Request ID is required' });
-				return;
+				return res.status(400).json({error: 'Request ID is required'});
 			}
 
 			const friendRequest = await friendService.rejectFriendRequest(requestId);
-			res.status(200).json(friendRequest); // Return the updated request
+			res.status(200).json(friendRequest);
 		} catch (error) {
-			res.status(500).json({ error: 'Error rejecting friend request'});
+			res.status(500).json({error: `Error rejecting friend request ${error}`});
 		}
 	},
-	getFriendRequest: async (req, res) => {
-		const { userId } = req.params;
-		const requests = await FriendshipRequest.find({
-			pendingUser: userId,
-			status: 'pending',
-		});
-		console.log(requests);
-		res.json(requests);
+
+	getAllFriendRequests: async (req, res) => {
+		const {userId} = req.params;
+		try {
+			if (!userId) {
+				res.status(400).json({error: 'User ID is required'});
+				return;
+			}
+			const requests: IFriendshipRequest[] = await friendService.getAllFriendRequests(userId);
+			res.status(200).json(requests);
+		} catch (err) {
+			res.status(500).json({error: 'Error getting friend requests'});
+		}
 	},
 
 	// Endpoint to get all friends for a user
 	getAllFriends: async (req, res) => {
-		const { userId } = req.params;
+		const {userId} = req.params;
 		const friends = await Friendship.find({
-			$or: [{ firstUser: userId }, { secondUser: userId }],
+			$or: [{firstUser: userId}, {secondUser: userId}],
 		});
 		res.json(friends);
 	}

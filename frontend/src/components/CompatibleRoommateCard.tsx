@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import { Card } from 'react-native-paper';
 import { theme } from '../theme';
 import { Button } from './Button';
-import { useNavigation } from '@react-navigation/native';
+import { useUser } from '@clerk/clerk-expo';
+import { friendService } from '../services/internal/friendService';
 
 interface CompatibleRoommateCardProps {
     roommate: {
@@ -19,12 +20,55 @@ interface CompatibleRoommateCardProps {
 export const CompatibleRoommateCard: React.FC<CompatibleRoommateCardProps> = ({
 	roommate,
 	compatibilityScore,
-	currentUserId
 }) => {
-	const navigation = useNavigation();
+	const { user: clerkUser } = useUser();
+	const [friendshipStatus, setFriendshipStatus] = useState<'none' | 'pending' | 'friends'>('none');
+	const [loading, setLoading] = useState<boolean>(false);
 
-	const handleSendMessage = async () => {
-		navigation.navigate('Messages', { receiverId: roommate.clerkId, referenceId: null, type: null });
+	useEffect(() => {
+		const fetchFriendshipStatus = async () => {
+			if (clerkUser?.id) {
+				try {
+					const status = await friendService.getStatus(clerkUser.id, roommate.clerkId);
+					setFriendshipStatus(status);
+				} catch (error) {
+					console.error('Error fetching friendship status:', error);
+				}
+			}
+		};
+
+		fetchFriendshipStatus();
+	}, [clerkUser?.id, roommate.clerkId]);
+
+	const handleSendFriendRequest = async () => {
+		if (!clerkUser?.id) return;
+		setLoading(true);
+		try {
+			await friendService.sendRequest(roommate.clerkId, clerkUser.id);
+			setFriendshipStatus('pending'); // ✅ Optimistically update UI
+		} catch (error) {
+			console.error('Error sending friend request:', error);
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	const renderFriendButton = () => {
+		switch (friendshipStatus) {
+		case 'none':
+			return (
+				<Button onPress={handleSendFriendRequest} mode='elevated' loading={loading}>
+                        Add Friend
+				</Button>
+			);
+		case 'pending':
+			return <Button mode='elevated' disabled><Text style={{ color: 'lightyellow' }}>Pending</Text></Button>;
+		case 'friends':
+			return <Button mode='elevated' disabled><Text style={{ color: 'lightblue' }}>Already
+                    Friends</Text></Button>;
+		default:
+			return null;
+		}
 	};
 
 	return (
@@ -36,9 +80,12 @@ export const CompatibleRoommateCard: React.FC<CompatibleRoommateCardProps> = ({
 					<Text style={styles.score}>Compatibility: {Math.round(compatibilityScore * 100)}%</Text>
 				</View>
 			</View>
-			<Button onPress={handleSendMessage} mode={'elevated'} disabled={currentUserId === roommate.clerkId}>
-                Send a Message
-			</Button>
+			<View style={{ paddingTop: 15 }}>
+				<Button marginVertical={0} onPress={() => console.log('Send message')} mode="elevated">
+                    Send a Message
+				</Button>
+				{renderFriendButton()}
+			</View>
 		</Card>
 	);
 };

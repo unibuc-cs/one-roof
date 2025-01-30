@@ -1,5 +1,4 @@
-
-import {FriendshipRequest} from '../models/friendshipRequest';
+import {FriendshipRequest, IFriendshipRequest} from '../models/friendshipRequest';
 import {Friendship} from '../models/friendship';
 
 class FriendService {
@@ -8,8 +7,8 @@ class FriendService {
 		// Check if users are already friends
 		const existingFriendship = await Friendship.findOne({
 			$or: [
-				{ firstUser: senderId, secondUser: receiverId },
-				{ firstUser: receiverId, secondUser: senderId },
+				{firstUser: senderId, secondUser: receiverId},
+				{firstUser: receiverId, secondUser: senderId},
 			],
 		});
 
@@ -39,17 +38,12 @@ class FriendService {
 		return newRequest; // Return the created friend request
 	}
 
-	async acceptFriendRequest(requestId: string, userId: string) {
+	async acceptFriendRequest(requestId: string) {
 		// Find the friend request by ID
 		const friendRequest = await FriendshipRequest.findById(requestId);
 
 		if (!friendRequest) {
 			throw new Error('Friend request not found');
-		}
-
-		// Check if the user is the one pending the request
-		if (friendRequest.userPending !== userId) {
-			throw new Error('You are not the pending user for this request');
 		}
 
 		// Create a new Friendship record
@@ -61,9 +55,11 @@ class FriendService {
 		// Save the friendship
 		await friendship.save();
 
-		// Delete the friend request as it is now accepted
-		friendRequest.status = 'accepted';
-		await friendRequest.save();
+		await FriendshipRequest.updateOne(
+			{_id: requestId},
+			{$set: {status: 'accepted'}}
+		);
+
 		return friendship; // Return the created friendship
 	}
 
@@ -77,10 +73,35 @@ class FriendService {
 		}
 
 		// Set the status of the request to rejected (you can also delete it, depending on your needs)
-		friendRequest.status = 'rejected';
-		await friendRequest.save();
+		await FriendshipRequest.updateOne(
+			{_id: requestId},
+			{$set: {status: 'rejected'}}
+		);
 
 		return friendRequest; // Return the updated request
+	}
+
+	async getAllFriendRequests(userId: string): Promise<IFriendshipRequest[]> {
+		const pendingForUser = await FriendshipRequest.find({
+			userPending: userId,
+			status: 'pending',
+		});
+
+		const pendingByUser = await FriendshipRequest.find({
+			userRequested: userId,
+			status: 'pending',
+		});
+
+		const response: IFriendshipRequest[] = [];
+		pendingForUser.forEach((request) => {
+			response.push(request.toObject());
+		});
+
+		pendingByUser.forEach((request) => {
+			response.push(request.toObject());
+		});
+
+		return response;
 	}
 }
 
