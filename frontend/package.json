@@ -17,6 +17,8 @@
     "ci:e2e-full": "npm run install:maestro && npm run ci:e2e"
   },
   "dependencies": {
+    "@expo/metro-runtime": "~3.1.3",
+    "@expo/ngrok": "^4.1.3",
     "@gorhom/bottom-sheet": "^4.6.1",
     "@ptomasroos/react-native-multi-slider": "^2.2.2",
     "@react-native-async-storage/async-storage": "1.21.0",
