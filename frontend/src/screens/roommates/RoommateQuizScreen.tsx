@@ -14,12 +14,14 @@ import { useNavigation } from '@react-navigation/native';
 
 const RoommateFeedbackSchema = Yup.object().shape({
 	preferredAreas: Yup.array()
-		.of(Yup.array().of(
-			Yup.object().shape({
-				latitude: Yup.number().required(),
-				longitude: Yup.number().required(),
-			})
-		))
+		.of(
+			Yup.array().of(
+				Yup.object().shape({
+					latitude: Yup.number().required(),
+					longitude: Yup.number().required(),
+				}),
+			),
+		)
 		.required('Please mark at least one area on the map'),
 
 	price: Yup.object().shape({
@@ -73,26 +75,43 @@ const RoommateFeedbackSchema = Yup.object().shape({
 			other: Yup.number().min(1).max(5).required(),
 		}),
 		guest: Yup.object().shape({
-			self: Yup.number().min(1).max(5).required('How often you have guests is required'),
-			other: Yup.number().min(1).max(5).required('How often your roommate can have guests is required'),
+			self: Yup.number()
+				.min(1)
+				.max(5)
+				.required('How often you have guests is required'),
+			other: Yup.number()
+				.min(1)
+				.max(5)
+				.required(
+					'How often your roommate can have guests is required',
+				),
 		}),
 
 		noise: Yup.object().shape({
-			self: Yup.number().min(1).max(5).required('Your noise level preference is required'),
-			other: Yup.number().min(1).max(5).required('How quiet you expect your roommate to be is required'),
+			self: Yup.number()
+				.min(1)
+				.max(5)
+				.required('Your noise level preference is required'),
+			other: Yup.number()
+				.min(1)
+				.max(5)
+				.required(
+					'How quiet you expect your roommate to be is required',
+				),
 		}),
 	}),
 });
-
 
 export const RoommateQuizScreen: React.FC = () => {
 	const navigation = useNavigation();
 	const { user } = useUser();
 	const currentUserId = user?.id;
 
-
 	const handleSubmit = async (roommateQuizValues: any) => {
-		await userService.submitRoommateQuiz(currentUserId as string, roommateQuizValues);
+		await userService.submitRoommateQuiz(
+			currentUserId as string,
+			roommateQuizValues,
+		);
 		navigation.navigate('Roommates');
 	};
 
@@ -121,31 +140,58 @@ export const RoommateQuizScreen: React.FC = () => {
 					onSubmit={handleSubmit}
 				>
 					{({ handleSubmit, setFieldValue, values }) => (
-						<KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
+						<KeyboardAwareScrollView
+							showsVerticalScrollIndicator={false}
+						>
 							<HeaderText paddingBottom={30} size={30}>
-                                Roommate Matching Quiz
+								Roommate Matching Quiz
 							</HeaderText>
 
-							<HeaderText size={16}> Where are you searching? </HeaderText>
+							<HeaderText size={16}>
+								{' '}
+								Where are you searching?{' '}
+							</HeaderText>
 							<View style={{ height: 400, marginTop: 10 }}>
 								<MapWithAreaPolygons
-									onChangePolygons={(polygons) => setFieldValue('preferredAreas', polygons)}
+									onChangePolygons={(polygons) =>
+										setFieldValue(
+											'preferredAreas',
+											polygons,
+										)
+									}
 								/>
 							</View>
 							<QuizSection
 								setFieldValue={setFieldValue}
 								additionalNodes={
-									<View style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-										<HeaderText size={16}>What’s your preferred price range?</HeaderText>
+									<View
+										style={{
+											display: 'flex',
+											justifyContent: 'center',
+											alignItems: 'center',
+										}}
+									>
+										<HeaderText size={16}>
+											What’s your preferred price range?
+										</HeaderText>
 										<PriceRangeSelector
 											priceRangeRef={{
-												current: [values.price.lowerBound, values.price.upperBound],
+												current: [
+													values.price.lowerBound,
+													values.price.upperBound,
+												],
 											}}
 											minPrice={MIN_PRICE}
 											maxPrice={MAX_PRICE}
 											onPriceChange={(newValues) => {
-												setFieldValue('price.lowerBound', newValues[0]);
-												setFieldValue('price.upperBound', newValues[1]);
+												setFieldValue(
+													'price.lowerBound',
+													newValues[0],
+												);
+												setFieldValue(
+													'price.upperBound',
+													newValues[1],
+												);
 											}}
 											sliderScale={0.8}
 										/>
@@ -154,15 +200,21 @@ export const RoommateQuizScreen: React.FC = () => {
 								hasAdditionalComments={false}
 								title="Dealbreakers"
 								binaryQuestions={[
-									{ prompt: 'Do you smoke?', fieldName: 'smoking.self' },
-									{ prompt: 'Do you have pets?', fieldName: 'pets.self' },
+									{
+										prompt: 'Do you smoke?',
+										fieldName: 'smoking.self',
+									},
+									{
+										prompt: 'Do you have pets?',
+										fieldName: 'pets.self',
+									},
 									{
 										prompt: 'Would you be comfortable with a roommate who smokes?',
-										fieldName: 'smoking.other'
+										fieldName: 'smoking.other',
 									},
 									{
 										prompt: 'Would you be comfortable with a roommate who has pets?',
-										fieldName: 'pets.other'
+										fieldName: 'pets.other',
 									},
 								]}
 								multiOptionQuestions={[
@@ -188,25 +240,29 @@ export const RoommateQuizScreen: React.FC = () => {
 										prompt: 'Are you more of a morning person or a night owl?',
 										leftText: 'Morning person',
 										rightText: 'Night owl',
-										fieldName: 'preferences.morningPerson.self',
+										fieldName:
+											'preferences.morningPerson.self',
 									},
 									{
 										prompt: 'How much of a morning person should your roommate be?',
 										leftText: 'Not at all',
 										rightText: 'Very much',
-										fieldName: 'preferences.morningPerson.other',
+										fieldName:
+											'preferences.morningPerson.other',
 									},
 									{
 										prompt: 'How particular are you about cleanliness?',
 										leftText: 'Very particular',
 										rightText: 'Not too bothered',
-										fieldName: 'preferences.cleanliness.self',
+										fieldName:
+											'preferences.cleanliness.self',
 									},
 									{
 										prompt: 'How clean should your roommate be?',
 										leftText: 'Not important',
 										rightText: 'Very important',
-										fieldName: 'preferences.cleanliness.other',
+										fieldName:
+											'preferences.cleanliness.other',
 									},
 									{
 										prompt: 'How often do you have guests?',
@@ -237,9 +293,18 @@ export const RoommateQuizScreen: React.FC = () => {
 									{
 										prompt: 'Would you prefer a roommate who is...',
 										options: [
-											{ label: 'A student', value: 'student' },
-											{ label: 'A working professional', value: 'working' },
-											{ label: 'No preference', value: 'either' },
+											{
+												label: 'A student',
+												value: 'student',
+											},
+											{
+												label: 'A working professional',
+												value: 'working',
+											},
+											{
+												label: 'No preference',
+												value: 'either',
+											},
 										],
 										fieldName: 'roommateType',
 									},
@@ -247,17 +312,16 @@ export const RoommateQuizScreen: React.FC = () => {
 								binaryQuestions={[
 									{
 										prompt: 'Are you comfortable splitting costs (e.g., utilities, WiFi) evenly with your roommate?',
-										fieldName: 'costSharing'
+										fieldName: 'costSharing',
 									},
 								]}
 							/>
 							<Button mode="contained" onPress={handleSubmit}>
-                                Submit Quiz
+								Submit Quiz
 							</Button>
 						</KeyboardAwareScrollView>
 					)}
 				</Formik>
-
 			</Card>
 		</Background>
 	);

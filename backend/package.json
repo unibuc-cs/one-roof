@@ -8,7 +8,9 @@
     "test-unit": "mocha 'test/unit/**/*.test.ts'",
     "start": "tsc && node dist/index.js",
     "dev": "concurrently \"nodemon --exec ts-node src/index.ts --ignore node_modules\"",
-    "test-integration": "npx jest test/integration --runInBand"
+    "test-integration": "npx jest test/integration --runInBand",
+    "lint": "eslint 'src/**/*.{ts,tsx}'",
+    "lint:fix": "eslint 'src/**/*.{ts,tsx}' --fix"
   },
   "keywords": [],
   "author": "",

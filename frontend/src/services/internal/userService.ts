@@ -1,14 +1,25 @@
 import { callApi } from '../../utils';
-import { IUser, IUserDetails, IUserWithClerk, IUserWithCompatibilityScore } from '../../models';
+import {
+	IUser,
+	IUserDetails,
+	IUserWithClerk,
+	IUserWithCompatibilityScore,
+} from '../../models';
 import { getUserRoleEnumFromString } from '../../enums';
 
-
 const userService = {
-	async createUser(userDetails: IUserDetails, userId: string): Promise<IUser> {
-		return callApi('users', {
-			method: 'POST',
-			body: userDetails,
-		}, userId);
+	async createUser(
+		userDetails: IUserDetails,
+		userId: string,
+	): Promise<IUser> {
+		return callApi(
+			'users',
+			{
+				method: 'POST',
+				body: userDetails,
+			},
+			userId,
+		);
 	},
 	async getUserById(userId: string): Promise<IUser> {
 		const user: any = await callApi(`users/${userId}`, {}, userId);
@@ -27,7 +38,10 @@ const userService = {
 	async getWithClerkDetailsByUserId(userId: string) {
 		return callApi(`users/fullByUserId/${userId}`);
 	},
-	async updateUser(userId: string, updates: Partial<IUserDetails>): Promise<IUser> {
+	async updateUser(
+		userId: string,
+		updates: Partial<IUserDetails>,
+	): Promise<IUser> {
 		return callApi(`users/${userId}`, {
 			method: 'PUT',
 			body: updates,
@@ -41,7 +55,10 @@ const userService = {
 		});
 	},
 
-	async updateUserByClerkId(clerkId: string, updates: Partial<IUserDetails>): Promise<IUser> {
+	async updateUserByClerkId(
+		clerkId: string,
+		updates: Partial<IUserDetails>,
+	): Promise<IUser> {
 		return callApi(`clerk/users/${clerkId}`, {
 			method: 'PUT',
 			body: updates,
@@ -55,15 +72,20 @@ const userService = {
 	async getAllUsers(): Promise<IUser[]> {
 		return callApi('users');
 	},
-	async submitRoommateQuiz(userId: string, roommateQuizValues: any): Promise<void> {
+	async submitRoommateQuiz(
+		userId: string,
+		roommateQuizValues: any,
+	): Promise<void> {
 		return callApi(`users/roommateQuiz/${userId}`, {
 			method: 'POST',
 			body: roommateQuizValues,
 		});
 	},
-	async getCompatibleRoommates(userId: string): Promise<IUserWithCompatibilityScore[]> {
+	async getCompatibleRoommates(
+		userId: string,
+	): Promise<IUserWithCompatibilityScore[]> {
 		return callApi(`users/compatibleRoommates/${userId}`);
-	}
+	},
 };
 
 export default userService;

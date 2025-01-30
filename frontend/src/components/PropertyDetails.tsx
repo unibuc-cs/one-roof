@@ -4,7 +4,7 @@ import { Image, StyleSheet, View } from 'react-native';
 import { theme } from '../theme';
 import { useCustomFonts } from '../hooks/useCustomFonts';
 
-const  PropertyDetails: React.FC<any> = ({ listing }) => {
+const PropertyDetails: React.FC<any> = ({ listing }) => {
 	return (
 		<View style={styles.container}>
 			<View style={styles.detailsContainer}>
@@ -15,13 +15,17 @@ const  PropertyDetails: React.FC<any> = ({ listing }) => {
 					</View>
 					<View style={[styles.cell, styles.borderBottom]}>
 						<Text style={styles.label}>Rooms:</Text>
-						<Text style={styles.value}>{listing.numberOfRooms}</Text>
+						<Text style={styles.value}>
+							{listing.numberOfRooms}
+						</Text>
 					</View>
 				</View>
 				<View style={styles.row}>
 					<View style={[styles.cell, styles.borderBottom]}>
 						<Text style={styles.label}>Bathrooms:</Text>
-						<Text style={styles.value}>{listing.numberOfBathrooms}</Text>
+						<Text style={styles.value}>
+							{listing.numberOfBathrooms}
+						</Text>
 					</View>
 					<View style={[styles.cell, styles.borderBottom]}>
 						<Text style={styles.label}>Size:</Text>
@@ -32,19 +36,20 @@ const  PropertyDetails: React.FC<any> = ({ listing }) => {
 			<View style={styles.amenitiesList}>
 				<Text style={styles.label}>Amenities:</Text>
 				{listing.amenities.map((amenity, index) => (
-					<Text key={index} style={styles.amenity}>  {`\u2022  ${amenity}`}</Text>
+					<Text key={index} style={styles.amenity}>
+						{' '}
+						{`\u2022  ${amenity}`}
+					</Text>
 				))}
 			</View>
-
 		</View>
 	);
 };
 
-
 const styles = StyleSheet.create({
-	container:{
+	container: {
 		paddingVertical: 10,
-		fontFamily: 'Proxima-Nova/Regular'
+		fontFamily: 'Proxima-Nova/Regular',
 	},
 	detailsContainer: {
 		paddingBottom: 10,
@@ -60,7 +65,7 @@ const styles = StyleSheet.create({
 		paddingVertical: 10,
 		paddingHorizontal: 5,
 		width: '48%',
-		fontFamily: 'Proxima-Nova/Regular'
+		fontFamily: 'Proxima-Nova/Regular',
 	},
 	label: {
 		fontSize: 16,
@@ -84,7 +89,7 @@ const styles = StyleSheet.create({
 	amenity: {
 		fontSize: 16,
 		marginLeft: 5,
-		fontFamily: 'Proxima-Nova/Regular'
+		fontFamily: 'Proxima-Nova/Regular',
 	},
 });
 

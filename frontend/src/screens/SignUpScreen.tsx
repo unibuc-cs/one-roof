@@ -6,8 +6,11 @@ import Logo from '../components/base/Logo';
 
 export default function SignUpScreen() {
 	const { isLoaded, signUp, setActive } = useSignUp();
-	const { signIn, isLoaded: isLoadedSignIn, setActive: setActiveSignIn } = useSignIn();
-
+	const {
+		signIn,
+		isLoaded: isLoadedSignIn,
+		setActive: setActiveSignIn,
+	} = useSignIn();
 
 	const [firstName, setFirstName] = React.useState('');
 	const [lastName, setLastName] = React.useState('');
@@ -20,7 +23,7 @@ export default function SignUpScreen() {
 	const renderFirstRegistrationStep = () => {
 		return (
 			<Background>
-				<Logo/>
+				<Logo />
 				<TextInput
 					autoCapitalize="none"
 					value={firstName}
@@ -63,7 +66,7 @@ export default function SignUpScreen() {
 					}}
 				/>
 				<Button mode="contained" onPress={onSignUpPress}>
-                    Continue
+					Continue
 				</Button>
 			</Background>
 		);
@@ -72,7 +75,7 @@ export default function SignUpScreen() {
 	const renderSecondVerificationStep = () => {
 		return (
 			<Background>
-				<Logo/>
+				<Logo />
 				<TextInput
 					value={code}
 					placeholder="Code..."
@@ -81,7 +84,7 @@ export default function SignUpScreen() {
 					}}
 				/>
 				<Button mode="contained" onPress={onPressVerify}>
-                    Verify Email
+					Verify Email
 				</Button>
 			</Background>
 		);
@@ -98,18 +101,18 @@ export default function SignUpScreen() {
 				lastName,
 				username,
 				emailAddress,
-				password
+				password,
 			});
 
-			await signUp.prepareEmailAddressVerification({ strategy: 'email_code' });
+			await signUp.prepareEmailAddressVerification({
+				strategy: 'email_code',
+			});
 
 			setIsPending(true);
-
 		} catch (err: any) {
 			console.error(JSON.stringify(err, null, 2));
 		}
 	};
-
 
 	const onPressVerify = async () => {
 		if (!isLoaded) {
@@ -117,9 +120,11 @@ export default function SignUpScreen() {
 		}
 
 		try {
-			const completeSignUp = await signUp.attemptEmailAddressVerification({
-				code
-			});
+			const completeSignUp = await signUp.attemptEmailAddressVerification(
+				{
+					code,
+				},
+			);
 
 			await setActive({ session: completeSignUp.createdSessionId });
 		} catch (err: any) {
@@ -129,7 +134,9 @@ export default function SignUpScreen() {
 
 	return (
 		<>
-			{isPending ? renderSecondVerificationStep() : renderFirstRegistrationStep()}
+			{isPending
+				? renderSecondVerificationStep()
+				: renderFirstRegistrationStep()}
 		</>
 	);
 }

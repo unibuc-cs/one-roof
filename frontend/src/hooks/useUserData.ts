@@ -9,12 +9,13 @@ export const useUserData = (userId: string) => {
 
 	useEffect(() => {
 		setIsLoading(true);
-		userService.getWithClerkDetailsByUserId(userId)
-			.then(data => {
+		userService
+			.getWithClerkDetailsByUserId(userId)
+			.then((data) => {
 				setUser(data);
 				setIsLoading(false);
 			})
-			.catch(err => {
+			.catch((err) => {
 				setError(err);
 				setIsLoading(false);
 			});
@@ -23,7 +24,6 @@ export const useUserData = (userId: string) => {
 	return { user, error, isLoading };
 };
 
-
 export const useUserDataByClerkId = (clerkId: string) => {
 	const [user, setUser] = useState<IUserWithClerk | null>(null);
 	const [isLoading, setIsLoading] = useState(false);
@@ -31,13 +31,14 @@ export const useUserDataByClerkId = (clerkId: string) => {
 
 	useEffect(() => {
 		setIsLoading(true);
-		userService.getFullUserByClerkId(clerkId)
-			.then(data => {
+		userService
+			.getFullUserByClerkId(clerkId)
+			.then((data) => {
 				setUser(data);
 				console.log('new user', data);
 				setIsLoading(false);
 			})
-			.catch(err => {
+			.catch((err) => {
 				setError(err);
 				setIsLoading(false);
 			});

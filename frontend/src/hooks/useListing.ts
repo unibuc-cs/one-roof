@@ -7,11 +7,12 @@ export const useListing = (listingId: string, userId: string) => {
 	const [error, setError] = useState(null);
 
 	useEffect(() => {
-		listingService.getListing(listingId, userId)
-			.then(data => {
+		listingService
+			.getListing(listingId, userId)
+			.then((data) => {
 				setListing(data);
 			})
-			.catch(err => {
+			.catch((err) => {
 				setError(err);
 			});
 	}, [listingId, userId]);

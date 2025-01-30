@@ -1,5 +1,4 @@
 import { callApi } from '../../utils';
-import { useUser } from '@clerk/clerk-expo';
 
 export const listingService = {
 	createListing: (data: any, userId: string) => {
@@ -20,5 +19,5 @@ export const listingService = {
 
 	deleteListing: (id: string, userId: string) => {
 		return callApi(`listings/${id}`, { method: 'DELETE' }, userId);
-	}
+	},
 };

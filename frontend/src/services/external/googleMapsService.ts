@@ -24,4 +24,3 @@ export const getCoordinatesFromAddress = async (address: string) => {
 		throw new Error('Could not get coordinates');
 	}
 };
-

@@ -1,7 +1,11 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { DrawerContentComponentProps, DrawerContentScrollView, DrawerItem, } from '@react-navigation/drawer';
-import { Caption, Drawer, Title, } from 'react-native-paper';
+import {
+	DrawerContentComponentProps,
+	DrawerContentScrollView,
+	DrawerItem,
+} from '@react-navigation/drawer';
+import { Caption, Drawer, Title } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ProfilePicture } from '../components/base/ProfilePicture';
 import { useAuth, useUser } from '@clerk/clerk-expo';
@@ -25,15 +29,24 @@ export function DrawerContent(props: DrawerContentComponentProps) {
 			<View style={styles.drawerContent}>
 				<View style={styles.userInfoSection}>
 					<View style={styles.profilePictureContainer}>
-						<ProfilePicture canEdit={false} source={{ uri: profilePictureUrl }}/>
+						<ProfilePicture
+							canEdit={false}
+							source={{ uri: profilePictureUrl }}
+						/>
 					</View>
 					<Caption style={styles.nickname}>@{user.username}</Caption>
-					<Title style={styles.title}>{`${capitalize(user.firstName)} ${capitalize(user.lastName)}`}</Title>
+					<Title
+						style={styles.title}
+					>{`${capitalize(user.firstName)} ${capitalize(user.lastName)}`}</Title>
 				</View>
 				<Drawer.Section style={styles.drawerSection}>
 					<DrawerItem
 						icon={({ color, size }) => (
-							<MaterialCommunityIcons name="home-outline" color={color} size={size}/>
+							<MaterialCommunityIcons
+								name="home-outline"
+								color={color}
+								size={size}
+							/>
 						)}
 						label="Home"
 						onPress={() => {
@@ -42,7 +55,11 @@ export function DrawerContent(props: DrawerContentComponentProps) {
 					/>
 					<DrawerItem
 						icon={({ color, size }) => (
-							<MaterialCommunityIcons name="account-outline" color={color} size={size}/>
+							<MaterialCommunityIcons
+								name="account-outline"
+								color={color}
+								size={size}
+							/>
 						)}
 						label="Profile"
 						onPress={() => {
@@ -51,47 +68,65 @@ export function DrawerContent(props: DrawerContentComponentProps) {
 					/>
 					<DrawerItem
 						icon={({ color, size }) => (
-							<Icon name="user-friends" size={18} color={color}/>
+							<Icon name="user-friends" size={18} color={color} />
 						)}
 						label="Friends"
 						onPress={() => {
 							props.navigation.navigate('Friends');
 						}}
 					/>
-					{role === UserRoleEnum.RegularUser && <DrawerItem
-						icon={({ color, size }) => (
-							<MaterialCommunityIcons name="account-group-outline" color={color} size={size}/>
-						)}
-						label="Roommates"
-						onPress={() => {
-							props.navigation.navigate('Roommates');
-						}}
-					/>}
-					{role === UserRoleEnum.Landlord &&
-                        <DrawerItem
-                        	icon={({ color, size }) => (
-                        		<MaterialCommunityIcons name="map-marker-outline" color={color} size={size}/>
-                        	)}
-                        	label="Add Property"
-                        	onPress={() => {
-                        		props.navigation.navigate('CreateListing');
-                        	}}
-                        />
-					}
-					{role === UserRoleEnum.RegularUser &&
-                        <DrawerItem
-                        	icon={({ color, size }) => (
-                        		<MaterialCommunityIcons name="home-outline" color={color} size={size}/>
-                        	)}
-                        	label="Add Review"
-                        	onPress={() => {
-                        		props.navigation.navigate('CreateReview');
-                        	}}
-                        />
-					}
+					{role === UserRoleEnum.RegularUser && (
+						<DrawerItem
+							icon={({ color, size }) => (
+								<MaterialCommunityIcons
+									name="account-group-outline"
+									color={color}
+									size={size}
+								/>
+							)}
+							label="Roommates"
+							onPress={() => {
+								props.navigation.navigate('Roommates');
+							}}
+						/>
+					)}
+					{role === UserRoleEnum.Landlord && (
+						<DrawerItem
+							icon={({ color, size }) => (
+								<MaterialCommunityIcons
+									name="map-marker-outline"
+									color={color}
+									size={size}
+								/>
+							)}
+							label="Add Property"
+							onPress={() => {
+								props.navigation.navigate('CreateListing');
+							}}
+						/>
+					)}
+					{role === UserRoleEnum.RegularUser && (
+						<DrawerItem
+							icon={({ color, size }) => (
+								<MaterialCommunityIcons
+									name="home-outline"
+									color={color}
+									size={size}
+								/>
+							)}
+							label="Add Review"
+							onPress={() => {
+								props.navigation.navigate('CreateReview');
+							}}
+						/>
+					)}
 					<DrawerItem
 						icon={({ color, size }) => (
-							<MaterialCommunityIcons name="heart-outline" color={color} size={size}/>
+							<MaterialCommunityIcons
+								name="heart-outline"
+								color={color}
+								size={size}
+							/>
 						)}
 						label="Favorites"
 						onPress={() => {
@@ -100,7 +135,11 @@ export function DrawerContent(props: DrawerContentComponentProps) {
 					/>
 					<DrawerItem
 						icon={({ color, size }) => (
-							<MaterialCommunityIcons name="message-outline" color={color} size={size}/>
+							<MaterialCommunityIcons
+								name="message-outline"
+								color={color}
+								size={size}
+							/>
 						)}
 						label="Chats"
 						onPress={() => {
@@ -109,7 +148,11 @@ export function DrawerContent(props: DrawerContentComponentProps) {
 					/>
 					<DrawerItem
 						icon={({ color, size }) => (
-							<MaterialCommunityIcons name="calendar-account-outline" color={color} size={size}/>
+							<MaterialCommunityIcons
+								name="calendar-account-outline"
+								color={color}
+								size={size}
+							/>
 						)}
 						label="Viewings"
 						onPress={() => {
@@ -128,7 +171,7 @@ export function DrawerContent(props: DrawerContentComponentProps) {
 							signOut();
 						}}
 					>
-                        Log out
+						Log out
 					</Button>
 				</Drawer.Section>
 			</View>
@@ -144,7 +187,7 @@ const styles = StyleSheet.create({
 		paddingLeft: 20,
 	},
 	nickname: {
-		marginTop: 10
+		marginTop: 10,
 	},
 	title: {
 		marginTop: 5,
@@ -154,6 +197,6 @@ const styles = StyleSheet.create({
 		marginTop: 15,
 	},
 	profilePictureContainer: {
-		marginLeft: 15
-	}
+		marginLeft: 15,
+	},
 });

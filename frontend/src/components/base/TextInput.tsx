@@ -3,7 +3,10 @@ import { StyleSheet, Text, View } from 'react-native';
 import { TextInput as Input } from 'react-native-paper';
 import { theme } from '../../theme';
 
-type Props = React.ComponentProps<typeof Input> & { errorText?: string, marginVertical?: number };
+type Props = React.ComponentProps<typeof Input> & {
+	errorText?: string,
+	marginVertical?: number,
+};
 
 export const TextInput = ({ errorText, marginVertical, ...props }: Props) => {
 	const customMargin = marginVertical !== undefined ? marginVertical : 12;
@@ -19,7 +22,6 @@ export const TextInput = ({ errorText, marginVertical, ...props }: Props) => {
 			{errorText ? <Text style={styles.error}>{errorText}</Text> : null}
 		</View>
 	);
-
 };
 const styles = StyleSheet.create({
 	container: {
@@ -29,13 +31,13 @@ const styles = StyleSheet.create({
 	input: {
 		color: 'red',
 		fontFamily: 'Proxima-Nova/Regular',
-		backgroundColor: theme.colors.secondary
+		backgroundColor: theme.colors.secondary,
 	},
 	error: {
 		fontSize: 14,
 		color: theme.colors.error,
 		paddingHorizontal: 4,
-	}
+	},
 });
 
 export default memo(TextInput);

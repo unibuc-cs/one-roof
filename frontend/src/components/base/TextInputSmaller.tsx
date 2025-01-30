@@ -2,23 +2,31 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { TextInput as Input } from 'react-native-paper';
 import { theme } from '../../theme';
-import { useCustomFonts } from '../../hooks/useCustomFonts';
 
-type Props = React.ComponentProps<typeof Input> & { errorText?: string, marginVertical?: number };
+type Props = React.ComponentProps<typeof Input> & {
+	errorText?: string,
+	marginVertical?: number,
+	multiline?: boolean,
+};
 
-export const TextInputSmaller = ({ errorText, marginVertical, ...props }: Props) => {
-	const LoadFonts = async () => {
-		await useCustomFonts();
-	};
-	const customPadding = props.multiline ? 8 : 0;
+export const TextInputSmaller = ({
+	errorText,
+	marginVertical,
+	multiline,
+	...props
+}: Props) => {
+	const customPadding = multiline ? 8 : 0;
 	return (
 		<View style={[styles.container]}>
 			<Input
-				style={[styles.inputContainer, { paddingVertical: customPadding }]}
+				style={[
+					styles.inputContainer,
+					{ paddingVertical: customPadding },
+				]}
 				contentStyle={styles.input}
 				selectionColor={theme.colors.secondary}
 				underlineColor="transparent"
-				mode='outlined'
+				mode="outlined"
 				numberOfLines={2}
 				dense={true}
 				{...props}
@@ -26,7 +34,6 @@ export const TextInputSmaller = ({ errorText, marginVertical, ...props }: Props)
 			{errorText ? <Text style={styles.error}>{errorText}</Text> : null}
 		</View>
 	);
-
 };
 const styles = StyleSheet.create({
 	container: {
@@ -45,5 +52,5 @@ const styles = StyleSheet.create({
 	error: {
 		fontSize: 14,
 		color: theme.colors.error,
-	}
+	},
 });

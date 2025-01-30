@@ -8,14 +8,14 @@ import { friendService } from '../services/internal/friendService';
 import { useNavigation } from '@react-navigation/native';
 
 interface CompatibleRoommateCardProps {
-    roommate: {
-        firstName: string,
-        lastName: string,
-        profilePicture: string,
-        clerkId: string,
-    },
-    compatibilityScore: number,
-    currentUserId?: string,
+	roommate: {
+		firstName: string,
+		lastName: string,
+		profilePicture: string,
+		clerkId: string,
+	},
+	compatibilityScore: number,
+	currentUserId?: string,
 }
 
 export const CompatibleRoommateCard: React.FC<CompatibleRoommateCardProps> = ({
@@ -24,14 +24,19 @@ export const CompatibleRoommateCard: React.FC<CompatibleRoommateCardProps> = ({
 }) => {
 	const navigation = useNavigation();
 	const { user: clerkUser } = useUser();
-	const [friendshipStatus, setFriendshipStatus] = useState<'none' | 'pending' | 'friends'>('none');
+	const [friendshipStatus, setFriendshipStatus] = useState<
+		'none' | 'pending' | 'friends'
+	>('none');
 	const [loading, setLoading] = useState<boolean>(false);
 
 	useEffect(() => {
 		const fetchFriendshipStatus = async () => {
 			if (clerkUser?.id) {
 				try {
-					const status = await friendService.getStatus(clerkUser.id, roommate.clerkId);
+					const status = await friendService.getStatus(
+						clerkUser.id,
+						roommate.clerkId,
+					);
 					setFriendshipStatus(status);
 				} catch (error) {
 					console.error('Error fetching friendship status:', error);
@@ -57,38 +62,66 @@ export const CompatibleRoommateCard: React.FC<CompatibleRoommateCardProps> = ({
 
 	const renderFriendButton = () => {
 		switch (friendshipStatus) {
-		case 'none':
-			return (
-				<Button onPress={handleSendFriendRequest} mode='elevated' loading={loading}>
-                        Add Friend
-				</Button>
-			);
-		case 'pending':
-			return <Button mode='elevated' disabled><Text style={{ color: 'lightyellow' }}>Pending</Text></Button>;
-		case 'friends':
-			return <Button mode='elevated' disabled><Text style={{ color: 'lightblue' }}>Already
-                    Friends</Text></Button>;
-		default:
-			return null;
+			case 'none':
+				return (
+					<Button
+						onPress={handleSendFriendRequest}
+						mode="elevated"
+						loading={loading}
+					>
+						Add Friend
+					</Button>
+				);
+			case 'pending':
+				return (
+					<Button mode="elevated" disabled>
+						<Text style={{ color: 'lightyellow' }}>Pending</Text>
+					</Button>
+				);
+			case 'friends':
+				return (
+					<Button mode="elevated" disabled>
+						<Text style={{ color: 'lightblue' }}>
+							Already Friends
+						</Text>
+					</Button>
+				);
+			default:
+				return null;
 		}
 	};
 
 	const handleSendMessage = async () => {
-		navigation.navigate('Messages', { receiverId: roommate.clerkId, referenceId: null, type: null });
+		navigation.navigate('Messages', {
+			receiverId: roommate.clerkId,
+			referenceId: null,
+			type: null,
+		});
 	};
 
 	return (
 		<Card style={styles.container}>
 			<View style={styles.row}>
-				<Image style={styles.profilePicture} source={{ uri: roommate.profilePicture }}/>
+				<Image
+					style={styles.profilePicture}
+					source={{ uri: roommate.profilePicture }}
+				/>
 				<View>
-					<Text style={styles.name}>{roommate.firstName} {roommate.lastName}</Text>
-					<Text style={styles.score}>Compatibility: {Math.round(compatibilityScore * 100)}%</Text>
+					<Text style={styles.name}>
+						{roommate.firstName} {roommate.lastName}
+					</Text>
+					<Text style={styles.score}>
+						Compatibility: {Math.round(compatibilityScore * 100)}%
+					</Text>
 				</View>
 			</View>
 			<View style={{ paddingTop: 15 }}>
-				<Button marginVertical={0} onPress={handleSendMessage} mode="elevated">
-                    Send a Message
+				<Button
+					marginVertical={0}
+					onPress={handleSendMessage}
+					mode="elevated"
+				>
+					Send a Message
 				</Button>
 				{renderFriendButton()}
 			</View>
@@ -132,4 +165,3 @@ const styles = StyleSheet.create({
 		color: 'white',
 	},
 });
-

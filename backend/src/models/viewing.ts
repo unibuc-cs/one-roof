@@ -13,14 +13,14 @@ interface IViewing extends Document {
 }
 
 const ViewingSchema = new Schema<IViewing>({
-    userId: { type: String, required: true },
-    listingId: { type: String, required: true },
-    title: { type: String, required: true },
-    address: { type: String, required: true },
-    landlordId: { type: String, required: true },
-    viewingDate: { type: Date, required: true },
-    status: { type: String, required: false, enum: ['confirmed', 'not confirmed'] },
-    createdAt: { type: Date, default: Date.now },
+	userId: { type: String, required: true },
+	listingId: { type: String, required: true },
+	title: { type: String, required: true },
+	address: { type: String, required: true },
+	landlordId: { type: String, required: true },
+	viewingDate: { type: Date, required: true },
+	status: { type: String, required: false, enum: ['confirmed', 'not confirmed'] },
+	createdAt: { type: Date, default: Date.now },
 	updatedAt: { type: Date, default: Date.now },
 }, { timestamps: true });
 

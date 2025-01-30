@@ -3,11 +3,15 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 
 type ToggleButtonProps = Omit<ButtonProps, 'onPress'> & {
-    isActive: boolean,
-    onToggle?: () => void,
+	isActive: boolean,
+	onToggle?: () => void,
 };
 
-export const ToggleButton: React.FC<ToggleButtonProps> = ({ isActive, style, ...props }) => {
+export const ToggleButton: React.FC<ToggleButtonProps> = ({
+	isActive,
+	style,
+	...props
+}) => {
 	return (
 		<Button mode="contained" width={props.width}>
 			{props.children}
@@ -21,5 +25,5 @@ const styles = StyleSheet.create({
 	},
 	button: {
 		backgroundColor: 'red',
-	}
+	},
 });

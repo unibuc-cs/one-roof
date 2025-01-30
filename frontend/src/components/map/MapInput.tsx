@@ -2,20 +2,27 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import MapView, { MapPressEvent, Marker, Region } from 'react-native-maps';
 import * as Location from 'expo-location';
-import { DEFAULT_LATITUDE_DELTA, DEFAULT_LONGITUDE_DELTA, mapStyles } from '../../utils';
+import {
+	DEFAULT_LATITUDE_DELTA,
+	DEFAULT_LONGITUDE_DELTA,
+	mapStyles,
+} from '../../utils';
 
 interface MapInputProps {
-    onLocationChange: (latitude: number, longitude: number) => void,
+	onLocationChange: (latitude: number, longitude: number) => void,
 }
 
 export const MapInput: React.FC<MapInputProps> = ({ onLocationChange }) => {
-	const [location, setLocation] = useState<Location.LocationObject | null>(null);
+	const [location, setLocation] = useState<Location.LocationObject | null>(
+		null,
+	);
 	const [region, setRegion] = useState<Region | null>(null);
 	const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
 	useEffect(() => {
 		(async () => {
-			const { status } = await Location.requestForegroundPermissionsAsync();
+			const { status } =
+				await Location.requestForegroundPermissionsAsync();
 			if (status !== 'granted') {
 				setErrorMsg('Permission to access location was denied');
 				return;
@@ -86,6 +93,6 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 10,
 	},
 	map: {
-		height: 300
+		height: 300,
 	},
 });

@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Dimensions, Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import {
+	Dimensions,
+	Image,
+	ScrollView,
+	StyleSheet,
+	TouchableOpacity,
+	View,
+} from 'react-native';
 import { RouteProp } from '@react-navigation/native';
 import { Background, Button, HeaderText } from '../../components';
 import { Card, TextInput } from 'react-native-paper';
@@ -12,8 +19,11 @@ import { useUser } from '@clerk/clerk-expo';
 import { capitalize } from 'lodash';
 
 type ListingDescriptionScreenProps = {
-    route: RouteProp<{ params: { generalDetails: any, location: any, facilities: any } }, 'params'>,
-    navigation: any,
+	route: RouteProp<
+		{ params: { generalDetails: any, location: any, facilities: any } },
+		'params'
+	>,
+	navigation: any,
 };
 
 const descriptionSchema = Yup.object().shape({
@@ -23,10 +33,12 @@ const descriptionSchema = Yup.object().shape({
 
 const initialFormValues = {
 	description: '',
-	photos: []
+	photos: [],
 };
 
-export const ListingDescriptionScreen: React.FC<ListingDescriptionScreenProps> = ({ route, navigation }) => {
+export const ListingDescriptionScreen: React.FC<
+	ListingDescriptionScreenProps
+> = ({ route, navigation }) => {
 	const { generalDetails, location, facilities } = route.params;
 	const [description, setDescription] = useState('');
 	const [photos, setPhotos] = useState<string[]>([]);
@@ -66,11 +78,12 @@ export const ListingDescriptionScreen: React.FC<ListingDescriptionScreenProps> =
 			updatedAt: currentDate,
 		};
 		console.log('listingData', listingData);
-		listingService.createListing(listingData, listingData.landlordId)
-			.then(response => {
+		listingService
+			.createListing(listingData, listingData.landlordId)
+			.then((response) => {
 				console.log('Listing successfully created', response);
 			})
-			.catch(error => {
+			.catch((error) => {
 				console.error('Failed to create listing', error);
 			});
 		navigation.navigate('Home');
@@ -83,21 +96,26 @@ export const ListingDescriptionScreen: React.FC<ListingDescriptionScreenProps> =
 		});
 
 		if (response.assets) {
-			const newPhotos = response.assets.map(asset => asset.uri);
+			const newPhotos = response.assets.map((asset) => asset.uri);
 			const photosAfterUpdate = [...new Set([...photos, ...newPhotos])];
 			setPhotos(photosAfterUpdate);
 		}
 	};
 
 	const deletePhoto = (uri: string) => {
-		setPhotos(photos.filter(photo => photo !== uri));
+		setPhotos(photos.filter((photo) => photo !== uri));
 	};
 
 	return (
 		<Background>
 			<Card style={styles.card}>
-				<ScrollView showsVerticalScrollIndicator={false} style={styles.scrollView}>
-					<HeaderText paddingBottom={10} textAlign={'left'} size={17}>Photos:</HeaderText>
+				<ScrollView
+					showsVerticalScrollIndicator={false}
+					style={styles.scrollView}
+				>
+					<HeaderText paddingBottom={10} textAlign={'left'} size={17}>
+						Photos:
+					</HeaderText>
 					<Carousel
 						loop
 						width={width - 100}
@@ -109,44 +127,61 @@ export const ListingDescriptionScreen: React.FC<ListingDescriptionScreenProps> =
 						style={styles.carousel}
 						renderItem={({ index }) => (
 							<View>
-								{photos[index] &&
-                                    (<Image
-                                    	style={styles.image}
-                                    	source={{
-                                    		uri: photos[index]
-                                    	}}
-                                    />)}
+								{photos[index] && (
+									<Image
+										style={styles.image}
+										source={{
+											uri: photos[index],
+										}}
+									/>
+								)}
 								<TouchableOpacity
 									style={styles.deleteButton}
 									onPress={() => deletePhoto(photos[index])}
 								>
-									<Ionicons name="trash" size={24} color="white"/>
+									<Ionicons
+										name="trash"
+										size={24}
+										color="white"
+									/>
 								</TouchableOpacity>
 							</View>
 						)}
 					/>
 
-					<Button mode="contained" onPress={pickImage}>Upload Photos</Button>
-					<HeaderText paddingBottom={10} textAlign={'left'} size={17}>Listing Description:</HeaderText>
+					<Button mode="contained" onPress={pickImage}>
+						Upload Photos
+					</Button>
+					<HeaderText paddingBottom={10} textAlign={'left'} size={17}>
+						Listing Description:
+					</HeaderText>
 
 					<TextInput
 						label="Description"
 						value={description}
-						onChangeText={text => setDescription(text)}
+						onChangeText={(text) => setDescription(text)}
 						multiline
 						style={styles.textInput}
 					/>
 					<View style={styles.buttonsContainer}>
-						<Button style={styles.button} mode="contained" onPress={handleDiscard}>Discard</Button>
-						<Button style={styles.button} mode="contained" onPress={handleCreate}>Create</Button>
+						<Button
+							style={styles.button}
+							mode="contained"
+							onPress={handleDiscard}
+						>
+							Discard
+						</Button>
+						<Button
+							style={styles.button}
+							mode="contained"
+							onPress={handleCreate}
+						>
+							Create
+						</Button>
 					</View>
 				</ScrollView>
-
 			</Card>
-
-
 		</Background>
-
 	);
 };
 

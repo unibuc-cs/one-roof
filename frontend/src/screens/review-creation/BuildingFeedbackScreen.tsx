@@ -48,11 +48,14 @@ const BuildingFeedbackSchema = Yup.object().shape({
 });
 
 type BuildingFeedbackScreenProps = {
-    route: RouteProp<{ params: { generalDetails: any } }, 'params'>,
-    navigation: any,
+	route: RouteProp<{ params: { generalDetails: any } }, 'params'>,
+	navigation: any,
 };
 
-export const BuildingFeedbackScreen: React.FC<BuildingFeedbackScreenProps> = ({ route, navigation }) => {
+export const BuildingFeedbackScreen: React.FC<BuildingFeedbackScreenProps> = ({
+	route,
+	navigation,
+}) => {
 	const { generalDetails } = route.params;
 
 	const handleDiscard = () => {
@@ -62,7 +65,10 @@ export const BuildingFeedbackScreen: React.FC<BuildingFeedbackScreenProps> = ({ 
 	const handleSubmit = (values: any) => {
 		console.log('General Details:', generalDetails);
 		console.log('Building Feedback:', values);
-		navigation.navigate('AreaFeedback', { generalDetails, buildingFeedback: values });
+		navigation.navigate('AreaFeedback', {
+			generalDetails,
+			buildingFeedback: values,
+		});
 	};
 
 	return (
@@ -111,26 +117,36 @@ export const BuildingFeedbackScreen: React.FC<BuildingFeedbackScreenProps> = ({ 
 					validationSchema={BuildingFeedbackSchema}
 					onSubmit={handleSubmit}
 				>
-					{({ handleChange, handleBlur, handleSubmit, setFieldValue, values }) => (
-						<KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
-							<HeaderText paddingBottom={30} size={30}>About your Building..</HeaderText>
+					{({
+						handleChange,
+						handleBlur,
+						handleSubmit,
+						setFieldValue,
+						values,
+					}) => (
+						<KeyboardAwareScrollView
+							showsVerticalScrollIndicator={false}
+						>
+							<HeaderText paddingBottom={30} size={30}>
+								About your Building..
+							</HeaderText>
 							<QuizSection
 								title="Pest Issues"
 								questions={[
 									{
 										prompt: 'How often do you experience issues with rodents (e.g., mice, rats)?',
 										leftText: 'Very Often',
-										rightText: 'Never'
+										rightText: 'Never',
 									},
 									{
 										prompt: 'How often do you experience issues with bugs (e.g., cockroaches, ants)?',
 										leftText: 'Very Often',
-										rightText: 'Never'
+										rightText: 'Never',
 									},
 									{
 										prompt: 'How often do you experience issues with mosquitoes?',
 										leftText: 'Very Often',
-										rightText: 'Never'
+										rightText: 'Never',
 									},
 								]}
 							/>
@@ -140,11 +156,13 @@ export const BuildingFeedbackScreen: React.FC<BuildingFeedbackScreenProps> = ({ 
 									{
 										prompt: 'How often do you experience issues with warm water or other utilities (e.g., electricity, gas)?',
 										leftText: 'Very Often',
-										rightText: 'Never'
+										rightText: 'Never',
 									},
 								]}
 								binaryQuestions={[
-									{ prompt: 'Does the building have a central heating system?' }
+									{
+										prompt: 'Does the building have a central heating system?',
+									},
 								]}
 							/>
 							<QuizSection
@@ -153,7 +171,7 @@ export const BuildingFeedbackScreen: React.FC<BuildingFeedbackScreenProps> = ({ 
 									{
 										prompt: 'Are there any mold issues in the building?',
 										leftText: 'All the time',
-										rightText: 'Not at all'
+										rightText: 'Not at all',
 									},
 								]}
 							/>
@@ -163,7 +181,7 @@ export const BuildingFeedbackScreen: React.FC<BuildingFeedbackScreenProps> = ({ 
 									{
 										prompt: 'How would you rate the noise insulation of the building (e.g., thin walls, external noise)?',
 										leftText: 'Very Bad',
-										rightText: 'Very Good'
+										rightText: 'Very Good',
 									},
 								]}
 							/>
@@ -173,11 +191,13 @@ export const BuildingFeedbackScreen: React.FC<BuildingFeedbackScreenProps> = ({ 
 									{
 										prompt: 'How would you rate the security of the building?',
 										leftText: 'Very Bad',
-										rightText: 'Very Good'
+										rightText: 'Very Good',
 									},
 								]}
 								binaryQuestions={[
-									{ prompt: 'Does the building have bodyguards at the entrance?' }
+									{
+										prompt: 'Does the building have bodyguards at the entrance?',
+									},
 								]}
 							/>
 							<QuizSection
@@ -186,16 +206,18 @@ export const BuildingFeedbackScreen: React.FC<BuildingFeedbackScreenProps> = ({ 
 									{
 										prompt: 'Does your building maintain a comfortable temperature during the summer?',
 										leftText: 'Very Dissatisfied',
-										rightText: 'Very Satisfied'
+										rightText: 'Very Satisfied',
 									},
 									{
 										prompt: 'Does your building maintain a comfortable temperature during the winter?',
 										leftText: 'Very Often',
-										rightText: 'Never'
+										rightText: 'Never',
 									},
 								]}
 								binaryQuestions={[
-									{ prompt: 'Does the building have an AC system?' }
+									{
+										prompt: 'Does the building have an AC system?',
+									},
 								]}
 							/>
 							<QuizSection
@@ -205,21 +227,30 @@ export const BuildingFeedbackScreen: React.FC<BuildingFeedbackScreenProps> = ({ 
 									{
 										prompt: 'How would you rate the quality and condition of the building finishes (e.g., windows, floors, doors)?',
 										leftText: 'Very Bad',
-										rightText: 'Very Good'
+										rightText: 'Very Good',
 									},
 									{
 										prompt: 'How modern and well-maintained are the building finishes (e.g., paint, fixtures)?',
 										leftText: 'Very Bad',
-										rightText: 'Very Good'
+										rightText: 'Very Good',
 									},
 								]}
 								binaryQuestions={[
-									{ prompt: 'Does your building have an elevator?' }
+									{
+										prompt: 'Does your building have an elevator?',
+									},
 								]}
 							/>
-							<Button mode="contained" onPress={handleSubmit}>Next</Button>
-							<Button style={{ marginTop: 0 }} mode="contained" onPress={() => handleDiscard()}>Discard
-                                Review</Button>
+							<Button mode="contained" onPress={handleSubmit}>
+								Next
+							</Button>
+							<Button
+								style={{ marginTop: 0 }}
+								mode="contained"
+								onPress={() => handleDiscard()}
+							>
+								Discard Review
+							</Button>
 						</KeyboardAwareScrollView>
 					)}
 				</Formik>

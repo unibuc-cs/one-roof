@@ -4,11 +4,11 @@ import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import { theme } from '../../theme';
 
 interface PriceRangeSelectorProps {
-    priceRangeRef: React.MutableRefObject<number[]>,
-    minPrice: number,
-    maxPrice: number,
-    onPriceChange: (newRange: number[]) => void,
-    sliderScale: number,
+	priceRangeRef: React.MutableRefObject<number[]>,
+	minPrice: number,
+	maxPrice: number,
+	onPriceChange: (newRange: number[]) => void,
+	sliderScale: number,
 }
 
 export const PriceRangeSelector: React.FC<PriceRangeSelectorProps> = ({
@@ -16,7 +16,7 @@ export const PriceRangeSelector: React.FC<PriceRangeSelectorProps> = ({
 	minPrice,
 	maxPrice,
 	onPriceChange,
-	sliderScale = 1
+	sliderScale = 1,
 }) => {
 	const handlePriceChange = (newValues: number[]) => {
 		priceRangeRef.current = newValues;
@@ -26,9 +26,13 @@ export const PriceRangeSelector: React.FC<PriceRangeSelectorProps> = ({
 	return (
 		<View>
 			<View style={styles.priceContainer}>
-				<Text style={styles.priceStyling}>{priceRangeRef.current[0]} € </Text>
+				<Text style={styles.priceStyling}>
+					{priceRangeRef.current[0]} €{' '}
+				</Text>
 				<Text> - </Text>
-				<Text style={styles.priceStyling}>{priceRangeRef.current[1]} € </Text>
+				<Text style={styles.priceStyling}>
+					{priceRangeRef.current[1]} €{' '}
+				</Text>
 			</View>
 			<MultiSlider
 				trackStyle={styles.trackStyle}
@@ -48,7 +52,7 @@ export const PriceRangeSelector: React.FC<PriceRangeSelectorProps> = ({
 
 const styles = StyleSheet.create({
 	checkbox: {
-		fontFamily: 'Proxima-Nova/Regular'
+		fontFamily: 'Proxima-Nova/Regular',
 	},
 	flexContainer: {
 		display: 'flex',
@@ -72,7 +76,7 @@ const styles = StyleSheet.create({
 		borderColor: 'darkgray',
 		borderStyle: 'solid',
 		borderWidth: 1,
-		color: theme.colors.text
+		color: theme.colors.text,
 	},
 	container: {
 		flex: 1,
@@ -90,5 +94,5 @@ const styles = StyleSheet.create({
 	buttonsContainer: {
 		flexDirection: 'row',
 		justifyContent: 'space-around',
-	}
+	},
 });

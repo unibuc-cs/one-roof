@@ -4,13 +4,13 @@ import { Button as PaperButton } from 'react-native-paper';
 import { theme } from '../../theme';
 
 export type ButtonProps = {
-    mode?: string,
-    style?: any,
-    width?: string | number,
-    marginVertical?: number,
-    fontSize?: number,
-    lineHeight?: number,
-    children: React.ReactNode,
+	mode?: string,
+	style?: any,
+	width?: string | number,
+	marginVertical?: number,
+	fontSize?: number,
+	lineHeight?: number,
+	children: React.ReactNode,
 } & React.ComponentProps<typeof PaperButton>;
 
 export const Button = ({
@@ -29,7 +29,9 @@ export const Button = ({
 			style={[
 				{ width, marginVertical },
 				styles.button,
-				mode === 'outlined' && { backgroundColor: theme.colors.surface },
+				mode === 'outlined' && {
+					backgroundColor: theme.colors.surface,
+				},
 				style,
 			]}
 			labelStyle={[styles.text, { fontSize, lineHeight }]}

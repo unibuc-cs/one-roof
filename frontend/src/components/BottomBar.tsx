@@ -18,16 +18,27 @@ export const BottomBar = () => {
 				enableContentPanningGesture={!state.isWaitingForSearch}
 			>
 				{state.isWaitingForSearch ? (
-					<ActivityIndicator size="small" color={'grey'}/>
+					<ActivityIndicator size="small" color={'grey'} />
 				) : (
-					<BottomSheetScrollView contentContainerStyle={styles.contentContainer}>
-						<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+					<BottomSheetScrollView
+						contentContainerStyle={styles.contentContainer}
+					>
+						<View
+							style={{
+								flex: 1,
+								justifyContent: 'center',
+								alignItems: 'center',
+							}}
+						>
 							<Text style={styles.resultsText}>
-								{state.searchType === 'listings' ? state.listings.length : state.reviews.length} results
+								{state.searchType === 'listings'
+									? state.listings.length
+									: state.reviews.length}{' '}
+								results
 							</Text>
 							<View style={{ height: 50 }}></View>
 						</View>
-						<ItemList/>
+						<ItemList />
 					</BottomSheetScrollView>
 				)}
 			</BottomSheet>
@@ -51,6 +62,5 @@ const styles = StyleSheet.create({
 		marginRight: 10, // TODO: Fix hardcoding?
 		width: 110,
 		alignSelf: 'flex-end',
-	}
+	},
 });
-

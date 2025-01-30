@@ -4,8 +4,32 @@ import { Ionicons } from '@expo/vector-icons';
 import { theme } from '../../theme';
 import { Button } from '../base/Button';
 import { useNavigation } from '@react-navigation/native';
+import { IListing, IReview } from '../../models';
 
-export const MessageItem = ({ msg, index, listings, reviews, userId }) => {
+interface MessageItemProps {
+	msg: {
+		_id: string,
+		content: string,
+		createdAt: string,
+		isRead: boolean,
+		receiverId: string,
+		senderId: string,
+		type: string,
+		referenceId: string,
+	},
+	index: number,
+	listings: Record<string, IListing>,
+	reviews: Record<string, IReview>,
+	userId: string,
+}
+
+export const MessageItem: React.FC<MessageItemProps> = ({
+	msg,
+	index,
+	listings,
+	reviews,
+	userId,
+}) => {
 	const showListing = msg.referenceId != null && msg.type === 'listing';
 	const showReview = msg.referenceId != null && msg.type === 'review';
 	const { navigate } = useNavigation();
@@ -26,54 +50,109 @@ export const MessageItem = ({ msg, index, listings, reviews, userId }) => {
 		return text;
 	};
 
-
 	return (
 		<React.Fragment key={index}>
 			{showListing && (
 				<View
-					style={[styles.listingContainer, msg.senderId === userId ? { alignSelf: 'flex-end' } : { alignSelf: 'flex-start' }]}>
+					style={[
+						styles.listingContainer,
+						msg.senderId === userId
+							? { alignSelf: 'flex-end' }
+							: { alignSelf: 'flex-start' },
+					]}
+				>
 					<View style={{ flex: 1 }}>
 						<Text style={styles.listingTitle}>
-							{listings[msg.referenceId] ? listings[msg.referenceId].title : 'Loading listing...'}
+							{listings[msg.referenceId]
+								? listings[msg.referenceId].title
+								: 'Loading listing...'}
 						</Text>
 						<Text style={styles.listingDescription}>
-							{listings[msg.referenceId] ? truncateText(listings[msg.referenceId].description, 100) : ''}
+							{listings[msg.referenceId]
+								? truncateText(
+										listings[msg.referenceId].description,
+										100,
+									)
+								: ''}
 						</Text>
 					</View>
 					<Pressable style={styles.openButton}>
-						<Button mode={'contained'}
-							onPress={() => navigate('Listing', { id: listings[msg.referenceId]._id })}>Open</Button>
+						<Button
+							mode={'contained'}
+							onPress={() =>
+								navigate('Listing', {
+									id: listings[msg.referenceId]._id,
+								})
+							}
+						>
+							Open
+						</Button>
 					</Pressable>
 				</View>
 			)}
 			{showReview && (
 				<View
-					style={[styles.listingContainer, msg.senderId === userId ? { alignSelf: 'flex-end' } : { alignSelf: 'flex-start' }]}>
+					style={[
+						styles.listingContainer,
+						msg.senderId === userId
+							? { alignSelf: 'flex-end' }
+							: { alignSelf: 'flex-start' },
+					]}
+				>
 					<View style={{ flex: 1 }}>
 						<Text style={styles.listingTitle}>
-							{reviews[msg.referenceId] ? reviews[msg.referenceId].title : 'Loading review...'}
+							{reviews[msg.referenceId]
+								? reviews[msg.referenceId].title
+								: 'Loading review...'}
 						</Text>
 						<Text style={styles.listingDescription}>
-							{reviews[msg.referenceId] ? truncateText(reviews[msg.referenceId].description, 100) : ''}
+							{reviews[msg.referenceId]
+								? truncateText(
+										reviews[msg.referenceId].description,
+										100,
+									)
+								: ''}
 						</Text>
 					</View>
 					<Pressable style={styles.openButton}>
-						<Button mode={'contained'}
-							onPress={() => navigate('ViewReview', { id: reviews[msg.referenceId]._id })}>Open</Button>
+						<Button
+							mode={'contained'}
+							onPress={() =>
+								navigate('ViewReview', {
+									id: reviews[msg.referenceId]._id,
+								})
+							}
+						>
+							Open
+						</Button>
 					</Pressable>
 				</View>
 			)}
 			<Pressable
 				style={[
 					styles.message,
-					msg.senderId === userId ? styles.senderMsgBubble : styles.receiverMsgBubble
+					msg.senderId === userId
+						? styles.senderMsgBubble
+						: styles.receiverMsgBubble,
 				]}
 			>
-				<Text style={msg.senderId === userId ? styles.senderMsg : styles.receiverMsg}>
+				<Text
+					style={
+						msg.senderId === userId
+							? styles.senderMsg
+							: styles.receiverMsg
+					}
+				>
 					{msg.content}
 				</Text>
 				<View style={{ flexDirection: 'row', gap: 5, display: 'flex' }}>
-					<Text style={msg.senderId === userId ? styles.senderMsg : styles.receiverMsg}>
+					<Text
+						style={
+							msg.senderId === userId
+								? styles.senderMsg
+								: styles.receiverMsg
+						}
+					>
 						{formatTime(msg.createdAt)}
 					</Text>
 					{msg.senderId === userId && (
@@ -88,7 +167,6 @@ export const MessageItem = ({ msg, index, listings, reviews, userId }) => {
 		</React.Fragment>
 	);
 };
-
 
 const styles = StyleSheet.create({
 	message: {

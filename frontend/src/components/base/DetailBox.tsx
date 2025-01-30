@@ -2,9 +2,8 @@ import { View } from 'react-native';
 import React, { ReactNode } from 'react';
 import { theme } from '../../theme';
 
-
 type DetailBoxProps = {
-    children: ReactNode,
+	children: ReactNode,
 };
 
 export const DetailBox: React.FC<DetailBoxProps> = ({ children }) => {
@@ -29,5 +28,5 @@ const styles = {
 	flexContent: {
 		display: 'flex',
 		flexDirection: 'row',
-	}
+	},
 };

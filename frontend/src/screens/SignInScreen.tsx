@@ -8,9 +8,10 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import Spinner from 'react-native-loading-spinner-overlay';
 
-
 const signInValidationSchema = Yup.object().shape({
-	emailAddress: Yup.string().email('Invalid email').required('Email is required'),
+	emailAddress: Yup.string()
+		.email('Invalid email')
+		.required('Email is required'),
 	password: Yup.string().required('Password is required'),
 });
 
@@ -38,23 +39,36 @@ export default function SignInScreen() {
 			setInvalidPassword(true);
 			console.log(JSON.stringify(err));
 			setSpinnerVisible(false); // Stop the spinner if there's an error
-			if ((err as Error).message === 'Password is incorrect. Try again, or use another method.') {
+			if (
+				(err as Error).message ===
+				'Password is incorrect. Try again, or use another method.'
+			) {
 				setInvalidPassword(true);
-				actions.setFieldError('password', 'Incorrect password. Please try again.');
+				actions.setFieldError(
+					'password',
+					'Incorrect password. Please try again.',
+				);
 			}
 		}
 	};
 
 	return (
 		<Background>
-			<Spinner visible={spinnerVisible} textContent={'Loading....'}/>
-			<Logo/>
+			<Spinner visible={spinnerVisible} textContent={'Loading....'} />
+			<Logo />
 			<Formik
 				initialValues={{ emailAddress: '', password: '' }}
 				validationSchema={signInValidationSchema}
 				onSubmit={handleSignIn} // Pass the custom submit function
 			>
-				{({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
+				{({
+					handleChange,
+					handleBlur,
+					handleSubmit,
+					values,
+					errors,
+					touched,
+				}) => (
 					<>
 						<TextInput
 							label="Email"
@@ -64,8 +78,14 @@ export default function SignInScreen() {
 							placeholder="Email..."
 							onChangeText={handleChange('emailAddress')}
 							onBlur={handleBlur('emailAddress')}
-							error={!!(touched.emailAddress && errors.emailAddress)}
-							errorText={touched.emailAddress && errors.emailAddress ? errors.emailAddress : undefined}
+							error={
+								!!(touched.emailAddress && errors.emailAddress)
+							}
+							errorText={
+								touched.emailAddress && errors.emailAddress
+									? errors.emailAddress
+									: undefined
+							}
 						/>
 
 						<TextInput
@@ -79,10 +99,13 @@ export default function SignInScreen() {
 							error={!!(touched.password && errors.password)}
 							errorText={errors.password as string}
 						/>
-						{invalidPassword &&
-                            <Text style={{ color: 'red' }}>Invalid email or password. Please try again.</Text>}
+						{invalidPassword && (
+							<Text style={{ color: 'red' }}>
+								Invalid email or password. Please try again.
+							</Text>
+						)}
 						<Button mode="contained" onPress={() => handleSubmit()}>
-                            Sign In
+							Sign In
 						</Button>
 					</>
 				)}

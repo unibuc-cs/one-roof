@@ -9,13 +9,21 @@ import {
 	PolygonEditorRef,
 } from '@siposdani87/expo-maps-polygon-editor';
 import { v4 as uuidv4 } from 'uuid';
-import { BUCHAREST_COORDINATES, DEFAULT_LATITUDE_DELTA, DEFAULT_LONGITUDE_DELTA } from '../../utils';
+import {
+	BUCHAREST_COORDINATES,
+	DEFAULT_LATITUDE_DELTA,
+	DEFAULT_LONGITUDE_DELTA,
+} from '../../utils';
 
 interface MapWithAreaPolygonsProps {
-    onChangePolygons?: (polygons: Array<Array<{ latitude: number, longitude: number }>>) => void,
+	onChangePolygons?: (
+		polygons: Array<Array<{ latitude: number, longitude: number }>>,
+	) => void,
 }
 
-export const MapWithAreaPolygons: React.FC<MapWithAreaPolygonsProps> = ({ onChangePolygons }) => {
+export const MapWithAreaPolygons: React.FC<MapWithAreaPolygonsProps> = ({
+	onChangePolygons,
+}) => {
 	const mapRef = useRef<MapView>(null);
 	const polygonEditorRef = useRef<PolygonEditorRef>(null);
 
@@ -33,7 +41,7 @@ export const MapWithAreaPolygons: React.FC<MapWithAreaPolygonsProps> = ({ onChan
 			strokeColor,
 			fillColor,
 		}),
-		[newPolygonKey, strokeColor, fillColor]
+		[newPolygonKey, strokeColor, fillColor],
 	);
 
 	const handleDrawArea = useCallback(() => {
@@ -70,7 +78,7 @@ export const MapWithAreaPolygons: React.FC<MapWithAreaPolygonsProps> = ({ onChan
 				polygonEditorRef.current?.setCoordinate(coordinate);
 			}
 		},
-		[isDrawing]
+		[isDrawing],
 	);
 
 	const onPolygonRemove = (index: number): void => {
@@ -99,7 +107,7 @@ export const MapWithAreaPolygons: React.FC<MapWithAreaPolygonsProps> = ({ onChan
 				return polygonsClone;
 			});
 		},
-		[onChangePolygons]
+		[onChangePolygons],
 	);
 
 	return (
@@ -120,27 +128,47 @@ export const MapWithAreaPolygons: React.FC<MapWithAreaPolygonsProps> = ({ onChan
 					polygons={polygons}
 					onPolygonCreate={onPolygonCreate}
 					onPolygonChange={onPolygonChange}
-					onPolygonSelect={() => {
-					}}
+					onPolygonSelect={() => {}}
 					onPolygonRemove={onPolygonRemove}
 				/>
 			</MapView>
 
 			<View style={styles.actionsContainer}>
-				<View style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+				<View
+					style={{
+						display: 'flex',
+						justifyContent: 'center',
+						alignItems: 'center',
+					}}
+				>
 					{!isDrawing ? (
-						<Button mode='contained' onPress={handleDrawArea} marginVertical={0} fontSize={12}
-							lineHeight={18}>
-                            Draw Area
+						<Button
+							mode="contained"
+							onPress={handleDrawArea}
+							marginVertical={0}
+							fontSize={12}
+							lineHeight={18}
+						>
+							Draw Area
 						</Button>
 					) : (
-						<Button mode='contained' onPress={handleFinishDrawing} marginVertical={0} fontSize={12}
-							lineHeight={18}>
-                            Finish Current Area
+						<Button
+							mode="contained"
+							onPress={handleFinishDrawing}
+							marginVertical={0}
+							fontSize={12}
+							lineHeight={18}
+						>
+							Finish Current Area
 						</Button>
 					)}
-					<Button mode='contained' fontSize={12} lineHeight={18} onPress={handleResetArea}>
-                        Reset All Areas
+					<Button
+						mode="contained"
+						fontSize={12}
+						lineHeight={18}
+						onPress={handleResetArea}
+					>
+						Reset All Areas
 					</Button>
 				</View>
 			</View>

@@ -5,13 +5,18 @@ import Button from './Button';
 import { HeaderText } from './HeaderText';
 
 type EditableFieldProps = {
-    label: string,
-    value: string,
-    isEditable: boolean,
-    onSave: (newValue: string) => void,
+	label: string,
+	value: string,
+	isEditable: boolean,
+	onSave: (newValue: string) => void,
 };
 
-export const EditableField: React.FC<EditableFieldProps> = ({ label, value, onSave, isEditable }) => {
+export const EditableField: React.FC<EditableFieldProps> = ({
+	label,
+	value,
+	onSave,
+	isEditable,
+}) => {
 	const [isEditing, setIsEditing] = useState(false);
 	const [editValue, setEditValue] = useState(value);
 	const textInputRef = useRef<TextInput>(null);
@@ -29,7 +34,9 @@ export const EditableField: React.FC<EditableFieldProps> = ({ label, value, onSa
 
 	return (
 		<View style={styles.fieldContainerColumn}>
-			<HeaderText size={20} textAlign="left">{label}</HeaderText>
+			<HeaderText size={20} textAlign="left">
+				{label}
+			</HeaderText>
 			<View style={styles.fieldContainerRow}>
 				{isEditing ? (
 					<View style={{ width: '70%' }}>
@@ -46,11 +53,23 @@ export const EditableField: React.FC<EditableFieldProps> = ({ label, value, onSa
 					<Text style={styles.value}>{value}</Text>
 				)}
 				{isEditing ? (
-					<Button mode="elevated" width={'fit-content'} style={{ marginLeft: 10 }}
-						onPress={handleSave}>Save</Button>
+					<Button
+						mode="elevated"
+						width={'fit-content'}
+						style={{ marginLeft: 10 }}
+						onPress={handleSave}
+					>
+						Save
+					</Button>
 				) : (
-					<Button mode="elevated" disabled={!isEditable} width={80}
-						onPress={() => setIsEditing(true)}>Edit</Button>
+					<Button
+						mode="elevated"
+						disabled={!isEditable}
+						width={80}
+						onPress={() => setIsEditing(true)}
+					>
+						Edit
+					</Button>
 				)}
 			</View>
 		</View>
@@ -80,7 +99,7 @@ const styles = StyleSheet.create({
 		borderColor: '#dcdcdc',
 		borderWidth: 1,
 		width: '70%',
-		color: '#616161'
+		color: '#616161',
 	},
 	input: {
 		fontSize: 16,
@@ -92,6 +111,6 @@ const styles = StyleSheet.create({
 		borderTopRightRadius: 20,
 		borderTopLeftRadius: 20,
 		height: 40,
-		color: 'black'
+		color: 'black',
 	},
 });

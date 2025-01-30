@@ -19,7 +19,7 @@ export const FurtherDetailsRegistrationScreen: React.FC = () => {
 		profilePictureUrl,
 		setProfilePictureUrl,
 		role,
-		setRole
+		setRole,
 	} = useUserDetails();
 
 	const { signOut } = useAuth();
@@ -49,16 +49,29 @@ export const FurtherDetailsRegistrationScreen: React.FC = () => {
 		}
 
 		// Landlord skips the review creation step
-		const nextOnboardingStep = role === UserRoleEnum.Landlord ? onboardingStep + 2 : onboardingStep + 1;
-		console.error('Submit details current role is: ', role, 'onboarding step is: ', onboardingStep, 'next step is: ', nextOnboardingStep);
+		const nextOnboardingStep =
+			role === UserRoleEnum.Landlord
+				? onboardingStep + 2
+				: onboardingStep + 1;
+		console.error(
+			'Submit details current role is: ',
+			role,
+			'onboarding step is: ',
+			onboardingStep,
+			'next step is: ',
+			nextOnboardingStep,
+		);
 
 		setOnboardingStep(nextOnboardingStep);
 
-		await userService.createUser({
-			role: role,
-			profilePicture: profilePictureUrl || '',
-			onboardingStep: nextOnboardingStep,
-		} as IUserDetails, user.id);
+		await userService.createUser(
+			{
+				role: role,
+				profilePicture: profilePictureUrl || '',
+				onboardingStep: nextOnboardingStep,
+			} as IUserDetails,
+			user.id,
+		);
 
 		const sanityCheckUser = await userService.getUserById(user.id);
 		console.error('User created', JSON.stringify(sanityCheckUser));
@@ -66,8 +79,13 @@ export const FurtherDetailsRegistrationScreen: React.FC = () => {
 
 	return (
 		<Background>
-			<HeaderText color={theme.colors.primary} size={30}> Almost There! </HeaderText>
-			<HeaderText paddingBottom={10} size={20}>Pick your Role</HeaderText>
+			<HeaderText color={theme.colors.primary} size={30}>
+				{' '}
+				Almost There!{' '}
+			</HeaderText>
+			<HeaderText paddingBottom={10} size={20}>
+				Pick your Role
+			</HeaderText>
 			<SwitchSelector
 				options={[
 					{ label: 'Regular User', value: UserRoleEnum.RegularUser },
@@ -84,16 +102,23 @@ export const FurtherDetailsRegistrationScreen: React.FC = () => {
 					height: 2,
 				}}
 			/>
-			<HeaderText paddingBottom={1} size={20}>Pick your Profile Picture (optional)</HeaderText>
-			<Button
-				mode={'elevated'}
-				onPress={pickImageAndUpload}>Choose File</Button>
-			{profilePictureUrl && <ProfilePicture canEdit={true} source={{ uri: profilePictureUrl }}/>}
+			<HeaderText paddingBottom={1} size={20}>
+				Pick your Profile Picture (optional)
+			</HeaderText>
+			<Button mode={'elevated'} onPress={pickImageAndUpload}>
+				Choose File
+			</Button>
+			{profilePictureUrl && (
+				<ProfilePicture
+					canEdit={true}
+					source={{ uri: profilePictureUrl }}
+				/>
+			)}
 			<Button mode="contained" onPress={submitDetails}>
-                Continue
+				Continue
 			</Button>
 			<Button mode="contained" onPress={logout}>
-                Discard
+				Discard
 			</Button>
 		</Background>
 	);

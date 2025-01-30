@@ -7,7 +7,12 @@ import { useUser } from '@clerk/clerk-expo';
 import { useUserDataByClerkId } from '../../hooks/useUserData';
 import { viewingService } from '../../services';
 
-export const ScheduleViewing: React.FC = ({ listingId, landlordId, listingTitle, listingAddress }) => {
+export const ScheduleViewing: React.FC = ({
+	listingId,
+	landlordId,
+	listingTitle,
+	listingAddress,
+}) => {
 	const [date, setDate] = useState(new Date());
 	const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 	const { user } = useUser();
@@ -21,11 +26,14 @@ export const ScheduleViewing: React.FC = ({ listingId, landlordId, listingTitle,
 			address: listingAddress,
 			landlordId: landlord?.clerkId as string,
 			viewingDate: date,
-			status: 'not confirmed'
+			status: 'not confirmed',
 		};
 
 		try {
-			const response = await viewingService.createViewing(viewingData, user?.id as string);
+			const response = await viewingService.createViewing(
+				viewingData,
+				user?.id as string,
+			);
 			console.log('response', response);
 		} catch (error) {
 			console.error('Error submitting viewing', error);
@@ -36,14 +44,24 @@ export const ScheduleViewing: React.FC = ({ listingId, landlordId, listingTitle,
 		<Card style={styles.container}>
 			<Text style={styles.title}>Schedule a Viewing!</Text>
 			<Text style={styles.infoText}>Your selected time:</Text>
-			<Text style={styles.timeText}>{date.toISOString().split('T')[0] + ' ' + date.toLocaleTimeString([], {
-				hour: '2-digit',
-				minute: '2-digit',
-				hour12: false
-			})}</Text>
-			<Button style={styles.button} onPress={() => setDatePickerVisibility(true)}><Text style={styles.buttonText}>Choose
-                time for Viewing</Text></Button>
-			<Button style={styles.button} onPress={handleSubmit}><Text style={styles.buttonText}>Schedule Viewing</Text></Button>
+			<Text style={styles.timeText}>
+				{date.toISOString().split('T')[0] +
+					' ' +
+					date.toLocaleTimeString([], {
+						hour: '2-digit',
+						minute: '2-digit',
+						hour12: false,
+					})}
+			</Text>
+			<Button
+				style={styles.button}
+				onPress={() => setDatePickerVisibility(true)}
+			>
+				<Text style={styles.buttonText}>Choose time for Viewing</Text>
+			</Button>
+			<Button style={styles.button} onPress={handleSubmit}>
+				<Text style={styles.buttonText}>Schedule Viewing</Text>
+			</Button>
 			<DateTimePickerModal
 				mode="datetime"
 				isVisible={isDatePickerVisible}
@@ -66,14 +84,14 @@ const styles = {
 	infoText: {
 		color: 'black',
 		fontSize: 16,
-		fontFamily: 'ProximaNova-Bold'
+		fontFamily: 'ProximaNova-Bold',
 	},
 	container: {
 		flex: 1,
 		padding: 10,
 		paddingBottom: 5,
 		marginVertical: 5,
-		fontFamily: 'Proxima-Nova/Regular'
+		fontFamily: 'Proxima-Nova/Regular',
 	},
 	button: {
 		backgroundColor: theme.colors.primary,
@@ -88,6 +106,6 @@ const styles = {
 		fontSize: 20,
 		marginBottom: 5,
 		fontFamily: 'ProximaNova-Bold',
-		color: theme.colors.primary
-	}
+		color: theme.colors.primary,
+	},
 };

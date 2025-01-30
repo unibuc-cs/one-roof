@@ -1,5 +1,11 @@
 import React from 'react';
-import { Image, ImageProps, StyleSheet, TouchableOpacity, View } from 'react-native';
+import {
+	Image,
+	ImageProps,
+	StyleSheet,
+	TouchableOpacity,
+	View,
+} from 'react-native';
 import { theme } from '../../theme';
 import { useUserDetails } from '../../contexts/UserDetailsContext';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -8,7 +14,7 @@ import { useUser } from '@clerk/clerk-expo';
 import userService from '../../services/internal/userService';
 
 type ProfilePictureProps = {
-    canEdit: boolean,
+	canEdit: boolean,
 } & ImageProps;
 
 export const ProfilePicture: React.FC<ProfilePictureProps> = (props) => {
@@ -35,19 +41,22 @@ export const ProfilePicture: React.FC<ProfilePictureProps> = (props) => {
 
 	if (props.canEdit) {
 		return (
-			<TouchableOpacity style={styles.container} onPress={props.canEdit ? handleEdit : undefined}>
+			<TouchableOpacity
+				style={styles.container}
+				onPress={props.canEdit ? handleEdit : undefined}
+			>
 				{imageComponent}
 				<View style={styles.iconContainer}>
-					<MaterialCommunityIcons name="plus" size={24} color="#fff"/>
+					<MaterialCommunityIcons
+						name="plus"
+						size={24}
+						color="#fff"
+					/>
 				</View>
 			</TouchableOpacity>
 		);
 	} else {
-		return (
-			<View style={styles.container}>
-				{imageComponent}
-			</View>
-		);
+		return <View style={styles.container}>{imageComponent}</View>;
 	}
 };
 
@@ -65,7 +74,7 @@ const styles = StyleSheet.create({
 		width: '100%',
 		borderRadius: 100,
 		borderWidth: 2,
-		borderColor: theme.colors.outline
+		borderColor: theme.colors.outline,
 	},
 	iconContainer: {
 		position: 'absolute',

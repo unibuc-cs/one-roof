@@ -22,15 +22,22 @@ export const CreateReviewScreen: React.FC<any> = () => {
 				throw new Error('User not initialized properly');
 			}
 
-			await userService.updateUser(user.id, { onboardingStep: nextOnboardingStep });
+			await userService.updateUser(user.id, {
+				onboardingStep: nextOnboardingStep,
+			});
 			setOnboardingStep(nextOnboardingStep);
 		}
 	};
 
-	const callToAction = 'Share your thoughts about your current living place and surroundings!';
-	const firstTimeMessage = 'Welcome!\n To benefit from the community\'s knowledge, we first ask you to leave a review of your current or past place of residence.\nYour review will help others make informed decisions.';
-	const additionalReviewMessage = 'We appreciate your willingness to share your experiences and help the community by leaving additional reviews!';
-	const welcomingMessage = isFirstTimeUser ? firstTimeMessage : additionalReviewMessage;
+	const callToAction =
+		'Share your thoughts about your current living place and surroundings!';
+	const firstTimeMessage =
+		'Welcome!\n To benefit from the community\'s knowledge, we first ask you to leave a review of your current or past place of residence.\nYour review will help others make informed decisions.';
+	const additionalReviewMessage =
+		'We appreciate your willingness to share your experiences and help the community by leaving additional reviews!';
+	const welcomingMessage = isFirstTimeUser
+		? firstTimeMessage
+		: additionalReviewMessage;
 
 	return (
 		<Background>
@@ -41,18 +48,21 @@ export const CreateReviewScreen: React.FC<any> = () => {
 					</HeaderText>
 				</View>
 				<View style={styles.flexItem}>
-					<Logo/>
+					<Logo />
 				</View>
 				<View style={styles.flexItem}>
-					<HeaderText size={20}>
-						{welcomingMessage}
-					</HeaderText>
+					<HeaderText size={20}>{welcomingMessage}</HeaderText>
 				</View>
 				<View style={styles.flexItem}>
 					<Button
 						mode={'contained'}
-						onPress={() => navigation.navigate('ReviewGeneralDetails')}
-					>{isFirstTimeUser ? 'Start writing your first review!' : 'Start writing another review!'}
+						onPress={() =>
+							navigation.navigate('ReviewGeneralDetails')
+						}
+					>
+						{isFirstTimeUser
+							? 'Start writing your first review!'
+							: 'Start writing another review!'}
 					</Button>
 				</View>
 			</Card>
@@ -66,7 +76,7 @@ const styles = StyleSheet.create({
 		backgroundColor: 'white',
 		padding: 16,
 		paddingTop: 16,
-		maxHeight: '100%'
+		maxHeight: '100%',
 	},
 	container: {
 		display: 'flex',

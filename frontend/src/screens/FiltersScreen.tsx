@@ -2,7 +2,12 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { Checkbox } from 'react-native-paper';
 import { Button, HeaderText } from '../components';
-import { NumberOfBathroomsEnum, NumberOfBedroomsEnum, PropertyTypeEnum, TypeOfProviderEnum } from '../enums';
+import {
+	NumberOfBathroomsEnum,
+	NumberOfBedroomsEnum,
+	PropertyTypeEnum,
+	TypeOfProviderEnum,
+} from '../enums';
 import { CustomSwitchSelector } from '../components/base/CustomSwitchSelector';
 import { theme } from '../theme';
 import RentalAmenitiesEnum from '../enums/RentalAmenitiesEnum';
@@ -10,14 +15,19 @@ import { MAX_PRICE, MIN_PRICE } from '../utils';
 import { useSearchContext } from '../contexts/SearchContext';
 import { debounce } from 'lodash';
 import { PriceRangeSelector } from '../components/base/PriceRangeSelector';
+import { useNavigation } from '@react-navigation/native';
 
-export const FiltersScreen = ({ navigation }) => {
+export const FiltersScreen = () => {
+	const { navigate } = useNavigation();
 	const [cleared, setCleared] = useState(false);
 	const { state, setFilters, triggerSearch } = useSearchContext();
 	const { filters } = state;
 	const amenitiesArray = Object.entries(RentalAmenitiesEnum);
 
-	const priceRangeRef = useRef([filters.priceRange.min, filters.priceRange.max]);
+	const priceRangeRef = useRef([
+		filters.priceRange.min,
+		filters.priceRange.max,
+	]);
 	const roomTypeRef = useRef(filters.roomType);
 	const bedroomsRef = useRef(filters.bedrooms);
 	const bathroomsRef = useRef(filters.bathrooms);
@@ -48,7 +58,7 @@ export const FiltersScreen = ({ navigation }) => {
 		setCleared(true);
 	};
 
-	const navigateToHome = () => setTimeout(() => navigation.navigate('Home'), 500);
+	const navigateToHome = () => setTimeout(() => navigate('Home'), 500);
 
 	useEffect(() => {
 		if (cleared) {
@@ -65,67 +75,86 @@ export const FiltersScreen = ({ navigation }) => {
 
 	const handleSelectAmenity = (amenity) => {
 		const updatedAmenities = filters.amenities.includes(amenity)
-			? filters.amenities.filter(item => item !== amenity)
+			? filters.amenities.filter((item) => item !== amenity)
 			: [...filters.amenities, amenity];
 		setFilters({
 			...filters,
 			amenities: updatedAmenities,
-			provider: TypeOfProviderEnum.Internal
+			provider: TypeOfProviderEnum.Internal,
 		});
 		providerRef.current = TypeOfProviderEnum.Internal;
 	};
 
-
 	const handlePriceChange = useCallback(
 		(values) => {
 			priceRangeRef.current = values;
-			setFilters({ ...filters, priceRange: { min: values[0], max: values[1] } });
+			setFilters({
+				...filters,
+				priceRange: { min: values[0], max: values[1] },
+			});
 		},
-		[filters]
+		[filters],
 	);
 
-	const handleRoomChange = useCallback(debounce((value) => {
-		roomTypeRef.current = value;
-		const newFilters = { ...filters, roomType: value };
-		if (value === PropertyTypeEnum.Studio) {
-			newFilters.bedrooms = NumberOfBedroomsEnum.One;
-			newFilters.bathrooms = NumberOfBathroomsEnum.One;
-		} else if (filters.roomType === PropertyTypeEnum.Studio) {
-			newFilters.bedrooms = NumberOfBedroomsEnum.Any;
-			newFilters.bathrooms = NumberOfBathroomsEnum.Any;
-		}
-		setFilters(newFilters);
-	}, 50), [filters]);
+	const handleRoomChange = useCallback(
+		debounce((value) => {
+			roomTypeRef.current = value;
+			const newFilters = { ...filters, roomType: value };
+			if (value === PropertyTypeEnum.Studio) {
+				newFilters.bedrooms = NumberOfBedroomsEnum.One;
+				newFilters.bathrooms = NumberOfBathroomsEnum.One;
+			} else if (filters.roomType === PropertyTypeEnum.Studio) {
+				newFilters.bedrooms = NumberOfBedroomsEnum.Any;
+				newFilters.bathrooms = NumberOfBathroomsEnum.Any;
+			}
+			setFilters(newFilters);
+		}, 50),
+		[filters],
+	);
 
-	const handleChangeBedrooms = useCallback(debounce((value) => {
-		bedroomsRef.current = value;
-		setFilters({ ...filters, bedrooms: value });
-	}, 50), [filters]);
+	const handleChangeBedrooms = useCallback(
+		debounce((value) => {
+			bedroomsRef.current = value;
+			setFilters({ ...filters, bedrooms: value });
+		}, 50),
+		[filters],
+	);
 
-	const handleChangeBathrooms = useCallback(debounce((value) => {
-		bathroomsRef.current = value;
-		setFilters({ ...filters, bathrooms: value });
-	}, 30), [filters]);
+	const handleChangeBathrooms = useCallback(
+		debounce((value) => {
+			bathroomsRef.current = value;
+			setFilters({ ...filters, bathrooms: value });
+		}, 30),
+		[filters],
+	);
 
-	const handleProviderChange = useCallback(debounce((value) => {
-		if (value === TypeOfProviderEnum.Storia || value === TypeOfProviderEnum.Olx) {
-			setFilters({
-				...filters,
-				provider: value,
-				amenities: []
-			});
-		} else {
-			setFilters({
-				...filters,
-				provider: value
-			});
-		}
-		providerRef.current = value;
-	}, 50), [filters]);
+	const handleProviderChange = useCallback(
+		debounce((value) => {
+			if (
+				value === TypeOfProviderEnum.Storia ||
+				value === TypeOfProviderEnum.Olx
+			) {
+				setFilters({
+					...filters,
+					provider: value,
+					amenities: [],
+				});
+			} else {
+				setFilters({
+					...filters,
+					provider: value,
+				});
+			}
+			providerRef.current = value;
+		}, 50),
+		[filters],
+	);
 
 	const propertyFilters = (
 		<View style={styles.container}>
-			<HeaderText paddingBottom={10} textAlign="left" size={17}>Property Type:</HeaderText>
+			<HeaderText paddingBottom={10} textAlign="left" size={17}>
+				Property Type:
+			</HeaderText>
 			<CustomSwitchSelector
 				options={[
 					{ label: 'Any', value: PropertyTypeEnum.Any },
@@ -138,7 +167,9 @@ export const FiltersScreen = ({ navigation }) => {
 				mode="green"
 			/>
 
-			<HeaderText paddingBottom={10} textAlign="left" size={17}>Source of Listing:</HeaderText>
+			<HeaderText paddingBottom={10} textAlign="left" size={17}>
+				Source of Listing:
+			</HeaderText>
 			<CustomSwitchSelector
 				options={[
 					{ label: 'Any', value: TypeOfProviderEnum.Any },
@@ -151,21 +182,33 @@ export const FiltersScreen = ({ navigation }) => {
 				mode="green"
 			/>
 
-			<HeaderText textAlign="left" size={17}>Price Range (monthly fee):</HeaderText>
+			<HeaderText textAlign="left" size={17}>
+				Price Range (monthly fee):
+			</HeaderText>
 			<View style={styles.flexContainer}>
-
-				<PriceRangeSelector priceRangeRef={priceRangeRef} minPrice={MIN_PRICE} maxPrice={MAX_PRICE}
-					onPriceChange={handlePriceChange}/>
+				<PriceRangeSelector
+					priceRangeRef={priceRangeRef}
+					minPrice={MIN_PRICE}
+					maxPrice={MAX_PRICE}
+					onPriceChange={handlePriceChange}
+				/>
 			</View>
 
-			<HeaderText paddingTop={0} paddingBottom={5} textAlign="left" size={17}>Number of Bedrooms:</HeaderText>
+			<HeaderText
+				paddingTop={0}
+				paddingBottom={5}
+				textAlign="left"
+				size={17}
+			>
+				Number of Bedrooms:
+			</HeaderText>
 			<CustomSwitchSelector
 				options={[
 					{ label: 'Any', value: NumberOfBedroomsEnum.Any },
 					{ label: '1', value: NumberOfBedroomsEnum.One },
 					{ label: '2', value: NumberOfBedroomsEnum.Two },
 					{ label: '3', value: NumberOfBedroomsEnum.Three },
-					{ label: '4+', value: NumberOfBedroomsEnum.FourOrMore }
+					{ label: '4+', value: NumberOfBedroomsEnum.FourOrMore },
 				]}
 				mode="green"
 				value={filters.bedrooms}
@@ -173,7 +216,9 @@ export const FiltersScreen = ({ navigation }) => {
 				disabled={roomTypeRef.current === PropertyTypeEnum.Studio}
 			/>
 
-			<HeaderText paddingBottom={5} textAlign="left" size={17}>Number of Bathrooms:</HeaderText>
+			<HeaderText paddingBottom={5} textAlign="left" size={17}>
+				Number of Bathrooms:
+			</HeaderText>
 			<CustomSwitchSelector
 				options={[
 					{ label: 'Any', value: NumberOfBathroomsEnum.Any },
@@ -187,7 +232,9 @@ export const FiltersScreen = ({ navigation }) => {
 				disabled={roomTypeRef.current === PropertyTypeEnum.Studio}
 			/>
 
-			<HeaderText textAlign="left" size={17}>Amenities (only for internal listings):</HeaderText>
+			<HeaderText textAlign="left" size={17}>
+				Amenities (only for internal listings):
+			</HeaderText>
 
 			<ScrollView>
 				{amenitiesArray.map((amenity, index) => (
@@ -195,8 +242,16 @@ export const FiltersScreen = ({ navigation }) => {
 						labelStyle={styles.checkbox}
 						key={index}
 						label={amenity[1]}
-						disabled={providerRef.current !== TypeOfProviderEnum.Internal && providerRef.current !== TypeOfProviderEnum.Any}
-						status={filters.amenities.includes(amenity[0]) ? 'checked' : 'unchecked'}
+						disabled={
+							providerRef.current !==
+								TypeOfProviderEnum.Internal &&
+							providerRef.current !== TypeOfProviderEnum.Any
+						}
+						status={
+							filters.amenities.includes(amenity[0])
+								? 'checked'
+								: 'unchecked'
+						}
 						onPress={() => handleSelectAmenity(amenity[0])}
 					/>
 				))}
@@ -206,18 +261,36 @@ export const FiltersScreen = ({ navigation }) => {
 
 	const buttons = (
 		<View style={[styles.buttonsContainer]}>
-			<Button width={'auto'} mode={'contained-tonal'} onPress={clearFilters}> Clear All </Button>
-			<Button width={'auto'} mode={'contained-tonal'} onPress={handleSearch}> Search </Button>
+			<Button
+				width={'auto'}
+				mode={'contained-tonal'}
+				onPress={clearFilters}
+			>
+				{' '}
+				Clear All{' '}
+			</Button>
+			<Button
+				width={'auto'}
+				mode={'contained-tonal'}
+				onPress={handleSearch}
+			>
+				{' '}
+				Search{' '}
+			</Button>
 		</View>
 	);
 
 	const reviewFilters = (
 		<View style={styles.container}>
-			<HeaderText paddingBottom={20} textAlign="left" size={20}>Recommendation Rating:</HeaderText>
+			<HeaderText paddingBottom={20} textAlign="left" size={20}>
+				Recommendation Rating:
+			</HeaderText>
 			<CustomSwitchSelector
 				options={recommendOptions}
 				initial={2}
-				onPress={(value) => setFilters({ ...filters, recommend: value })}
+				onPress={(value) =>
+					setFilters({ ...filters, recommend: value })
+				}
 				value={filters.recommend}
 				mode="green"
 			/>
@@ -227,7 +300,7 @@ export const FiltersScreen = ({ navigation }) => {
 	return (
 		<React.Fragment>
 			{state.searchType === 'listings' ? propertyFilters : reviewFilters}
-			<View style={{ height: 100 }}/>
+			<View style={{ height: 100 }} />
 			{buttons}
 		</React.Fragment>
 	);
@@ -235,7 +308,7 @@ export const FiltersScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
 	checkbox: {
-		fontFamily: 'Proxima-Nova/Regular'
+		fontFamily: 'Proxima-Nova/Regular',
 	},
 	flexContainer: {
 		display: 'flex',
@@ -259,7 +332,7 @@ const styles = StyleSheet.create({
 		borderColor: 'darkgray',
 		borderStyle: 'solid',
 		borderWidth: 1,
-		color: theme.colors.text
+		color: theme.colors.text,
 	},
 	container: {
 		flex: 1,
@@ -277,7 +350,7 @@ const styles = StyleSheet.create({
 	buttonsContainer: {
 		flexDirection: 'row',
 		justifyContent: 'space-around',
-	}
+	},
 });
 
 export default FiltersScreen;

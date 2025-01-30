@@ -1,7 +1,11 @@
 import MapView from 'react-native-map-clustering';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { getCoordinatesFromLocation, getShortenedString, mapStyles } from '../../utils';
+import {
+	getCoordinatesFromLocation,
+	getShortenedString,
+	mapStyles,
+} from '../../utils';
 import { IListing, IReview } from '../../models';
 import { BottomItemCard } from '../BottomItemCard';
 import { useSearchContext } from '../../contexts/SearchContext';
@@ -19,28 +23,39 @@ export const Map: React.FC = () => {
 	const mapRef = useRef(null);
 	const [legalToUpdate, setLegalToUpdate] = useState<boolean>(true);
 	const [selectedItem, setSelectedItem] = React.useState<IMapItem>();
-	const { state, setIsWaitingForSearch, setWasExternalSearchPerformed, triggerSearch } = useSearchContext();
+	const {
+		state,
+		setIsWaitingForSearch,
+		setWasExternalSearchPerformed,
+		triggerSearch,
+	} = useSearchContext();
 
 	const handleClose = useCallback(() => setSelectedItem(undefined), []);
 
 	const handleMarkerPress = useCallback((item: IMapItem) => {
-		setSelectedItem(prevItem => (prevItem === item ? undefined : item));
+		setSelectedItem((prevItem) => (prevItem === item ? undefined : item));
 	}, []);
 
-	const debouncedRegionUpdate = useCallback(debounce((newRegion) => {
-		triggerSearch(newRegion, false);
-	}, 600), [triggerSearch]);
+	const debouncedRegionUpdate = useCallback(
+		debounce((newRegion) => {
+			triggerSearch(newRegion, false);
+		}, 600),
+		[triggerSearch],
+	);
 
-	const handleRegionChangeComplete = useCallback((newRegion) => {
-		if (needsUpdate(state.region, newRegion)) {
-			if (legalToUpdate) {
-				setIsWaitingForSearch(true);
-				debouncedRegionUpdate(newRegion);
-			} else {
-				setLegalToUpdate(true);
+	const handleRegionChangeComplete = useCallback(
+		(newRegion) => {
+			if (needsUpdate(state.region, newRegion)) {
+				if (legalToUpdate) {
+					setIsWaitingForSearch(true);
+					debouncedRegionUpdate(newRegion);
+				} else {
+					setLegalToUpdate(true);
+				}
 			}
-		}
-	}, [state.region, legalToUpdate, debouncedRegionUpdate]);
+		},
+		[state.region, legalToUpdate, debouncedRegionUpdate],
+	);
 
 	const handleMapLoaded = useCallback(() => {
 		setIsWaitingForSearch(true);
@@ -48,10 +63,14 @@ export const Map: React.FC = () => {
 	}, []);
 
 	const needsUpdate = (oldRegion, newRegion) => {
-		return Math.abs(newRegion.latitude - oldRegion.latitude) > EPSILON ||
-            Math.abs(newRegion.longitude - oldRegion.longitude) > EPSILON ||
-            Math.abs(newRegion.latitudeDelta - oldRegion.latitudeDelta) > EPSILON ||
-            Math.abs(newRegion.longitudeDelta - oldRegion.longitudeDelta) > EPSILON;
+		return (
+			Math.abs(newRegion.latitude - oldRegion.latitude) > EPSILON ||
+			Math.abs(newRegion.longitude - oldRegion.longitude) > EPSILON ||
+			Math.abs(newRegion.latitudeDelta - oldRegion.latitudeDelta) >
+				EPSILON ||
+			Math.abs(newRegion.longitudeDelta - oldRegion.longitudeDelta) >
+				EPSILON
+		);
 	};
 
 	useEffect(() => {
@@ -62,11 +81,10 @@ export const Map: React.FC = () => {
 		}
 	}, [state.wasExternalSearchPerformed]);
 
-
 	const polygonCoords = [
 		{ latitude: 44.9301, longitude: 26.0901 },
-		{ latitude: 44.9310, longitude: 26.0910 },
-		{ latitude: 44.9320, longitude: 26.0905 },
+		{ latitude: 44.931, longitude: 26.091 },
+		{ latitude: 44.932, longitude: 26.0905 },
 		{ latitude: 44.9315, longitude: 26.0895 },
 	];
 
@@ -89,21 +107,36 @@ export const Map: React.FC = () => {
 					strokeColor="#FF0000"
 					strokeWidth={3}
 				/>
-				{(state.searchType === 'listings' ? state.filteredListings : state.filteredReviews).map(item => (
+				{(state.searchType === 'listings'
+					? state.filteredListings
+					: state.filteredReviews
+				).map((item) => (
 					<CustomMarker
 						key={`type${state.searchType}-item${item._id}`}
 						coordinate={getCoordinatesFromLocation(item.location)}
 						onPress={() => handleMarkerPress(item)}
-						text={state.searchType === SearchTypeEnum.Listings ? `${item.price} €` : getShortenedString(item.title, 10)}
+						text={
+							state.searchType === SearchTypeEnum.Listings
+								? `${item.price} €`
+								: getShortenedString(item.title, 10)
+						}
 					/>
 				))}
 			</MapView>
 			{selectedItem && (
 				<View style={styles.bottomCardContainer}>
-					{state.searchType === SearchTypeEnum.Listings ?
-						<BottomItemCard item={selectedItem as IListing} onClose={handleClose}/> :
-						<BottomItemCard item={selectedItem as IReview} type={'review'} onClose={handleClose}/>
-					}
+					{state.searchType === SearchTypeEnum.Listings ? (
+						<BottomItemCard
+							item={selectedItem as IListing}
+							onClose={handleClose}
+						/>
+					) : (
+						<BottomItemCard
+							item={selectedItem as IReview}
+							type={'review'}
+							onClose={handleClose}
+						/>
+					)}
 				</View>
 			)}
 		</View>

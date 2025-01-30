@@ -3,9 +3,18 @@ import { theme } from '../../theme';
 import React from 'react';
 
 // TODO: fix any
-export const CustomSwitchSelector: React.FC<any> = ({ options, mode, value, onPress, disabled, width }) => {
-	const buttonColor = mode === 'green' ? theme.colors.inverseSurface : theme.colors.text;
-	const borderColor = mode === 'green' ? theme.colors.text : theme.colors.secondary;
+export const CustomSwitchSelector: React.FC<any> = ({
+	options,
+	mode,
+	value,
+	onPress,
+	disabled,
+	width,
+}) => {
+	const buttonColor =
+		mode === 'green' ? theme.colors.inverseSurface : theme.colors.text;
+	const borderColor =
+		mode === 'green' ? theme.colors.text : theme.colors.secondary;
 	const backgroundColor = mode === 'green' ? theme.colors.inversePrimary : '';
 	return (
 		<SwitchSelector
@@ -20,10 +29,10 @@ export const CustomSwitchSelector: React.FC<any> = ({ options, mode, value, onPr
 			touchableProps={{ height: 200 }}
 			initial={0}
 			style={{
-				width: width
+				width: width,
 			}}
 			textContainerStyle={{ height: '100%' }}
-			value={options.map(entry => entry.value).indexOf(value)}
+			value={options.map((entry) => entry.value).indexOf(value)}
 			onPress={onPress}
 			bold={true}
 		/>

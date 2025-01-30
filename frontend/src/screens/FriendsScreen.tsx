@@ -1,5 +1,12 @@
 import React, { useCallback, useState } from 'react';
-import { ActivityIndicator, Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+	ActivityIndicator,
+	Alert,
+	StyleSheet,
+	Text,
+	TouchableOpacity,
+	View,
+} from 'react-native';
 import { friendService } from '../services/internal/friendService';
 import { useUser } from '@clerk/clerk-expo';
 import userService from '../services/internal/userService';
@@ -10,11 +17,12 @@ import { theme } from '../theme';
 import { IUserWithClerk } from '../models';
 import { FriendsList } from '../components/friends/FriendshipsList';
 
-
 export const FriendsScreen: React.FC = () => {
 	const [selectedTab, setSelectedTab] = useState<'All' | 'Requests'>('All');
 	const [friends, setFriends] = useState<IUserWithClerk[]>([]);
-	const [friendRequests, setFriendRequests] = useState<IFullFriendRequest[]>([]);
+	const [friendRequests, setFriendRequests] = useState<IFullFriendRequest[]>(
+		[],
+	);
 	const [loading, setLoading] = useState(false);
 
 	const { user } = useUser();
@@ -23,12 +31,16 @@ export const FriendsScreen: React.FC = () => {
 	const fetchFriends = async () => {
 		try {
 			setLoading(true);
-			const fetchedFriends = await friendService.getAllFriends(currentUserId);
+			const fetchedFriends =
+				await friendService.getAllFriends(currentUserId);
 			const friendsWithNames = await Promise.all(
 				fetchedFriends.map(async (friend) => {
-					const otherUserId = friend.firstUser === currentUserId ? friend.secondUser : friend.firstUser;
+					const otherUserId =
+						friend.firstUser === currentUserId
+							? friend.secondUser
+							: friend.firstUser;
 					return await userService.getFullUserByClerkId(otherUserId);
-				})
+				}),
 			);
 			setFriends(friendsWithNames);
 		} catch (error) {
@@ -42,17 +54,22 @@ export const FriendsScreen: React.FC = () => {
 	const fetchFriendRequests = async () => {
 		try {
 			setLoading(true);
-			const fetchedRequests = await friendService.getAllFriendRequests(currentUserId);
+			const fetchedRequests =
+				await friendService.getAllFriendRequests(currentUserId);
 			const fullRequests: IFullFriendRequest[] = await Promise.all(
 				fetchedRequests.map(async (request) => {
-					const firstUser = await userService.getFullUserByClerkId(request.userRequested);
-					const secondUser = await userService.getFullUserByClerkId(request.userPending);
+					const firstUser = await userService.getFullUserByClerkId(
+						request.userRequested,
+					);
+					const secondUser = await userService.getFullUserByClerkId(
+						request.userPending,
+					);
 					return {
 						...request,
 						userRequested: firstUser,
 						userPending: secondUser,
 					};
-				})
+				}),
 			);
 			setFriendRequests(fullRequests);
 		} catch (error) {
@@ -70,7 +87,7 @@ export const FriendsScreen: React.FC = () => {
 			} else if (selectedTab === 'Requests') {
 				fetchFriendRequests();
 			}
-		}, [selectedTab, currentUserId])
+		}, [selectedTab, currentUserId]),
 	);
 
 	const acceptFriendRequest = async (requestId: string) => {
@@ -82,7 +99,6 @@ export const FriendsScreen: React.FC = () => {
 			await fetchFriends();
 
 			await fetchFriendRequests();
-
 		} catch (error) {
 			console.error('Error accepting friend request:', error);
 			Alert.alert('Error', 'Failed to accept friend request');
@@ -100,7 +116,6 @@ export const FriendsScreen: React.FC = () => {
 			await fetchFriends();
 
 			await fetchFriendRequests();
-
 		} catch (error) {
 			console.error('Error accepting friend request:', error);
 			Alert.alert('Error', 'Failed to accept friend request');
@@ -111,11 +126,13 @@ export const FriendsScreen: React.FC = () => {
 
 	const renderSegmentContent = () => {
 		if (loading) {
-			return <ActivityIndicator size="large" color={theme.colors.primary}/>;
+			return (
+				<ActivityIndicator size="large" color={theme.colors.primary} />
+			);
 		}
 
 		if (selectedTab === 'All') {
-			return <FriendsList friends={friends}/>;
+			return <FriendsList friends={friends} />;
 			// return (
 			// 	<FlatList
 			// 		data={friends}
@@ -138,7 +155,10 @@ export const FriendsScreen: React.FC = () => {
 						try {
 							await acceptFriendRequest(requestId);
 						} catch (error) {
-							console.error('Error accepting friend request:', error);
+							console.error(
+								'Error accepting friend request:',
+								error,
+							);
 						}
 					}}
 					onReject={async (requestId: string) => {
@@ -146,11 +166,13 @@ export const FriendsScreen: React.FC = () => {
 							await rejectFriendRequest(requestId);
 							await fetchFriendRequests();
 						} catch (error) {
-							console.error('Error rejecting friend request:', error);
+							console.error(
+								'Error rejecting friend request:',
+								error,
+							);
 						}
 					}}
 				/>
-
 			);
 		}
 		return null;
@@ -161,17 +183,35 @@ export const FriendsScreen: React.FC = () => {
 			<Text style={styles.title}>Friends</Text>
 			<View style={styles.segmentedControl}>
 				<TouchableOpacity
-					style={[styles.tab, selectedTab === 'All' && styles.activeTab]}
+					style={[
+						styles.tab,
+						selectedTab === 'All' && styles.activeTab,
+					]}
 					onPress={() => setSelectedTab('All')}
 				>
-					<Text style={[styles.tabText, selectedTab === 'All' && styles.activeTabText]}>All</Text>
+					<Text
+						style={[
+							styles.tabText,
+							selectedTab === 'All' && styles.activeTabText,
+						]}
+					>
+						All
+					</Text>
 				</TouchableOpacity>
 				<TouchableOpacity
-					style={[styles.tab, selectedTab === 'Requests' && styles.activeTab]}
+					style={[
+						styles.tab,
+						selectedTab === 'Requests' && styles.activeTab,
+					]}
 					onPress={() => setSelectedTab('Requests')}
 				>
-					<Text style={[styles.tabText, selectedTab === 'Requests' && styles.activeTabText]}>
-                        Requests
+					<Text
+						style={[
+							styles.tabText,
+							selectedTab === 'Requests' && styles.activeTabText,
+						]}
+					>
+						Requests
 					</Text>
 				</TouchableOpacity>
 			</View>
@@ -179,7 +219,6 @@ export const FriendsScreen: React.FC = () => {
 		</View>
 	);
 };
-
 
 const styles = StyleSheet.create({
 	container: {

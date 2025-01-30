@@ -6,13 +6,18 @@ import { HeaderText } from './HeaderText';
 import { theme } from '../../theme';
 
 interface PreferenceSliderProps {
-    question: string,
-    leftText: string,
-    rightText: string,
-    onValueChange?: (value: number) => void,
+	question: string,
+	leftText: string,
+	rightText: string,
+	onValueChange?: (value: number) => void,
 }
 
-export const PreferenceSlider: React.FC<PreferenceSliderProps> = ({ question, leftText, rightText, onValueChange }) => {
+export const PreferenceSlider: React.FC<PreferenceSliderProps> = ({
+	question,
+	leftText,
+	rightText,
+	onValueChange,
+}) => {
 	const [value, setValue] = useState(3);
 
 	const handleValueChange = (newValue: number) => {
@@ -48,7 +53,10 @@ export const PreferenceSlider: React.FC<PreferenceSliderProps> = ({ question, le
 				<Text style={[styles.label, styles.leftText]} numberOfLines={2}>
 					{leftText}
 				</Text>
-				<Text style={[styles.label, styles.rightText]} numberOfLines={2}>
+				<Text
+					style={[styles.label, styles.rightText]}
+					numberOfLines={2}
+				>
 					{rightText}
 				</Text>
 			</View>

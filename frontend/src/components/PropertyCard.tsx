@@ -26,13 +26,13 @@ type PropertyCardProps = {
 	showFavorite: boolean,
 };
 
-
-export const PropertyCard: React.FC<PropertyCardProps> = ({ listing,
+export const PropertyCard: React.FC<PropertyCardProps> = ({
+	listing,
 	canOpen,
 	mode,
 	backgroundColor,
 	showCarousel = true,
-	showFavorite
+	showFavorite,
 }) => {
 	useCustomFonts();
 
@@ -47,7 +47,9 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ listing,
 	}, []);
 
 	const { favoriteListings, setFavoriteListings } = useUserDetails();
-	const [isFavorite, setIsFavorite] = useState<boolean>(listing._id in favoriteListings);
+	const [isFavorite, setIsFavorite] = useState<boolean>(
+		listing._id in favoriteListings,
+	);
 	const { navigate } = useNavigation();
 	const width = Dimensions.get('window').width;
 	const [pressed, setPressed] = useState(isFavorite); // State to manage pressed state of the button
@@ -63,7 +65,9 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ listing,
 
 	const updateFavoriteListings = async (updatedFavorites: string[]) => {
 		try {
-			await userService.updateUser(user?.id ?? '', { favoriteListings: updatedFavorites });
+			await userService.updateUser(user?.id ?? '', {
+				favoriteListings: updatedFavorites,
+			});
 			// useUserDetails().favoriteListings = updatedFavorites;
 		} catch (error) {
 			console.error('Failed to update favorite listings:', error);
@@ -81,7 +85,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ listing,
 		const id_ = user?.id;
 		setFavoriteListings((prevFavorites) => {
 			if (prevFavorites.includes(listing._id)) {
-				const list = prevFavorites.filter(id => id !== listing._id);
+				const list = prevFavorites.filter((id) => id !== listing._id);
 				updateFavoriteListings(list);
 				return list;
 			} else {
@@ -89,17 +93,28 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ listing,
 				updateFavoriteListings(list);
 				return list;
 			}
-
 		});
-
 	}, [listing._id, setFavoriteListings]);
 
 	return (
-		<Card mode={mode ?? 'elevated'} key={listing._id} style={[styles.cardContainer, { backgroundColor: backgroundColor ?? theme.colors.background }]}>
+		<Card
+			mode={mode ?? 'elevated'}
+			key={listing._id}
+			style={[
+				styles.cardContainer,
+				{ backgroundColor: backgroundColor ?? theme.colors.background },
+			]}
+		>
 			<View style={styles.contentContainer}>
 				<View style={styles.imageContainer}>
 					{canOpen && (
-						<Button mode="elevated" style={styles.openButton} onPress={() => open()}>{getOpenMessage()}</Button>
+						<Button
+							mode="elevated"
+							style={styles.openButton}
+							onPress={() => open()}
+						>
+							{getOpenMessage()}
+						</Button>
 					)}
 					{showCarousel ? (
 						<Carousel
@@ -131,13 +146,23 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ listing,
 							contentFit="cover"
 						/>
 					)}
-					{showFavorite && <MaterialCommunityIcons
-						name={(favoriteListings.includes(listing._id)) ? 'heart' : 'heart'}
-						size={40}
-						color={(favoriteListings.includes(listing._id)) ? 'red' : 'gray'}
-						style={styles.heartIcon}
-						onPress={toggleFavorite}
-					/>}
+					{showFavorite && (
+						<MaterialCommunityIcons
+							name={
+								favoriteListings.includes(listing._id)
+									? 'heart'
+									: 'heart'
+							}
+							size={40}
+							color={
+								favoriteListings.includes(listing._id)
+									? 'red'
+									: 'gray'
+							}
+							style={styles.heartIcon}
+							onPress={toggleFavorite}
+						/>
+					)}
 				</View>
 				<HeaderText paddingTop={0} paddingBottom={3} size={20}>
 					{listing.title} - {listing.price} €
@@ -145,14 +170,19 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ listing,
 				<Text style={styles.address}>{listing.address}</Text>
 				<View style={[styles.detailRow, { marginBottom: 15 }]}>
 					<DetailBox>
-						<Text style={styles.contentText}> {listing.size} m2 </Text>
+						<Text style={styles.contentText}>
+							{' '}
+							{listing.size} m2{' '}
+						</Text>
 					</DetailBox>
 					<DetailBox>
 						<Text style={styles.contentText}>{listing.type}</Text>
 					</DetailBox>
 					{listing.type !== PropertyTypeEnum.Studio && (
 						<DetailBox>
-							<Text style={styles.contentText}>{listing.numberOfRooms}</Text>
+							<Text style={styles.contentText}>
+								{listing.numberOfRooms}
+							</Text>
 							<MaterialCommunityIcons
 								style={styles.icon}
 								name={'bed-king-outline'}
@@ -163,7 +193,9 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ listing,
 					)}
 					{listing.type !== PropertyTypeEnum.Studio && (
 						<DetailBox>
-							<Text style={styles.contentText}>{listing.numberOfBathrooms}</Text>
+							<Text style={styles.contentText}>
+								{listing.numberOfBathrooms}
+							</Text>
 							<MaterialCommunityIcons
 								style={styles.icon}
 								name={'bathtub'}

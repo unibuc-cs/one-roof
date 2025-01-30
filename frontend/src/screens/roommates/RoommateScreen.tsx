@@ -1,6 +1,12 @@
 import React, { useCallback, useState } from 'react';
 import { Background } from '../../components';
-import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+	ActivityIndicator,
+	StyleSheet,
+	Text,
+	TouchableOpacity,
+	View,
+} from 'react-native';
 import { Card, Surface } from 'react-native-paper';
 // import Button from '../../components/Button';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
@@ -18,47 +24,69 @@ export const RoommateScreen: React.FC = () => {
 	useFocusEffect(
 		useCallback(() => {
 			setIsLoading(true);
-			userService.getFullUserByClerkId(clerkUser?.id || '')
-				.then(data => {
+			userService
+				.getFullUserByClerkId(clerkUser?.id || '')
+				.then((data) => {
 					setUser(data);
 					setIsLoading(false);
 				})
-				.catch(err => {
+				.catch((err) => {
 					setIsLoading(false);
 				});
-		}, [clerkUser?.id])
+		}, [clerkUser?.id]),
 	);
 
 	if (isLoading) {
-		return <ActivityIndicator size={'large'} color={theme.colors.primary}/>;
+		return (
+			<ActivityIndicator size={'large'} color={theme.colors.primary} />
+		);
 	}
 
-	const hasTakenQuiz = user?.roommateQuiz !== undefined && user?.roommateQuiz !== null;
+	const hasTakenQuiz =
+		user?.roommateQuiz !== undefined && user?.roommateQuiz !== null;
 
 	const getButton = ({ text, onPress }) => {
-		return (<Surface mode='elevated'
-			style={{
-				padding: 16,
-				borderRadius: 16,
-				marginTop: 16,
-				backgroundColor: theme.colors.inverseSurface
-			}}>
-			<TouchableOpacity onPress={onPress} style={{
-				flexWrap: 'wrap',
-				alignItems: 'center',
-				justifyContent: 'center',
-				height: 'auto',
-			}}>
-				<View style={{ flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center' }}>
-					<Text style={{
-						fontSize: 24,
-						textAlign: 'center',
-						color: 'white',
-						fontFamily: 'ProximaNova-Bold'
-					}} numberOfLines={0}>{text}</Text>
-				</View>
-			</TouchableOpacity>
-		</Surface>);
+		return (
+			<Surface
+				mode="elevated"
+				style={{
+					padding: 16,
+					borderRadius: 16,
+					marginTop: 16,
+					backgroundColor: theme.colors.inverseSurface,
+				}}
+			>
+				<TouchableOpacity
+					onPress={onPress}
+					style={{
+						flexWrap: 'wrap',
+						alignItems: 'center',
+						justifyContent: 'center',
+						height: 'auto',
+					}}
+				>
+					<View
+						style={{
+							flexWrap: 'wrap',
+							alignItems: 'center',
+							justifyContent: 'center',
+						}}
+					>
+						<Text
+							style={{
+								fontSize: 24,
+								textAlign: 'center',
+								color: 'white',
+								fontFamily: 'ProximaNova-Bold',
+							}}
+							numberOfLines={0}
+						>
+							{text}
+						</Text>
+					</View>
+				</TouchableOpacity>
+			</Surface>
+		);
 	};
 
 	const handleBrowseRoommates = () => {
@@ -69,12 +97,20 @@ export const RoommateScreen: React.FC = () => {
 		navigation.navigate('RoommateQuiz');
 	};
 
-	const takeQuizButton = hasTakenQuiz ? getButton({
-		text: 'Retake the Roommate Quiz',
-		onPress: handleTakeQuiz
-	}) : getButton({ text: 'Take the Roommate Quiz', onPress: handleTakeQuiz });
+	const takeQuizButton = hasTakenQuiz
+		? getButton({
+				text: 'Retake the Roommate Quiz',
+				onPress: handleTakeQuiz,
+			})
+		: getButton({
+				text: 'Take the Roommate Quiz',
+				onPress: handleTakeQuiz,
+			});
 
-	const browseRoommatesButton = getButton({ text: 'Browse Roommates', onPress: handleBrowseRoommates });
+	const browseRoommatesButton = getButton({
+		text: 'Browse Roommates',
+		onPress: handleBrowseRoommates,
+	});
 	return (
 		<Background>
 			<Card style={styles.card} contentStyle={styles.container}>
@@ -92,7 +128,7 @@ const styles = StyleSheet.create({
 		padding: 16,
 		height: '100%',
 		justifyContent: 'center',
-		alignItems: 'center'
+		alignItems: 'center',
 	},
 	container: {
 		flex: 1,
@@ -100,6 +136,6 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 		width: '70%',
-		gap: 20
+		gap: 20,
 	},
 });

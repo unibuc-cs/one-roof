@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Dimensions, KeyboardAvoidingView, Pressable, StyleSheet, Text, View } from 'react-native';
+import {
+	Dimensions,
+	KeyboardAvoidingView,
+	Pressable,
+	StyleSheet,
+	Text,
+	View,
+} from 'react-native';
 import { Background, MessagesContainer } from '../components';
 import { Ionicons } from '@expo/vector-icons';
 import { TextInput } from 'react-native-paper';
@@ -17,7 +24,6 @@ import { useUser } from '@clerk/clerk-expo';
 import { config } from '../config/configure';
 import { IMessage } from '../models/messageModel';
 
-
 type ChatMessagesScreenRouteProps = RouteProp<RootStackParamList, 'Message'>;
 let socket;
 
@@ -27,7 +33,11 @@ export const ConversationScreen: React.FC = () => {
 	};
 	const { navigate } = useNavigation();
 	const route = useRoute<ChatMessagesScreenRouteProps>();
-	const { receiverId, referenceId: initialReferenceId, type: initialType, } = route.params;
+	const {
+		receiverId,
+		referenceId: initialReferenceId,
+		type: initialType,
+	} = route.params;
 	const screenWidth = Dimensions.get('window').width;
 	const screenHeight = Dimensions.get('window').height;
 	const { contactedUsers: currUserContactedUsers } = useUserDetails();
@@ -38,7 +48,7 @@ export const ConversationScreen: React.FC = () => {
 		return <Text> Error </Text>;
 	}
 	const [message, setMessage] = useState('');
-	const [messages, setMessages] = useState([]);
+	const [messages, setMessages] = useState<IMessage[]>([]);
 	const { user: receiverUser } = useUserDataByClerkId(receiverId);
 	const [referenceId, setReferenceId] = useState(initialReferenceId);
 	const [type, setType] = useState(initialType);
@@ -46,9 +56,10 @@ export const ConversationScreen: React.FC = () => {
 	console.log('TIP DIN SCREEN', type, initialReferenceId, referenceId);
 	useEffect(() => {
 		socket = io(config.api.baseUrl, { transports: ['websocket'] });
-		const roomId = userId < receiverId ?
-			`${userId}-${receiverId}` :
-			`${receiverId}-${userId}`;
+		const roomId =
+			userId < receiverId
+				? `${userId}-${receiverId}`
+				: `${receiverId}-${userId}`;
 		socket.emit('join', { roomId: roomId });
 	}, [receiverId, userId]);
 
@@ -72,14 +83,19 @@ export const ConversationScreen: React.FC = () => {
 	}, []);
 
 	const checkIfIncludeType = () => {
-		const alreadyDiscussed = messages.filter((msg: IMessage) => msg.referenceId === referenceId);
+		const alreadyDiscussed = messages.filter(
+			(msg: IMessage) => msg.referenceId === referenceId,
+		);
 		const verdict = alreadyDiscussed.length == 0 ? initialType : null;
 		console.log(verdict, 'INCLUDE MESSAGE');
 		return verdict;
 	};
 
 	const getConversationMessages = async () => {
-		const data = await messageService.getConversationMessages(userId, receiverId);
+		const data = await messageService.getConversationMessages(
+			userId,
+			receiverId,
+		);
 		setMessages(data);
 	};
 
@@ -88,11 +104,15 @@ export const ConversationScreen: React.FC = () => {
 
 		if (!receiverUser.contactedUsers.includes(userId)) {
 			const newContactedUsers = [...receiverUser.contactedUsers, userId];
-			await userService.updateUser(receiverUser?.clerkId, { contactedUsers: newContactedUsers });
+			await userService.updateUser(receiverUser?.clerkId, {
+				contactedUsers: newContactedUsers,
+			});
 		}
 		if (!currUserContactedUsers.includes(receiverId)) {
 			const newContactedUsers = [...currUserContactedUsers, receiverId];
-			await userService.updateUser(clerkUser?.id, { contactedUsers: newContactedUsers });
+			await userService.updateUser(clerkUser?.id, {
+				contactedUsers: newContactedUsers,
+			});
 		}
 		const newMessage = await messageService.uploadMessage(
 			{
@@ -103,7 +123,7 @@ export const ConversationScreen: React.FC = () => {
 				referenceId: referenceId,
 				type: checkIfIncludeType(),
 			},
-			userId
+			userId,
 		);
 		socket.emit('newMessage', newMessage);
 		// // After the first message is sent, set referenceId and type to null
@@ -119,21 +139,34 @@ export const ConversationScreen: React.FC = () => {
 	return (
 		<KeyboardAvoidingView style={styles.container}>
 			<Background>
-				<View style={{ width: screenWidth, flex: 1, height: screenHeight }}>
+				<View
+					style={{
+						width: screenWidth,
+						flex: 1,
+						height: screenHeight,
+					}}
+				>
 					<View style={styles.topBar}>
 						{receiverUser && (
 							<>
 								<View style={styles.nameWrapper}>
 									<Text style={styles.receiverName}>
-										{receiverUser.firstName} {receiverUser.lastName}
+										{receiverUser.firstName}{' '}
+										{receiverUser.lastName}
 									</Text>
 								</View>
-								<Image style={styles.receiverProfilePicture} source={receiverUser?.profilePicture}/>
+								<Image
+									style={styles.receiverProfilePicture}
+									source={receiverUser?.profilePicture}
+								/>
 							</>
 						)}
 					</View>
 
-					<MessagesContainer initialMessages={messages} userId={userId}/>
+					<MessagesContainer
+						initialMessages={messages}
+						userId={userId}
+					/>
 					<View style={styles.inputBarContainer}>
 						<TextInput
 							style={styles.inputBar}
@@ -142,7 +175,11 @@ export const ConversationScreen: React.FC = () => {
 							onChangeText={(text) => setMessage(text)}
 						/>
 						<Pressable onPress={handleSend}>
-							<Ionicons name="send" size={24} color={theme.colors.primary}/>
+							<Ionicons
+								name="send"
+								size={24}
+								color={theme.colors.primary}
+							/>
 						</Pressable>
 					</View>
 				</View>
@@ -206,7 +243,6 @@ const styles = StyleSheet.create({
 	senderMsg: {
 		color: 'white',
 		alignSelf: 'flex-start',
-
 	},
 	receiverMsgBubble: {
 		backgroundColor: theme.colors.background,
@@ -235,5 +271,5 @@ const styles = StyleSheet.create({
 		height: 40,
 		marginHorizontal: 5,
 		flex: 1,
-	}
+	},
 });

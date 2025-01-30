@@ -13,7 +13,7 @@ export const OnboardingDecisionScreen = () => {
 		setOnboardingStep,
 		setProfilePictureUrl,
 		setRole,
-		setUserId
+		setUserId,
 	} = useUserDetails();
 	const { user } = useUser();
 
@@ -42,11 +42,11 @@ export const OnboardingDecisionScreen = () => {
 	};
 
 	switch (onboardingStep) {
-	case 1:
-		return <FurtherDetailsRegistrationScreen/>;
-	case 2:
-		return <CreateReviewScreen/>;
-	case 3:
-		return <HomeScreen/>;
+		case 1:
+			return <FurtherDetailsRegistrationScreen />;
+		case 2:
+			return <CreateReviewScreen />;
+		case 3:
+			return <HomeScreen />;
 	}
 };

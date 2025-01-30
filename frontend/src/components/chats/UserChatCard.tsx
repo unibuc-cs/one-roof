@@ -9,11 +9,14 @@ import { useUser } from '@clerk/clerk-expo';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { config } from '../../config/configure';
 
-
 let socket;
 
 const UserChatCard: React.FC<any> = ({ userId: receiverId }) => {
-	const { user: recvUser, isLoading, error } = useUserDataByClerkId(receiverId);
+	const {
+		user: recvUser,
+		isLoading,
+		error,
+	} = useUserDataByClerkId(receiverId);
 	console.log('recvUser', recvUser);
 	const { user: clerkUser } = useUser();
 	const { navigate } = useNavigation();
@@ -25,7 +28,10 @@ const UserChatCard: React.FC<any> = ({ userId: receiverId }) => {
 	const [message, setMessage] = useState(null);
 
 	const getLastConversationMessages = async () => {
-		const data = await messageService.getConversationMessages(clerkUser?.id, receiverId);
+		const data = await messageService.getConversationMessages(
+			clerkUser?.id,
+			receiverId,
+		);
 		if (data.length > 0) {
 			setMessage(data[data.length - 1]);
 		}
@@ -38,9 +44,10 @@ const UserChatCard: React.FC<any> = ({ userId: receiverId }) => {
 	useEffect(() => {
 		console.log('init socket');
 		socket = io(config.api.baseUrl, { transports: ['websocket'] });
-		const roomId = userId < receiverId ?
-			`${userId}-${receiverId}` :
-			`${receiverId}-${userId}`;
+		const roomId =
+			userId < receiverId
+				? `${userId}-${receiverId}`
+				: `${receiverId}-${userId}`;
 		socket.emit('join', { roomId: roomId });
 	}, []);
 
@@ -88,14 +95,30 @@ const UserChatCard: React.FC<any> = ({ userId: receiverId }) => {
 		);
 	}
 
-	const messageStyle = message && message.receiverId === userId && !message.isRead ? styles.unreadMessage : styles.readMessage;
+	const messageStyle =
+		message && message.receiverId === userId && !message.isRead
+			? styles.unreadMessage
+			: styles.readMessage;
 
 	return (
-		<Pressable style={styles.container}
-			onPress={() => navigate('Messages', { receiverId: recvUser?.clerkId, referenceId: null, type: null })}>
-			<Image style={styles.profilePicture} source={{ uri: recvUser.profilePicture }}/>
+		<Pressable
+			style={styles.container}
+			onPress={() =>
+				navigate('Messages', {
+					receiverId: recvUser?.clerkId,
+					referenceId: null,
+					type: null,
+				})
+			}
+		>
+			<Image
+				style={styles.profilePicture}
+				source={{ uri: recvUser.profilePicture }}
+			/>
 			<View style={{ gap: 5, flex: 1 }}>
-				<Text style={styles.name}>{recvUser.firstName} {recvUser.lastName}</Text>
+				<Text style={styles.name}>
+					{recvUser.firstName} {recvUser.lastName}
+				</Text>
 				{message && (
 					<Text style={[styles.lastMessage, messageStyle]}>
 						{message.content}
@@ -104,7 +127,9 @@ const UserChatCard: React.FC<any> = ({ userId: receiverId }) => {
 			</View>
 			<View>
 				{message && (
-					<Text style={[styles.time, messageStyle]}>{formatTime(message.createdAt)}</Text>
+					<Text style={[styles.time, messageStyle]}>
+						{formatTime(message.createdAt)}
+					</Text>
 				)}
 			</View>
 		</Pressable>
@@ -134,7 +159,7 @@ const styles = StyleSheet.create({
 	},
 	lastMessage: {
 		fontFamily: 'Proxima-Nova/Regular',
-		color: 'gray'
+		color: 'gray',
 	},
 	unreadMessage: {
 		fontFamily: 'ProximaNova-Bold',
@@ -142,7 +167,7 @@ const styles = StyleSheet.create({
 	},
 	time: {
 		fontFamily: 'Proxima-Nova/Regular',
-		color: 'gray'
+		color: 'gray',
 	},
 	loadingContainer: {
 		padding: 10,

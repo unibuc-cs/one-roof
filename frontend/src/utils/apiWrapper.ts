@@ -2,12 +2,16 @@ import axios, { AxiosRequestConfig } from 'axios';
 import { config } from '../config/configure';
 
 export interface CallApiOptions {
-    method?: 'GET' | 'POST' | 'PUT' | 'DELETE',
-    body?: any,
-    headers?: { [key: string]: string },
+	method?: 'GET' | 'POST' | 'PUT' | 'DELETE',
+	body?: any,
+	headers?: { [key: string]: string },
 }
 
-export async function callApi(endpoint: string, options: CallApiOptions = {}, userId: string = ''): Promise<any> {
+export async function callApi(
+	endpoint: string,
+	options: CallApiOptions = {},
+	userId: string = '',
+): Promise<any> {
 	const { method = 'GET', body = null, headers = {} } = options;
 
 	const axiosConfig: AxiosRequestConfig = {
@@ -31,7 +35,10 @@ export async function callApi(endpoint: string, options: CallApiOptions = {}, us
 
 		// Truncate response data for logging
 		const responseData = JSON.stringify(response.data);
-		const truncatedData = responseData.length > 500 ? responseData.substring(0, 500) + '...' : responseData;
+		const truncatedData =
+			responseData.length > 500
+				? responseData.substring(0, 500) + '...'
+				: responseData;
 
 		// Log status and response
 		console.log(`✅ API call succeeded. Status: ${response.status}`);
@@ -41,10 +48,13 @@ export async function callApi(endpoint: string, options: CallApiOptions = {}, us
 	} catch (error) {
 		if (axios.isAxiosError(error)) {
 			const status = error.response?.status || 'Unknown';
-			const errorMessage = error.response?.data?.message || 'API call failed';
+			const errorMessage =
+				error.response?.data?.message || 'API call failed';
 
 			console.error(`❌ API call failed. Status: ${status}`);
-			console.error(`🔴 Error message: ${JSON.stringify(error.response?.statusText)} - ${JSON.stringify(error.response?.data)}`);
+			console.error(
+				`🔴 Error message: ${JSON.stringify(error.response?.statusText)} - ${JSON.stringify(error.response?.data)}`,
+			);
 
 			throw new Error(errorMessage);
 		} else {

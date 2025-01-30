@@ -1,5 +1,11 @@
 import React, { useCallback, useState } from 'react';
-import { ActivityIndicator, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import {
+	ActivityIndicator,
+	Pressable,
+	ScrollView,
+	StyleSheet,
+	View,
+} from 'react-native';
 import UserChatCard from '../components/chats/UserChatCard';
 import { theme } from '../theme';
 import { useUser } from '@clerk/clerk-expo';
@@ -17,7 +23,9 @@ export const ChatsScreen: React.FC = () => {
 		useCallback(() => {
 			const fetchUserData = async () => {
 				try {
-					const ussr = await userService.getUserByClerkId(user?.id || '');
+					const ussr = await userService.getUserByClerkId(
+						user?.id || '',
+					);
 					if (ussr) {
 						setCurrentUser(ussr);
 					}
@@ -27,31 +35,42 @@ export const ChatsScreen: React.FC = () => {
 			};
 
 			fetchUserData();
-		}, [user?.id])
+		}, [user?.id]),
 	);
 
-
 	if (!currentUser) {
-		return <View style={{ justifyContent: 'center', flex: 1, alignItems: 'center' }}>
-			<ActivityIndicator size={'large'} color={theme.colors.primary}/>
-		</View>;
+		return (
+			<View
+				style={{
+					justifyContent: 'center',
+					flex: 1,
+					alignItems: 'center',
+				}}
+			>
+				<ActivityIndicator
+					size={'large'}
+					color={theme.colors.primary}
+				/>
+			</View>
+		);
 	}
 
-
 	return (
-		<ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
+		<ScrollView
+			showsVerticalScrollIndicator={false}
+			style={styles.container}
+		>
 			<View style={styles.title}>
 				<HeaderText size={24}>Chats</HeaderText>
 			</View>
 			<Pressable>
 				{currentUser?.contactedUsers.map((clerkUserId, index) => (
-					<UserChatCard key={index} userId={clerkUserId}/>
+					<UserChatCard key={index} userId={clerkUserId} />
 				))}
 			</Pressable>
 		</ScrollView>
 	);
 };
-
 
 const styles = StyleSheet.create({
 	title: {

@@ -8,15 +8,14 @@ import { SearchTypeEnum } from '../enums';
 import { useSearchContext } from '../contexts/SearchContext';
 import { getCoordinatesFromAddress } from '../services/external/googleMapsService';
 
-
 type TopBarProps = {
-    navigation: any,
+	navigation: any,
 };
-
 
 const TopBar: React.FC<TopBarProps> = ({ navigation }) => {
 	const { state, setSearchType, triggerSearch } = useSearchContext();
-	const routeName = navigation.getState().routes[navigation.getState().index].name;
+	const routeName =
+		navigation.getState().routes[navigation.getState().index].name;
 	const [searchQuery, setSearchQuery] = React.useState('');
 
 	const changeSearchType = (newType: SearchTypeEnum) => {
@@ -26,11 +25,11 @@ const TopBar: React.FC<TopBarProps> = ({ navigation }) => {
 	const handleSearchQuery = () => {
 		if (searchQuery) {
 			getCoordinatesFromAddress(searchQuery)
-				.then(region => {
+				.then((region) => {
 					triggerSearch(region, true);
 					setSearchQuery('');
 				})
-				.catch(error => {
+				.catch((error) => {
 					console.error('Geocoding error:', error);
 				});
 		}
@@ -50,20 +49,39 @@ const TopBar: React.FC<TopBarProps> = ({ navigation }) => {
 		return (
 			<View style={styles.container}>
 				<View style={styles.rowContainer}>
-					<View style={[styles.smallerRowContainer, { marginTop: 40 }]}>
-						<MenuIcon iconName={'menu'} onPress={() => navigation.openDrawer()}/>
+					<View
+						style={[styles.smallerRowContainer, { marginTop: 40 }]}
+					>
+						<MenuIcon
+							iconName={'menu'}
+							onPress={() => navigation.openDrawer()}
+						/>
 						<View style={styles.searchBarContainer}>
 							{searchBar}
 						</View>
-						<MenuIcon iconName="tune" onPress={() => navigation.navigate('Filters')}/>
+						<MenuIcon
+							iconName="tune"
+							onPress={() => navigation.navigate('Filters')}
+						/>
 					</View>
 				</View>
 				<View style={[styles.rowContainer, { width: '80%' }]}>
-					<View style={[styles.smallerRowContainer, { marginTop: 20, marginBottom: 10 }]}>
+					<View
+						style={[
+							styles.smallerRowContainer,
+							{ marginTop: 20, marginBottom: 10 },
+						]}
+					>
 						<SwitchSelector
 							options={[
-								{ label: 'Listings', value: SearchTypeEnum.Listings },
-								{ label: 'Reviews', value: SearchTypeEnum.Reviews },
+								{
+									label: 'Listings',
+									value: SearchTypeEnum.Listings,
+								},
+								{
+									label: 'Reviews',
+									value: SearchTypeEnum.Reviews,
+								},
 							]}
 							buttonColor={theme.colors.inverseSurface}
 							backgroundColor={theme.colors.inversePrimary}
@@ -79,15 +97,22 @@ const TopBar: React.FC<TopBarProps> = ({ navigation }) => {
 				</View>
 			</View>
 		);
-	} else if (routeName === 'Filters' || routeName === 'ReviewGeneralDetails' || routeName === 'BuildingFeedback'
-        || routeName === 'AreaFeedback') {
+	} else if (
+		routeName === 'Filters' ||
+		routeName === 'ReviewGeneralDetails' ||
+		routeName === 'BuildingFeedback' ||
+		routeName === 'AreaFeedback'
+	) {
 		return null;
 	} else {
 		return (
 			<View style={styles.menuContainer}>
-				<MenuIcon iconName={'menu'} onPress={() => {
-					navigation.openDrawer();
-				}}/>
+				<MenuIcon
+					iconName={'menu'}
+					onPress={() => {
+						navigation.openDrawer();
+					}}
+				/>
 			</View>
 		);
 	}
@@ -113,7 +138,7 @@ const styles = StyleSheet.create({
 	button: {
 		width: 150,
 		backgroundColor: 'white',
-		borderColor: 'black'
+		borderColor: 'black',
 	},
 	buttonsContainer: {
 		alignSelf: 'center',
@@ -138,12 +163,12 @@ const styles = StyleSheet.create({
 	},
 	searchBar: {
 		marginLeft: '7%',
-		marginRight: '7%'
+		marginRight: '7%',
 	},
 	/* TODO: maybe fix hardcoded? */
 	menuContainer: {
 		position: 'absolute',
 		marginLeft: '3%',
-		marginTop: '9%'
-	}
+		marginTop: '9%',
+	},
 });

@@ -5,10 +5,8 @@ import { BottomBar, Map } from '../components';
 export const HomeScreen = () => {
 	return (
 		<View style={{ flex: 1 }}>
-			<Map/>
-			<BottomBar/>
+			<Map />
+			<BottomBar />
 		</View>
 	);
 };
-
-

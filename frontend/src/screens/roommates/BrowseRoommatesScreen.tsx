@@ -10,7 +10,9 @@ import { useFocusEffect } from '@react-navigation/native';
 
 export const BrowseRoommatesScreen: React.FC = () => {
 	const { user } = useUser();
-	const [compatibleUsers, setCompatibleUsers] = useState<IUserWithCompatibilityScore[]>([]);
+	const [compatibleUsers, setCompatibleUsers] = useState<
+		IUserWithCompatibilityScore[]
+	>([]);
 	const [loading, setLoading] = useState(true);
 
 	useFocusEffect(
@@ -24,7 +26,7 @@ export const BrowseRoommatesScreen: React.FC = () => {
 					.catch((err) => console.log(err))
 					.finally(() => setLoading(false));
 			}
-		}, [user?.id])
+		}, [user?.id]),
 	);
 
 	const fetchCompatibleUsers = async (userId: string) => {
@@ -32,25 +34,35 @@ export const BrowseRoommatesScreen: React.FC = () => {
 		setCompatibleUsers(users);
 	};
 
-	const compatibleUsersElement = compatibleUsers.length > 0 ? (<ScrollView style={{ width: '100%', flex: 1 }}
-		contentContainerStyle={{ alignItems: 'center' }}>
-		{compatibleUsers.map((user) => (
-			<CompatibleRoommateCard key={user.user._id} roommate={user.user}
-				compatibilityScore={user.compatibilityScore}/>
-		))}
-	</ScrollView>) : (<HeaderText size={24}> No compatible roommates found! </HeaderText>);
+	const compatibleUsersElement =
+		compatibleUsers.length > 0 ? (
+			<ScrollView
+				style={{ width: '100%', flex: 1 }}
+				contentContainerStyle={{ alignItems: 'center' }}
+			>
+				{compatibleUsers.map((user) => (
+					<CompatibleRoommateCard
+						key={user.user._id}
+						roommate={user.user}
+						compatibilityScore={user.compatibilityScore}
+					/>
+				))}
+			</ScrollView>
+		) : (
+			<HeaderText size={24}> No compatible roommates found! </HeaderText>
+		);
 
 	return (
 		<Background>
 			<Card style={styles.card} contentStyle={styles.container}>
 				<HeaderText size={40} paddingBottom={30}>
-                    View Your Matches!
+					View Your Matches!
 				</HeaderText>
 				{loading ? (
-					<ActivityIndicator size="large"/>
-				) :
-					(compatibleUsersElement)
-				}
+					<ActivityIndicator size="large" />
+				) : (
+					compatibleUsersElement
+				)}
 			</Card>
 		</Background>
 	);

@@ -21,7 +21,17 @@ export const BottomItemCard: React.FC<any> = ({ item, onClose, type }) => {
 			snapPoints={[400]}
 			index={isOpen ? 0 : -1}
 		>
-			{type === 'review' ? <ReviewCard review={item}/> : <PropertyCard showFavorite={true} mode={'contained'} backgroundColor={'white'} canOpen={true} listing={item} />}
+			{type === 'review' ? (
+				<ReviewCard review={item} />
+			) : (
+				<PropertyCard
+					showFavorite={true}
+					mode={'contained'}
+					backgroundColor={'white'}
+					canOpen={true}
+					listing={item}
+				/>
+			)}
 		</BottomSheet>
 	);
 };

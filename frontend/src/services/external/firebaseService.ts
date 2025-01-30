@@ -2,9 +2,12 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage } from '../../config/firebaseConfig';
 import * as ImagePicker from 'expo-image-picker';
 
-export const getFilePathForProfilePicture = (clerkId: string) => `profilePictures/${clerkId}`;
+export const getFilePathForProfilePicture = (clerkId: string) =>
+	`profilePictures/${clerkId}`;
 
-export const uploadProfilePicture = async (clerkId: string): Promise<string> => {
+export const uploadProfilePicture = async (
+	clerkId: string,
+): Promise<string> => {
 	const result = await ImagePicker.launchImageLibraryAsync({
 		mediaTypes: ImagePicker.MediaTypeOptions.Images,
 		quality: 1,
