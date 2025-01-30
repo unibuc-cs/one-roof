@@ -60,5 +60,16 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
+      - name: Load Backend Secrets
+        run: |
+          echo "MONGO_URI=${{ secrets.BACKEND_MONGO_URI }}" >> $GITHUB_ENV
+          echo "MONGO_USER=${{ secrets.BACKEND_MONGO_USER }}" >> $GITHUB_ENV
+          echo "MONGO_PASS=${{ secrets.BACKEND_MONGO_PASS }}" >> $GITHUB_ENV
+          echo "MONGO_DB_NAME=${{ secrets.BACKEND_MONGO_DB_NAME }}" >> $GITHUB_ENV
+          echo "PORT=${{ secrets.BACKEND_PORT }}" >> $GITHUB_ENV
+          echo "CLERK_SECRET_KEY=${{ secrets.BACKEND_CLERK_SECRET_KEY }}" >> $GITHUB_ENV
+
       - name: Run All Backend Tests
+        env:
+          NODE_ENV: test
         run: npm run test-all

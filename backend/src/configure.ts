@@ -1,6 +1,9 @@
 import dotenv from 'dotenv';
 
-dotenv.config();
+// ✅ Load .env file ONLY when NOT running in GitHub Actions
+if (!process.env.GITHUB_ACTIONS) {
+	dotenv.config();
+}
 
 const getEnvironmentVariable = (key: string): string => {
 	const value = process.env[key];
