@@ -64,8 +64,8 @@ export const AgendaItem = (props: ItemProps) => {
                 { status ? <Text style={styles.itemConfirmText}>Confirmed       </Text> : <Text style={styles.itemNotConfirmText}>Not Confirmed</Text> }
             </View>
             <View>
-                <Text style={styles.itemTitleText} width = {acceptable ? 200 : 300}>{item.title}</Text>
-                <Text style={styles.itemAddressText} width = {acceptable ? 200 : 300}>{item.address}</Text>
+                <Text style={styles.itemTitleText} width = {acceptable || status ? 200 : 300}>{item.title}</Text>
+                <Text style={styles.itemAddressText} width = {acceptable || status ? 200 : 300}>{item.address}</Text>
             </View>
             { acceptable ? 
             (<View style={styles.itemButtonContainer}>
@@ -76,6 +76,13 @@ export const AgendaItem = (props: ItemProps) => {
                     <Text style={styles.buttonText}>Reject</Text>
                 </Button>
             </View>) : null }
+            {status ?
+            (<View style={styles.itemButtonContainer}>
+                <Button style={styles.buttonReject} onPress={handleReject}>
+                    <Text style={styles.buttonText}>Cancel</Text>
+                </Button>
+            </View>) : null
+            }
         </TouchableOpacity>
     );
 };
