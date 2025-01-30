@@ -1,0 +1,17 @@
+appId: host.exp.exponent
+---
+- launchApp
+- openLink: "exp://192.168.1.129:8081"
+- waitForAnimationToEnd
+- tapOn:
+    id: 'SignIn'
+- tapOn:
+    id: 'Email'
+- inputText: 'bagsylina@gmail.com'
+- tapOn:
+    id: 'Password'
+- inputText: '12345678'
+- tapOn:
+    id: 'SignIn'
+- waitForAnimationToEnd
+- assertVisible: 'Home'
