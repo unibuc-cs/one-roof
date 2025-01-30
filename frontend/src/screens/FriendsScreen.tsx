@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity, Button, Alert, ActivityIndicator } from 'react-native';
+import React, { useCallback, useState } from 'react';
+import { ActivityIndicator, Alert, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { friendService } from '../services/internal/friendService';
-import { IFriendship } from '../models/friendshipModel';
 import { useUser } from '@clerk/clerk-expo';
 import userService from '../services/internal/userService';
 import { IFriendRequest } from '../models/friendRequestModel';
-
+import { useFocusEffect } from '@react-navigation/native';
+import { capitalize } from 'lodash';
 
 
 export const FriendsScreen: React.FC = () => {
@@ -17,64 +17,65 @@ export const FriendsScreen: React.FC = () => {
 	const { user } = useUser();
 	const userId = user?.id as string;
 
-	useEffect(() => {
-		const fetchFriends = async () => {
-			try {
-				setLoading(true);
-				const fetchedFriends = await friendService.getAllFriends(userId);
-				const friendsWithNames = await Promise.all(
-					fetchedFriends.map(async (friend) => {
-						const otherUserId =
-							friend.firstUser === userId ? friend.secondUser : friend.firstUser;
-						const otherUser = await userService.getUserByClerkId(otherUserId);
-						const otherUserWithName = await  userService.getWithClerkDetailsByUserId(otherUser._id);
-						return {
-							...friend,
-							otherUserFirstName: otherUserWithName?.firstName || 'Unknown',
-							otherUserSecondName: otherUserWithName?.lastName || '',
-						};
-					})
-				);
-				setFriends(friendsWithNames);
-			} catch (error) {
-				console.error('Error fetching friends:', error);
-				Alert.alert('Error', 'Failed to fetch friends');
-			} finally {
-				setLoading(false);
-			}
-		};
-
-		const fetchFriendRequests = async () => {
-			try {
-				setLoading(true);
-				const fetchedRequests = await friendService.getAllFriendRequests(userId);
-				const requestsWithNames = await Promise.all(
-					fetchedRequests.map(async (request) => {
-						const otherUserId = request.requestedUser;
-						const otherUser = await userService.getUserByClerkId(otherUserId);
-						const otherUserWithName = await  userService.getWithClerkDetailsByUserId(otherUser._id);
-						return {
-							...request,
-							otherUserRequestFirstName: otherUserWithName?.firstName || 'Unknown',
-							otherUserRequestSecondName: otherUserWithName?.lastName || '',
-						};
-					})
-				);
-				setFriendRequests(requestsWithNames);
-			} catch (error) {
-				console.error('Error fetching friend requests:', error);
-				Alert.alert('Error', 'Failed to fetch friend requests');
-			} finally {
-				setLoading(false);
-			}
-		};
-
-		if (selectedTab === 'All') {
-			fetchFriends();
-		} else if (selectedTab === 'Requests') {
-			fetchFriendRequests();
+	const fetchFriends = async () => {
+		try {
+			setLoading(true);
+			const fetchedFriends = await friendService.getAllFriends(userId);
+			const friendsWithNames = await Promise.all(
+				fetchedFriends.map(async (friend) => {
+					const otherUserId = friend.firstUser === userId ? friend.secondUser : friend.firstUser;
+					const otherUser = await userService.getUserByClerkId(otherUserId);
+					const otherUserWithName = await userService.getWithClerkDetailsByUserId(otherUser._id);
+					return {
+						...friend,
+						otherUserFirstName: otherUserWithName?.firstName || 'Unknown',
+						otherUserSecondName: otherUserWithName?.lastName || '',
+					};
+				})
+			);
+			setFriends(friendsWithNames);
+		} catch (error) {
+			console.error('Error fetching friends:', error);
+			Alert.alert('Error', 'Failed to fetch friends');
+		} finally {
+			setLoading(false);
 		}
-	}, [selectedTab]);
+	};
+
+	const fetchFriendRequests = async () => {
+		try {
+			setLoading(true);
+			const fetchedRequests = await friendService.getAllFriendRequests(userId);
+			const requestsWithNames = await Promise.all(
+				fetchedRequests.map(async (request) => {
+					const otherUserId = request.requestedUser;
+					const otherUser = await userService.getUserByClerkId(otherUserId);
+					const otherUserWithName = await userService.getWithClerkDetailsByUserId(otherUser._id);
+					return {
+						...request,
+						otherUserRequestFirstName: otherUserWithName?.firstName || 'Unknown',
+						otherUserRequestSecondName: otherUserWithName?.lastName || '',
+					};
+				})
+			);
+			setFriendRequests(requestsWithNames);
+		} catch (error) {
+			console.error('Error fetching friend requests:', error);
+			Alert.alert('Error', 'Failed to fetch friend requests');
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	useFocusEffect(
+		useCallback(() => {
+			if (selectedTab === 'All') {
+				fetchFriends();
+			} else if (selectedTab === 'Requests') {
+				fetchFriendRequests();
+			}
+		}, [selectedTab, userId])
+	);
 
 	const acceptFriendRequest = async (requestId: string) => {
 		try {
@@ -112,15 +113,8 @@ export const FriendsScreen: React.FC = () => {
 	};
 	const renderSegmentContent = () => {
 		if (loading) {
-			return <ActivityIndicator size="large" color="#0000ff" />;
+			return <ActivityIndicator size="large" color="#0000ff"/>;
 		}
-
-		const capitalize = (str: string): string =>
-			str
-				.toLowerCase()
-				.split(' ')
-				.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-				.join(' ');
 
 		if (selectedTab === 'All') {
 			return (
@@ -185,7 +179,7 @@ export const FriendsScreen: React.FC = () => {
 					onPress={() => setSelectedTab('Requests')}
 				>
 					<Text style={[styles.tabText, selectedTab === 'Requests' && styles.activeTabText]}>
-						Requests
+                        Requests
 					</Text>
 				</TouchableOpacity>
 			</View>
@@ -193,7 +187,6 @@ export const FriendsScreen: React.FC = () => {
 		</View>
 	);
 };
-
 
 
 const styles = StyleSheet.create({
