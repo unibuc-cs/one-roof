@@ -1,8 +1,8 @@
 import chai from 'chai';
 import sinon from 'sinon';
 import mongoose from 'mongoose';
-import {Listing} from '../src/models';
-import {LISTINGS} from '../src/database';
+import {Listing} from '../../src/models';
+import {LISTINGS} from '../../src/database';
 
 const {expect} = chai;
 

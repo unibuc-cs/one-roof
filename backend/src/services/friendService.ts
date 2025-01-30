@@ -52,15 +52,9 @@ class FriendService {
 			secondUser: friendRequest.userPending,
 		});
 
-		// Save the friendship
 		await friendship.save();
 
-		await FriendshipRequest.updateOne(
-			{_id: requestId},
-			{$set: {status: 'accepted'}}
-		);
-
-		return friendship; // Return the created friendship
+		await FriendshipRequest.deleteOne({_id: requestId});
 	}
 
 	// Method to reject a Friend Request
@@ -72,13 +66,7 @@ class FriendService {
 			throw new Error('Friend request not found');
 		}
 
-		// Set the status of the request to rejected (you can also delete it, depending on your needs)
-		await FriendshipRequest.updateOne(
-			{_id: requestId},
-			{$set: {status: 'rejected'}}
-		);
-
-		return friendRequest; // Return the updated request
+		await FriendshipRequest.deleteOne({_id: requestId});
 	}
 
 	async getAllFriendRequests(userId: string): Promise<IFriendshipRequest[]> {

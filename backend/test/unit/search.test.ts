@@ -1,10 +1,8 @@
-import { assert } from 'chai';
+import {assert} from 'chai';
 import sinon from 'sinon';
-import {SearchService} from '../src/services';
-import {LISTINGS} from '../src/database';
-import {mockSearchParams} from '../src/database/seeds/searchParams';
-
-
+import {SearchService} from '../../src/services';
+import {LISTINGS} from '../../src/database';
+import {mockSearchParams} from '../../src/database/seeds/searchParams';
 
 
 describe('SearchService', function () {

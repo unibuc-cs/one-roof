@@ -1,8 +1,8 @@
 import {assert} from 'chai';
 import sinon from 'sinon';
-import {compatibilityService} from '../src/services/compatibilityService';
-import {IUser} from '../src/models';
-import {ICoordinates, IRoommatePreferences} from '../src/models/roommatePreferences';
+import {compatibilityService} from '../../src/services/compatibilityService';
+import {IUser} from '../../src/models';
+import {ICoordinates, IRoommatePreferences} from '../../src/models/roommatePreferences';
 import mongoose from 'mongoose';
 
 describe('CompatibilityService', function () {

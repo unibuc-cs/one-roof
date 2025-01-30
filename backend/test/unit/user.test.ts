@@ -1,10 +1,10 @@
 import chai from 'chai';
 import sinon from 'sinon';
 import mongoose from 'mongoose';
-import { User } from '../src/models';
-import {USERS} from '../src/database';
+import {User} from '../../src/models';
+import {USERS} from '../../src/database';
 
-const { expect } = chai;
+const {expect} = chai;
 
 describe('User Model', () => {
 	let userMock;
@@ -35,15 +35,15 @@ describe('User Model', () => {
 
 	it('should update a user by id', async () => {
 		const userId = new mongoose.Types.ObjectId();
-		const updatedData = { role: 'updatedRole' };
+		const updatedData = {role: 'updatedRole'};
 		const updatedUser = {
 			_id: userId,
 			...updatedData
 		};
 
-		userMock.expects('findByIdAndUpdate').withArgs(userId, updatedData, { new: true }).resolves(updatedUser);
+		userMock.expects('findByIdAndUpdate').withArgs(userId, updatedData, {new: true}).resolves(updatedUser);
 
-		const result = await User.findByIdAndUpdate(userId, updatedData, { new: true });
+		const result = await User.findByIdAndUpdate(userId, updatedData, {new: true});
 
 		expect(result).to.have.property('role', 'updatedRole');
 		userMock.verify();
@@ -52,7 +52,7 @@ describe('User Model', () => {
 	it('should delete a user by id', async () => {
 		const userId = new mongoose.Types.ObjectId();
 
-		userMock.expects('findByIdAndDelete').withArgs(userId).resolves({ _id: userId });
+		userMock.expects('findByIdAndDelete').withArgs(userId).resolves({_id: userId});
 
 		const result = await User.findByIdAndDelete(userId);
 
