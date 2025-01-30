@@ -11,6 +11,7 @@ export interface IUser {
     contactedUsers: string[], // modified to keep clerk ID's
     createdAt?: Date,
     updatedAt?: Date,
+    roommateQuiz: any,
 }
 
 export interface IUserWithClerk extends IUser {

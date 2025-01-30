@@ -70,7 +70,7 @@ export function DrawerContent(props: DrawerContentComponentProps) {
                         	}}
                         />
 					}
-					<DrawerItem
+					{role === UserRoleEnum.RegularUser && <DrawerItem
 						icon={({ color, size }) => (
 							<MaterialCommunityIcons name="account-group-outline" color={color} size={size}/>
 						)}
@@ -78,7 +78,7 @@ export function DrawerContent(props: DrawerContentComponentProps) {
 						onPress={() => {
 							props.navigation.navigate('Roommates');
 						}}
-					/>
+					/>}
 					<DrawerItem
 						icon={({ color, size }) => (
 							<MaterialCommunityIcons name="heart-outline" color={color} size={size}/>
@@ -105,8 +105,8 @@ export function DrawerContent(props: DrawerContentComponentProps) {
 						}}
 						icon="logout"
 						onPress={() => {
-							signOut();
 							resetUserDetails();
+							signOut();
 						}}
 					>
                         Log out

@@ -14,15 +14,16 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import SignUpScreen from './src/screens/SignUpScreen';
 import SignInScreen from './src/screens/SignInScreen';
 import { AppNavigation } from './src/navigation';
-import { UserDetailsProvider, useUserDetails } from './src/contexts/UserDetailsContext';
+import { UserDetailsProvider } from './src/contexts/UserDetailsContext';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Background } from './src/components';
 
 const AppLoader: React.FC<{ Stack: any }> = ({ Stack }) => {
 	const { state } = useSearchContext();
-	const { onboardingStep } = useUserDetails();
-	const isSearchDone = state.filteredListings.length > 0 || state.filteredReviews.length > 0;
+	// const { onboardingStep } = useUserDetails();
+	const isSearchDone = state.listings.length > 0 || state.reviews.length > 0 || state.filteredListings.length > 0 || state.filteredReviews.length > 0;
 
+	// console.error('onboarding: ', onboardingStep, 'state: ', JSON.stringify(state));s
 	useEffect(() => {
 		async function prepare() {
 			try {
@@ -61,8 +62,9 @@ const AppLoader: React.FC<{ Stack: any }> = ({ Stack }) => {
 				</GestureHandlerRootView>
 			</SignedOut>
 			<SignedIn>
-				{/*<AppNavigation/>*/}
-				{!isSearchDone && onboardingStep === 3 ? loadingScreen : <AppNavigation/>}
+				<AppNavigation/>
+				{/*not sure if the next line is fullproof:*/}
+				{/*{!isSearchDone && onboardingStep === 3 ? loadingScreen : <AppNavigation/>}*/}
 			</SignedIn>
 		</>);
 	// return !isSearchDone ? (

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { ActivityIndicator, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import UserChatCard from '../components/UserChatCard';
 import { theme } from '../theme';
@@ -6,30 +6,29 @@ import { useUser } from '@clerk/clerk-expo';
 import userService from '../services/internal/userService';
 import { IUser } from '../models';
 import { HeaderText } from '../components';
+import { useFocusEffect } from '@react-navigation/native';
 
 export const ChatsScreen: React.FC = () => {
 	const { user } = useUser();
 
-	const [currentUser, setCurrentUser] = useState<IUser>(null);
+	const [currentUser, setCurrentUser] = useState<IUser | null>(null);
 
-	const fetchUserData = async () => {
-		const ussr = await userService.getUserByClerkId(user?.id || '');
-		if (ussr) {
-			setCurrentUser(ussr);
-		}
-	};
+	useFocusEffect(
+		useCallback(() => {
+			const fetchUserData = async () => {
+				try {
+					const ussr = await userService.getUserByClerkId(user?.id || '');
+					if (ussr) {
+						setCurrentUser(ussr);
+					}
+				} catch (error) {
+					console.error('Error fetching user data:', error);
+				}
+			};
 
-	useEffect(() => {
-		fetchUserData();
-	}, [user?.id]);
-
-	useEffect(() => {
-		const interval = setInterval(() => {
 			fetchUserData();
-		}, 2000);
-
-		return () => clearInterval(interval);
-	}, []);
+		}, [user?.id])
+	);
 
 
 	if (!currentUser) {

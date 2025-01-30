@@ -1,5 +1,5 @@
 import { callApi } from '../../utils';
-import { IUser, IUserDetails, IUserWithCompatibilityScore } from '../../models';
+import { IUser, IUserDetails, IUserWithClerk, IUserWithCompatibilityScore } from '../../models';
 import { getUserRoleEnumFromString } from '../../enums';
 
 
@@ -21,7 +21,7 @@ const userService = {
 		user.role = getUserRoleEnumFromString(user.role);
 		return user;
 	},
-	async getFullUserByClerkId(userId: string): Promise<IUser> {
+	async getFullUserByClerkId(userId: string): Promise<IUserWithClerk> {
 		return callApi(`users/full/${userId}`);
 	},
 	async getWithClerkDetailsByUserId(userId: string) {
