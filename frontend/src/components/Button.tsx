@@ -4,23 +4,35 @@ import { Button as PaperButton } from 'react-native-paper';
 import { theme } from '../theme';
 
 export type ButtonProps = {
-	mode?: string,
-	style?: any,
-	width?: string | number,
-	children: React.ReactNode,
+    mode?: string,
+    style?: any,
+    width?: string | number,
+    marginVertical?: number,
+    fontSize?: number,
+    lineHeight?: number,
+    children: React.ReactNode,
 } & React.ComponentProps<typeof PaperButton>;
 
-export const Button = ({ mode, style, width, children, ...props }: ButtonProps) => {
+export const Button = ({
+	mode,
+	style,
+	width,
+	marginVertical = 15,
+	fontSize = 15,
+	lineHeight = 26,
+	children,
+	...props
+}: ButtonProps) => {
 	width = width || '100%';
 	return (
 		<PaperButton
 			style={[
-				{ width },
+				{ width, marginVertical },
 				styles.button,
 				mode === 'outlined' && { backgroundColor: theme.colors.surface },
-				style
+				style,
 			]}
-			labelStyle={styles.text}
+			labelStyle={[styles.text, { fontSize, lineHeight }]}
 			mode={mode}
 			{...props}
 		>
@@ -31,13 +43,13 @@ export const Button = ({ mode, style, width, children, ...props }: ButtonProps) 
 
 const styles = StyleSheet.create({
 	button: {
-		marginVertical: 15
+		// Removed hardcoded marginVertical
 	},
 	text: {
 		fontWeight: 'bold',
 		fontSize: 15,
-		lineHeight: 26
-	}
+		lineHeight: 26,
+	},
 });
 
 export default memo(Button);

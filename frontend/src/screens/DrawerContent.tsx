@@ -12,7 +12,7 @@ import { UserRoleEnum } from '../enums';
 
 export function DrawerContent(props: DrawerContentComponentProps) {
 	const { user } = useUser();
-	const { profilePictureUrl, role } = useUserDetails();
+	const { profilePictureUrl, role, resetUserDetails } = useUserDetails();
 	const { signOut } = useAuth();
 
 	if (!user || !role) {
@@ -24,7 +24,7 @@ export function DrawerContent(props: DrawerContentComponentProps) {
 			<View style={styles.drawerContent}>
 				<View style={styles.userInfoSection}>
 					<View style={styles.profilePictureContainer}>
-						<ProfilePicture canEdit={false} source={{ uri: profilePictureUrl }} />
+						<ProfilePicture canEdit={false} source={{ uri: profilePictureUrl }}/>
 					</View>
 					<Caption style={styles.nickname}>@{user.username}</Caption>
 					<Title style={styles.title}>{`${capitalize(user.firstName)} ${capitalize(user.lastName)}`}</Title>
@@ -32,42 +32,70 @@ export function DrawerContent(props: DrawerContentComponentProps) {
 				<Drawer.Section style={styles.drawerSection}>
 					<DrawerItem
 						icon={({ color, size }) => (
-							<MaterialCommunityIcons name="account-outline" color={color} size={size} />
+							<MaterialCommunityIcons name="home-outline" color={color} size={size}/>
+						)}
+						label="Home"
+						onPress={() => {
+							props.navigation.navigate('Home');
+						}}
+					/>
+					<DrawerItem
+						icon={({ color, size }) => (
+							<MaterialCommunityIcons name="account-outline" color={color} size={size}/>
 						)}
 						label="Profile"
-						onPress={() => { props.navigation.navigate('Profile'); }}
+						onPress={() => {
+							props.navigation.navigate('Profile');
+						}}
 					/>
-					{ role === UserRoleEnum.Landlord &&
-						<DrawerItem
-							icon={({ color, size }) => (
-								<MaterialCommunityIcons name="map-marker-outline" color={color} size={size} />
-							)}
-							label="Add Property"
-							onPress={() => { props.navigation.navigate('CreateListing'); }}
-						/>
+					{role === UserRoleEnum.Landlord &&
+                        <DrawerItem
+                        	icon={({ color, size }) => (
+                        		<MaterialCommunityIcons name="map-marker-outline" color={color} size={size}/>
+                        	)}
+                        	label="Add Property"
+                        	onPress={() => {
+                        		props.navigation.navigate('CreateListing');
+                        	}}
+                        />
 					}
-					{ role === UserRoleEnum.RegularUser &&
-						<DrawerItem
-							icon={({ color, size }) => (
-								<MaterialCommunityIcons name="home-outline" color={color} size={size} />
-							)}
-							label="Add Review"
-							onPress={() => { props.navigation.navigate('CreateReview'); }}
-						/>
+					{role === UserRoleEnum.RegularUser &&
+                        <DrawerItem
+                        	icon={({ color, size }) => (
+                        		<MaterialCommunityIcons name="home-outline" color={color} size={size}/>
+                        	)}
+                        	label="Add Review"
+                        	onPress={() => {
+                        		props.navigation.navigate('CreateReview');
+                        	}}
+                        />
 					}
+					{role === UserRoleEnum.RegularUser && <DrawerItem
+						icon={({ color, size }) => (
+							<MaterialCommunityIcons name="account-group-outline" color={color} size={size}/>
+						)}
+						label="Roommates"
+						onPress={() => {
+							props.navigation.navigate('Roommates');
+						}}
+					/>}
 					<DrawerItem
 						icon={({ color, size }) => (
-							<MaterialCommunityIcons name="heart-outline" color={color} size={size} />
+							<MaterialCommunityIcons name="heart-outline" color={color} size={size}/>
 						)}
 						label="Favorites"
-						onPress={() => { props.navigation.navigate('Favorites'); }}
+						onPress={() => {
+							props.navigation.navigate('Favorites');
+						}}
 					/>
 					<DrawerItem
 						icon={({ color, size }) => (
-							<MaterialCommunityIcons name="message-outline" color={color} size={size} />
+							<MaterialCommunityIcons name="message-outline" color={color} size={size}/>
 						)}
 						label="Chats"
-						onPress={() => { props.navigation.navigate('Chats'); }}
+						onPress={() => {
+							props.navigation.navigate('Chats');
+						}}
 					/>
 					<DrawerItem
 						icon={({ color, size }) => (
@@ -83,9 +111,12 @@ export function DrawerContent(props: DrawerContentComponentProps) {
 							alignSelf: 'center',
 						}}
 						icon="logout"
-						onPress={() => signOut()}
+						onPress={() => {
+							resetUserDetails();
+							signOut();
+						}}
 					>
-							Log out
+                        Log out
 					</Button>
 				</Drawer.Section>
 			</View>

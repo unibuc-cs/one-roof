@@ -1,44 +1,50 @@
-import React, { useContext, useEffect } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { useUserDetails } from '../contexts/UserDetailsContext';
-import { useUserData, useUserDataByClerkId } from '../hooks/useUserData';
+import React, { useCallback, useState } from 'react';
+import { ActivityIndicator, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import UserChatCard from '../components/UserChatCard';
-import { useCustomFonts } from '../hooks/useCustomFonts';
 import { theme } from '../theme';
 import { useUser } from '@clerk/clerk-expo';
-import Spinner from 'react-native-loading-spinner-overlay';
+import userService from '../services/internal/userService';
+import { IUser } from '../models';
+import { HeaderText } from '../components';
+import { useFocusEffect } from '@react-navigation/native';
 
 export const ChatsScreen: React.FC = () => {
-	const LoadFonts = async () => { await useCustomFonts(); };
-	const navigation = useNavigation();
-	// const {userId, } = useUserDetails();
-	// const {user: currentUser} = useUserData(userId)
 	const { user } = useUser();
-	console.log('CLERK ID FROM CHATS', user.id);
 
-	const { user: currentUser, isLoading, error } = useUserDataByClerkId(user?.id ?? '');
-	console.log('CURRENT USER FROM CLERK', currentUser);
+	const [currentUser, setCurrentUser] = useState<IUser | null>(null);
 
-	if (isLoading) {
-		return <Spinner></Spinner>;
+	useFocusEffect(
+		useCallback(() => {
+			const fetchUserData = async () => {
+				try {
+					const ussr = await userService.getUserByClerkId(user?.id || '');
+					if (ussr) {
+						setCurrentUser(ussr);
+					}
+				} catch (error) {
+					console.error('Error fetching user data:', error);
+				}
+			};
+
+			fetchUserData();
+		}, [user?.id])
+	);
+
+
+	if (!currentUser) {
+		return <View style={{ justifyContent: 'center', flex: 1, alignItems: 'center' }}>
+			<ActivityIndicator size={'large'} color={theme.colors.primary}/>
+		</View>;
 	}
 
-	if(!currentUser){
-		return (
-			<View style={{ justifyContent: 'center' }}>
-				<Text>Loading..</Text>
-			</View>
-		);
-	}
 
 	return (
 		<ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
 			<View style={styles.title}>
-				<Text style={{ fontSize:25 }}> Chats</Text>
+				<HeaderText size={24}>Chats</HeaderText>
 			</View>
 			<Pressable>
-				{currentUser?.contactedUsers.map((clerkUserId, index) =>(
+				{currentUser?.contactedUsers.map((clerkUserId, index) => (
 					<UserChatCard key={index} userId={clerkUserId}/>
 				))}
 			</Pressable>
@@ -48,7 +54,7 @@ export const ChatsScreen: React.FC = () => {
 
 
 const styles = StyleSheet.create({
-	title:{
+	title: {
 		alignItems: 'center',
 		borderBottomWidth: 1,
 		borderColor: theme.colors.primary,
@@ -59,6 +65,6 @@ const styles = StyleSheet.create({
 		backgroundColor: 'white',
 		minHeight: 'fit-content',
 		width: '100%',
-		margin:0,
+		margin: 0,
 	},
 });

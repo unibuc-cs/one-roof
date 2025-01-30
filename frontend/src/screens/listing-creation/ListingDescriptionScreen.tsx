@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Image, ScrollView, KeyboardAvoidingView, Platform, Dimensions, TouchableOpacity } from 'react-native';
+import { Dimensions, Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { RouteProp } from '@react-navigation/native';
-import * as Location from 'expo-location';
-import { Button, HeaderText } from '../../components';
-import { TextInput, Card } from 'react-native-paper';
+import { Background, Button, HeaderText } from '../../components';
+import { Card, TextInput } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
-import { Background } from '../../components';
 import Carousel from 'react-native-reanimated-carousel';
 import { Ionicons } from '@expo/vector-icons';
 import { listingService } from '../../services';
-import { useUserDetails } from '../../contexts/UserDetailsContext';
 import * as Yup from 'yup';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useUser } from '@clerk/clerk-expo';
+import { capitalize } from 'lodash';
 
 type ListingDescriptionScreenProps = {
     route: RouteProp<{ params: { generalDetails: any, location: any, facilities: any } }, 'params'>,
@@ -35,7 +32,7 @@ export const ListingDescriptionScreen: React.FC<ListingDescriptionScreenProps> =
 	const [photos, setPhotos] = useState<string[]>([]);
 	const { user } = useUser();
 	const width = Dimensions.get('window').width;
-	const  height = Dimensions.get('window').height;
+	const height = Dimensions.get('window').height;
 	const currentDate = new Date();
 
 	useEffect(() => {
@@ -48,12 +45,12 @@ export const ListingDescriptionScreen: React.FC<ListingDescriptionScreenProps> =
 	};
 
 	const handleCreate = async () => {
-		const listingData ={
+		const listingData = {
 			landlordId: user?.id as string,
 			title: generalDetails.title,
 			description: description,
 			photos: photos,
-			address: `${generalDetails.address.country} ${generalDetails.address.stateOrProvince} ${generalDetails.address.city} ${generalDetails.address.street} ${generalDetails.address.streetNumber}`,
+			address: `${capitalize(generalDetails.address.street)} ${generalDetails.address.streetNumber}, ${capitalize(generalDetails.address.city)}`,
 			location: {
 				type: 'Point',
 				coordinates: [location.longitude, location.latitude],
@@ -70,7 +67,7 @@ export const ListingDescriptionScreen: React.FC<ListingDescriptionScreenProps> =
 		};
 		console.log('listingData', listingData);
 		listingService.createListing(listingData, listingData.landlordId)
-			.then(response =>{
+			.then(response => {
 				console.log('Listing successfully created', response);
 			})
 			.catch(error => {
@@ -87,7 +84,7 @@ export const ListingDescriptionScreen: React.FC<ListingDescriptionScreenProps> =
 
 		if (response.assets) {
 			const newPhotos = response.assets.map(asset => asset.uri);
-			const photosAfterUpdate = [... new Set([...photos, ...newPhotos])];
+			const photosAfterUpdate = [...new Set([...photos, ...newPhotos])];
 			setPhotos(photosAfterUpdate);
 		}
 	};
@@ -97,38 +94,33 @@ export const ListingDescriptionScreen: React.FC<ListingDescriptionScreenProps> =
 	};
 
 	return (
-
 		<Background>
-
-
 			<Card style={styles.card}>
 				<ScrollView showsVerticalScrollIndicator={false} style={styles.scrollView}>
-
 					<HeaderText paddingBottom={10} textAlign={'left'} size={17}>Photos:</HeaderText>
-
 					<Carousel
 						loop
 						width={width - 100}
 						height={width / 2}
 						autoPlay={true}
-						data= {photos}
+						data={photos}
 						autoPlayInterval={5000}
 						scrollAnimationDuration={1000}
 						style={styles.carousel}
 						renderItem={({ index }) => (
 							<View>
-								{ photos[index] &&
-                                ( <Image
-                                	style={styles.image}
-                                	source={{
-                                		uri: photos[index]
-                                	}}
-                                />)}
+								{photos[index] &&
+                                    (<Image
+                                    	style={styles.image}
+                                    	source={{
+                                    		uri: photos[index]
+                                    	}}
+                                    />)}
 								<TouchableOpacity
 									style={styles.deleteButton}
 									onPress={() => deletePhoto(photos[index])}
 								>
-									<Ionicons name="trash" size={24} color="white" />
+									<Ionicons name="trash" size={24} color="white"/>
 								</TouchableOpacity>
 							</View>
 						)}
@@ -162,8 +154,8 @@ const styles = StyleSheet.create({
 	card: {
 		display: 'flex',
 		flexDirection: 'column',
-		width:'100%',
-		flex:1,
+		width: '100%',
+		flex: 1,
 		backgroundColor: 'white',
 		padding: 16,
 		marginVertical: 30,
@@ -179,9 +171,9 @@ const styles = StyleSheet.create({
 		backgroundColor: '#f0f0f0',
 		marginVertical: 10,
 	},
-	carousel:{
-		justifyContent:'center',
-		alignSelf:'center',
+	carousel: {
+		justifyContent: 'center',
+		alignSelf: 'center',
 		backgroundColor: '#f0f0f0',
 		borderRadius: 10,
 	},

@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
-import { Card, Checkbox, TextInput } from 'react-native-paper';
-import { Button, HeaderText } from '../../components';
-import { NumberOfBathroomsEnum, NumberOfBedroomsEnum, PropertyTypeEnum } from '../../enums';
+import { StyleSheet, Text, View } from 'react-native';
+import { Card, TextInput } from 'react-native-paper';
+import { Background, Button, HeaderText } from '../../components';
+import { PropertyTypeEnum } from '../../enums';
 import { CustomSwitchSelector } from '../../components/CustomSwitchSelector';
-import { useCustomFonts } from '../../hooks/useCustomFonts';
 import * as Yup from 'yup';
-import { Background } from '../../components';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Formik } from 'formik';
 import 'react-native-get-random-values';
@@ -28,7 +25,7 @@ const GeneralDetailsSchema = Yup.object().shape({
 
 });
 
-const initialFormValues={
+const initialFormValues = {
 	title: '',
 	type: 'studio',
 	address: {
@@ -42,9 +39,7 @@ const initialFormValues={
 	price: '200',
 };
 
-
-export const CreateListingScreen: React.FC<any>= ({ navigation }) => {
-	const LoadFonts = async () => { await useCustomFonts(); };
+export const CreateListingScreen: React.FC<any> = ({ navigation }) => {
 	const [formValues, setFormValues] = useState(initialFormValues);
 
 	useEffect(() => {
@@ -67,7 +62,8 @@ export const CreateListingScreen: React.FC<any>= ({ navigation }) => {
 				>
 					{({ handleChange, handleBlur, handleSubmit, setFieldValue, values, errors, touched }) => (
 						<KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
-							<HeaderText paddingBottom={10} textAlign={'center'} size={25}>Create a new listing</HeaderText>
+							<HeaderText paddingBottom={10} textAlign={'center'} size={25}>Create a new
+                                listing</HeaderText>
 							<HeaderText paddingBottom={10} textAlign={'left'} size={17}>Listing title:</HeaderText>
 							<TextInput
 								style={styles.textInput}
@@ -170,8 +166,9 @@ export const CreateListingScreen: React.FC<any>= ({ navigation }) => {
 							/>
 							{touched.price && errors.price && <Text style={styles.error}>{errors.price}</Text>}
 							<View style={styles.buttonsContainer}>
-								<Button style={styles.button} mode= "contained" onPress={handleDiscard}>Discard</Button>
-								<Button style={styles.button} mode="contained" onPress={() => handleSubmit()}>Next</Button>
+								<Button style={styles.button} mode="contained" onPress={handleDiscard}>Discard</Button>
+								<Button style={styles.button} mode="contained"
+									onPress={() => handleSubmit()}>Next</Button>
 							</View>
 						</KeyboardAwareScrollView>
 					)}
@@ -183,7 +180,7 @@ export const CreateListingScreen: React.FC<any>= ({ navigation }) => {
 
 const styles = StyleSheet.create({
 	card: {
-		flex:1,
+		flex: 1,
 		width: '100%',
 		backgroundColor: 'white',
 		padding: 16,
@@ -194,7 +191,7 @@ const styles = StyleSheet.create({
 		flexGrow: 1,
 		margin: 10,
 	},
-	textInput:{
+	textInput: {
 		borderWidth: 0,
 		borderRadius: 10,
 		height: 40,
@@ -215,8 +212,8 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 
 	},
-	button:{
-		width:'fit-content'
+	button: {
+		width: 'fit-content'
 	}
 });
 

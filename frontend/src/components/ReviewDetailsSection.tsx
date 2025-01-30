@@ -3,32 +3,39 @@ import { StyleSheet, Text, View } from 'react-native';
 import { HeaderText } from './HeaderText';
 import { theme } from '../theme';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useCustomFonts } from '../hooks/useCustomFonts';
 
 interface ReviewSectionSchema {
-	title: string,
-	questions?: Array<{
-		prompt: string,
-		leftText: string,
-		rightText: string,
-		value: number,
-	}>,
-	isLast?: boolean,
-	binaryQuestions?: Array<{
-		question: string,
-		value: boolean,
-	}>,
-	multiOptionQuestions?: Array<{
-		prompt: string,
-		value: string,
-	}>,
-	additional?: string,
+    title: string,
+    questions?: Array<{
+        prompt: string,
+        leftText: string,
+        rightText: string,
+        value: number,
+    }>,
+    isLast?: boolean,
+    binaryQuestions?: Array<{
+        question: string,
+        value: boolean,
+    }>,
+    multiOptionQuestions?: Array<{
+        prompt: string,
+        value: string,
+    }>,
+    additional?: string,
 }
 
-export const ReviewDetailsSection: React.FC<ReviewSectionSchema> = ({ title, questions, isLast, binaryQuestions, multiOptionQuestions, additional }) => {
+export const ReviewDetailsSection: React.FC<ReviewSectionSchema> = ({
+	title,
+	questions,
+	isLast,
+	binaryQuestions,
+	multiOptionQuestions,
+	additional
+}) => {
 	return (
 		<View>
-			{title !== '' && <HeaderText color={theme.colors.primary} textAlign={'left'} paddingTop={0} size={22}>{title}</HeaderText>}
+			{title !== '' && <HeaderText color={theme.colors.primary} textAlign={'left'} paddingTop={0}
+				size={22}>{title}</HeaderText>}
 			{questions?.map((q, index) => (
 				<View key={index} style={styles.questionContainer}>
 					<Text style={styles.questionText}>{q.prompt}</Text>
@@ -51,7 +58,7 @@ export const ReviewDetailsSection: React.FC<ReviewSectionSchema> = ({ title, que
 			{}
 			{!isLast && (
 				<View style={styles.diamondIcon}>
-					<Icon size={20} color={theme.colors.primary} name={'cards-diamond-outline'} />
+					<Icon size={20} color={theme.colors.primary} name={'cards-diamond-outline'}/>
 				</View>
 			)}
 			{additional && (

@@ -1,20 +1,15 @@
 import MapView from 'react-native-map-clustering';
-import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import {
-	BUCHAREST_COORDINATES,
-	DEFAULT_LATITUDE_DELTA,
-	DEFAULT_LONGITUDE_DELTA,
-	getCoordinatesFromLocation, getShortenedString,
-	mapStyles
-} from '../utils';
+import { getCoordinatesFromLocation, getShortenedString, mapStyles } from '../utils';
 import { IListing, IReview } from '../models';
 import { BottomItemCard } from './BottomItemCard';
 import { useSearchContext } from '../contexts/SearchContext';
 import { SearchTypeEnum } from '../enums';
-import { CustomMarker } from './CustomMarker';
-import { capitalize, debounce } from 'lodash';
+import { debounce } from 'lodash';
 import { theme } from '../theme';
+import { Polygon } from 'react-native-maps';
+import { CustomMarker } from './CustomMarker';
 
 const EPSILON = 0.001;
 
@@ -37,14 +32,13 @@ export const Map: React.FC = () => {
 	}, 600), [triggerSearch]);
 
 	const handleRegionChangeComplete = useCallback((newRegion) => {
-		 if (needsUpdate(state.region, newRegion)) {
-			 if (legalToUpdate) {
-				 setIsWaitingForSearch(true);
-				 debouncedRegionUpdate(newRegion);
-			 } else {
-				 console.log('was illegal');
-				 setLegalToUpdate(true);
-			 }
+		if (needsUpdate(state.region, newRegion)) {
+			if (legalToUpdate) {
+				setIsWaitingForSearch(true);
+				debouncedRegionUpdate(newRegion);
+			} else {
+				setLegalToUpdate(true);
+			}
 		}
 	}, [state.region, legalToUpdate, debouncedRegionUpdate]);
 
@@ -55,20 +49,26 @@ export const Map: React.FC = () => {
 
 	const needsUpdate = (oldRegion, newRegion) => {
 		return Math.abs(newRegion.latitude - oldRegion.latitude) > EPSILON ||
-			Math.abs(newRegion.longitude - oldRegion.longitude) > EPSILON ||
-			Math.abs(newRegion.latitudeDelta - oldRegion.latitudeDelta) > EPSILON ||
-			Math.abs(newRegion.longitudeDelta - oldRegion.longitudeDelta) > EPSILON;
+            Math.abs(newRegion.longitude - oldRegion.longitude) > EPSILON ||
+            Math.abs(newRegion.latitudeDelta - oldRegion.latitudeDelta) > EPSILON ||
+            Math.abs(newRegion.longitudeDelta - oldRegion.longitudeDelta) > EPSILON;
 	};
 
 	useEffect(() => {
 		if (mapRef.current && state.wasExternalSearchPerformed) {
-			console.log('was external map');
 			mapRef.current.animateToRegion(state.region, 1000);
 			setWasExternalSearchPerformed(false);
 			setLegalToUpdate(false);
 		}
 	}, [state.wasExternalSearchPerformed]);
 
+
+	const polygonCoords = [
+		{ latitude: 44.9301, longitude: 26.0901 },
+		{ latitude: 44.9310, longitude: 26.0910 },
+		{ latitude: 44.9320, longitude: 26.0905 },
+		{ latitude: 44.9315, longitude: 26.0895 },
+	];
 
 	return (
 		<View style={styles.map}>
@@ -81,10 +81,17 @@ export const Map: React.FC = () => {
 				onRegionChangeComplete={handleRegionChangeComplete}
 				customMapStyle={mapStyles}
 				onPress={() => setSelectedItem(undefined)}
+				tracksViewChanges={false}
 			>
-				{(state.searchType === 'listings' ? state.filteredListings : state.filteredReviews).map((item, index) => (
+				<Polygon
+					coordinates={polygonCoords}
+					fillColor="rgba(255,0,0,0.3)"
+					strokeColor="#FF0000"
+					strokeWidth={3}
+				/>
+				{(state.searchType === 'listings' ? state.filteredListings : state.filteredReviews).map(item => (
 					<CustomMarker
-						key={index}
+						key={`type${state.searchType}-item${item._id}`}
 						coordinate={getCoordinatesFromLocation(item.location)}
 						onPress={() => handleMarkerPress(item)}
 						text={state.searchType === SearchTypeEnum.Listings ? `${item.price} €` : getShortenedString(item.title, 10)}
@@ -94,8 +101,8 @@ export const Map: React.FC = () => {
 			{selectedItem && (
 				<View style={styles.bottomCardContainer}>
 					{state.searchType === SearchTypeEnum.Listings ?
-						<BottomItemCard item={selectedItem as IListing} onClose={handleClose} /> :
-						<BottomItemCard item={selectedItem as IReview} type={'review'} onClose={handleClose} />
+						<BottomItemCard item={selectedItem as IListing} onClose={handleClose}/> :
+						<BottomItemCard item={selectedItem as IReview} type={'review'} onClose={handleClose}/>
 					}
 				</View>
 			)}

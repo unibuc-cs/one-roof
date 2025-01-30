@@ -1,10 +1,8 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { Button, ReviewSection } from '../../components';
+import { Background, Button, HeaderText, QuizSection } from '../../components';
 import { RouteProp } from '@react-navigation/native';
-import { HeaderText } from '../../components';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { Background } from '../../components';
 import { Card } from 'react-native-paper';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -36,8 +34,8 @@ const AreaFeedbackSchema = Yup.object().shape({
 });
 
 type AreaFeedbackScreenProps = {
-	route: RouteProp<{ params: { generalDetails: any, buildingFeedback: any } }, 'params'>,
-	navigation: any,
+    route: RouteProp<{ params: { generalDetails: any, buildingFeedback: any } }, 'params'>,
+    navigation: any,
 };
 
 export const AreaFeedbackScreen: React.FC<AreaFeedbackScreenProps> = ({ route, navigation }) => {
@@ -78,7 +76,7 @@ export const AreaFeedbackScreen: React.FC<AreaFeedbackScreenProps> = ({ route, n
 				setOnboardingStep(nextOnboardingStep);
 			}
 			navigation.navigate('Home');
-		} catch(error){
+		} catch (error) {
 			console.error('Error submitting review', error);
 
 		}
@@ -115,7 +113,7 @@ export const AreaFeedbackScreen: React.FC<AreaFeedbackScreenProps> = ({ route, n
 					{({ handleChange, handleBlur, handleSubmit, setFieldValue, values }) => (
 						<KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
 							<HeaderText paddingBottom={30} size={30}>About your Area..</HeaderText>
-							<ReviewSection
+							<QuizSection
 								title="Transportation"
 								questions={[
 									{
@@ -148,7 +146,7 @@ export const AreaFeedbackScreen: React.FC<AreaFeedbackScreenProps> = ({ route, n
 									},
 								]}
 							/>
-							<ReviewSection
+							<QuizSection
 								title="Demographics"
 								multiOptionQuestions={[
 									{
@@ -162,7 +160,7 @@ export const AreaFeedbackScreen: React.FC<AreaFeedbackScreenProps> = ({ route, n
 									},
 								]}
 							/>
-							<ReviewSection
+							<QuizSection
 								title="Safety and Noise"
 								questions={[
 									{
@@ -177,7 +175,7 @@ export const AreaFeedbackScreen: React.FC<AreaFeedbackScreenProps> = ({ route, n
 									},
 								]}
 							/>
-							<ReviewSection
+							<QuizSection
 								isLast={true}
 								title="Environmental Factors"
 								questions={[
@@ -199,7 +197,8 @@ export const AreaFeedbackScreen: React.FC<AreaFeedbackScreenProps> = ({ route, n
 								]}
 							/>
 							<Button mode="contained" onPress={handleSubmit}>Submit Review</Button>
-							<Button style={{ marginTop: 0 }} mode="contained" onPress={() => handleDiscard()}>Discard Review</Button>
+							<Button style={{ marginTop: 0 }} mode="contained" onPress={() => handleDiscard()}>Discard
+                                Review</Button>
 						</KeyboardAwareScrollView>
 					)}
 				</Formik>

@@ -1,12 +1,11 @@
 import React from 'react';
-import { View, Text, StyleSheet, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useUser } from '@clerk/clerk-expo';
 import { useUserDetails } from '../contexts/UserDetailsContext';
 import { ProfilePicture } from '../components/ProfilePicture';
-import { Background } from '../components';
+import { Background, HeaderText } from '../components';
 import { EditableField } from '../components/EditableField';
-import { Card, Divider } from 'react-native-paper';
-import { HeaderText } from '../components';
+import { Divider } from 'react-native-paper';
 import { theme } from '../theme';
 
 export const ProfileScreen: React.FC = () => {
@@ -22,7 +21,7 @@ export const ProfileScreen: React.FC = () => {
 					<ProfilePicture canEdit={true} source={{ uri: profilePictureUrl }}/>
 				</View>
 				<HeaderText size={19}>
-					Role: <Text style={{ color: theme.colors.primary }}>{role}</Text>
+                    Role: <Text style={{ color: theme.colors.primary }}>{role}</Text>
 				</HeaderText>
 				<EditableField
 					isEditable={true}

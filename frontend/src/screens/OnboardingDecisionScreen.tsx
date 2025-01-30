@@ -7,27 +7,38 @@ import { CreateReviewScreen } from './review-creation';
 import { HomeScreen } from './HomeScreen';
 
 export const OnboardingDecisionScreen = () => {
-	const { onboardingStep, setContactedUsers, setOnboardingStep, setProfilePictureUrl, setRole, setUserId } = useUserDetails();
+	const {
+		onboardingStep,
+		setContactedUsers,
+		setOnboardingStep,
+		setProfilePictureUrl,
+		setRole,
+		setUserId
+	} = useUserDetails();
 	const { user } = useUser();
 
 	useEffect(() => {
 		if (user) {
 			const userId = user.id;
 			fetchAndStoreUserDetails(userId)
-				.then((res) => console.log(res))
-				.catch((err) => console.log(err));
+				.then((res) => console.log('res', res))
+				.catch((err) => console.log('err', err))
+				.finally(() => console.log('finally'));
 		}
-	}, [user]);
+	}, [user, onboardingStep]);
 
 	const fetchAndStoreUserDetails = async (userId: string) => {
-		console.log('before fetchAndStoreUserDetails', userId);
-		const userDetails = await userService.getUserByClerkId(userId);
-		console.log('userdetails', userDetails);
-		setRole(userDetails.role);
-		setOnboardingStep(userDetails.onboardingStep);
-		setProfilePictureUrl(userDetails.profilePicture);
-		setUserId(userDetails._id);
-		setContactedUsers(userDetails.contactedUsers);
+		let userDetails;
+		try {
+			userDetails = await userService.getUserByClerkId(userId);
+			setRole(userDetails.role);
+			setOnboardingStep(userDetails.onboardingStep);
+			setProfilePictureUrl(userDetails.profilePicture);
+			setUserId(userDetails._id);
+			setContactedUsers(userDetails.contactedUsers);
+		} catch (err) {
+			// do nothing - if the user is not found, it means they will be created in the next step
+		}
 	};
 
 	switch (onboardingStep) {

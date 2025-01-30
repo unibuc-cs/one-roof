@@ -1,23 +1,28 @@
 import React from 'react';
-import { Text, StyleSheet, TextProps, ColorValue } from 'react-native';
+import { ColorValue, StyleSheet, Text, TextProps } from 'react-native';
 import { theme } from '../theme';
-import { useCustomFonts } from '../hooks/useCustomFonts';
-import { ActivityIndicator } from 'react-native-paper';
 
 
 type HeaderTextProps = {
-	children: React.ReactNode,
-	size: number,
-	paddingTop?: number,
-	paddingBottom?: number,
-	color?: ColorValue,
-	textAlign?: 'center' | 'left' | 'right' | 'justify' | 'auto',
-	marginTop?: number,
+    children: React.ReactNode,
+    size: number,
+    paddingTop?: number,
+    paddingBottom?: number,
+    color?: ColorValue,
+    textAlign?: 'center' | 'left' | 'right' | 'justify' | 'auto',
+    marginTop?: number,
 } & TextProps;
 
-export const HeaderText = ({ children, color, size, paddingBottom, paddingTop, textAlign, marginTop, ...props }: HeaderTextProps) => {
-	const LoadFonts = async () => { await useCustomFonts(); };
-
+export const HeaderText = ({
+	children,
+	color,
+	size,
+	paddingBottom,
+	paddingTop,
+	textAlign,
+	marginTop,
+	...props
+}: HeaderTextProps) => {
 	color = color || theme.colors.text;
 	paddingTop = paddingTop ? paddingTop : 15;
 	textAlign = textAlign || 'center';

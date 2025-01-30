@@ -1,6 +1,7 @@
-import { ISearchParams, Listing, Review } from '../models';
+import {ISearchParams, Listing, Review} from '../models';
 import {
-	applyCombinedStrategies, applyStrategyToEntity,
+	applyCombinedStrategies,
+	applyStrategyToEntity,
 	GeospatialSearchStrategy,
 	ListingFiltersStrategy,
 	ReviewFiltersStrategy
@@ -11,7 +12,6 @@ export const SearchService = {
 		const geospatialStrategy = new GeospatialSearchStrategy();
 		const listingFiltersStrategy = new ListingFiltersStrategy();
 		const reviewFiltersStrategy = new ReviewFiltersStrategy();
-		console.log('THE OG SEARHC PARAMS', searchParams);
 		try {
 			const restrictedListings = await applyCombinedStrategies(Listing, geospatialStrategy, listingFiltersStrategy, searchParams);
 			const restrictedReviews = await applyCombinedStrategies(Review, geospatialStrategy, reviewFiltersStrategy, searchParams);
@@ -22,7 +22,7 @@ export const SearchService = {
 			return {
 				listings: restrictedListings,
 				reviews: restrictedReviews,
-				filteredListings:  justFilteredListings,
+				filteredListings: justFilteredListings,
 				filteredReviews: justFilteredReviews
 			};
 		} catch (error) {
