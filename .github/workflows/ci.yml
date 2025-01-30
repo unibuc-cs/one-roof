@@ -69,6 +69,12 @@ jobs:
           echo "PORT=${{ secrets.BACKEND_PORT }}" >> $GITHUB_ENV
           echo "CLERK_SECRET_KEY=${{ secrets.BACKEND_CLERK_SECRET_KEY }}" >> $GITHUB_ENV
 
+      - name: Debug Environment Variables
+        run: env | grep MONGO_
+
+      - name: Debug Raw Github Environment Variables
+        run: printenv
+
       - name: Run All Backend Tests
         env:
           NODE_ENV: test
