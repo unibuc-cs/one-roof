@@ -17,6 +17,7 @@ import {useUser} from '@clerk/clerk-expo';
 import {IMessage} from '../models/messageModel';
 import {config} from "../config/configure";
 import {NotificationTypesEnum} from "../enums";
+import {tokens} from "react-native-paper/lib/typescript/styles/themes/v3/tokens";
 
 
 type ChatMessagesScreenRouteProps = RouteProp<RootStackParamList, 'Message'>;
@@ -27,10 +28,9 @@ export const ConversationScreen: React.FC = () => {
 	const { navigate } = useNavigation();
 	const route = useRoute<ChatMessagesScreenRouteProps>();
 	const { receiverId, referenceId: initialReferenceId, type: initialType,  } = route.params;
-	console.log('initial type', initialType);
 	const screenWidth = Dimensions.get('window').width;
 	const screenHeight = Dimensions.get('window').height;
-	const { contactedUsers: currUserContactedUsers, allowedNotifications } = useUserDetails();
+	const { contactedUsers: currUserContactedUsers, allowedNotifications, pushTokens } = useUserDetails();
 	// const { userId, contactedUsers: currUserContactedUsers } = useUserDetails();
 	const { user: clerkUser } = useUser();
 	const userId = clerkUser?.id;
@@ -43,7 +43,6 @@ export const ConversationScreen: React.FC = () => {
 	const [referenceId, setReferenceId] = useState(initialReferenceId);
 	const [type, setType] = useState(initialType);
 
-	console.log('TIP DIN SCREEN', type, initialReferenceId, referenceId);
 	useEffect(() => {
 		socket = io(config.api.baseUrl, { transports: ['websocket'] });
 		const roomId = userId < receiverId ?
@@ -62,8 +61,9 @@ export const ConversationScreen: React.FC = () => {
 		socket.on('messageReceived', (msg)=>{
 			if(msg.receiverId === userId && msg.senderId === receiverId){
 				setMessages([...messages, msg]);
-				if(allowedNotifications.includes(NotificationTypesEnum.Messages))
+				if(allowedNotifications.includes(NotificationTypesEnum.Messages)){
 					sendNewMessageNotification(msg);
+				}
 
 			}
 		});
@@ -81,8 +81,13 @@ export const ConversationScreen: React.FC = () => {
 		return verdict;
 	};
 
-	const sendNewMessageNotification = async (msg) => {
-		await notificationService.sendNotification("New message", msg.content, userId); // TODO: test with another device
+	const sendNewMessageNotification = async (msg, pushTokens) => {
+
+			for (const token of pushTokens) {
+				console.log(token);
+				await notificationService.sendNotification("New message", msg.content, userId, token);
+			}
+			// TODO: test with another device
 	};
 
 	const getConversationMessages = async () => {
@@ -113,6 +118,7 @@ export const ConversationScreen: React.FC = () => {
 			userId
 		);
 		socket.emit('newMessage', newMessage);
+		sendNewMessageNotification()
 		// // After the first message is sent, set referenceId and type to null
 		// if (referenceId !== null || type !== null) {
 		//     setReferenceId(null);
