@@ -9,26 +9,33 @@ import { CustomSwitchSelector } from './CustomSwitchSelector';
 
 interface ReviewSectionSchema {
     title: string,
+    setFieldValue?: (field: string, value: any) => void,
     questions?: Array<{
         prompt: string,
         leftText: string,
         rightText: string,
+        fieldName?: string,
     }>,
     hasAdditionalComments?: boolean,
     isLast?: boolean,
-    binaryQuestions?: Array<string>,
+    binaryQuestions?: Array<{
+        prompt: string,
+        fieldName?: string,
+    }>,
     multiOptionQuestions?: Array<{
         prompt: string,
         options: Array<{
             label: string,
             value: string,
         }>,
+        fieldName?: string,
     }>,
     additionalNodes?: ReactNode,
 }
 
 export const QuizSection: React.FC<ReviewSectionSchema> = ({
 	title,
+	setFieldValue,
 	questions,
 	hasAdditionalComments = true,
 	isLast = false,
@@ -46,13 +53,14 @@ export const QuizSection: React.FC<ReviewSectionSchema> = ({
 					question={q.prompt}
 					leftText={q.leftText}
 					rightText={q.rightText}
+					onValueChange={(value) => setFieldValue && q.fieldName && setFieldValue(q.fieldName, value)}
 				/>)}
 			{binaryQuestions?.map((question, index) => (
 				<View
 					key={`binary-${index}`}
 					style={styles.binaryQuestion}
 				>
-					<HeaderText paddingBottom={16} size={16}>{question}</HeaderText>
+					<HeaderText paddingBottom={16} size={16}>{question.prompt}</HeaderText>
 					<CustomSwitchSelector
 						mode={'green'}
 						width={150}
@@ -60,6 +68,7 @@ export const QuizSection: React.FC<ReviewSectionSchema> = ({
 							{ label: 'No', value: 0 },
 							{ label: 'Yes', value: 1 },
 						]}
+						onPress={(value) => setFieldValue && question.fieldName && setFieldValue(question.fieldName, value)}
 					/>
 				</View>
 			))
@@ -70,6 +79,7 @@ export const QuizSection: React.FC<ReviewSectionSchema> = ({
 					<CustomSwitchSelector
 						mode={'green'}
 						options={question.options}
+						onPress={(value) => setFieldValue && question.fieldName && setFieldValue(question.fieldName, value)}
 					/>
 				</View>
 			))

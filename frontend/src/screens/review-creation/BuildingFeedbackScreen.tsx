@@ -144,7 +144,7 @@ export const BuildingFeedbackScreen: React.FC<BuildingFeedbackScreenProps> = ({ 
 									},
 								]}
 								binaryQuestions={[
-									'Does the building have a central heating system?'
+									{ prompt: 'Does the building have a central heating system?' }
 								]}
 							/>
 							<QuizSection
@@ -177,7 +177,7 @@ export const BuildingFeedbackScreen: React.FC<BuildingFeedbackScreenProps> = ({ 
 									},
 								]}
 								binaryQuestions={[
-									'Does the building have bodyguards at the entrance?'
+									{ prompt: 'Does the building have bodyguards at the entrance?' }
 								]}
 							/>
 							<QuizSection
@@ -195,7 +195,7 @@ export const BuildingFeedbackScreen: React.FC<BuildingFeedbackScreenProps> = ({ 
 									},
 								]}
 								binaryQuestions={[
-									'Does the building have an AC system?'
+									{ prompt: 'Does the building have an AC system?' }
 								]}
 							/>
 							<QuizSection
@@ -214,7 +214,7 @@ export const BuildingFeedbackScreen: React.FC<BuildingFeedbackScreenProps> = ({ 
 									},
 								]}
 								binaryQuestions={[
-									'Does your building have an elevator?'
+									{ prompt: 'Does your building have an elevator?' }
 								]}
 							/>
 							<Button mode="contained" onPress={handleSubmit}>Next</Button>

@@ -1,5 +1,5 @@
 import MapView from 'react-native-map-clustering';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { getCoordinatesFromLocation, getShortenedString, mapStyles } from '../utils';
 import { IListing, IReview } from '../models';
@@ -69,10 +69,6 @@ export const Map: React.FC = () => {
 		{ latitude: 44.9320, longitude: 26.0905 },
 		{ latitude: 44.9315, longitude: 26.0895 },
 	];
-
-	const items = useMemo(() => {
-		return state.searchType === 'listings' ? state.filteredListings : state.filteredReviews;
-	}, [state.searchType, state.filteredListings, state.filteredReviews]);
 
 	return (
 		<View style={styles.map}>

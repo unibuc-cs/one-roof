@@ -1,11 +1,11 @@
-import {Document, model, Schema} from 'mongoose';
+import {Schema} from 'mongoose';
 
-interface ICoordinates {
+export interface ICoordinates {
     latitude: number,
     longitude: number,
 }
 
-interface IPriceRange {
+export interface IPriceRange {
     lowerBound: number,
     upperBound: number,
 }
@@ -20,8 +20,7 @@ interface IPreference {
     other: number, // What they expect from a roommate
 }
 
-interface IRoommatePreferences extends Document {
-    userId: string,
+export interface IRoommatePreferences {
     dateTaken: Date,
     preferredAreas: ICoordinates[][],
     price: IPriceRange,
@@ -60,8 +59,7 @@ const PreferenceSchema = new Schema<IPreference>({
 	other: {type: Number, required: true, min: 1, max: 5},
 });
 
-const RoommatePreferencesSchema = new Schema<IRoommatePreferences>({
-	userId: {type: String, required: true, index: true},
+export const RoommatePreferencesSchema = new Schema<IRoommatePreferences>({
 	dateTaken: {type: Date, default: Date.now},
 	preferredAreas: {type: [[CoordinatesSchema]], required: true},
 	price: {type: PriceRangeSchema, required: true},
@@ -80,4 +78,3 @@ const RoommatePreferencesSchema = new Schema<IRoommatePreferences>({
 	},
 });
 
-export const RoommatePreferences = model<IRoommatePreferences>('RoommatePreferences', RoommatePreferencesSchema);

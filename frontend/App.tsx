@@ -1,70 +1,5 @@
-// import React, { useState } from 'react';
-// import { ClerkProvider, SignedIn, SignedOut } from '@clerk/clerk-expo';
-// import { tokenCache } from './src/auth/tokenCache';
-// import { PaperProvider } from 'react-native-paper';
-// import { StyleSheet } from 'react-native';
-// import { theme } from './src/theme';
-// import { EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY } from '@env';
-// import { NavigationContainer } from '@react-navigation/native';
-// import { createNativeStackNavigator } from '@react-navigation/native-stack';
-// import SignUpScreen from './src/screens/SignUpScreen';
-// import { UnauthenticatedHomeScreen } from './src/screens';
-// import { UserDetailsProvider } from './src/contexts/UserDetailsContext';
-// import { AppNavigation } from './src/navigation';
-// import { GestureHandlerRootView } from 'react-native-gesture-handler';
-// import SignInScreen from './src/screens/SignInScreen';
-// import AppLoading from 'expo-app-loading';
-// import { useCustomFonts } from './src/hooks/useCustomFonts';
-//
-// const Stack = createNativeStackNavigator();
-// export default function App() {
-// 	const [isReady, setIsReady] = useState<boolean>(false);
-// 	const loadFonts = async () => {
-// 		await useCustomFonts();
-// 	}
-//
-// 	if (!isReady) {
-// 		return (
-// 			<AppLoading
-// 				startAsync={loadFonts}
-// 				autoHideSplash={true}
-// 				onFinish={() => setIsReady(true)}
-// 				onError={() => {}}
-// 			/>
-// 		)
-// 	}
-//
-// 	return (
-// 		<ClerkProvider
-// 			tokenCache={tokenCache}
-// 			publishableKey={EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY}>
-// 			<PaperProvider theme={theme}>
-// 				<SignedIn>
-// 					<UserDetailsProvider>
-// 						<AppNavigation/>
-// 					</UserDetailsProvider>
-// 				</SignedIn>
-// 				<SignedOut>
-// 					<GestureHandlerRootView style={{ flex: 1 }}>
-// 						<NavigationContainer>
-// 							<Stack.Navigator
-// 								initialRouteName={'Home'}
-// 								screenOptions={{
-// 									headerShown: false
-// 								}}>
-// 								<Stack.Screen name="Home" component={UnauthenticatedHomeScreen}/>
-// 								<Stack.Screen name="SignIn" component={SignInScreen}/>
-// 								<Stack.Screen name="SignUp" component={SignUpScreen}/>
-// 							</Stack.Navigator>
-// 						</NavigationContainer>
-// 					</GestureHandlerRootView>
-// 				</SignedOut>
-// 			</PaperProvider>
-// 		</ClerkProvider>
-// 	);
-// }
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, ActivityIndicator } from 'react-native';
+import React, { useEffect } from 'react';
+import { ActivityIndicator, StyleSheet, Text } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
 import { ClerkProvider, SignedIn, SignedOut } from '@clerk/clerk-expo';
 import { tokenCache } from './src/auth/tokenCache';
@@ -72,67 +7,125 @@ import { PaperProvider } from 'react-native-paper';
 import { theme } from './src/theme';
 import { EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY } from '@env';
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import SignUpScreen from './src/screens/SignUpScreen';
-import { UnauthenticatedHomeScreen } from './src/screens';
-import { UserDetailsProvider } from './src/contexts/UserDetailsContext';
-import { AppNavigation } from './src/navigation';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import SignInScreen from './src/screens/SignInScreen';
 import { useCustomFonts } from './src/hooks/useCustomFonts';
+import { SearchProvider, useSearchContext } from './src/contexts/SearchContext';
+import { UnauthenticatedHomeScreen } from './src/screens';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import SignUpScreen from './src/screens/SignUpScreen';
+import SignInScreen from './src/screens/SignInScreen';
+import { AppNavigation } from './src/navigation';
+import { UserDetailsProvider, useUserDetails } from './src/contexts/UserDetailsContext';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Background } from './src/components';
 
-const Stack = createNativeStackNavigator();
-
-export default function App() {
-	const [appIsReady, setAppIsReady] = useState(false);
+const AppLoader: React.FC<{ Stack: any }> = ({ Stack }) => {
+	const { state } = useSearchContext();
+	const { onboardingStep } = useUserDetails();
+	const isSearchDone = state.filteredListings.length > 0 || state.filteredReviews.length > 0;
 
 	useEffect(() => {
 		async function prepare() {
 			try {
-				// Keep the splash screen visible while we fetch resources
 				await SplashScreen.preventAutoHideAsync();
-				// Load fonts and perform any other setup
 				await useCustomFonts();
 			} catch (e) {
 				console.warn(e);
 			} finally {
-				// After loading resources, hide the splash screen
-				setAppIsReady(true);
-				await SplashScreen.hideAsync();
+				const interval = setInterval(() => {
+					if (isSearchDone) { // ✅ Wait for the first search to complete
+						SplashScreen.hideAsync();
+						clearInterval(interval);
+					}
+				}, 200);
 			}
 		}
 
 		prepare();
-	}, []);
+	}, [isSearchDone]);
 
-	if (!appIsReady) {
-		return (
-			<View style={styles.container}>
-				<ActivityIndicator size="large" />
-				<Text>Loading...</Text>
-			</View>
-		);
-	}
+	const loadingScreen = <Background>
+		<ActivityIndicator size="large"/>
+		<Text>Loading...</Text>
+	</Background>;
+
+	return (
+		<>
+			<SignedOut>
+				<GestureHandlerRootView style={{ flex: 1 }}>
+					<Stack.Navigator initialRouteName={'Home'}
+						screenOptions={{ headerShown: false }}>
+						<Stack.Screen name="Home" component={UnauthenticatedHomeScreen}/>
+						<Stack.Screen name="SignIn" component={SignInScreen}/>
+						<Stack.Screen name="SignUp" component={SignUpScreen}/>
+					</Stack.Navigator>
+				</GestureHandlerRootView>
+			</SignedOut>
+			<SignedIn>
+				{/*<AppNavigation/>*/}
+				{!isSearchDone && onboardingStep === 3 ? loadingScreen : <AppNavigation/>}
+			</SignedIn>
+		</>);
+	// return !isSearchDone ? (
+	//
+	// ) : (
+	// 	<>
+	// 		<SignedIn>
+	// 			<AppNavigation/>
+	// 		</SignedIn>
+	//
+	// 	</>
+	// );
+};
+
+export default function App() {
+	// const { state } = useSearchContext();
+	// const isSearchDone = state.listings.length > 0;
+	//
+	// useEffect(() => {
+	// 	async function prepare() {
+	// 		try {
+	// 			// Keep the splash screen visible while we fetch resources
+	// 			await SplashScreen.preventAutoHideAsync();
+	// 			// Load fonts and perform any other setup
+	// 			await useCustomFonts();
+	// 		} catch (e) {
+	// 			console.warn(e);
+	// 		} finally {
+	// 			// After loading resources, hide the splash screen
+	// 			const interval = setInterval(() => {
+	// 				if (isSearchDone) { // ✅ Only when search is complete
+	// 					setAppIsReady(true);
+	// 					SplashScreen.hideAsync();
+	// 					clearInterval(interval); // Stop checking
+	// 				}
+	// 			}, 500);
+	// 		}
+	// 	}
+	//
+	// 	prepare();
+	// }, [isSearchDone]);
+	//
+	// if (!appIsReady) {
+	// 	return (
+	// 		<Background>
+	// 			<ActivityIndicator size="large"/>
+	// 			<Text>Loading...</Text>
+	// 		</Background>
+	// 	);
+	// }
+
+	const Stack = createNativeStackNavigator();
 
 	return (
 		<ClerkProvider tokenCache={tokenCache} publishableKey={EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY}>
 			<PaperProvider theme={theme}>
-				<SignedIn>
+				<NavigationContainer>
 					<UserDetailsProvider>
-						<AppNavigation />
+						<SearchProvider>
+							<AppLoader Stack={Stack}/>
+						</SearchProvider>
 					</UserDetailsProvider>
-				</SignedIn>
-				<SignedOut>
-					<GestureHandlerRootView style={{ flex: 1 }}>
-						<NavigationContainer>
-							<Stack.Navigator initialRouteName={'Home'} screenOptions={{ headerShown: false }}>
-								<Stack.Screen name="Home" component={UnauthenticatedHomeScreen} />
-								<Stack.Screen name="SignIn" component={SignInScreen} />
-								<Stack.Screen name="SignUp" component={SignUpScreen} />
-							</Stack.Navigator>
-						</NavigationContainer>
-					</GestureHandlerRootView>
-				</SignedOut>
+				</NavigationContainer>
 			</PaperProvider>
 		</ClerkProvider>
 	);

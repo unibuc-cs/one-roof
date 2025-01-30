@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Card, Text } from 'react-native-paper';
-import { Image, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Image, StyleSheet, View } from 'react-native';
 import { theme } from '../theme';
-import { useUserData, useUserDataByClerkId } from '../hooks/useUserData';
+import { useUserDataByClerkId } from '../hooks/useUserData';
 import Button from '../components/Button';
 import { useNavigation } from '@react-navigation/native';
 import { useUser } from '@clerk/clerk-expo';
@@ -13,8 +13,8 @@ const ReachOutToUser: React.FC<any> = ({ message, userToReachOutToId, referenceI
 	const { user: landlord } = useUserDataByClerkId(userToReachOutToId);
 	const { user } = useUser();
 
-	if (landlord == null) {
-		return <Text>Error - landlord not found</Text>;
+	if (!landlord) {
+		return <ActivityIndicator size="large" color={theme.colors.primary}/>;
 	}
 
 	const userCreatedAt = new Date(landlord.createdAt);
@@ -40,7 +40,8 @@ const ReachOutToUser: React.FC<any> = ({ message, userToReachOutToId, referenceI
 					<Text style={styles.date}>With us since: {yearMonth}</Text>
 				</View>
 			</View>
-			<Button mode={'elevated'} disabled={user?.id === landlord.clerkId} onPress={handleSendMessage}>Send a message</Button>
+			<Button mode={'elevated'} disabled={user?.id === landlord.clerkId} onPress={handleSendMessage}>Send a
+                message</Button>
 		</Card>
 	);
 };

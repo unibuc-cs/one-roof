@@ -10,14 +10,6 @@ export const ListingService = {
 			console.error(error);
 			return undefined;
 		}
-		// try {
-		// 	console.log('listing', listing);
-		// 	const toReturn = listing.save();
-		// 	return toReturn;
-		// } catch (err) {
-		// 	console.error(err);
-		// 	return listing;
-		// }
 	},
 
 	getListingById: async (id: string): Promise<IListing | null> => {

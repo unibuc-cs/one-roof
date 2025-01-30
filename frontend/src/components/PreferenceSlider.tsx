@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Dimensions, StyleSheet, Text, View } from 'react-native';
 import { Slider } from 'react-native-awesome-slider';
 import { useSharedValue } from 'react-native-reanimated';
-import { useCustomFonts } from '../hooks/useCustomFonts';
 import { HeaderText } from './HeaderText';
 import { theme } from '../theme';
 
@@ -14,9 +13,6 @@ interface PreferenceSliderProps {
 }
 
 export const PreferenceSlider: React.FC<PreferenceSliderProps> = ({ question, leftText, rightText, onValueChange }) => {
-	const LoadFonts = async () => {
-		await useCustomFonts();
-	};
 	const [value, setValue] = useState(3);
 
 	const handleValueChange = (newValue: number) => {
@@ -46,6 +42,7 @@ export const PreferenceSlider: React.FC<PreferenceSliderProps> = ({ question, le
 				}}
 				progress={progress}
 				style={styles.slider}
+				onValueChange={handleValueChange}
 			/>
 			<View style={styles.labels}>
 				<Text style={[styles.label, styles.leftText]} numberOfLines={2}>
