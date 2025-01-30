@@ -11,6 +11,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Card } from 'react-native-paper';
 import ReachOutToUser from '../components/ReachOutToUser';
 import { useCustomFonts } from '../hooks/useCustomFonts';
+import { ScheduleViewing } from '../components/ScheduleViewing';
 
 type ListingScreenRouteProp = RouteProp<RootStackParamList, 'Listing'>;
 
@@ -58,6 +59,8 @@ export const ListingScreen: React.FC = ({ navigation }) => {
 					<PropertyDetails listing = {listing}/>
 					<Text style={styles.description}>{listing.description}</Text>
 					<ReachOutToUser message={'Contact the Landlord!'} userToReachOutToId = {listing.landlordId} type={'listing'} referenceId = {listing._id}/>
+
+					<ScheduleViewing listingId={listing._id} landlordId={listing.landlordId} listingTitle={listing.title} listingAddress={listing.address} />
 				</Card>
 			</ScrollView>
 

@@ -1,10 +1,8 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { Button, ReviewSection } from '../../components';
+import { Background, Button, HeaderText, QuizSection } from '../../components';
 import { RouteProp } from '@react-navigation/native';
-import { HeaderText } from '../../components';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { Background } from '../../components';
 import { Card } from 'react-native-paper';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -50,8 +48,8 @@ const BuildingFeedbackSchema = Yup.object().shape({
 });
 
 type BuildingFeedbackScreenProps = {
-	route: RouteProp<{ params: { generalDetails: any } }, 'params'>,
-	navigation: any,
+    route: RouteProp<{ params: { generalDetails: any } }, 'params'>,
+    navigation: any,
 };
 
 export const BuildingFeedbackScreen: React.FC<BuildingFeedbackScreenProps> = ({ route, navigation }) => {
@@ -116,67 +114,112 @@ export const BuildingFeedbackScreen: React.FC<BuildingFeedbackScreenProps> = ({ 
 					{({ handleChange, handleBlur, handleSubmit, setFieldValue, values }) => (
 						<KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
 							<HeaderText paddingBottom={30} size={30}>About your Building..</HeaderText>
-							<ReviewSection
+							<QuizSection
 								title="Pest Issues"
 								questions={[
-									{ prompt: 'How often do you experience issues with rodents (e.g., mice, rats)?', leftText: 'Very Often', rightText: 'Never' },
-									{ prompt: 'How often do you experience issues with bugs (e.g., cockroaches, ants)?', leftText: 'Very Often', rightText: 'Never' },
-									{ prompt: 'How often do you experience issues with mosquitoes?', leftText: 'Very Often', rightText: 'Never' },
+									{
+										prompt: 'How often do you experience issues with rodents (e.g., mice, rats)?',
+										leftText: 'Very Often',
+										rightText: 'Never'
+									},
+									{
+										prompt: 'How often do you experience issues with bugs (e.g., cockroaches, ants)?',
+										leftText: 'Very Often',
+										rightText: 'Never'
+									},
+									{
+										prompt: 'How often do you experience issues with mosquitoes?',
+										leftText: 'Very Often',
+										rightText: 'Never'
+									},
 								]}
 							/>
-							<ReviewSection
+							<QuizSection
 								title="Utility Availability"
 								questions={[
-									{ prompt: 'How often do you experience issues with warm water or other utilities (e.g., electricity, gas)?', leftText: 'Very Often', rightText: 'Never' },
+									{
+										prompt: 'How often do you experience issues with warm water or other utilities (e.g., electricity, gas)?',
+										leftText: 'Very Often',
+										rightText: 'Never'
+									},
 								]}
 								binaryQuestions={[
-									'Does the building have a central heating system?'
+									{ prompt: 'Does the building have a central heating system?' }
 								]}
 							/>
-							<ReviewSection
+							<QuizSection
 								title="Mold Issues"
 								questions={[
-									{ prompt: 'Are there any mold issues in the building?', leftText: 'All the time', rightText: 'Not at all' },
+									{
+										prompt: 'Are there any mold issues in the building?',
+										leftText: 'All the time',
+										rightText: 'Not at all'
+									},
 								]}
 							/>
-							<ReviewSection
+							<QuizSection
 								title="Noise and Insulation"
 								questions={[
-									{ prompt: 'How would you rate the noise insulation of the building (e.g., thin walls, external noise)?', leftText: 'Very Bad', rightText: 'Very Good' },
+									{
+										prompt: 'How would you rate the noise insulation of the building (e.g., thin walls, external noise)?',
+										leftText: 'Very Bad',
+										rightText: 'Very Good'
+									},
 								]}
 							/>
-							<ReviewSection
+							<QuizSection
 								title="Security"
 								questions={[
-									{ prompt: 'How would you rate the security of the building?', leftText: 'Very Bad', rightText: 'Very Good' },
+									{
+										prompt: 'How would you rate the security of the building?',
+										leftText: 'Very Bad',
+										rightText: 'Very Good'
+									},
 								]}
 								binaryQuestions={[
-									'Does the building have bodyguards at the entrance?'
+									{ prompt: 'Does the building have bodyguards at the entrance?' }
 								]}
 							/>
-							<ReviewSection
+							<QuizSection
 								title="HVAC (Heating, Ventilation, and Air Conditioning)"
 								questions={[
-									{ prompt: 'Does your building maintain a comfortable temperature during the summer?', leftText: 'Very Dissatisfied', rightText: 'Very Satisfied' },
-									{ prompt: 'Does your building maintain a comfortable temperature during the winter?', leftText: 'Very Often', rightText: 'Never' },
+									{
+										prompt: 'Does your building maintain a comfortable temperature during the summer?',
+										leftText: 'Very Dissatisfied',
+										rightText: 'Very Satisfied'
+									},
+									{
+										prompt: 'Does your building maintain a comfortable temperature during the winter?',
+										leftText: 'Very Often',
+										rightText: 'Never'
+									},
 								]}
 								binaryQuestions={[
-									'Does the building have an AC system?'
+									{ prompt: 'Does the building have an AC system?' }
 								]}
 							/>
-							<ReviewSection
+							<QuizSection
 								isLast={true}
 								title="Building Finishes and Quality"
 								questions={[
-									{ prompt: 'How would you rate the quality and condition of the building finishes (e.g., windows, floors, doors)?', leftText: 'Very Bad', rightText: 'Very Good' },
-									{ prompt: 'How modern and well-maintained are the building finishes (e.g., paint, fixtures)?', leftText: 'Very Bad', rightText: 'Very Good' },
+									{
+										prompt: 'How would you rate the quality and condition of the building finishes (e.g., windows, floors, doors)?',
+										leftText: 'Very Bad',
+										rightText: 'Very Good'
+									},
+									{
+										prompt: 'How modern and well-maintained are the building finishes (e.g., paint, fixtures)?',
+										leftText: 'Very Bad',
+										rightText: 'Very Good'
+									},
 								]}
 								binaryQuestions={[
-									'Does your building have an elevator?'
+									{ prompt: 'Does your building have an elevator?' }
 								]}
 							/>
 							<Button mode="contained" onPress={handleSubmit}>Next</Button>
-							<Button style={{ marginTop: 0 }} mode="contained" onPress={() => handleDiscard()}>Discard Review</Button>
+							<Button style={{ marginTop: 0 }} mode="contained" onPress={() => handleDiscard()}>Discard
+                                Review</Button>
 						</KeyboardAwareScrollView>
 					)}
 				</Formik>

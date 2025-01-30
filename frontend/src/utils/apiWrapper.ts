@@ -1,11 +1,10 @@
-import { AxiosRequestConfig } from 'axios';
-import axios from 'axios';
-import {config} from "../config/configure";
+import axios, { AxiosRequestConfig } from 'axios';
+import { config } from '../config/configure';
 
 export interface CallApiOptions {
-	method?: 'GET' | 'POST' | 'PUT' | 'DELETE',
-	body?: any,
-	headers?: { [key: string]: string },
+    method?: 'GET' | 'POST' | 'PUT' | 'DELETE',
+    body?: any,
+    headers?: { [key: string]: string },
 }
 
 export async function callApi(endpoint: string, options: CallApiOptions = {}, userId: string = ''): Promise<any> {
@@ -21,22 +20,35 @@ export async function callApi(endpoint: string, options: CallApiOptions = {}, us
 		data: body,
 	};
 
-	if (userId && axiosConfig.headers) {
+	if (userId) {
 		axiosConfig.headers['X-Clerk-User-Id'] = userId;
 	}
 
-	axiosConfig.data = body;
+	console.log(`Calling API: ${axiosConfig.method} ${axiosConfig.url}`);
 
-	console.log(`Calling API with config: ${JSON.stringify(axiosConfig)}`);
 	try {
 		const response = await axios(axiosConfig);
-		console.log(`API call succeeded with response: ${JSON.stringify(response.data)}`);
+
+		// Truncate response data for logging
+		const responseData = JSON.stringify(response.data);
+		const truncatedData = responseData.length > 500 ? responseData.substring(0, 500) + '...' : responseData;
+
+		// Log status and response
+		console.log(`✅ API call succeeded. Status: ${response.status}`);
+		console.log(`📩 Response data: ${truncatedData}`);
+
 		return response.data;
 	} catch (error) {
-		console.error(error);
 		if (axios.isAxiosError(error)) {
-			throw new Error(error.response?.data.message || 'API call failed');
+			const status = error.response?.status || 'Unknown';
+			const errorMessage = error.response?.data?.message || 'API call failed';
+
+			console.error(`❌ API call failed. Status: ${status}`);
+			console.error(`🔴 Error message: ${JSON.stringify(error.response?.statusText)} - ${JSON.stringify(error.response?.data)}`);
+
+			throw new Error(errorMessage);
 		} else {
+			console.error(`❌ An unknown error occurred: ${error}`);
 			throw new Error('An unknown error occurred');
 		}
 	}

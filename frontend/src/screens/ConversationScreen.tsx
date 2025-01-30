@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, StyleSheet, KeyboardAvoidingView, Dimensions, Pressable } from 'react-native';
-import { Background } from '../components';
+import { Dimensions, KeyboardAvoidingView, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Background, MessagesContainer } from '../components';
 import { Ionicons } from '@expo/vector-icons';
 import { TextInput } from 'react-native-paper';
 import { theme } from '../theme';
@@ -12,9 +12,9 @@ import { useUserDataByClerkId } from '../hooks/useUserData';
 import { Image } from 'expo-image';
 import { useCustomFonts } from '../hooks/useCustomFonts';
 import userService from '../services/internal/userService';
-import { MessagesContainer } from '../components';
 import { io } from 'socket.io-client';
 import { useUser } from '@clerk/clerk-expo';
+import { config } from '../config/configure';
 import { IMessage } from '../models/messageModel';
 
 
@@ -22,11 +22,12 @@ type ChatMessagesScreenRouteProps = RouteProp<RootStackParamList, 'Message'>;
 let socket;
 
 export const ConversationScreen: React.FC = () => {
-	const LoadFonts = async () => { await useCustomFonts(); };
+	const LoadFonts = async () => {
+		await useCustomFonts();
+	};
 	const { navigate } = useNavigation();
 	const route = useRoute<ChatMessagesScreenRouteProps>();
-	const { receiverId, referenceId: initialReferenceId, type: initialType,  } = route.params;
-	console.log('initial type', initialType);
+	const { receiverId, referenceId: initialReferenceId, type: initialType, } = route.params;
 	const screenWidth = Dimensions.get('window').width;
 	const screenHeight = Dimensions.get('window').height;
 	const { contactedUsers: currUserContactedUsers } = useUserDetails();
@@ -58,13 +59,13 @@ export const ConversationScreen: React.FC = () => {
 	}, [receiverId, initialReferenceId]);
 
 	useEffect(() => {
-		socket.on('messageReceived', (msg)=>{
-			if(msg.receiverId === userId && msg.senderId === receiverId){
+		socket.on('messageReceived', (msg) => {
+			if (msg.receiverId === userId && msg.senderId === receiverId) {
 				setMessages([...messages, msg]);
 			}
 		});
-		socket.on('updateMessages', (msg) =>{
-			if(msg.receiverId === userId && msg.senderId === receiverId){
+		socket.on('updateMessages', (msg) => {
+			if (msg.receiverId === userId && msg.senderId === receiverId) {
 				getConversationMessages();
 			}
 		});
@@ -127,12 +128,12 @@ export const ConversationScreen: React.FC = () => {
 										{receiverUser.firstName} {receiverUser.lastName}
 									</Text>
 								</View>
-								<Image style={styles.receiverProfilePicture} source={receiverUser?.profilePicture} />
+								<Image style={styles.receiverProfilePicture} source={receiverUser?.profilePicture}/>
 							</>
 						)}
 					</View>
 
-					<MessagesContainer initialMessages={messages} userId={userId} />
+					<MessagesContainer initialMessages={messages} userId={userId}/>
 					<View style={styles.inputBarContainer}>
 						<TextInput
 							style={styles.inputBar}
@@ -141,7 +142,7 @@ export const ConversationScreen: React.FC = () => {
 							onChangeText={(text) => setMessage(text)}
 						/>
 						<Pressable onPress={handleSend}>
-							<Ionicons name="send" size={24} color={theme.colors.primary} />
+							<Ionicons name="send" size={24} color={theme.colors.primary}/>
 						</Pressable>
 					</View>
 				</View>
@@ -173,7 +174,7 @@ const styles = StyleSheet.create({
 		width: 40,
 		borderRadius: 20,
 	},
-	receiverName:{
+	receiverName: {
 		fontFamily: 'Proxima-Nova/Regular',
 		fontSize: 20,
 	},
@@ -199,10 +200,10 @@ const styles = StyleSheet.create({
 	},
 	senderMsgBubble: {
 		alignItems: 'center',
-		alignSelf:'flex-end',
+		alignSelf: 'flex-end',
 		backgroundColor: theme.colors.primary,
 	},
-	senderMsg:{
+	senderMsg: {
 		color: 'white',
 		alignSelf: 'flex-start',
 
@@ -213,22 +214,22 @@ const styles = StyleSheet.create({
 		alignSelf: 'flex-start',
 		color: 'black',
 	},
-	receiverMsg:{
+	receiverMsg: {
 		color: 'black',
 		alignSelf: 'flex-end',
 	},
-	inputBarContainer:{
+	inputBarContainer: {
 		alignItems: 'center',
 		flexDirection: 'row',
 		borderColor: theme.colors.primary,
 		borderTopWidth: 2,
 		paddingBottom: 20,
-		padding:10,
+		padding: 10,
 		backgroundColor: theme.colors.background,
 		width: '100%',
-		gap:5,
+		gap: 5,
 	},
-	inputBar:{
+	inputBar: {
 		borderColor: theme.colors.primary,
 		borderWidth: 1,
 		height: 40,
