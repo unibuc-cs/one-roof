@@ -1,7 +1,7 @@
 appId: host.exp.exponent
 ---
 - launchApp
-- openLink: "exp://192.168.1.129:8081"
+- openLink: "${EXPO_URL}"
 - waitForAnimationToEnd
 - tapOn:
     id: 'SignIn'

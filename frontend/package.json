@@ -9,7 +9,12 @@
     "web": "expo start --web",
     "test": "jest",
     "lint": "eslint 'src/**/*.{ts,tsx}'",
-    "lint:fix": "eslint 'src/**/*.{ts,tsx}' --fix"
+    "lint:fix": "eslint 'src/**/*.{ts,tsx}' --fix",
+    "test:e2e": "maestro test e2e/login.yml",
+    "install:maestro": "curl -Ls 'https://get.maestro.mobile.dev' | bash",
+    "start:expo": "npx expo start --tunnel",
+    "ci:e2e": "npm run start:expo & sleep 10 && npm run test:e2e",
+    "ci:e2e-full": "npm run install:maestro && npm run ci:e2e"
   },
   "dependencies": {
     "@gorhom/bottom-sheet": "^4.6.1",
