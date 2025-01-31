@@ -92,7 +92,9 @@ jobs:
         working-directory: frontend
 
       - name: Install Backend Dependencies
-        run: npm install
+        run: |
+          npm install
+          npm install socket.io
         working-directory: backend
 
       - name: Run Backend
