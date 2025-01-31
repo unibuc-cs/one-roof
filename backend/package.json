@@ -4,13 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test-all": "npm run test-unit && npm run test-integration",
-    "test-unit": "mocha 'test/unit/**/*.test.ts'",
+    "test": "mocha 'test/**/*.test.ts'",
     "start": "tsc && node dist/index.js",
-    "dev": "concurrently \"nodemon --exec ts-node src/index.ts --ignore node_modules\"",
-    "test-integration": "npx jest test/integration --runInBand",
-    "lint": "eslint 'src/**/*.{ts,tsx}'",
-    "lint:fix": "eslint 'src/**/*.{ts,tsx}' --fix"
+    "dev": "concurrently \"nodemon --exec ts-node src/index.ts --ignore node_modules\""
   },
   "keywords": [],
   "author": "",
@@ -18,8 +14,13 @@
   "dependencies": {
     "@turf/turf": "^7.2.0",
     "dotenv": "^16.4.7",
+    "cron": "^3.3.2",
+    "dotenv": "^16.4.7",
+    "expo-server-sdk": "^3.13.0",
     "express": "^4.19.2",
-    "mongodb": "^6.5.0"
+    "firebase": "^11.1.0",
+    "mongodb": "^6.5.0",
+    "socket.io": "^4.8.1"
   },
   "devDependencies": {
     "@clerk/clerk-sdk-node": "^4.13.14",
