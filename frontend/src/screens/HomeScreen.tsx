@@ -1,12 +1,13 @@
 import React from 'react';
 import { View } from 'react-native';
-import { BottomBar, Map } from '../components';
+import { BottomBar } from '../components';
+import { HeatmapComponent } from '../components/map/Heatmap';
 
 export const HomeScreen = () => {
 	return (
 		<View style={{ flex: 1 }}>
-			<Map />
-			<BottomBar />
+			<HeatmapComponent/>
+			<BottomBar/>
 		</View>
 	);
 };

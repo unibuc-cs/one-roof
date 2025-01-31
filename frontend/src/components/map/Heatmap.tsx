@@ -1,23 +1,23 @@
 import MapView from 'react-native-map-clustering';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { getCoordinatesFromLocation, getShortenedString, mapStyles, } from '../../utils';
+import { getCoordinatesFromLocation, mapStyles, } from '../../utils';
 import { IListing, IReview } from '../../models';
 import { BottomItemCard } from '../BottomItemCard';
 import { useSearchContext } from '../../contexts/SearchContext';
-import { SearchTypeEnum } from '../../enums';
 import { debounce } from 'lodash';
 import { theme } from '../../theme';
 import { CustomMarker } from './CustomMarker';
+import { Heatmap } from 'react-native-maps';
 
 const EPSILON = 0.001;
 
 type IMapItem = IListing | IReview;
 
-export const Map: React.FC = () => {
+export const HeatmapComponent: React.FC = () => {
 	const mapRef = useRef(null);
 	const [legalToUpdate, setLegalToUpdate] = useState<boolean>(true);
-	const [selectedItem, setSelectedItem] = React.useState<IMapItem>();
+	const [selectedItem, setSelectedItem] = useState<IMapItem>();
 	const {
 		state,
 		setIsWaitingForSearch,
@@ -61,10 +61,8 @@ export const Map: React.FC = () => {
 		return (
 			Math.abs(newRegion.latitude - oldRegion.latitude) > EPSILON ||
 			Math.abs(newRegion.longitude - oldRegion.longitude) > EPSILON ||
-			Math.abs(newRegion.latitudeDelta - oldRegion.latitudeDelta) >
-			EPSILON ||
-			Math.abs(newRegion.longitudeDelta - oldRegion.longitudeDelta) >
-			EPSILON
+			Math.abs(newRegion.latitudeDelta - oldRegion.latitudeDelta) > EPSILON ||
+			Math.abs(newRegion.longitudeDelta - oldRegion.longitudeDelta) > EPSILON
 		);
 	};
 
@@ -76,6 +74,12 @@ export const Map: React.FC = () => {
 		}
 	}, [state.wasExternalSearchPerformed]);
 
+	// ✅ Convert Listings to Heatmap Points
+	const heatmapPoints = state.filteredListings.map((listing) => ({
+		latitude: getCoordinatesFromLocation(listing.location).latitude,
+		longitude: getCoordinatesFromLocation(listing.location).longitude,
+		weight: listing.price, // Higher price = more intense heatmap
+	}));
 
 	return (
 		<View style={styles.map}>
@@ -90,36 +94,24 @@ export const Map: React.FC = () => {
 				onPress={() => setSelectedItem(undefined)}
 				tracksViewChanges={false}
 			>
-				{(state.searchType === 'listings'
-						? state.filteredListings
-						: state.filteredReviews
-				).map((item) => (
+				<Heatmap points={heatmapPoints} radius={30} opacity={0.6}/>
+
+				{state.filteredListings.map((listing) => (
 					<CustomMarker
-						key={`type${state.searchType}-item${item._id}`}
-						coordinate={getCoordinatesFromLocation(item.location)}
-						onPress={() => handleMarkerPress(item)}
-						text={
-							state.searchType === SearchTypeEnum.Listings
-								? `${item.price} €`
-								: getShortenedString(item.title, 10)
-						}
+						key={`listing-${listing._id}`}
+						coordinate={getCoordinatesFromLocation(listing.location)}
+						onPress={() => handleMarkerPress(listing)}
+						text={`${listing.price} €`}
 					/>
 				))}
 			</MapView>
+
 			{selectedItem && (
 				<View style={styles.bottomCardContainer}>
-					{state.searchType === SearchTypeEnum.Listings ? (
-						<BottomItemCard
-							item={selectedItem as IListing}
-							onClose={handleClose}
-						/>
-					) : (
-						<BottomItemCard
-							item={selectedItem as IReview}
-							type={'review'}
-							onClose={handleClose}
-						/>
-					)}
+					<BottomItemCard
+						item={selectedItem as IListing}
+						onClose={handleClose}
+					/>
 				</View>
 			)}
 		</View>
@@ -142,3 +134,4 @@ const styles = StyleSheet.create({
 		bottom: 0,
 	},
 });
+
