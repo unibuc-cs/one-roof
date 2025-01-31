@@ -76,7 +76,7 @@ jobs:
 
   frontend-test:
     name: Run Frontend Tests
-    runs-on: ubuntu-latest # MacOS is required for running Android Emulator
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -114,9 +114,9 @@ jobs:
       - name: Install Maestro
         run: curl -Ls "https://get.maestro.mobile.dev" | bash
 
-      - name: Prebuild Expo
-        run: npx expo prebuild --clean
-        working-directory: frontend
+      - name: Add android to path
+        run: |
+          echo "$HOME/android/sdk" >> $GITHUB_PATH
 
       - name: Start Expo Server
         run: npx expo start &
