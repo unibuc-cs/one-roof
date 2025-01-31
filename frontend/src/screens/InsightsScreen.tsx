@@ -6,13 +6,17 @@ import { listingService, viewingService } from '../services';
 import { format, isAfter, parseISO, subDays, subHours } from 'date-fns';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { HeaderText } from '../components';
+import { useUser } from '@clerk/clerk-expo';
 
-const currDate = '2025-01-25 10:24:17';
+const currDate = new Date();
 
 //two buttons
 export const InsightsScreen: React.FC = () => {
 	// if an attribute defined with useState changes its state, the entire functional component re-runs
-	const { userId } = useUserDetails();
+	const { user } = useUser();
+	const userId = user?.id;
+
+	//const { userId } = useUserDetails();
 	const [timeUnit, setTimeUnit] = useState<'Day' | 'Hour'>('Hour');
 	const [displayed, setDisplayed] = useState<'Views' | 'Viewings'>('Views');
 	const [chartData, setChartData] = useState<{ labels: string[], values: number[] }>({ labels: [], values: [], });
@@ -60,7 +64,7 @@ export const InsightsScreen: React.FC = () => {
 
 	const aggregateByDay = (data) => {
 		return data.reduce((acc, curr) => {
-			const day = format(parseISO(curr), 'yyyy-MM-dd');
+			const day = format(curr, 'dd');
 			if (!acc[day]) {
 				acc[day] = 0;
 			}
@@ -71,7 +75,7 @@ export const InsightsScreen: React.FC = () => {
 
 	const aggregateByHour = (data) => {
 		return data.reduce((acc, curr) => {
-			const hour = format(parseISO(curr), 'yyyy-MM-dd HH:00');
+			const hour = format(curr, 'HH');
 			//console.log('hour:', hour);
 			if (!acc[hour]) {
 				acc[hour] = 0;
@@ -178,7 +182,7 @@ export const InsightsScreen: React.FC = () => {
 					</TouchableOpacity>
 				</View>
 
-				<HeaderText size={25}>Displaying data for the last 7 ${timeUnit}</HeaderText>
+				<HeaderText size={25}>Displaying {displayed} for the last 7 {timeUnit}s</HeaderText>
 
 				<View style={styles.chartContainer} testID="chart container">
 					<ScrollView>
