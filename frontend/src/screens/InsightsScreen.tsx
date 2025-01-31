@@ -39,10 +39,10 @@ export const InsightsScreen: React.FC = () => {
 		let data;
 		console.log('Handling data; current pressed:', displayed, timeUnit);
 		if (displayed === 'Views') {
-			data =  fetchViews(); //await
+			data = await fetchViews(); //await
 		} else {
-			console.log('cur')
-			data = fetchViewings(); //await 
+			console.log('fetching Viewings');
+			data = await fetchViewings(); //await 
 		}
 		console.log('Fetched data:', data);
 	
@@ -142,13 +142,13 @@ export const InsightsScreen: React.FC = () => {
 				<View style={styles.segmentedControl}>
                     <TouchableOpacity testID='views_button'
                         style={[styles.tab, displayed  === 'Views' && styles.activeTab]}
-                        onPress={() => setDisplayed('Views')}
+                        onPress={() => {console.log('pressed  Views'); setDisplayed('Views')}}
                     >
                         <Text style={[styles.tabText, displayed === 'Views' && styles.activeTabText]}> Views </Text>
                     </TouchableOpacity>
                     <TouchableOpacity testID = 'viewings_button'
                         style={[styles.tab, displayed === 'Viewings' && styles.activeTab]}
-                        onPress={() => setDisplayed('Viewings')}
+                        onPress={() => {console.log('pressed  Viewings'); setDisplayed('Viewings')}}
                     >
                         <Text style={[styles.tabText, displayed === 'Viewings' && styles.activeTabText]}> Viewings </Text>
                     </TouchableOpacity>
@@ -156,13 +156,13 @@ export const InsightsScreen: React.FC = () => {
 				<View style={styles.segmentedControl}>
                     <TouchableOpacity testID='hour_button'
                         style={[styles.tab, timeUnit  === 'Hour' && styles.activeTab]}
-                        onPress={() => setTimeUnit('Hour')}
+                        onPress={() => {console.log('pressed  Hour'); setTimeUnit('Hour')}}
                     >
                         <Text style={[styles.tabText, timeUnit  === 'Hour' && styles.activeTabText]}> Hour </Text>
                     </TouchableOpacity>
                     <TouchableOpacity testID='day_button'
                         style={[styles.tab, timeUnit  === 'Day' && styles.activeTab]}
-                        onPress={() => setTimeUnit('Day')}
+                        onPress={() => {console.log('pressed  Day'); setTimeUnit('Day')}}
                     >
                         <Text style={[styles.tabText, timeUnit  === 'Day' && styles.activeTabText]}> Day </Text>
                     </TouchableOpacity>

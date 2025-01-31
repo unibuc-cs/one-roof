@@ -1,12 +1,17 @@
 import { render, screen, fireEvent , waitFor, userEvent, act} from '@testing-library/react-native';  // Import the component to test
 import { describe, expect, test, jest, it} from '@jest/globals';
-import React from 'react';
+import React, {ReactNode, useState, createContext} from 'react';
 import { View } from 'react-native';
 import { InsightsScreen} from '../src/screens/InsightsScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { BarChart } from 'react-native-chart-kit';
+import { viewingService } from '../src/services';
+import { callApi } from '../src/utils/apiWrapper';
+import { UserDetailsProvider, useUserDetails } from '../src/contexts/UserDetailsContext';
+import { mockListingsResponse, mockViewingsResponse } from '../__tests_files__/mockResponses';
 
 import PropTypes from 'prop-types';
+import { useUser } from '@clerk/clerk-expo';
 
 const TouchableOpacity = ({ children, onPress }) => (
   <button onClick={onPress}>{children}</button>
@@ -30,42 +35,78 @@ jest.mock('react-native-gesture-handler', () => ({
   TouchableOpacity: TouchableOpacity
 }));
 
+jest.mock('../src/utils/apiWrapper', () => ({
+  callApi: jest.fn(), 
+}))
+
+interface mockUserDetails {
+  userId: string,
+};
+
+const mockDefaultUserDetails : mockUserDetails= {
+  userId: 'user_2pwGRzshslTfPL09YP5S4jzVV7N',
+}
+
+const MockUserDetailsContext = createContext<mockUserDetails>(mockDefaultUserDetails);
+
+const MockUserDetailsProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const userId = 'user_2pwGRzshslTfPL09YP5S4jzVV7N';
+  return (
+    <MockUserDetailsContext.Provider value={{userId}}>
+      {children}
+    </MockUserDetailsContext.Provider>
+  );
+};
+
 function renderWithNavigation(Component, { route = {}, navigation = {} } = {}) {
   return render(
-    <NavigationContainer>
-      <Component navigation={navigation} route={route} />
-    </NavigationContainer>
+    <MockUserDetailsProvider>
+      <NavigationContainer>
+        <Component navigation={navigation} route={route} />
+      </NavigationContainer>
+    </MockUserDetailsProvider>
   );
 }
 
-describe('Insights screen', () => {
-    it('barchart exists', /*async*/ () => {
-        renderWithNavigation(InsightsScreen);
+jest.mock('../src/contexts/UserDetailsContext', () => ({
+  useUserDetails: jest.fn(),
+}));
 
-        // await act(async () => {
-        //   renderWithNavigation(InsightsScreen);
-        // });
+describe('Insights screen', () => {
+    it('barchart exists', async () => {
+         const mockedUserDetails : UserDetails
+        (callApi as jest.MockedFunction<typeof callApi>).mockResolvedValue(mockListingsResponse);
+        (useUserDetails as jest.MockedFunction<typeof useUserDetails>).mockReturnValue();
+
+        await renderWithNavigation(InsightsScreen);
 
         const barchart_exists = screen.UNSAFE_getAllByType(BarChart);
         expect(barchart_exists).toBeTruthy();
-    }) //,
-    // it('data is reaggregated if hour is changed to day', async () => {
+    }),
+    it('api call is made if Views is changed to Viewings', async () => {
+      const spyOnServiceViewings = jest.spyOn(viewingService, 'getUserViewings');
 
-    //   const spyOnHandleData = jest.spyOn(InsightsScreen, 'handleData');
+      renderWithNavigation(InsightsScreen);
 
+      const button = screen.getByText('Viewings');
 
-    //   renderWithNavigation(InsightsScreen);
+      fireEvent.press(button);
 
-    //   const button = screen.getByTestId('day_button');
+      expect(spyOnServiceViewings).toHaveBeenCalled(); 
 
-    //   fireEvent.press(button)
+      // await waitFor(() => {
+      //   expect(spyOnServiceViewings).toHaveBeenCalled(); 
+      // });
 
-    //   await waitFor(() => {
-    //     expect(setTimeUnit).toHaveBeenCalledWith('Day'); // ✅ Ensures timeUnit changed
-    //   });
-
-    //   spyOnHandleData.mockRestore();
-
-    // })
+    })
 
 });
+
+
+// // useUserDetails.mockReturnValue({
+      //     userId: 'mockedUserId',
+      //     // You can mock other properties here as well
+      //     onboardingStep: 1,
+      //     role: 'RegularUser', // or whatever value fits your test case
+      //     // Add any other necessary fields
+      //   });
