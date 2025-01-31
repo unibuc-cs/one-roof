@@ -113,11 +113,11 @@ jobs:
       - name: Debug Expo URL
         run: echo "Expo is running at exp://${CURRENT_IP}:8081"
 
-      - name: Download Expo Go APK
-        run: curl -o expo-go.apk https://d1ahtucjixef4r.cloudfront.net/Exponent-2.30.11.apk
+      #- name: Download Expo Go APK
+        #run: curl -o expo-go.apk https://d1ahtucjixef4r.cloudfront.net/Exponent-2.30.11.apk
 
-      - name: Verify APK Download
-        run: ls -l expo-go.apk
+      #- name: Verify APK Download
+        #run: ls -l expo-go.apk
 
       - name: Add Maestro to PATH
         run: |
@@ -140,6 +140,7 @@ jobs:
           profile: pixel_4
           script: |
             adb devices
+            curl -o expo-go.apk https://d1ahtucjixef4r.cloudfront.net/Exponent-2.30.11.apk
             adb install expo-go.apk
             maestro test e2e/login.yml
         env:
