@@ -9,10 +9,17 @@ import { debounce } from 'lodash';
 import { theme } from '../../theme';
 import { CustomMarker } from './CustomMarker';
 import { Heatmap } from 'react-native-maps';
+import { fetchAirPollutionData, fetchCrimeData } from '../../services/external/openWeatherApi';
 
 const EPSILON = 0.001;
 
 type IMapItem = IListing | IReview;
+
+interface DataPoint {
+	latitude: number,
+	longitude: number,
+	weight: number,
+}
 
 export const HeatmapComponent: React.FC = () => {
 	const mapRef = useRef(null);
@@ -74,7 +81,27 @@ export const HeatmapComponent: React.FC = () => {
 		}
 	}, [state.wasExternalSearchPerformed]);
 
-	// ✅ Convert Listings to Heatmap Points
+	const [airPollutionPoints, setAirPollutionPoints] = useState<DataPoint[]>([]);
+	const [crimePoints, setCrimePoints] = useState([]);
+	const [trafficNoisePoints, setTrafficNoisePoints] = useState([]);
+
+	useEffect(() => {
+		(async () => {
+			const airPollutionData: DataPoint[] = await fetchAirPollutionData();
+			console.log('Air pollution data:', airPollutionData);
+			setAirPollutionPoints(airPollutionData);
+		})();
+	}, []); // ✅ Runs only on mount
+
+	useEffect(() => {
+		(async () => {
+			const crimeData = await fetchCrimeData();
+			console.error('Crime data:', crimeData);
+			setCrimePoints(crimeData);
+		})();
+	}, []);
+
+
 	const heatmapPoints = state.filteredListings.map((listing) => ({
 		latitude: getCoordinatesFromLocation(listing.location).latitude,
 		longitude: getCoordinatesFromLocation(listing.location).longitude,
@@ -94,8 +121,7 @@ export const HeatmapComponent: React.FC = () => {
 				onPress={() => setSelectedItem(undefined)}
 				tracksViewChanges={false}
 			>
-				<Heatmap points={heatmapPoints} radius={30} opacity={0.6}/>
-
+				{crimePoints.length > 0 && <Heatmap points={crimePoints} radius={50} opacity={0.6}/>}
 				{state.filteredListings.map((listing) => (
 					<CustomMarker
 						key={`listing-${listing._id}`}
