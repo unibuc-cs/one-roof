@@ -21,13 +21,13 @@ export const UnauthenticatedHomeScreen = () => {
 				}}
 			>
 				<View style={{ flex: 1, marginRight: 5 }}>
-					<Button mode="contained" onPress={() => navigate('SignIn')}>
+					<Button mode="contained" testID='SignIn' onPress={() => navigate('SignIn')}>
 						{' '}
 						Login{' '}
 					</Button>
 				</View>
 				<View style={{ flex: 1, marginLeft: 5 }}>
-					<Button mode="contained" onPress={() => navigate('SignUp')}>
+					<Button mode="contained" testID='SignUp' onPress={() => navigate('SignUp')}>
 						{' '}
 						Register{' '}
 					</Button>

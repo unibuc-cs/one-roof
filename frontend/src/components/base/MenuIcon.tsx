@@ -5,10 +5,11 @@ import React from 'react';
 
 type MenuIconProps = {
 	iconName: string,
+	testID: string,
 	onPress: any,
 };
 
-export const MenuIcon: React.FC<MenuIconProps> = ({ iconName, onPress }) => {
+export const MenuIcon: React.FC<MenuIconProps> = ({ iconName, testID, onPress }) => {
 	return (
 		<Pressable
 			style={{
@@ -20,7 +21,7 @@ export const MenuIcon: React.FC<MenuIconProps> = ({ iconName, onPress }) => {
 		>
 			<View style={styles.container}>
 				<View style={styles.iconContainer}>
-					<Icon name={iconName} size={25} color={'white'} />
+					<Icon name={iconName} testID={testID} size={25} color={'white'} />
 				</View>
 			</View>
 		</Pressable>

@@ -272,6 +272,7 @@ export const FiltersScreen = () => {
 			<Button
 				width={'auto'}
 				mode={'contained-tonal'}
+				testID='Search'
 				onPress={handleSearch}
 			>
 				{' '}
