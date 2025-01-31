@@ -113,12 +113,6 @@ jobs:
       - name: Debug Expo URL
         run: echo "Expo is running at exp://${CURRENT_IP}:8081"
 
-      #- name: Download Expo Go APK
-        #run: curl -o expo-go.apk https://d1ahtucjixef4r.cloudfront.net/Exponent-2.30.11.apk
-
-      #- name: Verify APK Download
-        #run: ls -l expo-go.apk
-
       - name: Add Maestro to PATH
         run: |
           echo "$HOME/.maestro/bin" >> $GITHUB_PATH
@@ -132,7 +126,10 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
-      - name: Move e2e/login.yml to Runner
+      - name: Move home.yml to Runner
+        run: mv e2e/home.yml /home/runner/work/one-roof/one-roof
+
+      - name: Move login.yml to Runner
         run: mv e2e/login.yml /home/runner/work/one-roof/one-roof
 
       - name: Start Android Emulator and Test
@@ -145,19 +142,7 @@ jobs:
             adb devices
             curl -o expo-go.apk https://d1ahtucjixef4r.cloudfront.net/Exponent-2.30.11.apk
             adb install expo-go.apk
+            maestro test home.yml
             maestro test login.yml
         env:
-          CURRENT_IP: ${{ env.CURRENT_IP }}
-
-      # Install Expo Go on Emulator
-      #- name: Install Expo Go on Emulator
-        #run: adb install expo-go.apk
-
-      #- name: Verify Emulator is Available
-        #run: adb devices
-
-      #- name: Run Maestro E2E Tests
-        #run: maestro test e2e/login.yml
-        #env:
-          #EXPO_URL: ${{ env.EXPO_URL }}
-
+          CURRENT_IP: ${{ env.CURRENT_IP }}}
