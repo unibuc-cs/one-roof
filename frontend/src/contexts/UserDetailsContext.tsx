@@ -11,7 +11,6 @@ interface UserDetails {
 	role: UserRoleEnum,
 	setRole: React.Dispatch<React.SetStateAction<UserRoleEnum>>,
 	userId: string,
-	favoriteListings: string[],
 	setUserId: React.Dispatch<React.SetStateAction<string>>,
 	contactedUsers: string[],
 	pushTokens: string[],
@@ -19,7 +18,12 @@ interface UserDetails {
 	allowedNotifications: NotificationTypesEnum[],
 	setAllowedNotifications: React.Dispatch<React.SetStateAction<NotificationTypesEnum[]>>,
 	setContactedUsers: React.Dispatch<React.SetStateAction<string[]>>,
+	favoriteListings: string[],
 	setFavoriteListings: React.Dispatch<React.SetStateAction<string[]>>,
+	savedLists: string[],
+	setSavedLists: React.Dispatch<React.SetStateAction<string[]>>,
+	viewedListings: string[],
+	setViewedListings: React.Dispatch<React.SetStateAction<string[]>>,
 	resetUserDetails: () => void,
 }
 
@@ -41,6 +45,10 @@ const defaultUserDetails: UserDetails = {
 	resetUserDetails: () => {},
 	allowedNotifications: [],
 	setAllowedNotifications: () => {},
+	savedLists: [],
+	setSavedLists: () => {},
+	viewedListings: [],
+	setViewedListings: () => {},
 };
 
 const UserDetailsContext = createContext<UserDetails>(defaultUserDetails);
@@ -59,6 +67,8 @@ export const UserDetailsProvider: React.FC<UserDetailsProviderProps> = ({
 	const [contactedUsers, setContactedUsers] = useState<string[]>([]);
 	const [pushTokens, setPushTokens] = useState<string[]>([]);
 	const [favoriteListings, setFavoriteListings] = useState<string[]>([]);
+	const [savedLists, setSavedLists] = useState<string[]>([]);
+	const [viewedListings, setViewedListings] = useState<string[]>([]);
 	const resetUserDetails = () => {
 		setOnboardingStep(1);
 		setProfilePicture('');
@@ -66,6 +76,8 @@ export const UserDetailsProvider: React.FC<UserDetailsProviderProps> = ({
 		setUserId('');
 		setContactedUsers([]);
 		setFavoriteListings([]);
+		setPushTokens([]);
+		// TODO: ADD EXTRA THINGS HERE
 	};
 	const [allowedNotifications, setAllowedNotifications] = useState<NotificationTypesEnum[]>([]);
 
@@ -81,9 +93,7 @@ export const UserDetailsProvider: React.FC<UserDetailsProviderProps> = ({
 	}, [user]);
 
 	const fetchAndStoreUserDetails = async (userId: string) => {
-		console.log('before fetchAndStoreUserDetails', userId);
 		const userDetails = await userService.getUserByClerkId(userId);
-		console.log('userdetails', userDetails);
 		setPushTokens(userDetails.pushTokens);
 		setRole(userDetails.role);
 		setOnboardingStep(userDetails.onboardingStep);
@@ -95,6 +105,8 @@ export const UserDetailsProvider: React.FC<UserDetailsProviderProps> = ({
 
 	return (
 		<UserDetailsContext.Provider value={{
+			viewedListings, setViewedListings,
+			savedLists, setSavedLists,
 			favoriteListings, setFavoriteListings,
 			onboardingStep, setOnboardingStep,
 			profilePictureUrl: profilePicture, setProfilePictureUrl: setProfilePicture,

@@ -15,6 +15,7 @@ interface IListing extends Document {
     size: number,
 	url ?: string,
     amenities: string[],
+	views: Date[],
 	external: boolean,
     createdAt: Date,
     updatedAt: Date,
@@ -34,6 +35,7 @@ const ListingSchema = new Schema<IListing>({
 	size: { type: Number, required: true },
 	amenities: { type: [String], required: true, default: []},
 	url: { type: String, required: false },
+	views: {type: [Date], required: false, default: []},
 	external: { type: Boolean, required: true, default: false },
 }, { timestamps: true });
 

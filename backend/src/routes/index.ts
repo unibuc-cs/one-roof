@@ -3,6 +3,7 @@ export * from './userRoutes';
 export * from './reviewRoutes';
 export * from './searchRoutes';
 export * from './messageRoutes';
-export * from './viewingRoutes';
+export * from './savedListRoutes';
 export * from './friendRoutes';
+export * from './viewingRoutes';
 export * from './notificationRoutes';

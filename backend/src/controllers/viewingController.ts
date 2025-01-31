@@ -1,3 +1,4 @@
+/* eslint-disable no-trailing-spaces */
 import { ViewingService, ListingService } from '../services';
 
 export const ViewingController = {
@@ -27,6 +28,16 @@ export const ViewingController = {
 	getUserViewings: async (req, res) => {
 		try {
 			const viewings = await ViewingService.getUserViewings(req.params.userId);
+			res.json(viewings);
+		}
+		catch (error) {
+			res.status(500).json({ error: 'Failed to retrieve viewings' });
+		}
+	},
+
+	getLandlordViewings: async (req, res) => {
+		try {
+			const viewings = await ViewingService.getLandlordViewings(req.params.userId);
 			res.json(viewings);
 		}
 		catch (error) {

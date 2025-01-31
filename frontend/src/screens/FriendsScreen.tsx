@@ -10,7 +10,7 @@ import {
 import { friendService } from '../services/internal/friendService';
 import { useUser } from '@clerk/clerk-expo';
 import userService from '../services/internal/userService';
-import { IFullFriendRequest } from '../models/friendRequestModel';
+import { IFullFriendRequest } from '../models';
 import { useFocusEffect } from '@react-navigation/native';
 import { FriendshipRequestsList } from '../components/friends/FriendshipRequestsList';
 import { theme } from '../theme';
@@ -133,19 +133,6 @@ export const FriendsScreen: React.FC = () => {
 
 		if (selectedTab === 'All') {
 			return <FriendsList friends={friends} />;
-			// return (
-			// 	<FlatList
-			// 		data={friends}
-			// 		keyExtractor={(item) => `${item.firstUser}-${item.secondUser}`}
-			// 		renderItem={({ item }) => (
-			// 			<View style={styles.card}>
-			// 				<Text style={styles.friendName}>
-			// 					{capitalize(`${item.otherUserFirstName} ${item.otherUserSecondName}`.trim())}
-			// 				</Text>
-			// 			</View>
-			// 		)}
-			// 		ListEmptyComponent={<HeaderText size={24}>You have no friends yet!</HeaderText>}
-			// 	/>
 		} else if (selectedTab === 'Requests') {
 			return (
 				<FriendshipRequestsList

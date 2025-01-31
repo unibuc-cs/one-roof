@@ -14,6 +14,7 @@ import { capitalize } from '../utils';
 import Button from '../components/base/Button';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { UserRoleEnum } from '../enums';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 export function DrawerContent(props: DrawerContentComponentProps) {
 	const { user } = useUser();
@@ -135,6 +136,29 @@ export function DrawerContent(props: DrawerContentComponentProps) {
 					/>
 					<DrawerItem
 						icon={({ color, size }) => (
+							<MaterialCommunityIcons name="content-save-all-outline" size={size} color={color} />
+						)}
+						label="Saved Lists"
+						onPress={() => { props.navigation.navigate('SavedLists'); }}
+					/>
+					<DrawerItem
+						icon={({ color, size }) => (
+							<FontAwesome name="history" size={size} color={color} />
+						)}
+						label="History"
+						onPress={() => { props.navigation.navigate('History'); }}
+					/>
+					{role === UserRoleEnum.Landlord &&
+					<DrawerItem
+						icon={({ color, size }) => (
+							<FontAwesome name="bar-chart" size={size} color={color} />
+						)}
+						label="Insights"
+						onPress={() => { props.navigation.navigate('Insights'); }}
+					/>
+					}
+					<DrawerItem
+						icon={({ color, size }) => (
 							<MaterialCommunityIcons
 								name="message-outline"
 								color={color}
@@ -165,6 +189,13 @@ export function DrawerContent(props: DrawerContentComponentProps) {
 						)}
 						label="Notifications"
 						onPress={() => { props.navigation.navigate('Notifications'); }}
+					/>
+					<DrawerItem
+						icon={({ color, size }) => (
+							<MaterialCommunityIcons name="calendar-account-outline" color={color} size={size} />
+						)}
+						label="Viewings"
+						onPress={() => { props.navigation.navigate('Viewings'); }}
 					/>
 					<Button
 						mode="elevated"

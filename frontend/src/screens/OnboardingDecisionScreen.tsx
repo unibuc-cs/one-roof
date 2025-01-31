@@ -5,9 +5,29 @@ import userService from '../services/internal/userService';
 import { FurtherDetailsRegistrationScreen } from './FurtherDetailsRegistrationScreen';
 import { CreateReviewScreen } from './review-creation';
 import { HomeScreen } from './HomeScreen';
+import { savedListService } from '../services/internal/savedListService';
 
 export const OnboardingDecisionScreen = () => {
-	const { onboardingStep } = useUserDetails();
+	const { onboardingStep, setContactedUsers, setOnboardingStep, setProfilePictureUrl, setRole, setUserId } = useUserDetails();
+	const { user } = useUser();
+
+	useEffect(() => {
+		if (user) {
+			const userId = user.id;
+			fetchAndStoreUserDetails(userId)
+				.then((res) => console.log(res))
+				.catch((err) => console.log(err));
+		}
+	}, [user]);
+
+	const fetchAndStoreUserDetails = async (userId: string) => {
+		const userDetails = await userService.getUserByClerkId(userId);
+		setRole(userDetails.role);
+		setOnboardingStep(userDetails.onboardingStep);
+		setProfilePictureUrl(userDetails.profilePicture);
+		setUserId(userDetails._id);
+		setContactedUsers(userDetails.contactedUsers);
+	};
 
 	switch (onboardingStep) {
 	case 1:

@@ -21,12 +21,16 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import TopBar from '../components/TopBar';
 import { useUserDetails } from '../contexts/UserDetailsContext';
 import ConversationScreen from '../screens/ConversationScreen';
-import { IReview } from '../models';
+import {IListing, IReview} from '../models';
 import { FavoriteScreen } from '../screens/FavoriteScreens';
 import { RoommateQuizScreen } from '../screens/roommates/RoommateQuizScreen';
 import { BrowseRoommatesScreen } from '../screens/roommates/BrowseRoommatesScreen';
 import { RoommateScreen } from '../screens/roommates/RoommateScreen';
 import { FriendsScreen } from '../screens/FriendsScreen';
+import { SavedListsScreen } from '../screens/SavedListsScreen';
+import { SavedListDetailsScreen } from '../screens/SavedListDetailsScreen';
+import { InsightsScreen } from '../screens/InsightsScreen';
+import { HistoryScreen } from '../screens/HistoryScreen';
 
 export type RootStackParamList = {
 	Home: undefined,
@@ -49,6 +53,12 @@ export type RootStackParamList = {
 	ConfirmLocation: undefined,
 	ListingFacilities: undefined,
 	ListingDescription: undefined,
+	SavedListDetails: {
+		savedListId: string;
+		sharedWith: string[];
+		savedListings: string[];
+	},
+	ListingToBeAdded?: { listing?: IListing }
 };
 
 export const AppNavigation = () => {
@@ -71,8 +81,8 @@ export const AppNavigation = () => {
 			<Drawer.Screen name="Chats" component={ChatsScreen} />
 			<Drawer.Screen name="Favorites" component={FavoriteScreen} />
 			<Drawer.Screen name="CreateReview" component={CreateReviewScreen} />
-            <Drawer.Screen name="Notifications" component={NotificationsScreen} />
-            <Drawer.Screen
+			<Drawer.Screen name="Notifications" component={NotificationsScreen} />
+			<Drawer.Screen
 				name="CreateListing"
 				component={CreateListingScreen}
 			/>
@@ -110,6 +120,10 @@ export const AppNavigation = () => {
 			/>
 			<Drawer.Screen name="ViewReview" component={ViewReviewScreen} />
 			<Drawer.Screen name="Viewings" component={ViewingsCalendar} />
+			<Drawer.Screen name="Insights" component={InsightsScreen}/>
+			<Drawer.Screen name="History" component={HistoryScreen}/>
+			<Drawer.Screen name="SavedLists" component={SavedListsScreen} />
+			<Drawer.Screen name="SavedListDetails" component={SavedListDetailsScreen} />
 		</Drawer.Navigator>
 	);
 };

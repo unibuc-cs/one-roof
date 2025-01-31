@@ -21,17 +21,7 @@ const userService = {
 			userId,
 		);
 	},
-	async getUserById(userId: string): Promise<IUser> {
-		const user: any = await callApi(`users/${userId}`, {}, userId);
-		user.role = getUserRoleEnumFromString(user.role);
-		return user;
-	},
-	async getUserByClerkId(clerkId: string): Promise<IUser | null> {
-		console.log('getUserByClerkId', clerkId);
-		const user: any = await callApi(`users/${clerkId}`, {}, clerkId);
-		user.role = getUserRoleEnumFromString(user.role);
-		return user;
-	},
+
 	async getFullUserByClerkId(userId: string): Promise<IUserWithClerk> {
 		return callApi(`users/full/${userId}`);
 	},

@@ -11,6 +11,9 @@ export interface IUser {
 	contactedUsers: string[], // modified to keep clerk ID's
 	pushTokens: string[],
 	allowedNotifications: NotificationTypesEnum[],
+	favoriteListings: string[],
+	savedLists: string[],
+	viewedListings: string[],
 	createdAt?: Date,
 	updatedAt?: Date,
 	roommateQuiz: any,
