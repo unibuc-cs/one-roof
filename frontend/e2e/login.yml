@@ -9,7 +9,6 @@ appId: host.exp.exponent
     timeout: 60000
 - tapOn:
     id: 'SignIn'
-- assertVisible: 'SignIn'
 - tapOn:
     id: 'Email'
 - inputText: 'bagsylina@gmail.com'

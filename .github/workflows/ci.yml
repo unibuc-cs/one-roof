@@ -114,8 +114,12 @@ jobs:
       - name: Install Maestro
         run: curl -Ls "https://get.maestro.mobile.dev" | bash
 
+      - name: Prebuild Expo
+        run: npx expo prebuild --clean
+        working-directory: frontend
+
       - name: Start Expo Server
-        run: npx expo start --tunnel &
+        run: npx expo start &
         working-directory: frontend
         env:
           EXPO_NO_DEBUG: 1
