@@ -116,6 +116,9 @@ jobs:
       - name: Download Expo Go APK
         run: curl -o expo-go.apk https://d1ahtucjixef4r.cloudfront.net/Exponent-2.30.11.apk
 
+      - name: Verify APK Download
+        run: ls -l expo-go.apk
+
       - name: Add Maestro to PATH
         run: |
           echo "$HOME/.maestro/bin" >> $GITHUB_PATH
