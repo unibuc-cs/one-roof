@@ -129,7 +129,8 @@ export const SavedListsScreen: React.FC = () => {
 
 					{sharedLists.map((savedList) => (
 						<SavedListDetailsProvider key={savedList._id} savedListId={savedList._id}>
-							<SavedListCard savedList={savedList} listingToBeAdded={listing}/>
+							<SavedListCard savedListId={savedList._id} savedList={savedList}
+										   listingToBeAdded={listing}/>
 						</SavedListDetailsProvider>
 					))}
 				</>
