@@ -16,7 +16,8 @@
     "dev": "nodemon --exec ts-node src/index.ts",
     "staging": "NODE_ENV=staging nodemon --exec ts-node src/index.ts",
     "staging:windows": "dotenv -e .env.staging -- nodemon --exec ts-node src/index.ts",
-    "prod": "NODE_ENV=production ts-node src/index.ts"
+    "prod": "NODE_ENV=production ts-node src/index.ts",
+    "security": "npm audit --audit-level=high"
   },
   "keywords": [],
   "author": "",
