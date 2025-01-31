@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - backup-main
+      - last-working-backup-amin
   pull_request:
     branches:
       - main
