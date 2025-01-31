@@ -204,7 +204,7 @@ jobs:
     environment: production
     steps:
       - name: Wait for Approval
-        run: echo "✅ Approved. Merging staging → production."
+        run: echo "sApproved. Merging staging → production."
 
   merge-to-production:
     name: Merge Staging → Production
