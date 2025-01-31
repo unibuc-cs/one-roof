@@ -113,29 +113,8 @@ jobs:
       - name: Debug Expo URL
         run: echo "Expo is running at exp://${CURRENT_IP}:8081"
 
-      #- name: Start Android Emulator
-        #run: |
-          #echo "Starting Android Emulator..."
-          #nohup emulator -avd test-emulator -no-audio -no-window -gpu swiftshader_indirect &
-          #sleep 30  # Ensure emulator has time to start
-
-      - name: Start Android Emulator
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 31
-          arch: x86_64
-          profile: pixel_4
-          script: adb devices
-
       - name: Download Expo Go APK
         run: curl -o expo-go.apk https://d1ahtucjixef4r.cloudfront.net/Exponent-2.30.11.apk
-
-      # Install Expo Go on Emulator
-      - name: Install Expo Go on Emulator
-        run: adb install expo-go.apk
-
-      - name: Verify Emulator is Available
-        run: adb devices
 
       - name: Add Maestro to PATH
         run: |
@@ -144,8 +123,34 @@ jobs:
       - name: Check Maestro
         run: maestro --version
 
-      - name: Run Maestro E2E Tests
-        run: maestro test e2e/login.yml
+      - name: Enable KVM group perms
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Start Android Emulator and Test
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 31
+          arch: x86_64
+          profile: pixel_4
+          script: |
+            adb devices
+            adb install expo-go.apk
+            maestro test e2e/login.yml
         env:
-          EXPO_URL: ${{ env.EXPO_URL }}
+          CURRENT_IP: ${{ env.CURRENT_IP }}
+
+      # Install Expo Go on Emulator
+      #- name: Install Expo Go on Emulator
+        #run: adb install expo-go.apk
+
+      #- name: Verify Emulator is Available
+        #run: adb devices
+
+      #- name: Run Maestro E2E Tests
+        #run: maestro test e2e/login.yml
+        #env:
+          #EXPO_URL: ${{ env.EXPO_URL }}
 
