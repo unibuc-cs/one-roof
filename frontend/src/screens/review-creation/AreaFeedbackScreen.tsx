@@ -1,10 +1,8 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { Button, ReviewSection } from '../../components';
+import { Background, Button, HeaderText, QuizSection } from '../../components';
 import { RouteProp } from '@react-navigation/native';
-import { HeaderText } from '../../components';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { Background } from '../../components';
 import { Card } from 'react-native-paper';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -36,11 +34,17 @@ const AreaFeedbackSchema = Yup.object().shape({
 });
 
 type AreaFeedbackScreenProps = {
-	route: RouteProp<{ params: { generalDetails: any, buildingFeedback: any } }, 'params'>,
+	route: RouteProp<
+		{ params: { generalDetails: any, buildingFeedback: any } },
+		'params'
+	>,
 	navigation: any,
 };
 
-export const AreaFeedbackScreen: React.FC<AreaFeedbackScreenProps> = ({ route, navigation }) => {
+export const AreaFeedbackScreen: React.FC<AreaFeedbackScreenProps> = ({
+	route,
+	navigation,
+}) => {
 	const { generalDetails, buildingFeedback } = route.params;
 	const { user } = useUser();
 	const { onboardingStep, setOnboardingStep } = useUserDetails();
@@ -55,7 +59,10 @@ export const AreaFeedbackScreen: React.FC<AreaFeedbackScreenProps> = ({ route, n
 			livingSituation: generalDetails.livingSituation,
 			location: {
 				type: 'Point',
-				coordinates: [generalDetails.longitude, generalDetails.latitude],
+				coordinates: [
+					generalDetails.longitude,
+					generalDetails.latitude,
+				],
 			},
 			address: generalDetails.livingSituation,
 			areaFeedback: values,
@@ -66,7 +73,10 @@ export const AreaFeedbackScreen: React.FC<AreaFeedbackScreenProps> = ({ route, n
 		console.log('reviewData', reviewData);
 
 		try {
-			const response = await reviewService.createReview(reviewData, generalDetails.reviewerId);
+			const response = await reviewService.createReview(
+				reviewData,
+				generalDetails.reviewerId,
+			);
 			console.log('response', response);
 			if (!user || !user.id) {
 				throw new Error('User not initialized properly');
@@ -74,13 +84,14 @@ export const AreaFeedbackScreen: React.FC<AreaFeedbackScreenProps> = ({ route, n
 
 			if (onboardingStep == 2) {
 				const nextOnboardingStep = onboardingStep + 1;
-				await userService.updateUser(user.id, { onboardingStep: nextOnboardingStep });
+				await userService.updateUser(user.id, {
+					onboardingStep: nextOnboardingStep,
+				});
 				setOnboardingStep(nextOnboardingStep);
 			}
 			navigation.navigate('Home');
-		} catch(error){
+		} catch (error) {
 			console.error('Error submitting review', error);
-
 		}
 	};
 
@@ -112,26 +123,36 @@ export const AreaFeedbackScreen: React.FC<AreaFeedbackScreenProps> = ({ route, n
 					validationSchema={AreaFeedbackSchema}
 					onSubmit={handleSubmit}
 				>
-					{({ handleChange, handleBlur, handleSubmit, setFieldValue, values }) => (
-						<KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
-							<HeaderText paddingBottom={30} size={30}>About your Area..</HeaderText>
-							<ReviewSection
+					{({
+						handleChange,
+						handleBlur,
+						handleSubmit,
+						setFieldValue,
+						values,
+					}) => (
+						<KeyboardAwareScrollView
+							showsVerticalScrollIndicator={false}
+						>
+							<HeaderText paddingBottom={30} size={30}>
+								About your Area..
+							</HeaderText>
+							<QuizSection
 								title="Transportation"
 								questions={[
 									{
 										prompt: 'How satisfied are you with the public transport options in your area?',
 										leftText: 'Very Dissatisfied',
-										rightText: 'Very Satisfied'
+										rightText: 'Very Satisfied',
 									},
 									{
 										prompt: 'How satisfied are you with the conditions for car transport in your area (e.g., road quality, traffic flow)?',
 										leftText: 'Very Dissatisfied',
-										rightText: 'Very Satisfied'
+										rightText: 'Very Satisfied',
 									},
 									{
 										prompt: 'How often do you experience severe traffic congestion in your area?',
 										leftText: 'Very Often',
-										rightText: 'Never'
+										rightText: 'Never',
 									},
 								]}
 								multiOptionQuestions={[
@@ -143,63 +164,90 @@ export const AreaFeedbackScreen: React.FC<AreaFeedbackScreenProps> = ({ route, n
 											{ label: 'Tram', value: 'tram' },
 											{ label: 'Car', value: 'car' },
 											{ label: 'Bike', value: 'bike' },
-											{ label: 'Walking', value: 'walking' }
-										]
+											{
+												label: 'Walking',
+												value: 'walking',
+											},
+										],
 									},
 								]}
 							/>
-							<ReviewSection
+							<QuizSection
 								title="Demographics"
 								multiOptionQuestions={[
 									{
-										prompt: 'What is the predominant demographic in your area?', options: [
-											{ label: 'Can\'t tell', value: 'all' },
-											{ label: 'Students', value: 'students' },
-											{ label: 'Young Adults', value: 'young' },
-											{ label: 'Families', value: 'families' },
-											{ label: 'Retirees', value: 'retirees' },
-										]
+										prompt: 'What is the predominant demographic in your area?',
+										options: [
+											{
+												label: 'Can\'t tell',
+												value: 'all',
+											},
+											{
+												label: 'Students',
+												value: 'students',
+											},
+											{
+												label: 'Young Adults',
+												value: 'young',
+											},
+											{
+												label: 'Families',
+												value: 'families',
+											},
+											{
+												label: 'Retirees',
+												value: 'retirees',
+											},
+										],
 									},
 								]}
 							/>
-							<ReviewSection
+							<QuizSection
 								title="Safety and Noise"
 								questions={[
 									{
 										prompt: 'How would you rate the noise level in your area?',
 										leftText: 'Very Noisy',
-										rightText: 'Very Quiet'
+										rightText: 'Very Quiet',
 									},
 									{
 										prompt: 'Do you feel safe walking around your area at night?',
 										leftText: 'Very Unsafe',
-										rightText: 'Very Safe'
+										rightText: 'Very Safe',
 									},
 								]}
 							/>
-							<ReviewSection
+							<QuizSection
 								isLast={true}
 								title="Environmental Factors"
 								questions={[
 									{
 										prompt: 'How would you rate the cleanliness of your area (e.g., streets, public spaces)?',
 										leftText: 'Very Bad',
-										rightText: 'Very Good'
+										rightText: 'Very Good',
 									},
 									{
 										prompt: 'How satisfied are you with the amount and quality of green spaces (e.g., parks, gardens) in your area?',
 										leftText: 'Very Dissatisfied',
-										rightText: 'Very Satisfied'
+										rightText: 'Very Satisfied',
 									},
 									{
 										prompt: 'How would you rate the pollution levels (e.g., air quality, noise pollution) in your area?',
 										leftText: 'Very Bad',
-										rightText: 'Very Good'
+										rightText: 'Very Good',
 									},
 								]}
 							/>
-							<Button mode="contained" onPress={handleSubmit}>Submit Review</Button>
-							<Button style={{ marginTop: 0 }} mode="contained" onPress={() => handleDiscard()}>Discard Review</Button>
+							<Button mode="contained" onPress={handleSubmit}>
+								Submit Review
+							</Button>
+							<Button
+								style={{ marginTop: 0 }}
+								mode="contained"
+								onPress={() => handleDiscard()}
+							>
+								Discard Review
+							</Button>
 						</KeyboardAwareScrollView>
 					)}
 				</Formik>

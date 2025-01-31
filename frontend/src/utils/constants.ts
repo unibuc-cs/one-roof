@@ -3,7 +3,7 @@ export const BUCHAREST_COORDINATES = {
 	longitude: 26.1025,
 };
 
-export const DEFAULT_LATITUDE_DELTA = 0.0920;
+export const DEFAULT_LATITUDE_DELTA = 0.092;
 export const DEFAULT_LONGITUDE_DELTA = 0.08;
-export const MIN_PRICE = 100;
-export const MAX_PRICE = 2000;
+export const MIN_PRICE = 200;
+export const MAX_PRICE = 3000;

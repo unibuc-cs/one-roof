@@ -1,4 +1,4 @@
-import { UserRoleEnum } from '../enums';
+import { UserRoleEnum, NotificationTypesEnum } from '../enums';
 
 export type IUserDetails = Omit<IUser, 'clerkId'>;
 
@@ -9,8 +9,11 @@ export interface IUser {
 	role: UserRoleEnum,
 	onboardingStep: number,
 	contactedUsers: string[], // modified to keep clerk ID's
+	pushTokens: string[],
+	allowedNotifications: NotificationTypesEnum[],
 	createdAt?: Date,
 	updatedAt?: Date,
+	roommateQuiz: any,
 }
 
 export interface IUserWithClerk extends IUser {
@@ -18,4 +21,9 @@ export interface IUserWithClerk extends IUser {
 	lastName: string,
 	email: string,
 	nickname: string,
+}
+
+export interface IUserWithCompatibilityScore {
+	user: IUserWithClerk,
+	compatibilityScore: number,
 }

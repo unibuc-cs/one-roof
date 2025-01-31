@@ -1,19 +1,17 @@
 import React, { useState } from 'react';
-import { TextInput } from '../components';
-import { Text, StyleSheet } from 'react-native';
+import { Background, TextInput } from '../components';
+import { Text } from 'react-native';
 import { useSignIn } from '@clerk/clerk-expo';
-import { Background } from '../components';
-import Button from '../components/Button';
-import Logo from '../components/Logo';
+import Button from '../components/base/Button';
+import Logo from '../components/base/Logo';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import Spinner from 'react-native-loading-spinner-overlay';
-import { FormikHelpers } from 'formik';
-
-
 
 const signInValidationSchema = Yup.object().shape({
-	emailAddress: Yup.string().email('Invalid email').required('Email is required'),
+	emailAddress: Yup.string()
+		.email('Invalid email')
+		.required('Email is required'),
 	password: Yup.string().required('Password is required'),
 });
 
@@ -41,9 +39,15 @@ export default function SignInScreen() {
 			setInvalidPassword(true);
 			console.log(JSON.stringify(err));
 			setSpinnerVisible(false); // Stop the spinner if there's an error
-			if ((err as Error).message === 'Password is incorrect. Try again, or use another method.') {
+			if (
+				(err as Error).message ===
+				'Password is incorrect. Try again, or use another method.'
+			) {
 				setInvalidPassword(true);
-				actions.setFieldError('password', 'Incorrect password. Please try again.');
+				actions.setFieldError(
+					'password',
+					'Incorrect password. Please try again.',
+				);
 			}
 		}
 	};
@@ -57,22 +61,37 @@ export default function SignInScreen() {
 				validationSchema={signInValidationSchema}
 				onSubmit={handleSignIn} // Pass the custom submit function
 			>
-				{({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
+				{({
+					handleChange,
+					handleBlur,
+					handleSubmit,
+					values,
+					errors,
+					touched,
+				}) => (
 					<>
 						<TextInput
 							label="Email"
+							testID='Email'
 							returnKeyType="next"
 							autoCapitalize="none"
 							value={values.emailAddress}
 							placeholder="Email..."
 							onChangeText={handleChange('emailAddress')}
 							onBlur={handleBlur('emailAddress')}
-							error={!!(touched.emailAddress && errors.emailAddress)}
-							errorText={touched.emailAddress && errors.emailAddress ? errors.emailAddress : undefined}
+							error={
+								!!(touched.emailAddress && errors.emailAddress)
+							}
+							errorText={
+								touched.emailAddress && errors.emailAddress
+									? errors.emailAddress
+									: undefined
+							}
 						/>
 
 						<TextInput
 							label="Password"
+							testID='Password'
 							returnKeyType="done"
 							secureTextEntry={true}
 							value={values.password}
@@ -82,8 +101,12 @@ export default function SignInScreen() {
 							error={!!(touched.password && errors.password)}
 							errorText={errors.password as string}
 						/>
-						{invalidPassword && <Text style={{ color: 'red' }}>Invalid email or password. Please try again.</Text>}
-						<Button mode="contained" onPress={() => handleSubmit()}>
+						{invalidPassword && (
+							<Text style={{ color: 'red' }}>
+								Invalid email or password. Please try again.
+							</Text>
+						)}
+						<Button mode="contained" testID='SignIn' onPress={() => handleSubmit()}>
 							Sign In
 						</Button>
 					</>

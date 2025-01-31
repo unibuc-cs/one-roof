@@ -1,9 +1,8 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { HeaderText } from './HeaderText';
+import { HeaderText } from './base/HeaderText';
 import { theme } from '../theme';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useCustomFonts } from '../hooks/useCustomFonts';
 
 interface ReviewSectionSchema {
 	title: string,
@@ -25,33 +24,63 @@ interface ReviewSectionSchema {
 	additional?: string,
 }
 
-export const ReviewDetailsSection: React.FC<ReviewSectionSchema> = ({ title, questions, isLast, binaryQuestions, multiOptionQuestions, additional }) => {
+export const ReviewDetailsSection: React.FC<ReviewSectionSchema> = ({
+	title,
+	questions,
+	isLast,
+	binaryQuestions,
+	multiOptionQuestions,
+	additional,
+}) => {
 	return (
 		<View>
-			{title !== '' && <HeaderText color={theme.colors.primary} textAlign={'left'} paddingTop={0} size={22}>{title}</HeaderText>}
+			{title !== '' && (
+				<HeaderText
+					color={theme.colors.primary}
+					textAlign={'left'}
+					paddingTop={0}
+					size={22}
+				>
+					{title}
+				</HeaderText>
+			)}
 			{questions?.map((q, index) => (
 				<View key={index} style={styles.questionContainer}>
 					<Text style={styles.questionText}>{q.prompt}</Text>
-					<Text style={styles.answerText}>{q.value >= 3 ? q.rightText : q.leftText}</Text>
+					<Text style={styles.answerText}>
+						{q.value >= 3 ? q.rightText : q.leftText}
+					</Text>
 				</View>
 			))}
 			{binaryQuestions?.map((binaryQuestion, index) => (
 				<View key={index} style={styles.questionContainer}>
-					<Text style={styles.questionText}>{binaryQuestion.question}</Text>
-					<Text style={styles.answerText}>{binaryQuestion.value ? 'Yes' : 'No'}</Text>
+					<Text style={styles.questionText}>
+						{binaryQuestion.question}
+					</Text>
+					<Text style={styles.answerText}>
+						{binaryQuestion.value ? 'Yes' : 'No'}
+					</Text>
 				</View>
 			))}
 
 			{multiOptionQuestions?.map((question, index) => (
 				<View key={index} style={styles.questionContainer}>
-					{question.prompt !== '' && <Text style={styles.questionText}>{question.prompt}</Text>}
+					{question.prompt !== '' && (
+						<Text style={styles.questionText}>
+							{question.prompt}
+						</Text>
+					)}
 					<Text style={styles.answerText}>{question.value}</Text>
 				</View>
 			))}
 			{}
 			{!isLast && (
 				<View style={styles.diamondIcon}>
-					<Icon size={20} color={theme.colors.primary} name={'cards-diamond-outline'} />
+					<Icon
+						size={20}
+						color={theme.colors.primary}
+						name={'cards-diamond-outline'}
+					/>
 				</View>
 			)}
 			{additional && (
@@ -86,6 +115,5 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 		marginTop: 15,
-	}
+	},
 });
-

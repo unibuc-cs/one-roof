@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {  View, ScrollView } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import PropertyCard from '../components/PropertyCard';
 import { useUserDetails } from '../contexts/UserDetailsContext';
 import { HeaderText } from '../components';
@@ -13,11 +13,17 @@ export const FavoriteScreen: React.FC = () => {
 	const [listings, setListings] = useState<any[]>([]);
 	const [loading, setLoading] = useState<boolean>(true);
 
-	if(listings)
+	if (listings)
 		useEffect(() => {
 			const fetchListings = async () => {
-				const fetchedListings = await Promise.all(favoriteListings.map(id => listingService.getListing(id, user?.id)));
-				setListings(fetchedListings.filter(listing => listing !== null));
+				const fetchedListings = await Promise.all(
+					favoriteListings.map((id) =>
+						listingService.getListing(id, user?.id),
+					),
+				);
+				setListings(
+					fetchedListings.filter((listing) => listing !== null),
+				);
 				setLoading(false);
 			};
 
@@ -46,11 +52,11 @@ export const FavoriteScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-	'container': {
+	container: {
 		width: '100%',
 	},
-	'wrapper': {
+	wrapper: {
 		marginTop: 50,
-		width: '100%'
-	}
+		width: '100%',
+	},
 });

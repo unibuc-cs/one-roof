@@ -1,6 +1,6 @@
 /node_modules/
 
-.env
+.env.development
 .env.local
 .env.development.local
 .env.test.local
@@ -39,7 +39,7 @@ bower_components/
 
 .yarn-integrity
 
-.env
+.env.development
 
 .cache
 .parcel-cache
@@ -65,7 +65,7 @@ dist
 tmp/
 temp/
 
-.env*
+.env.development
 .env.vault
 .flaskenv*
 !.env.project

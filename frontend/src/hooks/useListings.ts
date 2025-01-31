@@ -9,12 +9,13 @@ export const useListings = () => {
 
 	useEffect(() => {
 		setIsLoading(true);
-		listingService.getAllListings()
-			.then(data => {
+		listingService
+			.getAllListings()
+			.then((data) => {
 				setListings(data);
 				setIsLoading(false);
 			})
-			.catch(err => {
+			.catch((err) => {
 				setError(err);
 				setIsLoading(false);
 			});

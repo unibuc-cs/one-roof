@@ -1,12 +1,11 @@
 import React from 'react';
-import { View, Text, StyleSheet, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useUser } from '@clerk/clerk-expo';
 import { useUserDetails } from '../contexts/UserDetailsContext';
-import { ProfilePicture } from '../components/ProfilePicture';
-import { Background } from '../components';
-import { EditableField } from '../components/EditableField';
-import { Card, Divider } from 'react-native-paper';
-import { HeaderText } from '../components';
+import { ProfilePicture } from '../components/base/ProfilePicture';
+import { Background, HeaderText } from '../components';
+import { EditableField } from '../components/base/EditableField';
+import { Divider } from 'react-native-paper';
 import { theme } from '../theme';
 
 export const ProfileScreen: React.FC = () => {
@@ -17,12 +16,19 @@ export const ProfileScreen: React.FC = () => {
 
 	return (
 		<Background>
-			<ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollView}>
+			<ScrollView
+				showsVerticalScrollIndicator={false}
+				contentContainerStyle={styles.scrollView}
+			>
 				<View style={{ marginBottom: 7, alignItems: 'center' }}>
-					<ProfilePicture canEdit={true} source={{ uri: profilePictureUrl }}/>
+					<ProfilePicture
+						canEdit={true}
+						source={{ uri: profilePictureUrl }}
+					/>
 				</View>
 				<HeaderText size={19}>
-					Role: <Text style={{ color: theme.colors.primary }}>{role}</Text>
+					Role:{' '}
+					<Text style={{ color: theme.colors.primary }}>{role}</Text>
 				</HeaderText>
 				<EditableField
 					isEditable={true}
@@ -30,21 +36,21 @@ export const ProfileScreen: React.FC = () => {
 					value={user.firstName || ''}
 					onSave={(newValue) => user.update({ firstName: newValue })}
 				/>
-				<Divider/>
+				<Divider />
 				<EditableField
 					isEditable={true}
 					label="Last Name"
 					value={user.lastName || ''}
 					onSave={(newValue) => user.update({ lastName: newValue })}
 				/>
-				<Divider/>
+				<Divider />
 				<EditableField
 					isEditable={true}
 					label="Username"
 					value={user.username || ''}
 					onSave={(newValue) => user.update({ username: newValue })}
 				/>
-				<Divider/>
+				<Divider />
 				<EditableField
 					isEditable={false}
 					label="Email"
@@ -61,12 +67,12 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	scrollView: {
-		backgroundColor: 'white',
+		backgroundColor: theme.colors.background,
 		elevation: 20,
 		flexGrow: 1,
 		justifyContent: 'center',
 		padding: 20,
-		paddingHorizontal: 15
+		paddingHorizontal: 15,
 	},
 	card: {
 		margin: 20,

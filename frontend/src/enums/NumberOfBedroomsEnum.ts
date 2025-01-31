@@ -3,5 +3,5 @@ export enum NumberOfBedroomsEnum {
 	'One',
 	'Two',
 	'Three',
-	'FourOrMore'
+	'FourOrMore',
 }

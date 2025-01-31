@@ -1,0 +1,20 @@
+appId: host.exp.exponent
+---
+- launchApp
+- openLink: "exp://${EXPO_IP}:8081"
+- waitForAnimationToEnd
+- assertVisible: 'Home'
+- tapOn: 'Ok'
+- tapOn: 'Reviews'
+- tapOn: 'Heatmap'
+- tapOn: 'Listings'
+- tapOn:
+    id: 'filters'
+- tapOn: 'Studio'
+- tapOn: 'Internal'
+- swipe:
+    from: 'Wi-Fi/High-Speed Internet'
+    direction: UP
+- tapOn: 'Furnished'
+- tapOn:
+    id: 'Search'

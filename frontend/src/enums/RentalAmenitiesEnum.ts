@@ -18,7 +18,7 @@ enum RentalAmenitiesEnum {
 	Furnished = 'Furnished',
 	CableTV = 'Cable TV',
 	Elevator = 'Elevator Access',
-	PublicTransportAccess = 'Public Transport Accessibility'
+	PublicTransportAccess = 'Public Transport Accessibility',
 }
 
 export default RentalAmenitiesEnum;

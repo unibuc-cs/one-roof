@@ -16,5 +16,5 @@ export const reviewService = {
 
 	deleteReview: (id: string, userId: string) => {
 		return callApi(`reviews/${id}`, { method: 'DELETE' }, userId);
-	}
+	},
 };

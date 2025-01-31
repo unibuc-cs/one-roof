@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { Card, Title, Paragraph } from 'react-native-paper';
+import { StyleSheet, Text, View } from 'react-native';
+import { Card, Paragraph, Title } from 'react-native-paper';
 import { theme } from '../theme'; // Ensure you have a theme file or adjust the colors accordingly
 
 interface ReviewCardProps {
@@ -10,15 +10,24 @@ interface ReviewCardProps {
 	recommend: 1 | 2 | 3 | 4 | 5,
 }
 
-export const ReviewCard: React.FC<ReviewCardProps> = ({ title, livingSituation, description, recommend }) => {
+export const ReviewCard: React.FC<ReviewCardProps> = ({
+	title,
+	livingSituation,
+	description,
+	recommend,
+}) => {
 	return (
 		<Card style={styles.card}>
 			<Card.Content>
 				<Title style={styles.title}>{title}</Title>
-				<Paragraph style={styles.livingSituation}>{livingSituation}</Paragraph>
+				<Paragraph style={styles.livingSituation}>
+					{livingSituation}
+				</Paragraph>
 				<Paragraph style={styles.description}>{description}</Paragraph>
 				<View style={styles.recommendContainer}>
-					<Text style={styles.recommendText}>Recommend: {recommend}/5</Text>
+					<Text style={styles.recommendText}>
+						Recommend: {recommend}/5
+					</Text>
 				</View>
 			</Card.Content>
 		</Card>
@@ -55,7 +64,7 @@ const styles = StyleSheet.create({
 	},
 	recommendText: {
 		fontSize: 14,
-		color: theme.colors.accent,
+		color: theme.colors.dropdown,
 		fontWeight: 'bold',
 	},
 });

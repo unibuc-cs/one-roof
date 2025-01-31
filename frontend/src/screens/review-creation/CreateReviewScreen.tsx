@@ -1,12 +1,12 @@
-import React, { useEffect } from 'react';
-import { View, StyleSheet } from 'react-native';
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
 import { useUserDetails } from '../../contexts/UserDetailsContext';
 import { useUser } from '@clerk/clerk-expo';
 import userService from '../../services/internal/userService';
-import { Button, HeaderText, Background } from '../../components';
+import { Background, Button, HeaderText } from '../../components';
 import { Card } from 'react-native-paper';
 import { theme } from '../../theme';
-import Logo from '../../components/Logo';
+import Logo from '../../components/base/Logo';
 import { useNavigation } from '@react-navigation/native';
 
 export const CreateReviewScreen: React.FC<any> = () => {
@@ -22,15 +22,22 @@ export const CreateReviewScreen: React.FC<any> = () => {
 				throw new Error('User not initialized properly');
 			}
 
-			await userService.updateUser(user.id, { onboardingStep: nextOnboardingStep });
+			await userService.updateUser(user.id, {
+				onboardingStep: nextOnboardingStep,
+			});
 			setOnboardingStep(nextOnboardingStep);
 		}
 	};
 
-	const callToAction = 'Share your thoughts about your current living place and surroundings!';
-	const firstTimeMessage = 'Welcome!\n To benefit from the community\'s knowledge, we first ask you to leave a review of your current or past place of residence.\nYour review will help others make informed decisions.';
-	const additionalReviewMessage = 'We appreciate your willingness to share your experiences and help the community by leaving additional reviews!';
-	const welcomingMessage = isFirstTimeUser ? firstTimeMessage : additionalReviewMessage;
+	const callToAction =
+		'Share your thoughts about your current living place and surroundings!';
+	const firstTimeMessage =
+		'Welcome!\n To benefit from the community\'s knowledge, we first ask you to leave a review of your current or past place of residence.\nYour review will help others make informed decisions.';
+	const additionalReviewMessage =
+		'We appreciate your willingness to share your experiences and help the community by leaving additional reviews!';
+	const welcomingMessage = isFirstTimeUser
+		? firstTimeMessage
+		: additionalReviewMessage;
 
 	return (
 		<Background>
@@ -41,18 +48,21 @@ export const CreateReviewScreen: React.FC<any> = () => {
 					</HeaderText>
 				</View>
 				<View style={styles.flexItem}>
-					<Logo/>
+					<Logo />
 				</View>
 				<View style={styles.flexItem}>
-					<HeaderText size={20}>
-						{welcomingMessage}
-					</HeaderText>
+					<HeaderText size={20}>{welcomingMessage}</HeaderText>
 				</View>
 				<View style={styles.flexItem}>
 					<Button
 						mode={'contained'}
-						onPress={() => navigation.navigate('ReviewGeneralDetails')}
-					>{isFirstTimeUser ? 'Start writing your first review!': 'Start writing another review!'}
+						onPress={() =>
+							navigation.navigate('ReviewGeneralDetails')
+						}
+					>
+						{isFirstTimeUser
+							? 'Start writing your first review!'
+							: 'Start writing another review!'}
 					</Button>
 				</View>
 			</Card>
@@ -63,10 +73,10 @@ export const CreateReviewScreen: React.FC<any> = () => {
 const styles = StyleSheet.create({
 	card: {
 		marginVertical: 30,
-		backgroundColor: 'white',
+		backgroundColor: theme.colors.background,
 		padding: 16,
 		paddingTop: 16,
-		maxHeight: '100%'
+		maxHeight: '100%',
 	},
 	container: {
 		display: 'flex',

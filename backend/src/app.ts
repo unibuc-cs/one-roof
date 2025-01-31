@@ -1,8 +1,17 @@
-import express, { Express } from 'express';
+import express, {Express} from 'express';
 import corsMiddleware from './middleware/cors';
 import loggerMiddleware from './middleware/logger';
-import { config } from './configure';
-import {userRouter, reviewRouter, listingRouter, searchRouter, messageRouter, viewingRouter} from './routes';
+import {config} from './configure';
+import {
+	friendRouter,
+	listingRouter,
+	messageRouter,
+	reviewRouter,
+	searchRouter,
+	userRouter,
+	viewingRouter,
+	notificationRouter,
+} from './routes';
 
 const app: Express = express();
 app.set('port', config.port);
@@ -20,6 +29,8 @@ app.use('/api/reviews', reviewRouter);
 app.use('/api/listings', listingRouter);
 app.use('/api/search', searchRouter);
 app.use('/api/messages', messageRouter);
+app.use('/api/notifications', notificationRouter);
 app.use('/api/viewings', viewingRouter);
+app.use('/api/friends', friendRouter);
 
 export default app;

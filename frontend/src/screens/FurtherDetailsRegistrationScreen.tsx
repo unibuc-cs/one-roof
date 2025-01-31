@@ -1,25 +1,26 @@
-import { Background } from '../components';
+import { Background, HeaderText } from '../components';
 import { Divider } from 'react-native-paper';
-import Button from '../components/Button';
+import Button from '../components/base/Button';
 import * as React from 'react';
 import { useUserDetails } from '../contexts/UserDetailsContext';
 import { UserRoleEnum } from '../enums';
 import SwitchSelector from 'react-native-switch-selector';
-import { HeaderText } from '../components';
 import { theme } from '../theme';
-import { ProfilePicture } from '../components/ProfilePicture';
+import { ProfilePicture } from '../components/base/ProfilePicture';
 import { useAuth, useUser } from '@clerk/clerk-expo';
 import userService from '../services/internal/userService';
 import { uploadProfilePicture } from '../services';
 import { IUserDetails } from '../models';
 
 export const FurtherDetailsRegistrationScreen: React.FC = () => {
-	const { onboardingStep,
+	const {
+		onboardingStep,
 		setOnboardingStep,
 		profilePictureUrl,
 		setProfilePictureUrl,
 		role,
-		setRole } = useUserDetails();
+		setRole,
+	} = useUserDetails();
 
 	const { signOut } = useAuth();
 
@@ -47,21 +48,41 @@ export const FurtherDetailsRegistrationScreen: React.FC = () => {
 			throw new Error('User is null');
 		}
 
-		const nextOnboardingStep = onboardingStep + 1;
+		// Landlord skips the review creation step
+		const nextOnboardingStep =
+			role === UserRoleEnum.Landlord
+				? onboardingStep + 2
+				: onboardingStep + 1;
+		console.error(
+			'Submit details current role is: ',
+			role,
+			'onboarding step is: ',
+			onboardingStep,
+			'next step is: ',
+			nextOnboardingStep,
+		);
 
 		setOnboardingStep(nextOnboardingStep);
 
-		await userService.createUser({
-			role: role,
-			profilePicture: profilePictureUrl || '',
-			onboardingStep: nextOnboardingStep
-		} as IUserDetails, user.id);
+		await userService.createUser(
+			{
+				role: role,
+				profilePicture: profilePictureUrl || '',
+				onboardingStep: nextOnboardingStep,
+			} as IUserDetails,
+			user.id,
+		);
 	};
 
 	return (
 		<Background>
-			<HeaderText color={theme.colors.primary} size={30}> Almost There! </HeaderText>
-			<HeaderText paddingBottom={10} size={20}>Pick your Role</HeaderText>
+			<HeaderText color={theme.colors.primary} size={30}>
+				{' '}
+				Almost There!{' '}
+			</HeaderText>
+			<HeaderText paddingBottom={10} size={20}>
+				Pick your Role
+			</HeaderText>
 			<SwitchSelector
 				options={[
 					{ label: 'Regular User', value: UserRoleEnum.RegularUser },
@@ -78,11 +99,18 @@ export const FurtherDetailsRegistrationScreen: React.FC = () => {
 					height: 2,
 				}}
 			/>
-			<HeaderText paddingBottom={1} size={20}>Pick your Profile Picture (optional)</HeaderText>
-			<Button
-				mode={'elevated'}
-				onPress={pickImageAndUpload}>Choose File</Button>
-			{profilePictureUrl && <ProfilePicture canEdit={true} source={{ uri: profilePictureUrl }}  />}
+			<HeaderText paddingBottom={1} size={20}>
+				Pick your Profile Picture (optional)
+			</HeaderText>
+			<Button mode={'elevated'} onPress={pickImageAndUpload}>
+				Choose File
+			</Button>
+			{profilePictureUrl && (
+				<ProfilePicture
+					canEdit={true}
+					source={{ uri: profilePictureUrl }}
+				/>
+			)}
 			<Button mode="contained" onPress={submitDetails}>
 				Continue
 			</Button>

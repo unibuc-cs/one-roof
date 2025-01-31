@@ -14,5 +14,5 @@ export const theme = {
 		offWhite: '#f6f6f6',
 		inverseSurface: '#174c50',
 		inversePrimary: '#c9dcde',
-	}
+	},
 };

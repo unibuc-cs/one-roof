@@ -3,16 +3,23 @@ import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Background } from '../../components';
 import MapView, { Marker, MapPressEvent, Region } from 'react-native-maps';
-import { BUCHAREST_COORDINATES, DEFAULT_LATITUDE_DELTA, DEFAULT_LONGITUDE_DELTA, mapStyles } from '../../utils';
+import {
+	BUCHAREST_COORDINATES,
+	DEFAULT_LATITUDE_DELTA,
+	DEFAULT_LONGITUDE_DELTA,
+	mapStyles,
+} from '../../utils';
 import { getCoordinatesFromAddress } from '../../services/external/googleMapsService';
 import { Button, CustomMarker } from '../../components';
 
 type ListingConfirmLocationScreenProps = {
-    route: RouteProp<{ params: { generalDetails: any, id: any } }, 'params'>,
-    navigation: any,
+	route: RouteProp<{ params: { generalDetails: any, id: any } }, 'params'>,
+	navigation: any,
 };
 
-export const ListingConfirmLocationScreen: React.FC<ListingConfirmLocationScreenProps> = ({ route, navigation }) => {
+export const ListingConfirmLocationScreen: React.FC<
+	ListingConfirmLocationScreenProps
+> = ({ route, navigation }) => {
 	const { generalDetails, id } = route.params;
 	const mapRef = useRef(null);
 	const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -27,9 +34,12 @@ export const ListingConfirmLocationScreen: React.FC<ListingConfirmLocationScreen
 	const handleDiscard = () => {
 		navigation.navigate('Home');
 	};
-	const handleConfirm = () =>{
+	const handleConfirm = () => {
 		console.log(region);
-		navigation.navigate('ListingFacilities', { generalDetails: generalDetails, location: region });
+		navigation.navigate('ListingFacilities', {
+			generalDetails: generalDetails,
+			location: region,
+		});
 	};
 
 	const getInitialRegion = async () => {
@@ -46,15 +56,14 @@ export const ListingConfirmLocationScreen: React.FC<ListingConfirmLocationScreen
 				console.log('MAKING INTIIAL REQUEST');
 				setRegion({
 					...region,
-					latitudeDelta: 0.010,
-					longitudeDelta: 0.010,
+					latitudeDelta: 0.01,
+					longitudeDelta: 0.01,
 				});
 			} catch (error) {
 				setErrorMsg('Failed to get coordinates from address');
 			}
 		})();
 	}, [id]);
-
 
 	if (errorMsg) {
 		return <Text>{errorMsg}</Text>;
@@ -79,24 +88,35 @@ export const ListingConfirmLocationScreen: React.FC<ListingConfirmLocationScreen
 				<CustomMarker
 					coordinate={{
 						latitude: region.latitude,
-						longitude: region.longitude
+						longitude: region.longitude,
 					}}
 					text={'New Property Location'}
 				/>
 			)}
 
 			<View style={styles.buttonsContainer}>
-				<Button style={styles.button} mode={'contained'} onPress={() => handleDiscard()}>Discard</Button>
-				<Button style={styles.button} mode={'contained'} onPress={() => handleConfirm()}>Confirm</Button>
+				<Button
+					style={styles.button}
+					mode={'contained'}
+					onPress={() => handleDiscard()}
+				>
+					Discard
+				</Button>
+				<Button
+					style={styles.button}
+					mode={'contained'}
+					onPress={() => handleConfirm()}
+				>
+					Confirm
+				</Button>
 			</View>
-
 		</Background>
 	);
 };
 
 const styles = StyleSheet.create({
 	card: {
-		marginTop:60,
+		marginTop: 60,
 		flex: 1,
 		width: '100%',
 	},
@@ -109,9 +129,8 @@ const styles = StyleSheet.create({
 		width: '80%',
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-
 	},
-	button:{
+	button: {
 		width: 'auto',
-	}
+	},
 });

@@ -1,7 +1,11 @@
 import { I2DPoint } from '../models';
 import { BUCHAREST_COORDINATES } from './constants';
 
-const generatePerimeterCoordinates = (center, radius, numPoints): I2DPoint[] => {
+const generatePerimeterCoordinates = (
+	center,
+	radius,
+	numPoints,
+): I2DPoint[] => {
 	const points: I2DPoint[] = [];
 	for (let i = 0; i < numPoints; i++) {
 		const angle = Math.random() * 2 * Math.PI;
@@ -9,8 +13,8 @@ const generatePerimeterCoordinates = (center, radius, numPoints): I2DPoint[] => 
 		const latitude = center.latitude + randomRadius * Math.cos(angle);
 		const longitude = center.longitude + randomRadius * Math.sin(angle);
 		points.push({
-			'latitude': latitude,
-			'longitude': longitude,
+			latitude: latitude,
+			longitude: longitude,
 		});
 	}
 	return points;
@@ -18,6 +22,8 @@ const generatePerimeterCoordinates = (center, radius, numPoints): I2DPoint[] => 
 
 const radius = 0.08;
 
-export const pins= generatePerimeterCoordinates(BUCHAREST_COORDINATES, radius, 30);
-
-
+export const pins = generatePerimeterCoordinates(
+	BUCHAREST_COORDINATES,
+	radius,
+	30,
+);

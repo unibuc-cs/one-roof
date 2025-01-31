@@ -16,3 +16,4 @@ export * from './FiltersScreen';
 export * from './ViewReviewScreen';
 export * from './ConversationScreen';
 export * from './ViewingsCalendar';
+export * from './NotificationsScreen';

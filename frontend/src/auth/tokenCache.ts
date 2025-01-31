@@ -14,5 +14,5 @@ export const tokenCache = {
 		} catch (err) {
 			console.error(err);
 		}
-	}
+	},
 };
