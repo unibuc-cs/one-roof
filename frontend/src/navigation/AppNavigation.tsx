@@ -11,7 +11,6 @@ import {
 	ListingDescriptionScreen,
 	ListingFacilitiesScreen,
 	ListingScreen,
-	DrawerContent,
     NotificationsScreen,
 	OnboardingDecisionScreen,
 	ProfileScreen,

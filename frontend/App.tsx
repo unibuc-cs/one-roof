@@ -124,9 +124,11 @@ export default function App() {
 			<PaperProvider theme={theme}>
 				<NavigationContainer>
 					<UserDetailsProvider>
-						<SearchProvider>
-							<AppLoader Stack={Stack}/>
-						</SearchProvider>
+						<NotificationDataProvider>
+							<SearchProvider>
+								<AppLoader Stack={Stack}/>
+							</SearchProvider>
+						</NotificationDataProvider>
 					</UserDetailsProvider>
 				</NavigationContainer>
 			</PaperProvider>

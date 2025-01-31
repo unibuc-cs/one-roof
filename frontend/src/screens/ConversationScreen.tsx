@@ -17,7 +17,6 @@ import {useUser} from '@clerk/clerk-expo';
 import {IMessage} from '../models/messageModel';
 import {config} from "../config/configure";
 import {NotificationTypesEnum} from "../enums";
-import {tokens} from "react-native-paper/lib/typescript/styles/themes/v3/tokens";
 
 
 type ChatMessagesScreenRouteProps = RouteProp<RootStackParamList, 'Message'>;
@@ -68,7 +67,6 @@ export const ConversationScreen: React.FC = () => {
 		socket.on('messageReceived', (msg) => {
 			if (msg.receiverId === userId && msg.senderId === receiverId) {
 				setMessages([...messages, msg]);
-
 				if(allowedNotifications.includes(NotificationTypesEnum.Messages)){
 					sendNewMessageNotification(msg);
 				}
@@ -92,7 +90,6 @@ export const ConversationScreen: React.FC = () => {
 	};
 
 	const sendNewMessageNotification = async (msg) => {
-
 			for (const token of pushTokens) {
 				await notificationService.sendNotification("New message", msg.content, userId, token);
 			}

@@ -1,4 +1,5 @@
 import { Schema, type Document, model } from 'mongoose';
+import {IRoommatePreferences, RoommatePreferencesSchema} from "./roommatePreferences";
 
 interface IUser extends Document {
     clerkId: string,
@@ -37,7 +38,7 @@ const UserSchema = new Schema<IUser>({
 	contactedUsers: [{type: String}],
 	friendRequests: [{ type: String }], // Incoming friend requests
 	friends: [{ type: String }], // Established friendships
-	roommateQuiz: {type: RoommatePreferencesSchema, default: null}
+	roommateQuiz: {type: RoommatePreferencesSchema, default: null},
     pushTokens: [{ type: String}],
     allowedNotifications: [{ type: String}],
 },

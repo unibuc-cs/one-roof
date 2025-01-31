@@ -5,7 +5,7 @@ import { Button } from '../index';
 import { theme } from '../../theme';
 import { useUser } from '@clerk/clerk-expo';
 import { useUserDataByClerkId } from '../../hooks/useUserData';
-import { viewingService } from '../../services';
+import {notificationService, viewingService} from '../../services';
 
 export const ScheduleViewing: React.FC = ({
 	listingId,
@@ -28,6 +28,11 @@ export const ScheduleViewing: React.FC = ({
 			viewingDate: date,
 			status: 'not confirmed',
 		};
+		const pushTokens = landlord?.pushTokens;
+		for(const token of pushTokens){
+			await notificationService.sendNotification("New viewing request ", "You have a new viewing request", landlord?.clerkId as string, token);
+		}
+
 
 		try {
 			const response = await viewingService.createViewing(

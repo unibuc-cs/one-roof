@@ -117,7 +117,7 @@ export const NotificationDataProvider: React.FC<NotificationContextProviderProps
             if (!currPushTokens.includes(token.data)) {
                 const newPushTokens = [...currPushTokens, token.data];
                 await userService.updateUser(clerkId, {pushTokens: newPushTokens});
-                console.log("Added new push token:", token.data);
+                // console.error("Added new push token:", token.data);
                 setPushTokens(newPushTokens);
             }
         });

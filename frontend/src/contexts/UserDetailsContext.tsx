@@ -1,5 +1,7 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { UserRoleEnum } from '../enums';
+import React, {createContext, useContext, useState, ReactNode, useEffect} from 'react';
+import {NotificationTypesEnum, UserRoleEnum} from '../enums';
+import {useUser} from "@clerk/clerk-expo";
+import userService from "../services/internal/userService";
 
 interface UserDetails {
 	onboardingStep: number,
@@ -67,7 +69,7 @@ export const UserDetailsProvider: React.FC<UserDetailsProviderProps> = ({
 	};
 	const [allowedNotifications, setAllowedNotifications] = useState<NotificationTypesEnum[]>([]);
 
-	const { user } = useUser();
+	const {user} = useUser();
 
 	useEffect(() => {
 		if (user) {
@@ -100,7 +102,7 @@ export const UserDetailsProvider: React.FC<UserDetailsProviderProps> = ({
 			userId, setUserId,
 			contactedUsers, setContactedUsers,
 			pushTokens, setPushTokens,
-			allowedNotifications, setAllowedNotifications
+			allowedNotifications, setAllowedNotifications,
             resetUserDetails
         }}>
 			{children}
