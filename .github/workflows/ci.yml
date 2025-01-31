@@ -97,20 +97,17 @@ jobs:
         run: curl -Ls "https://get.maestro.mobile.dev" | bash
 
       - name: Start Expo Server
-        run: npx expo start --tunnel &
+        run: npx expo start --tunnel > expo_output.log &
         env:
           EXPO_NO_DEBUG: 1
           EXPO_USE_LOCAL: 1
         
       - name: Wait for Expo to Start
         run: sleep 20  # Ensure Expo has time to start
-
-      - name: Get expo config data
-        run: npx expo config --json > expo-config.json
       
       - name: Get expo url
         run: |
-          echo "EXPO_URL=$(jq -r '.url' expo-config.json)" >> $GITHUB_ENV
+          echo "EXPO_URL=$(grep -o 'exp://[^\"]*' expo_output.log)" >> $GITHUB_ENV
 
       #- name: Get Expo Dev Server URL
         #run: |

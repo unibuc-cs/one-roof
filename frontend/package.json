@@ -32,7 +32,7 @@
     "@siposdani87/expo-maps-polygon-editor": "^1.0.7",
     "@types/lodash": "^4.17.1",
     "@types/uuid": "^9.0.8",
-    "expo": "^50.0.18",
+    "expo": "^50.0.21",
     "expo-app-loading": "^2.1.1",
     "expo-font": "~11.10.3",
     "expo-image": "~1.10.6",
