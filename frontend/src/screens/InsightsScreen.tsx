@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
 import { useUserDetails } from '../contexts/UserDetailsContext';
-import { LineChart, BarChart, PieChart } from 'react-native-chart-kit';
+import { BarChart,} from 'react-native-chart-kit';
 import { Dimensions } from 'react-native';
 import { listingService, viewingService } from '../services';
 import { parseISO, format, subDays, subHours, isAfter } from 'date-fns';
-import { Button } from 'react-native';
 import { useEffect } from 'react';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Text } from 'react-native';
 import { HeaderText } from '../components/HeaderText';
+
+const currDate = "2025-01-25 10:24:17";
 
 //two buttons
 export const InsightsScreen: React.FC = () => {
@@ -19,7 +20,7 @@ export const InsightsScreen: React.FC = () => {
 	const [displayed, setDisplayed] = useState<'Views' | 'Viewings'>('Views');
 	const [chartData, setChartData] = useState<{ labels: string[], values: number[] }>({labels: [],values: [], });
 	//const currDate = new Date();
-	const currDate = "2025-01-25 10:24:17";
+	
 
 	useEffect(() => {
 		const updateChartData = async () => {
@@ -34,8 +35,6 @@ export const InsightsScreen: React.FC = () => {
 	}, [timeUnit, displayed]);
 
 
-	//console.log("CHART DATA!!!!!!!!", chartData);
-
 	async function handleData () {
 		let data;
 		console.log('Handling data; current pressed:', displayed, timeUnit);
@@ -46,7 +45,7 @@ export const InsightsScreen: React.FC = () => {
 			data = fetchViewings(); //await 
 		}
 		console.log('Fetched data:', data);
-
+	
 		let acc: { [key: string]: number }; //!!!
 		if (timeUnit === 'Hour') { // hour shows last day, day shows last month
 			data = data.filter(date => isAfter(date, subHours(currDate, 7)));
@@ -58,7 +57,7 @@ export const InsightsScreen: React.FC = () => {
 			acc = aggregateByDay(data);
 			console.log('aggregated by day: ', acc);
 		}
-
+	
 		return acc;
 	};
 
@@ -86,68 +85,53 @@ export const InsightsScreen: React.FC = () => {
 	};
 
 
-	const fetchViews =  () => { // async
-		// const allListings = await listingService.getAllListings();
-		// const landlordsListings = allListings.filter(listing => listing.landlordId ===  userId);
+	const fetchViews = async () => { // async
+		const allListings = await listingService.getAllListings();
+		const landlordsListings = allListings.filter(listing => listing.landlordId ===  userId);
 
-		// const viewsDates : Date[] = [];
-		// for (const listing of landlordsListings) {
-		// 	viewsDates.push(...listing.views); // ?
-		// }
+		const viewsDates : Date[] = [];
+		for (const listing of landlordsListings) {
+			viewsDates.push(...listing.views); // ?
+		}
 
-		const viewsDates = [
-			'2025-01-24 09:24:17',
-			'2025-01-24 15:50:49',
-			'2025-01-24 08:07:47',
-			'2025-01-24 11:19:17',
-			'2025-01-24 15:32:07',
-			'2025-01-24 06:26:34',
-			'2025-01-24 04:10:35',
-			'2025-01-24 16:49:35',
-			'2025-01-24 02:11:32',
-			'2025-01-24 13:08:39'
-		  ];
+		// const viewsDates = [
+		// 	'2025-01-24 09:24:17',
+		// 	'2025-01-24 15:50:49',
+		// 	'2025-01-24 08:07:47',
+		// 	'2025-01-24 11:19:17',
+		// 	'2025-01-24 15:32:07',
+		// 	'2025-01-24 06:26:34',
+		// 	'2025-01-24 04:10:35',
+		// 	'2025-01-24 16:49:35',
+		// 	'2025-01-24 02:11:32',
+		// 	'2025-01-24 13:08:39'
+		//   ];
 
 		return viewsDates;
 	};
 
-	const fetchViewings =  () => { // async
-		// const landlordViewings = await viewingService.getLandlordViewings(userId);
+	const fetchViewings = async () => { // async
+		const landlordViewings = await viewingService.getLandlordViewings(userId);
 
-		// const viewingsDates : Date[] = [];
-		// for (const viewing of landlordViewings) {
-		// 	viewingsDates.push(viewing.viewingDate);
-		// }
-		const viewingsDates = [
-			"2025-01-15 11:31:42",
-			"2025-01-24 03:41:41",
-			"2025-01-20 04:15:41",
-			"2025-01-17 05:54:21",
-			"2025-01-19 18:55:29",
-			"2025-01-24 00:08:27",
-			"2025-01-14 03:18:03",
-			"2025-01-17 02:41:02",
-			"2025-01-21 01:30:33",
-			"2025-01-17 08:54:11"
-		  ];
+		const viewingsDates : Date[] = [];
+		for (const viewing of landlordViewings) {
+			viewingsDates.push(viewing.viewingDate);
+		}
+		// const viewingsDates = [
+		// 	"2025-01-15 11:31:42",
+		// 	"2025-01-24 03:41:41",
+		// 	"2025-01-20 04:15:41",
+		// 	"2025-01-17 05:54:21",
+		// 	"2025-01-19 18:55:29",
+		// 	"2025-01-24 00:08:27",
+		// 	"2025-01-14 03:18:03",
+		// 	"2025-01-17 02:41:02",
+		// 	"2025-01-21 01:30:33",
+		// 	"2025-01-17 08:54:11"
+		//   ];
 
 		return viewingsDates;
 	};
-
-	// const splitChartDataIntoRows = (data, rowSize) => {
-	// 	const rows : { labels: string[], values: number[] }[] = [];
-	// 	const noLabels = data.labels.length;
-	// 	const noRows = Math.floor(noLabels / rowSize) + (noLabels % rowSize ? 1 : 0);
-	// 	for (let i = 0; i < noRows; i++) {
-	// 		const row = {
-	// 			labels: data.labels.slice(i * rowSize, (i + 1) * rowSize),
-	// 			values: data.values.slice(i * rowSize, (i + 1) * rowSize),
-	// 		}; 
-	// 		rows.push(row);
-	// 	}
-	// 	console.log('rows:', rows);
-	// 	return rows;
-	// };
 
 
 	return (
@@ -261,64 +245,3 @@ const styles = StyleSheet.create({
 		flexDirection: 'row'
 	},
 });
-
-
-// const styles = StyleSheet.create({
-// 	wrapper: {
-// 		flex: 1,
-// 		padding: 16,
-// 		paddingTop: 40, // Add padding to move content down
-// 		backgroundColor: '#fff',
-// 	},
-// 	controlSection: {
-// 		flexDirection: 'column', 
-// 		justifyContent: 'space-between', // Space rows evenly
-// 		marginBottom: 20, 
-// 	  },
-// 	buttonContainer: {
-// 		flexDirection: 'row', // Arrange buttons horizontally
-// 		justifyContent: 'space-around', // Space between buttons
-// 		marginBottom: 10, // Add space below the buttons
-// 		marginTop: 50,
-// 	},
-// 	chartContainer: {
-// 		marginLeft: 20,
-// 		marginRight: 20,
-// 		flexDirection: 'row'
-// 	},
-// 	container: {
-// 		flex: 1,
-// 		padding: 16,
-// 		paddingTop: 40, // Add padding to move content down
-// 		backgroundColor: '#fff',
-// 	},
-// 	title: {
-// 		fontSize: 24,
-// 		fontWeight: 'bold',
-// 		textAlign: 'center',
-// 		marginBottom: 16,
-// 	},
-// 	segmentedControl: {
-// 		flexDirection: 'row',
-// 		backgroundColor: '#f5f5f5',
-// 		borderRadius: 8,
-// 		marginBottom: 16,
-// 	},
-// 	tab: {
-// 		flex: 1,
-// 		paddingVertical: 10,
-// 		alignItems: 'center',
-// 		borderRadius: 8,
-// 	},
-// 	activeTab: {
-// 		backgroundColor: '#e0e0e0',
-// 	},
-// 	tabText: {
-// 		fontSize: 16,
-// 		color: '#666',
-// 	},
-// 	activeTabText: {
-// 		fontWeight: 'bold',
-// 		color: '#000',
-// 	},
-// });
