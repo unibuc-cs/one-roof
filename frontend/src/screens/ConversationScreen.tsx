@@ -1,28 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import {
-	Dimensions,
-	KeyboardAvoidingView,
-	Pressable,
-	StyleSheet,
-	Text,
-	View,
-} from 'react-native';
-import { Background, MessagesContainer } from '../components';
-import { Ionicons } from '@expo/vector-icons';
-import { TextInput } from 'react-native-paper';
-import { theme } from '../theme';
-import { useUserDetails } from '../contexts/UserDetailsContext';
-import { messageService } from '../services';
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { RootStackParamList } from '../navigation';
-import { useUserDataByClerkId } from '../hooks/useUserData';
-import { Image } from 'expo-image';
-import { useCustomFonts } from '../hooks/useCustomFonts';
+import React, {useEffect, useState} from 'react';
+import {Dimensions, KeyboardAvoidingView, Pressable, StyleSheet, Text, View} from 'react-native';
+import {Background, MessagesContainer} from '../components';
+import {Ionicons} from '@expo/vector-icons';
+import {TextInput} from 'react-native-paper';
+import {theme} from '../theme';
+import {useUserDetails} from '../contexts/UserDetailsContext';
+import {messageService, notificationService} from '../services';
+import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
+import {RootStackParamList} from '../navigation';
+import {useUserDataByClerkId} from '../hooks/useUserData';
+import {Image} from 'expo-image';
+import {useCustomFonts} from '../hooks/useCustomFonts';
 import userService from '../services/internal/userService';
-import { io } from 'socket.io-client';
-import { useUser } from '@clerk/clerk-expo';
-import { config } from '../config/configure';
-import { IMessage } from '../models/messageModel';
+import {io} from 'socket.io-client';
+import {useUser} from '@clerk/clerk-expo';
+import {IMessage} from '../models/messageModel';
+import {config} from "../config/configure";
+import {NotificationTypesEnum} from "../enums";
+import {tokens} from "react-native-paper/lib/typescript/styles/themes/v3/tokens";
+
 
 type ChatMessagesScreenRouteProps = RouteProp<RootStackParamList, 'Message'>;
 let socket;
@@ -40,7 +36,7 @@ export const ConversationScreen: React.FC = () => {
 	} = route.params;
 	const screenWidth = Dimensions.get('window').width;
 	const screenHeight = Dimensions.get('window').height;
-	const { contactedUsers: currUserContactedUsers } = useUserDetails();
+	const { contactedUsers: currUserContactedUsers, allowedNotifications, pushTokens } = useUserDetails();
 	// const { userId, contactedUsers: currUserContactedUsers } = useUserDetails();
 	const { user: clerkUser } = useUser();
 	const userId = clerkUser?.id;
@@ -53,7 +49,6 @@ export const ConversationScreen: React.FC = () => {
 	const [referenceId, setReferenceId] = useState(initialReferenceId);
 	const [type, setType] = useState(initialType);
 
-	console.log('TIP DIN SCREEN', type, initialReferenceId, referenceId);
 	useEffect(() => {
 		socket = io(config.api.baseUrl, { transports: ['websocket'] });
 		const roomId =
@@ -73,6 +68,11 @@ export const ConversationScreen: React.FC = () => {
 		socket.on('messageReceived', (msg) => {
 			if (msg.receiverId === userId && msg.senderId === receiverId) {
 				setMessages([...messages, msg]);
+
+				if(allowedNotifications.includes(NotificationTypesEnum.Messages)){
+					sendNewMessageNotification(msg);
+				}
+
 			}
 		});
 		socket.on('updateMessages', (msg) => {
@@ -89,6 +89,14 @@ export const ConversationScreen: React.FC = () => {
 		const verdict = alreadyDiscussed.length == 0 ? initialType : null;
 		console.log(verdict, 'INCLUDE MESSAGE');
 		return verdict;
+	};
+
+	const sendNewMessageNotification = async (msg) => {
+
+			for (const token of pushTokens) {
+				await notificationService.sendNotification("New message", msg.content, userId, token);
+			}
+			// TODO: test with another device
 	};
 
 	const getConversationMessages = async () => {

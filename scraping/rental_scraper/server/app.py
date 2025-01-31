@@ -9,7 +9,9 @@ def parse_json(data):
 
 
 app = Flask(__name__)
-client = MongoClient('mongodb://localhost:27017/')
+# client = MongoClient('mongodb://localhost:27017/')
+client = MongoClient('mongodb://one-roof-user:w2L38f?Wpy}e@130.61.13.108:27017/one-roof')
+
 db = client['one-roof']
 collection = db['listings']
 

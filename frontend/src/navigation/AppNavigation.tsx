@@ -11,6 +11,8 @@ import {
 	ListingDescriptionScreen,
 	ListingFacilitiesScreen,
 	ListingScreen,
+	DrawerContent,
+    NotificationsScreen,
 	OnboardingDecisionScreen,
 	ProfileScreen,
 	ReviewGeneralDetailsScreen,
@@ -75,6 +77,7 @@ export const AppNavigation = () => {
 				name="CreateListing"
 				component={CreateListingScreen}
 			/>
+            <Drawer.Screen name="Notifications" component={NotificationsScreen} />
 			<Drawer.Screen name="Profile" component={ProfileScreen} />
 			<Drawer.Screen name="Listing" component={ListingScreen} />
 			<Drawer.Screen name="Filters" component={FiltersScreen} />

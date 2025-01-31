@@ -5,7 +5,9 @@ import random
 
 
 class MongoService:
-    def __init__(self, uri='mongodb://localhost:27017/', db_name='one-roof', collection_name='listings'):
+#     def __init__(self, uri='mongodb://localhost:27017/', db_name='one-roof', collection_name='listings'):
+    def __init__(self, uri='mongodb://one-roof-user:w2L38f?Wpy}e@130.61.13.108:27017/one-roof', db_name='one-roof', collection_name='listings'):
+
         self.client = MongoClient(uri)
         self.db = self.client[db_name]
         self.collection = self.db[collection_name]

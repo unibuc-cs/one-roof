@@ -17,6 +17,7 @@ import { AppNavigation } from './src/navigation';
 import { UserDetailsProvider } from './src/contexts/UserDetailsContext';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Background } from './src/components';
+import {NotificationDataProvider} from "./src/contexts/NotificationContext";
 
 const AppLoader: React.FC<{ Stack: any }> = ({ Stack }) => {
 	const { state } = useSearchContext();

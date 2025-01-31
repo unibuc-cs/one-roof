@@ -1,5 +1,5 @@
-import { USERS, LISTINGS } from './seeds';
-import { Listing } from '../models';
+import { USERS, LISTINGS, REVIEWS } from './seeds';
+import { Listing, Review } from '../models';
 
 const seedUsers = async () => {
 	for (const user of USERS) {
@@ -16,9 +16,19 @@ const seedListings = async () => {
 	}
 };
 
+const seedReviews = async () => {
+	const reviewsNum = await Review.countDocuments();
+	if (!reviewsNum) {
+		for (const review of REVIEWS) {
+			await review.save();
+		}
+	}
+}
+
 export const seedDatabase = async () => {
 	try {
 		await seedListings();
+		await seedReviews();
 		console.log('Database seeding successful');
 	} catch (error) {
 		console.error(`Database seeding failed ${error}`);
