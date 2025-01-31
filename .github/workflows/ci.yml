@@ -98,7 +98,7 @@ jobs:
 
       - name: Add Maestro to PATH
         run: |
-          export PATH="$PATH:$HOME/.bash_profile/.maestro/bin:$HOME/.zshrc/.maestro/bin"
+          export PATH="$PATH:$HOME"
           echo "PATH updated to include Maestro: $PATH"
 
       - name: Check Maestro
