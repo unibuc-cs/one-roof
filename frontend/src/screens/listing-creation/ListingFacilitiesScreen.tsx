@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
 import { Card, TextInput } from 'react-native-paper';
 import { Checkbox } from 'react-native-paper';
 

@@ -32,9 +32,10 @@
     "plugins": [
       "expo-font"
     ],
+    "owner": "one-roof",
     "extra": {
       "eas": {
-        "projectId": "5b9ac9b6-fc14-4446-a0bc-858e488c6512"
+        "projectId": "cc60edc5-201c-4192-af0f-26b81dddc7d3"
       }
     }
   }

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
 import { Card, Checkbox, TextInput } from 'react-native-paper';
 import { Button, HeaderText } from '../../components';
 import { NumberOfBathroomsEnum, NumberOfBedroomsEnum, PropertyTypeEnum } from '../../enums';
