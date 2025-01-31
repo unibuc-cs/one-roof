@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import path from 'path';
 
-// load .env file ONLY when NOT running in GitHub Actions
+// load .env.development file ONLY when NOT running in GitHub Actions
 if (!process.env.GITHUB_ACTIONS) {
 	const envFile = `.env.${process.env.NODE_ENV || 'development'}`;
 	dotenv.config({path: path.resolve(__dirname, `../${envFile}`)});

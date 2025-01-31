@@ -10,5 +10,12 @@ export const notificationService = {
                 body,
             }
         }, clerkId);
+    },
+
+    async sendFriendRequestNotification(receivingUser, sendingUser) {
+        const pushTokens = receivingUser?.pushTokens as string[];
+        for (const token of pushTokens) {
+            await notificationService.sendNotification("New friend request", `Friend Request from: ${sendingUser.firstName} ${sendingUser.lastName}`, receivingUser.clerkId as string, token);
+        }
     }
 }
