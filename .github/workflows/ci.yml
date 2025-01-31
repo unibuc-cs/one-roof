@@ -160,7 +160,7 @@ jobs:
         with:
           api-level: 31
           arch: x86_64
-          profile: pixel_4
+          profile: pixel_8
           script: |
             adb devices
             curl -o expo-go.apk https://d1ahtucjixef4r.cloudfront.net/Exponent-2.30.11.apk
