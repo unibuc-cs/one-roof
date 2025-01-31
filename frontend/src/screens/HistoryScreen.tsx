@@ -1,19 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { View, ScrollView, StyleSheet } from 'react-native';
-import PropertyCard from '../components/PropertyCard';  // Assuming PropertyCard is your listing component
+import React, { useState } from 'react';
+import { ScrollView, StyleSheet, View } from 'react-native';
+import PropertyCard from '../components/PropertyCard'; // Assuming PropertyCard is your listing component
 import { HeaderText } from '../components';
 import { listingService } from '../services';
 import { useUser } from '@clerk/clerk-expo';
 import { IListing } from '../models';
 import { useUserDetails } from '../contexts/UserDetailsContext';
+import { useFocusEffect } from '@react-navigation/native';
 
 export const HistoryScreen: React.FC = () => {
 	const { user } = useUser();
-    const {viewedListings} = useUserDetails();
+	const { viewedListings } = useUserDetails();
 	const [listings, setListings] = useState<IListing[]>([]);
 	const [loading, setLoading] = useState<boolean>(true);
 
-	useEffect(() => {
+	useFocusEffect(() => {
 		const fetchListings = async () => {
 			const fetchedListings = await Promise.all(viewedListings.map(id => listingService.getListing(id, user?.id ?? '')));
 			setListings(fetchedListings.filter(listing => listing !== null));
@@ -21,7 +22,7 @@ export const HistoryScreen: React.FC = () => {
 		};
 
 		fetchListings();
-	}, []);
+	});
 
 	return (
 		<View style={styles.wrapper}>

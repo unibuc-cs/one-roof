@@ -6,7 +6,7 @@ import {
 	GOOGLE_MAPS_API_KEY,
 } from '@env';
 
-console.log(`http://${API_HOST}:${API_PORT}`)
+console.log(`http://${API_HOST}:${API_PORT}`);
 
 export const config = {
 	api: {

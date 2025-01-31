@@ -8,9 +8,9 @@ interface IUser extends Document {
 	gender: 'male' | 'female' | 'other',
 	onboardingStep: number,
 	contactedUsers: string[],
-    favoriteListings: string[],
-    savedLists: string[],
-    viewedListings: string[],
+	favoriteListings: string[],
+	savedLists: string[],
+	viewedListings: string[],
 	roommateQuiz?: IRoommatePreferences,
 	pushTokens: string[],
 	allowedNotifications: string[],
@@ -44,11 +44,9 @@ const UserSchema = new Schema<IUser>({
 	roommateQuiz: {type: RoommatePreferencesSchema, default: null},
 	pushTokens: [{type: String}],
 	allowedNotifications: [{type: String}],
-    favoriteListings: [{type: String}],
-    savedLists: [{type: String}],
-    viewedListings: [{type: String}],
-	friendRequests: [{ type: String }], // Incoming friend requests
-	friends: [{ type: String }], // Established friendships
+	favoriteListings: [{type: String}],
+	savedLists: [{type: String}],
+	viewedListings: [{type: String}],
 },
 {timestamps: true});
 

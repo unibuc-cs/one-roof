@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { NotificationTypesEnum, UserRoleEnum } from '../enums';
 import { useUser } from '@clerk/clerk-expo';
 import userService from '../services/internal/userService';
@@ -29,26 +29,37 @@ interface UserDetails {
 
 const defaultUserDetails: UserDetails = {
 	onboardingStep: 1,
-	setOnboardingStep: () => {},
+	setOnboardingStep: () => {
+	},
 	profilePictureUrl: '',
-	setProfilePictureUrl: () => {},
+	setProfilePictureUrl: () => {
+	},
 	role: UserRoleEnum.RegularUser,
-	setRole: () => {},
+	setRole: () => {
+	},
 	userId: '',
-	setUserId: () => {},
+	setUserId: () => {
+	},
 	contactedUsers: [],
-	setContactedUsers: () => {},
+	setContactedUsers: () => {
+	},
 	pushTokens: [],
-	setPushTokens: () => {},
+	setPushTokens: () => {
+	},
 	favoriteListings: [],
-	setFavoriteListings: () => {},
-	resetUserDetails: () => {},
+	setFavoriteListings: () => {
+	},
+	resetUserDetails: () => {
+	},
 	allowedNotifications: [],
-	setAllowedNotifications: () => {},
+	setAllowedNotifications: () => {
+	},
 	savedLists: [],
-	setSavedLists: () => {},
+	setSavedLists: () => {
+	},
 	viewedListings: [],
-	setViewedListings: () => {},
+	setViewedListings: () => {
+	},
 };
 
 const UserDetailsContext = createContext<UserDetails>(defaultUserDetails);
@@ -93,7 +104,7 @@ export const UserDetailsProvider: React.FC<UserDetailsProviderProps> = ({
 	}, [user]);
 
 	const fetchAndStoreUserDetails = async (userId: string) => {
-		const userDetails = await userService.getUserByClerkId(userId);
+		const userDetails = await userService.getFullUserByClerkId(userId);
 		setPushTokens(userDetails.pushTokens);
 		setRole(userDetails.role);
 		setOnboardingStep(userDetails.onboardingStep);
@@ -101,6 +112,7 @@ export const UserDetailsProvider: React.FC<UserDetailsProviderProps> = ({
 		setUserId(userDetails._id);
 		setContactedUsers(userDetails.contactedUsers);
 		setAllowedNotifications(userDetails.allowedNotifications);
+		setSavedLists(userDetails.savedLists);
 	};
 
 	return (
@@ -115,7 +127,8 @@ export const UserDetailsProvider: React.FC<UserDetailsProviderProps> = ({
 			contactedUsers, setContactedUsers,
 			pushTokens, setPushTokens,
 			allowedNotifications, setAllowedNotifications,
-            resetUserDetails }}>
+			resetUserDetails
+		}}>
 			{children}
 		</UserDetailsContext.Provider>
 	);

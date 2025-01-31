@@ -2,7 +2,7 @@ import { callApi } from '../../utils';
 
 export const savedListService = {
 	createSavedList: (data: any, userId: string) => {
-		return callApi('savedlists', {method: 'POST', body: data}, userId);
+		return callApi('savedlists', { method: 'POST', body: data }, userId);
 	},
 
 	getSavedList: (id: string, userId:string) => { // , ownerId: string

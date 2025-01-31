@@ -1,4 +1,4 @@
-import { UserRoleEnum, NotificationTypesEnum } from '../enums';
+import { NotificationTypesEnum, UserRoleEnum } from '../enums';
 
 export type IUserDetails = Omit<IUser, 'clerkId'>;
 

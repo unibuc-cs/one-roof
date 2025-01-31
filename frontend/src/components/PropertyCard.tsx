@@ -8,7 +8,6 @@ import { theme } from '../theme';
 import Carousel from 'react-native-reanimated-carousel';
 import { PropertyTypeEnum } from '../enums';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useCustomFonts } from '../hooks/useCustomFonts';
 import * as Linking from 'expo-linking';
 import { Image } from 'expo-image';
 import { useUser } from '@clerk/clerk-expo';
@@ -16,7 +15,6 @@ import { useUserDetails } from '../contexts/UserDetailsContext';
 import userService from '../services/internal/userService';
 import { listingService } from '../services';
 import Spinner from 'react-native-loading-spinner-overlay';
-import { ISchema } from 'yup';
 
 type PropertyCardProps = {
 	listing: IListing,
@@ -35,8 +33,6 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
 	showCarousel = true,
 	showFavorite,
 }) => {
-	useCustomFonts();
-
 	const getOpenMessage = useCallback(() => {
 		if (!listing.external) {
 			return 'Open';
@@ -47,10 +43,6 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
 		}
 	}, []);
 
-	const { favoriteListings, setFavoriteListings } = useUserDetails();
-	const [isFavorite, setIsFavorite] = useState<boolean>(
-		listing._id in favoriteListings,
-	);
 	const { navigate } = useNavigation();
 	const width = Dimensions.get('window').width;
 	const { user } = useUser();
@@ -64,8 +56,9 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
 
 	const open = useCallback(async () => {
 		// update user's history
-		if (!viewedListings.includes(listing._id)) {
-			const updatedHistory = (viewedListings !== null) ? [...viewedListings, listing._id] : [listing._id];
+		const nextViewedListings = viewedListings ? [...viewedListings] : [];
+		if (!nextViewedListings.includes(listing._id)) {
+			const updatedHistory = [...nextViewedListings, listing._id];
 			await userService.updateUser(userId, { viewedListings: updatedHistory });
 			setViewedListings(updatedHistory);
 		}
@@ -128,8 +121,10 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
 				<View style={styles.imageContainer}>
 					{canOpen && (
 						<View style={styles.buttonContainer}>
-							<Button mode="elevated" style={styles.openButton} onPress={() => open()}>{getOpenMessage()}</Button>
-							<Button mode="elevated" style={styles.addToListButton} onPress={goToListsScreen}> Save </Button>
+							<Button mode="elevated" style={styles.addToListButton}
+									onPress={() => open()}>{getOpenMessage()}</Button>
+							<Button mode="elevated" style={styles.addToListButton}
+									onPress={goToListsScreen}> Save </Button>
 						</View>
 					)}
 					{showCarousel ? (
@@ -284,9 +279,16 @@ const styles = StyleSheet.create({
 	buttonContainer: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
+		alignItems: 'center',
+		alignSelf: 'center',
+		alignContent: 'center',
+		width: '50%',
+		position: 'absolute',
+		bottom: 10,
+		zIndex: 100
 	},
 	addToListButton: {
-		zIndex: 100,
+		alignSelf: 'center',
 	},
 
 });

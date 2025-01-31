@@ -6,12 +6,12 @@ import {
 	friendRouter,
 	listingRouter,
 	messageRouter,
+	notificationRouter,
 	reviewRouter,
+	savedListRouter,
 	searchRouter,
 	userRouter,
-	viewingRouter,
-	notificationRouter,
-	savedListRouter
+	viewingRouter
 } from './routes';
 
 const app: Express = express();

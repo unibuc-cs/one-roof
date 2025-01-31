@@ -1,16 +1,13 @@
-import React, { useState } from 'react';
-import { View, ScrollView, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Dimensions, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useUserDetails } from '../contexts/UserDetailsContext';
-import { BarChart,} from 'react-native-chart-kit';
-import { Dimensions } from 'react-native';
+import { BarChart, } from 'react-native-chart-kit';
 import { listingService, viewingService } from '../services';
-import { parseISO, format, subDays, subHours, isAfter } from 'date-fns';
-import { useEffect } from 'react';
+import { format, isAfter, parseISO, subDays, subHours } from 'date-fns';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { Text } from 'react-native';
-import { HeaderText } from '../components/HeaderText';
+import { HeaderText } from '../components';
 
-const currDate = "2025-01-25 10:24:17";
+const currDate = '2025-01-25 10:24:17';
 
 //two buttons
 export const InsightsScreen: React.FC = () => {
@@ -18,16 +15,16 @@ export const InsightsScreen: React.FC = () => {
 	const { userId } = useUserDetails();
 	const [timeUnit, setTimeUnit] = useState<'Day' | 'Hour'>('Hour');
 	const [displayed, setDisplayed] = useState<'Views' | 'Viewings'>('Views');
-	const [chartData, setChartData] = useState<{ labels: string[], values: number[] }>({labels: [],values: [], });
+	const [chartData, setChartData] = useState<{ labels: string[], values: number[] }>({ labels: [], values: [], });
 	//const currDate = new Date();
-	
+
 
 	useEffect(() => {
 		const updateChartData = async () => {
 			const aggregated = await handleData();
-			const agg_keys:string[] = Object.keys(aggregated);
-			const agg_values:number[] = Object.values(aggregated) as number[];
-			setChartData({labels: agg_keys, values: agg_values});
+			const agg_keys: string[] = Object.keys(aggregated);
+			const agg_values: number[] = Object.values(aggregated) as number[];
+			setChartData({ labels: agg_keys, values: agg_values });
 			//setChartData(aggregated);
 		};
 
@@ -35,17 +32,17 @@ export const InsightsScreen: React.FC = () => {
 	}, [timeUnit, displayed]);
 
 
-	async function handleData () {
+	async function handleData() {
 		let data;
 		console.log('Handling data; current pressed:', displayed, timeUnit);
 		if (displayed === 'Views') {
 			data = await fetchViews(); //await
 		} else {
 			console.log('fetching Viewings');
-			data = await fetchViewings(); //await 
+			data = await fetchViewings(); //await
 		}
 		console.log('Fetched data:', data);
-	
+
 		let acc: { [key: string]: number }; //!!!
 		if (timeUnit === 'Hour') { // hour shows last day, day shows last month
 			data = data.filter(date => isAfter(date, subHours(currDate, 7)));
@@ -57,7 +54,7 @@ export const InsightsScreen: React.FC = () => {
 			acc = aggregateByDay(data);
 			console.log('aggregated by day: ', acc);
 		}
-	
+
 		return acc;
 	};
 
@@ -87,9 +84,9 @@ export const InsightsScreen: React.FC = () => {
 
 	const fetchViews = async () => { // async
 		const allListings = await listingService.getAllListings();
-		const landlordsListings = allListings.filter(listing => listing.landlordId ===  userId);
+		const landlordsListings = allListings.filter(listing => listing.landlordId === userId);
 
-		const viewsDates : Date[] = [];
+		const viewsDates: Date[] = [];
 		for (const listing of landlordsListings) {
 			viewsDates.push(...listing.views); // ?
 		}
@@ -113,7 +110,7 @@ export const InsightsScreen: React.FC = () => {
 	const fetchViewings = async () => { // async
 		const landlordViewings = await viewingService.getLandlordViewings(userId);
 
-		const viewingsDates : Date[] = [];
+		const viewingsDates: Date[] = [];
 		for (const viewing of landlordViewings) {
 			viewingsDates.push(viewing.viewingDate);
 		}
@@ -140,65 +137,78 @@ export const InsightsScreen: React.FC = () => {
 				<HeaderText size={40}>Your Insights</HeaderText>
 
 				<View style={styles.segmentedControl}>
-                    <TouchableOpacity testID='views_button'
-                        style={[styles.tab, displayed  === 'Views' && styles.activeTab]}
-                        onPress={() => {console.log('pressed  Views'); setDisplayed('Views')}}
-                    >
-                        <Text style={[styles.tabText, displayed === 'Views' && styles.activeTabText]}> Views </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity testID = 'viewings_button'
-                        style={[styles.tab, displayed === 'Viewings' && styles.activeTab]}
-                        onPress={() => {console.log('pressed  Viewings'); setDisplayed('Viewings')}}
-                    >
-                        <Text style={[styles.tabText, displayed === 'Viewings' && styles.activeTabText]}> Viewings </Text>
-                    </TouchableOpacity>
-                </View>
+					<TouchableOpacity testID="views_button"
+									  style={[styles.tab, displayed === 'Views' && styles.activeTab]}
+									  onPress={() => {
+										  console.log('pressed  Views');
+										  setDisplayed('Views');
+									  }}
+					>
+						<Text style={[styles.tabText, displayed === 'Views' && styles.activeTabText]}> Views </Text>
+					</TouchableOpacity>
+					<TouchableOpacity testID="viewings_button"
+									  style={[styles.tab, displayed === 'Viewings' && styles.activeTab]}
+									  onPress={() => {
+										  console.log('pressed  Viewings');
+										  setDisplayed('Viewings');
+									  }}
+					>
+						<Text
+							style={[styles.tabText, displayed === 'Viewings' && styles.activeTabText]}> Viewings </Text>
+					</TouchableOpacity>
+				</View>
 				<View style={styles.segmentedControl}>
-                    <TouchableOpacity testID='hour_button'
-                        style={[styles.tab, timeUnit  === 'Hour' && styles.activeTab]}
-                        onPress={() => {console.log('pressed  Hour'); setTimeUnit('Hour')}}
-                    >
-                        <Text style={[styles.tabText, timeUnit  === 'Hour' && styles.activeTabText]}> Hour </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity testID='day_button'
-                        style={[styles.tab, timeUnit  === 'Day' && styles.activeTab]}
-                        onPress={() => {console.log('pressed  Day'); setTimeUnit('Day')}}
-                    >
-                        <Text style={[styles.tabText, timeUnit  === 'Day' && styles.activeTabText]}> Day </Text>
-                    </TouchableOpacity>
-                </View>
+					<TouchableOpacity testID="hour_button"
+									  style={[styles.tab, timeUnit === 'Hour' && styles.activeTab]}
+									  onPress={() => {
+										  console.log('pressed  Hour');
+										  setTimeUnit('Hour');
+									  }}
+					>
+						<Text style={[styles.tabText, timeUnit === 'Hour' && styles.activeTabText]}> Hour </Text>
+					</TouchableOpacity>
+					<TouchableOpacity testID="day_button"
+									  style={[styles.tab, timeUnit === 'Day' && styles.activeTab]}
+									  onPress={() => {
+										  console.log('pressed  Day');
+										  setTimeUnit('Day');
+									  }}
+					>
+						<Text style={[styles.tabText, timeUnit === 'Day' && styles.activeTabText]}> Day </Text>
+					</TouchableOpacity>
+				</View>
 
 				<HeaderText size={25}>Displaying data for the last 7 ${timeUnit}</HeaderText>
 
-				<View style={styles.chartContainer} testID='chart container'>
+				<View style={styles.chartContainer} testID="chart container">
 					<ScrollView>
 						<BarChart
-								key={'barchart'}
-								// testID=`rtow ${index}`
-								data={{
-									labels: chartData.labels,
-									datasets: [
-										{
-											data: chartData.values,
-										},
-									],
-								}}
-								width={Dimensions.get('window').width - 16} // Full width
-								height={220}
-								yAxisLabel=""
-								yAxisSuffix=""
-								chartConfig={{
-									backgroundColor: '#f2f2f2',
-									backgroundGradientFrom: '#fff',
-									backgroundGradientTo: '#eee',
-									decimalPlaces: 0,
-									color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-								}}
-								style={{ marginBottom: 16 }}
+							key={'barchart'}
+							// testID=`rtow ${index}`
+							data={{
+								labels: chartData.labels,
+								datasets: [
+									{
+										data: chartData.values,
+									},
+								],
+							}}
+							width={Dimensions.get('window').width - 16} // Full width
+							height={220}
+							yAxisLabel=""
+							yAxisSuffix=""
+							chartConfig={{
+								backgroundColor: '#f2f2f2',
+								backgroundGradientFrom: '#fff',
+								backgroundGradientTo: '#eee',
+								decimalPlaces: 0,
+								color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+							}}
+							style={{ marginBottom: 16 }}
 						/>
 					</ScrollView>
 				</View>
-				
+
 			</ScrollView>
 		</View>
 	);

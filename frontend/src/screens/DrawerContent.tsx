@@ -1,10 +1,6 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import {
-	DrawerContentComponentProps,
-	DrawerContentScrollView,
-	DrawerItem,
-} from '@react-navigation/drawer';
+import { DrawerContentComponentProps, DrawerContentScrollView, DrawerItem, } from '@react-navigation/drawer';
 import { Caption, Drawer, Title } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ProfilePicture } from '../components/base/ProfilePicture';
@@ -13,7 +9,6 @@ import { useUserDetails } from '../contexts/UserDetailsContext';
 import { capitalize } from '../utils';
 import Button from '../components/base/Button';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import { UserRoleEnum } from '../enums';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 export function DrawerContent(props: DrawerContentComponentProps) {
@@ -24,6 +19,10 @@ export function DrawerContent(props: DrawerContentComponentProps) {
 	if (!user || !role) {
 		return null;
 	}
+
+	const roleString = role.toString().toLowerCase().replace(' ', '').replace(' ', '');
+	const landlordRef = 'landlord';
+	const regularUserRef = 'regularuser';
 
 	return (
 		<DrawerContentScrollView {...props}>
@@ -69,14 +68,14 @@ export function DrawerContent(props: DrawerContentComponentProps) {
 					/>
 					<DrawerItem
 						icon={({ color, size }) => (
-							<Icon name="user-friends" size={18} color={color} />
+							<Icon name="user-friends" size={18} color={color}/>
 						)}
 						label="Friends"
 						onPress={() => {
 							props.navigation.navigate('Friends');
 						}}
 					/>
-					{role === UserRoleEnum.RegularUser && (
+					{roleString === regularUserRef && (
 						<DrawerItem
 							icon={({ color, size }) => (
 								<MaterialCommunityIcons
@@ -91,7 +90,7 @@ export function DrawerContent(props: DrawerContentComponentProps) {
 							}}
 						/>
 					)}
-					{role === UserRoleEnum.Landlord && (
+					{roleString === landlordRef && (
 						<DrawerItem
 							icon={({ color, size }) => (
 								<MaterialCommunityIcons
@@ -106,7 +105,7 @@ export function DrawerContent(props: DrawerContentComponentProps) {
 							}}
 						/>
 					)}
-					{role === UserRoleEnum.RegularUser && (
+					{roleString === regularUserRef && (
 						<DrawerItem
 							icon={({ color, size }) => (
 								<MaterialCommunityIcons
@@ -136,26 +135,32 @@ export function DrawerContent(props: DrawerContentComponentProps) {
 					/>
 					<DrawerItem
 						icon={({ color, size }) => (
-							<MaterialCommunityIcons name="content-save-all-outline" size={size} color={color} />
+							<MaterialCommunityIcons name="content-save-all-outline" size={size} color={color}/>
 						)}
 						label="Saved Lists"
-						onPress={() => { props.navigation.navigate('SavedLists'); }}
+						onPress={() => {
+							props.navigation.navigate('SavedLists');
+						}}
 					/>
 					<DrawerItem
 						icon={({ color, size }) => (
-							<FontAwesome name="history" size={size} color={color} />
+							<FontAwesome name="history" size={size} color={color}/>
 						)}
 						label="History"
-						onPress={() => { props.navigation.navigate('History'); }}
+						onPress={() => {
+							props.navigation.navigate('History');
+						}}
 					/>
-					{role === UserRoleEnum.Landlord &&
-					<DrawerItem
-						icon={({ color, size }) => (
-							<FontAwesome name="bar-chart" size={size} color={color} />
-						)}
-						label="Insights"
-						onPress={() => { props.navigation.navigate('Insights'); }}
-					/>
+					{roleString === landlordRef &&
+						<DrawerItem
+							icon={({ color, size }) => (
+								<FontAwesome name="bar-chart" size={size} color={color}/>
+							)}
+							label="Insights"
+							onPress={() => {
+								props.navigation.navigate('Insights');
+							}}
+						/>
 					}
 					<DrawerItem
 						icon={({ color, size }) => (
@@ -185,17 +190,12 @@ export function DrawerContent(props: DrawerContentComponentProps) {
 					/>
 					<DrawerItem
 						icon={({ color, size }) => (
-							<MaterialCommunityIcons name="bell-outline" color={color} size={size} />
+							<MaterialCommunityIcons name="bell-outline" color={color} size={size}/>
 						)}
 						label="Notifications"
-						onPress={() => { props.navigation.navigate('Notifications'); }}
-					/>
-					<DrawerItem
-						icon={({ color, size }) => (
-							<MaterialCommunityIcons name="calendar-account-outline" color={color} size={size} />
-						)}
-						label="Viewings"
-						onPress={() => { props.navigation.navigate('Viewings'); }}
+						onPress={() => {
+							props.navigation.navigate('Notifications');
+						}}
 					/>
 					<Button
 						mode="elevated"

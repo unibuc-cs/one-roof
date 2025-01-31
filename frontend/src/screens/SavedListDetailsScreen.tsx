@@ -1,35 +1,49 @@
-import React, { useEffect, useState } from 'react';
-import { View, ScrollView, StyleSheet } from 'react-native';
-import PropertyCard from '../components/PropertyCard';  // Assuming PropertyCard is your listing component
+import React, { useCallback, useState } from 'react';
+import { ScrollView, StyleSheet, View } from 'react-native';
+import PropertyCard from '../components/PropertyCard'; // Assuming PropertyCard is your listing component
 import { HeaderText } from '../components';
-import { listingService } from '../services';
+import { listingService, savedListService } from '../services';
 import { useUser } from '@clerk/clerk-expo';
-import { useRoute, RouteProp } from '@react-navigation/native';
-import { RootStackParamList } from '../navigation';
+import { RouteProp, useFocusEffect } from '@react-navigation/native';
 import { IListing } from '../models';
 
-type SavedListDetailsScreenRouteProp = RouteProp<
-  RootStackParamList,
-  'SavedListDetails'
->;
+type SavedListDetailsScreenProps = {
+	route: RouteProp<{ params: { savedListId: string } }, 'params'>,
+};
 
-export const SavedListDetailsScreen: React.FC = () => {
+export const SavedListDetailsScreen: React.FC<SavedListDetailsScreenProps> = (props) => {
+	const savedListId = props.route.params.savedListId;
 	const { user } = useUser();
-	const route = useRoute<SavedListDetailsScreenRouteProp>(); // Use RouteProp to type the route
-	const { sharedWith, savedListings } = route.params; // Extract route params
 
 	const [listings, setListings] = useState<IListing[]>([]);
 	const [loading, setLoading] = useState<boolean>(true);
 
-	useEffect(() => {
-		const fetchListings = async () => {
-			const fetchedListings = await Promise.all(savedListings.map(id => listingService.getListing(id, user?.id ?? '')));
-			setListings(fetchedListings.filter(listing => listing !== null));
-			setLoading(false);
-		};
+	useFocusEffect(
+		useCallback(() => {
+			const fetchListings = async () => {
+				try {
+					setLoading(true);
 
-		fetchListings();
-	}, []);
+					const savedListDetails = await savedListService.getSavedList(savedListId, user?.id ?? '');
+					const savedListingsIds = savedListDetails.savedListings;
+					// Fetch listings based on the saved list details
+					const fetchedListings = await Promise.all(
+						savedListingsIds.map(id => listingService.getListing(id, user?.id ?? ''))
+					);
+
+					// Remove null values (failed fetches)
+					setListings(fetchedListings.filter(listing => listing !== null));
+				} catch (error) {
+					console.error('Error fetching saved listings:', error);
+				} finally {
+					setLoading(false);
+				}
+			};
+
+			fetchListings();
+		}, [savedListId, user?.id]) // Ensure it re-runs if the saved list ID or user ID changes
+	);
+
 
 	return (
 		<View style={styles.wrapper}>

@@ -1,65 +1,69 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet} from 'react-native';
+import { Alert, FlatList, Modal, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Button, Card, Text } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
-import { IListing, ISavedList, IUser, IUserWithClerk } from '../models';
-import { useSavedListDetails } from '../contexts/SavedListDetailsContext';
+import { IListing, ISavedList, IUserWithClerk } from '../models';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../navigation'; // Adjust the import path
+import { RootStackParamList } from '../navigation';
 import { friendService } from '../services/internal/friendService';
 import { useUser } from '@clerk/clerk-expo';
 import userService from '../services/internal/userService';
 import { savedListService } from '../services';
-import { TouchableOpacity, Modal, FlatList, Alert } from 'react-native';
-import { View } from 'react-native';
 
 export type SavedListNavigationProp = NativeStackNavigationProp<
-  RootStackParamList,
-  'SavedListDetails'
+	RootStackParamList,
+	'SavedListDetails'
 >;
 
 type SavedListCardProps = {
-  savedList: ISavedList,
-  listingToBeAdded: IListing | undefined
+	savedListId: string,
+	savedList: ISavedList,
+	listingToBeAdded: IListing | undefined,
 };
 
-const SavedListCard: React.FC<SavedListCardProps> = ({ savedList , listingToBeAdded}) => {
-	const { navigate } = useNavigation<SavedListNavigationProp>();
+const SavedListCard: React.FC<SavedListCardProps> = ({ savedListId, savedList, listingToBeAdded }) => {
+	const navigation = useNavigation();
 	const { user } = useUser();
 	const [friends, setFriends] = useState<IUserWithClerk[]>([]);
 	const [selectedFriends, setSelectedFriends] = useState<IUserWithClerk[]>([]);
+	const [ownerDetails, setOwnerDetails] = useState<IUserWithClerk>();
 	const [friendsDropdownVisible, setFriendsDropdownVisible] = useState(false);
 	// make sure the context is updated everywhere necessary!!!!
-	//const { savedListId, sharedWith, setSharedWith, savedListings, setSavedListings } = useSavedListDetails(); 
+	//const { savedListId, sharedWith, setSharedWith, savedListings, setSavedListings } = useSavedListDetails();
 	const sharedWith = savedList.sharedWith;
 	const savedListings = savedList.savedListings;
 
 	useEffect(() => {
 		//let friendsList;
-		const getFriends= async() => {
+		const getFriends = async () => {
 			const fetchedFriendships = await friendService.getAllFriends(user?.id ?? '');
-			const friendsList = fetchedFriendships.map(friendship => friendship.firstUser === user?.id ? friendship.secondUser : friendship.firstUser)
-			const fullFriendsList : IUserWithClerk[] = await Promise.all(friendsList.map(friendId => userService.getUserByClerkId(friendId)));
+			const friendsList = fetchedFriendships.map(friendship => friendship.firstUser === user?.id ? friendship.secondUser : friendship.firstUser);
+			const fullFriendsList: IUserWithClerk[] = await Promise.all(friendsList.map(friendId => userService.getFullUserByClerkId(friendId)));
 			const getSharedWithFriends = fullFriendsList.filter(friend => sharedWith.includes(friend._id));
 			const notSharedWithFriends = fullFriendsList.filter(friend => !sharedWith.includes(friend._id));
 			setSelectedFriends(getSharedWithFriends);
 			setFriends(notSharedWithFriends);
-		}
+		};
 		getFriends();
 
 	}, []);
-	
+
+	useEffect(() => {
+		const fetchOwnerDetails = async () => {
+			const owner = await userService.getFullUserByClerkId(savedList.ownerId);
+			setOwnerDetails(owner);
+		};
+
+		fetchOwnerDetails();
+	}, []);
 
 	const toggleFriendsDropdown = () => {
-		console.log('friends: ', friends);
 		setFriendsDropdownVisible(!friendsDropdownVisible);
 	};
 
 	const openSavedList = () => {
-		navigate('SavedListDetails', {
-			savedListId: savedList._id,
-			sharedWith: sharedWith,
-			savedListings: savedListings,
+		navigation.navigate('SavedListDetails', {
+			savedListId: savedListId,
 		});
 	};
 
@@ -67,8 +71,7 @@ const SavedListCard: React.FC<SavedListCardProps> = ({ savedList , listingToBeAd
 		if (sharedWith.includes(friend._id)) {
 			Alert.alert('This list is already shared with this friend.');
 			return;
-		}
-		else{
+		} else {
 			//let updatedSharedWith;
 			sharedWith.push(friend._id);
 			console.log('new sharedWith: ', sharedWith);
@@ -81,14 +84,14 @@ const SavedListCard: React.FC<SavedListCardProps> = ({ savedList , listingToBeAd
 		}
 	};
 
-	const selectList = async (list : ISavedList) => { // to see type of list
-		if (listingToBeAdded){
+	const selectList = async (list: ISavedList) => { // to see type of list
+		if (listingToBeAdded) {
 			console.log('Inside select list ', list);
 
 
 			if (!list.savedListings.includes(listingToBeAdded._id)) {
-					console.log(`Adding to ${list.name}`);
-					savedListings.push(listingToBeAdded?._id);
+				console.log(`Adding to ${list.name}`);
+				savedListings.push(listingToBeAdded?._id);
 			} else
 				console.log('Already exists in list');
 			await savedListService.updateSavedList(list._id, { savedListings: savedListings }, user?.id ?? '');
@@ -102,31 +105,39 @@ const SavedListCard: React.FC<SavedListCardProps> = ({ savedList , listingToBeAd
 		<Card style={styles.cardContainer}>
 			<Card.Content>
 				<Text style={styles.listName}>{savedList.name}</Text>
-				<Text style={styles.ownerId}>Owner ID: {savedList.ownerId}</Text>
-				<Text style={styles.sharedWith}>Shared With: {selectedFriends.map((user) => user.nickname).join(', ')}</Text>
+				<Text style={styles.ownerId}>Owner: {ownerDetails?.firstName + ' ' + ownerDetails?.lastName}</Text>
+				<Text style={styles.sharedWith}>Shared
+					With: {selectedFriends.map((user) => user.nickname).join(', ')}</Text>
 			</Card.Content>
 			<Card.Actions>
-				<Button mode="contained" onPress={openSavedList} testID='buton1'> Open </Button>
-				<Button mode="contained" onPress={toggleFriendsDropdown} testID='buton2'> Share </Button>
+				<Button mode="contained" onPress={() => {
+					console.log('inainte de navigate');
+					navigation.navigate('SavedListDetails', { testString: 'te rog', savedListId: savedListId });
+				}}
+						testID="buton1"> Open </Button>
+				<Button mode="contained" onPress={toggleFriendsDropdown} testID="buton2"> Share </Button>
 				{(listingToBeAdded !== null && listingToBeAdded !== undefined) && (
-					<Button mode="contained" onPress={() => selectList(savedList)} testID='buton3'>Add</Button>
+					<Button mode="contained" onPress={() => selectList(savedList)} testID="buton3">Add</Button>
 				)}
 			</Card.Actions>
 
-			<Modal visible={friendsDropdownVisible} transparent={true} animationType="slide" onRequestClose={toggleFriendsDropdown} testID='modal!'>
-				<View style= {styles.modalContainer}>
+			<Modal visible={friendsDropdownVisible} transparent={true} animationType="slide"
+				   onRequestClose={toggleFriendsDropdown} testID="modal!">
+				<View style={styles.modalContainer}>
 					<View style={styles.modalContent}>
-						<FlatList data={friends} keyExtractor={(item: IUserWithClerk)=>item._id.toString()} renderItem={({ item })=>(
-							<TouchableOpacity style={styles.listItem} onPress={() => shareList(item)}>
-								<Text style = {styles.listItemText}> {item.firstName + ' ' + item.lastName + ' - ' + item.nickname} </Text>
-							</TouchableOpacity>
-						)} />
+						<FlatList data={friends} keyExtractor={(item: IUserWithClerk) => item._id.toString()}
+								  renderItem={({ item }) => (
+									  <TouchableOpacity style={styles.listItem} onPress={() => shareList(item)}>
+										  <Text
+											  style={styles.listItemText}> {item.firstName + ' ' + item.lastName + ' - ' + item.nickname} </Text>
+									  </TouchableOpacity>
+								  )}/>
 
 						<TouchableOpacity
-								style={styles.closeButton} // Add your custom styling here
-								onPress={toggleFriendsDropdown} // Toggles visibility
-							>
-								<Text style={styles.closeButtonText}>Close</Text>
+							style={styles.closeButton} // Add your custom styling here
+							onPress={toggleFriendsDropdown} // Toggles visibility
+						>
+							<Text style={styles.closeButtonText}>Close</Text>
 						</TouchableOpacity>
 					</View>
 				</View>
@@ -186,29 +197,23 @@ const styles = StyleSheet.create({
 		backgroundColor: '#f00', // Red background for visibility
 		borderRadius: 5,
 		alignItems: 'center',
-	  },
-	  closeButtonText: {
+	},
+	closeButtonText: {
 		color: '#fff', // White text
 		fontSize: 16,
 		fontWeight: 'bold',
-	  },
+	},
 });
 
 export default SavedListCard;
 
 
-
-
-
-
-
-
 // const getContext = async () => {
-	// 	console.log('before loading context from database', savedList._id);
-	// 	const listDetails = await savedListService.getSavedList(savedList._id, user?.id ?? '');
-	// 	console.log('list details: ', listDetails);
-	// 	setSharedWith(listDetails.sharedWith);
-	// 	setSavedListings(listDetails.savedListings);
-	// };
+// 	console.log('before loading context from database', savedList._id);
+// 	const listDetails = await savedListService.getSavedList(savedList._id, user?.id ?? '');
+// 	console.log('list details: ', listDetails);
+// 	setSharedWith(listDetails.sharedWith);
+// 	setSavedListings(listDetails.savedListings);
+// };
 
-	// await getContext();
+// await getContext();

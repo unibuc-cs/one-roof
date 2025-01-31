@@ -1,11 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import {
-	ActivityIndicator,
-	Pressable,
-	ScrollView,
-	StyleSheet,
-	View,
-} from 'react-native';
+import { ActivityIndicator, Pressable, ScrollView, StyleSheet, View, } from 'react-native';
 import UserChatCard from '../components/chats/UserChatCard';
 import { theme } from '../theme';
 import { useUser } from '@clerk/clerk-expo';
@@ -23,7 +17,7 @@ export const ChatsScreen: React.FC = () => {
 		useCallback(() => {
 			const fetchUserData = async () => {
 				try {
-					const ussr = await userService.getUserByClerkId(
+					const ussr = await userService.getFullUserByClerkId(
 						user?.id || '',
 					);
 					if (ussr) {
@@ -65,7 +59,7 @@ export const ChatsScreen: React.FC = () => {
 			</View>
 			<Pressable>
 				{currentUser?.contactedUsers.map((clerkUserId, index) => (
-					<UserChatCard key={index} userId={clerkUserId} />
+					<UserChatCard key={index} userId={clerkUserId}/>
 				))}
 			</Pressable>
 		</ScrollView>
