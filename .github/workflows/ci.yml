@@ -78,18 +78,19 @@ jobs:
     runs-on: ubuntu-latest
     needs: backend-test
     steps:
-      - name: Install MongoDB CLI
+      - name: Install MongoDB Shell (mongosh)
         run: |
           sudo apt-get update
-          sudo apt-get install -y mongodb-clients
+          sudo apt-get install -y gnupg curl
+          curl -fsSL https://pgp.mongodb.com/server-6.0.asc | sudo tee /usr/share/keyrings/mongodb-server-key.asc
+          echo "deb [signed-by=/usr/share/keyrings/mongodb-server-key.asc] https://repo.mongodb.org/apt/ubuntu $(lsb_release -cs)/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list
+          sudo apt-get update
+          sudo apt-get install -y mongodb-org-shell
 
       - name: Check MongoDB Connection
         run: |
           echo "Checking MongoDB Connection..."
-          mongosh --host ${{ secrets.BACKEND_MONGO_URI }} \
-                 --username ${{ secrets.BACKEND_MONGO_USER }} \
-                 --password ${{ secrets.BACKEND_MONGO_PASS }} \
-                 --authenticationDatabase admin \
+          mongosh "mongodb://${{ secrets.BACKEND_MONGO_USER }}:${{ secrets.BACKEND_MONGO_PASS }}@${{ secrets.BACKEND_MONGO_URI }}/admin?authSource=admin" \
                  --eval "db.runCommand({ ping: 1 })"
 
   security-check:
