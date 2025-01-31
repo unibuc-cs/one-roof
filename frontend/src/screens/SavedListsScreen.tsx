@@ -74,23 +74,23 @@ export const SavedListsScreen: React.FC = () => {
 			};
 			await saveToDatabase();
 
-			console.log('After adding list ', myLists, created_list_id);
+			console.log('After adding list ', savedLists, created_list_id);
 			let updatedLists;
-			if (myLists === null) {
+			if (savedLists === null) {
 				updatedLists = [created_list_id];
 			}
 			else {
-				updatedLists = [...myLists, created_list_id];
+				updatedLists = [...savedLists, created_list_id];
 			}
 			
 			await userService.updateUser(user?.id ?? '', { savedLists: updatedLists }); //update user in database
 	
 			console.log('list added', created_list_id);
 
-			// because of this the entire page will be re-rendered
-			setMyLists(updatedLists); // update the user context
-			setNewListName(''); // Clear the new list name field
 			setSavedLists(updatedLists);
+			//setMyLists(updatedLists); // update the user context
+			setNewListName(''); // Clear the new list name field
+			
 		}
 	};
 
