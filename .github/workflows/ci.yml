@@ -4,13 +4,11 @@ on:
   push:
     branches:
       - main
-      - backup-main
-      - last-working-backup-amin
-      - improve-ci-cd
+      - last-working-after-merge
   pull_request:
     branches:
       - main
-      - backup-main
+      - last-working-after-merge
   workflow_dispatch: # Allows manual triggering
 
 jobs:
@@ -128,7 +126,7 @@ jobs:
     name: Auto Merge Main → Staging
     needs: [ backend-test, db-health-check, security-check, create-staging-branch ]
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/improve-ci-cd'
+    if: github.ref == 'refs/heads/last-working-after-merge'
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
