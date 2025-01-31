@@ -94,13 +94,7 @@ jobs:
         run: npm install
 
       - name: Install Maestro
-        run: curl -Ls "https://get.maestro.mobile.dev" | bash
-
-      - name: Add Maestro to PATH
-        run: export PATH="$PATH":"/Users/runner/.zshrc/.maestro/bin"
-      
-      - name: Add Maestro to PATH (2)
-        run: echo "/Users/runner/.zshrc" >> $GITHUB_PATH
+        run: curl -Ls "https://get.maestro.mobile.dev" | zsh
 
       - name: Check Maestro
         run: maestro --version
