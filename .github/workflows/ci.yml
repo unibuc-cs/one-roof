@@ -96,8 +96,14 @@ jobs:
       - name: Install Maestro
         run: curl -Ls "https://get.maestro.mobile.dev" | bash
 
+      - name: Adding Maestro to PATH
+        run: export PATH=$PATH:$HOME/.maestro/bin
+
+      - name: Check Maestro
+        run: maestro --version
+
       - name: Start Expo Server
-        run: npx expo start --tunnel > expo_output.log &
+        run: npx expo start --tunnel &
         env:
           EXPO_NO_DEBUG: 1
           EXPO_USE_LOCAL: 1
@@ -107,7 +113,7 @@ jobs:
       
       - name: Get expo url
         run: |
-          echo "EXPO_URL=$(grep -o 'exp://[^\"]*' expo_output.log)" >> $GITHUB_ENV
+          echo "EXPO_URL=exp://localhost:8081" >> $GITHUB_ENV
 
       #- name: Get Expo Dev Server URL
         #run: |
