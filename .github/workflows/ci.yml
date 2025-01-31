@@ -98,8 +98,7 @@ jobs:
 
       - name: Add Maestro to PATH
         run: |
-          export PATH="$PATH:$HOME"
-          echo "PATH updated to include Maestro: $PATH"
+          echo "$HOME" >> $GITHUB_PATH
 
       - name: Check Maestro
         run: maestro --version
