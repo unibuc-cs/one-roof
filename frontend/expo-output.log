@@ -1,0 +1,18 @@
+Starting project at /home/anna/WebstormProjects/one-roof-nou/frontend
+env: load .env
+env: export HELLO API_PORT AUTH0_DOMAIN AUTH0_CLIENT_ID API_HOST EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY FIREBASE_API_KEY FIREBASE_STORAGE_BUCKET FIREBASE_PROJECT_ID FIREBASE_APP_ID FIREBASE_MESSAGING_SENDER_ID FIREBASE_MEASUREMENT_ID FIREBASE_AUTH_DOMAIN GOOGLE_MAPS_API_KEY
+Starting Metro Bundler
+Tunnel connected.
+Tunnel ready.
+The following packages should be updated for best compatibility with the installed expo version:
+  @react-native-picker/picker@2.7.6 - expected version: 2.6.1
+  expo@50.0.18 - expected version: ~50.0.20
+  expo-location@17.0.1 - expected version: ~16.5.5
+  react-native-get-random-values@1.11.0 - expected version: ~1.8.0
+  react-native-svg@15.10.1 - expected version: 14.1.0
+Your project may not work correctly until you install the correct versions of the packages.
+Waiting on http://localhost:8085
+Logs for your project will appear below.
+Tunnel connection has been closed. This is often related to intermittent connection problems with the Ngrok servers. Restart the dev server to try connecting to Ngrok again.
+Check the Ngrok status page for outages: https://status.ngrok.com/
+Tunnel connected.

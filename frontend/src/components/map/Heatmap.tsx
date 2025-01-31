@@ -1,150 +1,184 @@
-import MapView from 'react-native-map-clustering';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { getCoordinatesFromLocation, mapStyles, } from '../../utils';
+import { getCoordinatesFromLocation, mapStyles } from '../../utils';
 import { IListing, IReview } from '../../models';
-import { BottomItemCard } from '../BottomItemCard';
 import { useSearchContext } from '../../contexts/SearchContext';
-import { debounce } from 'lodash';
 import { theme } from '../../theme';
-import { CustomMarker } from './CustomMarker';
-import { Heatmap } from 'react-native-maps';
-import { fetchAirPollutionData, fetchCrimeData } from '../../services/external/openWeatherApi';
+import environmentalData from '../../../assets/data/environmental_data.json';
+import { MultiSelect } from 'react-native-element-dropdown';
+import MapView, { Heatmap } from 'react-native-maps';
 
 const EPSILON = 0.001;
 
-type IMapItem = IListing | IReview;
-
 interface DataPoint {
+	latitude: number,
+	longitude: number,
+	pm2_5: number,
+}
+
+interface ScoredPoint {
 	latitude: number,
 	longitude: number,
 	weight: number,
 }
 
+const weightOptions = [
+	{ label: 'Price', value: 'price' },
+	{ label: 'Review Score', value: 'review' },
+	{ label: 'Air Pollution', value: 'pollution' }
+];
+
 export const HeatmapComponent: React.FC = () => {
 	const mapRef = useRef(null);
-	const [legalToUpdate, setLegalToUpdate] = useState<boolean>(true);
-	const [selectedItem, setSelectedItem] = useState<IMapItem>();
-	const {
-		state,
-		setIsWaitingForSearch,
-		setWasExternalSearchPerformed,
-		triggerSearch,
-	} = useSearchContext();
+	const { state } = useSearchContext();
+	const [scoredPoints, setScoredPoints] = useState<ScoredPoint[]>([]);
+	const [selectedWeights, setSelectedWeights] = useState(['price', 'review', 'pollution']);
 
-	const handleClose = useCallback(() => setSelectedItem(undefined), []);
 
-	const handleMarkerPress = useCallback((item: IMapItem) => {
-		setSelectedItem((prevItem) => (prevItem === item ? undefined : item));
+	// useFocusEffect(
+	// 	React.useCallback(() => {
+	// 		const intervalId = setInterval(() => {
+	// 			calculateHeatmapData();
+	// 		}, 1000); // Runs every 1 second
+	//
+	// 		return () => clearInterval(intervalId); // Cleanup on unmount
+	// 	}, [state.listings, state.reviews])
+	// );
+	//
+	// useFocusEffect(
+	// 	() => {
+	// 		calculateHeatmapData();
+	// 	});
+	// useEffect(() => {
+	// 	calculateHeatmapData();
+	// }, [state.filteredListings, state.filteredReviews, selectedWeights]);
+
+	// useEffect(() => {
+	// 	calculateHeatmapData();
+	// }, []);
+
+	useEffect(() => {
+		console.error(state);
 	}, []);
-
-	const debouncedRegionUpdate = useCallback(
-		debounce((newRegion) => {
-			triggerSearch(newRegion, false);
-		}, 600),
-		[triggerSearch],
-	);
-
-	const handleRegionChangeComplete = useCallback(
-		(newRegion) => {
-			if (needsUpdate(state.region, newRegion)) {
-				if (legalToUpdate) {
-					setIsWaitingForSearch(true);
-					debouncedRegionUpdate(newRegion);
-				} else {
-					setLegalToUpdate(true);
-				}
-			}
-		},
-		[state.region, legalToUpdate, debouncedRegionUpdate],
-	);
-
-	const handleMapLoaded = useCallback(() => {
-		setIsWaitingForSearch(true);
-		debouncedRegionUpdate(state.region);
-	}, []);
-
-	const needsUpdate = (oldRegion, newRegion) => {
-		return (
-			Math.abs(newRegion.latitude - oldRegion.latitude) > EPSILON ||
-			Math.abs(newRegion.longitude - oldRegion.longitude) > EPSILON ||
-			Math.abs(newRegion.latitudeDelta - oldRegion.latitudeDelta) > EPSILON ||
-			Math.abs(newRegion.longitudeDelta - oldRegion.longitudeDelta) > EPSILON
-		);
+	const getDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
+		return Math.sqrt((lat1 - lat2) ** 2 + (lon1 - lon2) ** 2);
 	};
 
-	useEffect(() => {
-		if (mapRef.current && state.wasExternalSearchPerformed) {
-			mapRef.current.animateToRegion(state.region, 1000);
-			setWasExternalSearchPerformed(false);
-			setLegalToUpdate(false);
+	const findClosest = (lat: number, lon: number, data: (IListing | IReview)[], key: string) => {
+		let minDistance = Number.MAX_VALUE;
+		let closestValue = null;
+
+		for (const item of data) {
+			const itemCoords = getCoordinatesFromLocation(item.location);
+			const distance = getDistance(lat, lon, itemCoords.latitude, itemCoords.longitude);
+
+			if (distance < minDistance) {
+				minDistance = distance;
+				closestValue = item[key];
+			}
 		}
-	}, [state.wasExternalSearchPerformed]);
 
-	const [airPollutionPoints, setAirPollutionPoints] = useState<DataPoint[]>([]);
-	const [crimePoints, setCrimePoints] = useState([]);
-	const [trafficNoisePoints, setTrafficNoisePoints] = useState([]);
+		return closestValue ?? 0;
+	};
 
-	useEffect(() => {
-		(async () => {
-			const airPollutionData: DataPoint[] = await fetchAirPollutionData();
-			console.log('Air pollution data:', airPollutionData);
-			setAirPollutionPoints(airPollutionData);
-		})();
-	}, []); // ✅ Runs only on mount
+	const calculateHeatmapData = () => {
+		console.error('inainte ajung aici? ', state.listings.length, state.reviews.length);
+		console.error('ajung aici? ', state.listings.length, state.reviews.length);
 
-	useEffect(() => {
-		(async () => {
-			const crimeData = await fetchCrimeData();
-			console.error('Crime data:', crimeData);
-			setCrimePoints(crimeData);
-		})();
-	}, []);
+		const listingPrices = state.listings.map((l) => l.price);
+		const minPrice = Math.min(...listingPrices);
+		const maxPrice = Math.max(...listingPrices);
 
+		const reviewScores = state.reviews.map((r) => r.recommend);
+		const minReview = Math.min(...reviewScores);
+		const maxReview = Math.max(...reviewScores);
 
-	const heatmapPoints = state.filteredListings.map((listing) => ({
-		latitude: getCoordinatesFromLocation(listing.location).latitude,
-		longitude: getCoordinatesFromLocation(listing.location).longitude,
-		weight: listing.price, // Higher price = more intense heatmap
-	}));
+		const pollutionLevels = environmentalData.map((p) => p.pm2_5);
+		const minPollution = Math.min(...pollutionLevels);
+		const maxPollution = Math.max(...pollutionLevels);
 
+		const normalize = (value: number, min: number, max: number) =>
+			max - min === 0 ? 0.5 : (value - min) / (max - min);
+
+		const selectedWeightCount = selectedWeights.length;
+		const weightValue = selectedWeightCount ? 1 / selectedWeightCount : 0;
+
+		console.error('env data here', environmentalData);
+		const scored = environmentalData.map((point) => {
+			const closestPrice = findClosest(point.latitude, point.longitude, state.listings, 'price');
+			const closestReview = findClosest(point.latitude, point.longitude, state.reviews, 'score');
+
+			console.error('closestPrice', closestPrice);
+			console.error('closestReview', closestReview);
+
+			const normalizedPrice = 1 - normalize(closestPrice, minPrice, maxPrice);
+			const normalizedReview = normalize(closestReview, minReview, maxReview);
+			const normalizedPollution = 1 - normalize(point.pm2_5, minPollution, maxPollution);
+
+			let score = 0;
+			if (selectedWeights.includes('price')) score += weightValue * normalizedPrice;
+			if (selectedWeights.includes('review')) score += weightValue * normalizedReview;
+			if (selectedWeights.includes('pollution')) score += weightValue * normalizedPollution;
+
+			return {
+				latitude: point.latitude,
+				longitude: point.longitude,
+				weight: score,
+			};
+		});
+
+		console.error('scored', scored);
+		setScoredPoints(scored);
+	};
+
+	// console.error('scoredPoints', scoredPoints);
+	// console.error('selectedWeights', selectedWeights);
+	// console.error('env data', environmentalData);
 	return (
-		<View style={styles.map}>
-			<MapView
-				clusterColor={theme.colors.primary}
-				ref={mapRef}
-				style={styles.map}
-				initialRegion={state.region}
-				onMapLoaded={handleMapLoaded}
-				onRegionChangeComplete={handleRegionChangeComplete}
-				customMapStyle={mapStyles}
-				onPress={() => setSelectedItem(undefined)}
-				tracksViewChanges={false}
-			>
-				{crimePoints.length > 0 && <Heatmap points={crimePoints} radius={50} opacity={0.6}/>}
-				{state.filteredListings.map((listing) => (
-					<CustomMarker
-						key={`listing-${listing._id}`}
-						coordinate={getCoordinatesFromLocation(listing.location)}
-						onPress={() => handleMarkerPress(listing)}
-						text={`${listing.price} €`}
-					/>
-				))}
-			</MapView>
+		<View style={styles.container}>
+			<MultiSelect
+				data={weightOptions}
+				labelField="label"
+				valueField="value"
+				value={selectedWeights}
+				onChange={setSelectedWeights}
+				placeholder="Select weight factors"
+				selectedStyle={styles.selectedItems}
+				containerStyle={styles.dropdownContainer}
+			/>
 
-			{selectedItem && (
-				<View style={styles.bottomCardContainer}>
-					<BottomItemCard
-						item={selectedItem as IListing}
-						onClose={handleClose}
-					/>
-				</View>
-			)}
+			<View style={styles.map}>
+				<MapView
+					ref={mapRef}
+					style={styles.map}
+					initialRegion={state.region}
+					customMapStyle={mapStyles}
+				>
+					{scoredPoints.length > 0 && <Heatmap points={scoredPoints} radius={50} opacity={0.6}/>}
+				</MapView>
+
+			</View>
 		</View>
 	);
 };
 
 const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		height: '100%',
+	},
+	dropdownContainer: {
+		position: 'absolute',
+		top: 20,
+		left: 10,
+		right: 10,
+		zIndex: 1000,
+	},
+	selectedItems: {
+		backgroundColor: theme.colors.primary,
+		borderRadius: 5,
+		padding: 5,
+	},
 	bottomCardContainer: {
 		position: 'absolute',
 		bottom: 0,
@@ -160,4 +194,3 @@ const styles = StyleSheet.create({
 		bottom: 0,
 	},
 });
-
