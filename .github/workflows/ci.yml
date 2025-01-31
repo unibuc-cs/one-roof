@@ -96,24 +96,25 @@ jobs:
       - name: Install Maestro
         run: curl -Ls "https://get.maestro.mobile.dev" | bash
 
-      #- name: Start Expo Server
-        #run: npx expo start --tunnel &
-        #env:
-          #EXPO_NO_DEBUG: 1
-          #EXPO_USE_LOCAL: 1
+      - name: Start Expo Server
+        run: npx expo start --tunnel &
+        env:
+          EXPO_NO_DEBUG: 1
+          EXPO_USE_LOCAL: 1
+        
+      - name: Wait for Expo to Start
+        run: sleep 20  # Ensure Expo has time to start
 
-      #- name: Wait for Expo to Start
-        #run: sleep 20  # Ensure Expo has time to start
+      - name: Get expo config data
+        run: npx expo config --json > expo-config.json
+      
+      - name: Get expo url
+        run: |
+          echo "EXPO_URL=$(jq -r '.url' expo-config.json)" >> $GITHUB_ENV
 
       #- name: Get Expo Dev Server URL
         #run: |
           #echo "EXPO_URL=$(npx expo url)" >> $GITHUB_ENV
-
-      - name: Start Expo & Extract URL
-        run: |
-          expo start --json > expo-url.json &
-          sleep 20
-          echo "EXPO_URL=$(jq -r '.url' expo-url.json)" >> $GITHUB_ENV
 
       - name: Debug Expo URL
         run: echo "Expo is running at $EXPO_URL"
