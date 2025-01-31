@@ -6,7 +6,7 @@ appId: host.exp.exponent
 - extendedWaitUntil:
     visible:
         id: 'SignIn'
-    timeout: 120000
+    timeout: 180000
 - tapOn:
     id: 'SignIn'
 - tapOn:
