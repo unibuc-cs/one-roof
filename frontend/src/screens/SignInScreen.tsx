@@ -72,6 +72,7 @@ export default function SignInScreen() {
 					<>
 						<TextInput
 							label="Email"
+							testID='Email'
 							returnKeyType="next"
 							autoCapitalize="none"
 							value={values.emailAddress}
@@ -90,6 +91,7 @@ export default function SignInScreen() {
 
 						<TextInput
 							label="Password"
+							testID='Password'
 							returnKeyType="done"
 							secureTextEntry={true}
 							value={values.password}
@@ -104,7 +106,7 @@ export default function SignInScreen() {
 								Invalid email or password. Please try again.
 							</Text>
 						)}
-						<Button mode="contained" onPress={() => handleSubmit()}>
+						<Button mode="contained" testID='SignIn' onPress={() => handleSubmit()}>
 							Sign In
 						</Button>
 					</>

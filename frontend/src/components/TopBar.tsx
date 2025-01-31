@@ -54,6 +54,7 @@ const TopBar: React.FC<TopBarProps> = ({ navigation }) => {
 					>
 						<MenuIcon
 							iconName={'menu'}
+							testID="menu"
 							onPress={() => navigation.openDrawer()}
 						/>
 						<View style={styles.searchBarContainer}>
@@ -61,6 +62,7 @@ const TopBar: React.FC<TopBarProps> = ({ navigation }) => {
 						</View>
 						<MenuIcon
 							iconName="tune"
+							testID="filters"
 							onPress={() => navigation.navigate('Filters')}
 						/>
 					</View>

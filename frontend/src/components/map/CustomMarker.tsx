@@ -24,6 +24,7 @@ export const VanillaCustomMarker: React.FC<CustomMarkerProps> = ({
 			coordinate={coordinate}
 			onPress={onPress}
 			tracksViewChanges={tracks}
+			testID='custom-marker'
 		>
 			<View style={styles.container}>
 				<Text style={styles.text}>{text}</Text>
