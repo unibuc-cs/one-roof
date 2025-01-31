@@ -42,7 +42,7 @@ export const ViewingService = {
 	},
 
 	updateViewingById: async (id: string, updateData: UpdateQuery<IViewing>): Promise<IViewing | null> => {
-		return Viewing.findByIdAndUpdate(id, updateData, { new: true }).exec();
+		return Viewing.findByIdAndUpdate(id, updateData, { new: true });
 	},
 
 	confirmViewingById: async (id: string): Promise<IViewing | null> => {
