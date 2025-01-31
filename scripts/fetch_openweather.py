@@ -7,7 +7,7 @@ from time import sleep
 BUCURESTI_COORDS = {"lat": 44.4268, "lon": 26.1025}
 RADIUS_KM = 12
 POINT_COUNT = 100
-OPENWEATHER_API_KEY = "1edc4e7e508513170e1d77d8eebcd7a8"
+OPENWEATHER_API_KEY = "api_key"
 OUTPUT_FILE = "data/environmental_data.json"
 
 

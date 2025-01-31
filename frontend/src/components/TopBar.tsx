@@ -82,6 +82,10 @@ const TopBar: React.FC<TopBarProps> = ({ navigation }) => {
 									label: 'Reviews',
 									value: SearchTypeEnum.Reviews,
 								},
+								{
+									label: 'Heatmap',
+									value: 'Heatmap'
+								}
 							]}
 							buttonColor={theme.colors.inverseSurface}
 							backgroundColor={theme.colors.inversePrimary}
