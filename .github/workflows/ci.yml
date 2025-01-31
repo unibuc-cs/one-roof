@@ -132,6 +132,9 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
+      - name: Move e2e/login.yml to Runner
+        run: mv e2e/login.yml /home/runner/work/one-roof/one-roof/e2e
+
       - name: Start Android Emulator and Test
         uses: reactivecircus/android-emulator-runner@v2
         with:
