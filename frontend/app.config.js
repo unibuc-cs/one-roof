@@ -36,7 +36,6 @@ export default {
     "owner": "one-roof",
     "extra": {
       "eas": {
-        "projectId": "cc60edc5-201c-4192-af0f-26b81dddc7d3",
         "plugins": [
           [
             "expo-build-properties",

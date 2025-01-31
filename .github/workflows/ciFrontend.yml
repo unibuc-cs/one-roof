@@ -34,6 +34,9 @@ jobs:
       - name: Create release directory
         run: mkdir release
 
+      - name: Create GOOGLE_SERVICES_FILE
+        run: echo ${{secrets.GOOGLE_SERVICES_FILE}} > google-services.json
+
       - name: Build app
         run: eas build -p android --local --profile preview --output release/one-roof-prev.apk
 
