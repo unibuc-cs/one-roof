@@ -71,7 +71,8 @@ export const AppNavigation = () => {
 			<Drawer.Screen name="Chats" component={ChatsScreen} />
 			<Drawer.Screen name="Favorites" component={FavoriteScreen} />
 			<Drawer.Screen name="CreateReview" component={CreateReviewScreen} />
-			<Drawer.Screen
+            <Drawer.Screen name="Notifications" component={NotificationsScreen} />
+            <Drawer.Screen
 				name="CreateListing"
 				component={CreateListingScreen}
 			/>

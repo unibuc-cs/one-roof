@@ -12,10 +12,11 @@ import { SearchProvider, useSearchContext } from './src/contexts/SearchContext';
 import { UnauthenticatedHomeScreen } from './src/screens';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import SignUpScreen from './src/screens/SignUpScreen';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {UserDetailsProvider} from './src/contexts/UserDetailsContext';
+import {AppNavigation} from './src/navigation';
 import SignInScreen from './src/screens/SignInScreen';
-import { AppNavigation } from './src/navigation';
-import { UserDetailsProvider } from './src/contexts/UserDetailsContext';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {NotificationDataProvider} from "./src/contexts/NotificationContext";
 import { Background } from './src/components';
 
 const AppLoader: React.FC<{ Stack: any }> = ({ Stack }) => {
@@ -123,9 +124,11 @@ export default function App() {
 			<PaperProvider theme={theme}>
 				<NavigationContainer>
 					<UserDetailsProvider>
-						<SearchProvider>
-							<AppLoader Stack={Stack}/>
-						</SearchProvider>
+                        <NotificationDataProvider>
+                            <SearchProvider>
+                                <AppLoader Stack={Stack}/>
+                            </SearchProvider>
+                        </NotificationDataProvider>
 					</UserDetailsProvider>
 				</NavigationContainer>
 			</PaperProvider>

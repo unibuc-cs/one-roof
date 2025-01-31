@@ -4,3 +4,4 @@ export * from './PropertyTypeEnum';
 export * from './NumberOfBathroomsEnum';
 export * from './NumberOfBedroomsEnum';
 export * from './TypeOfProviderEnum';
+export * from './NotificationTypesEnum'

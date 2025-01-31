@@ -24,6 +24,7 @@ import { useUser } from '@clerk/clerk-expo';
 import { config } from '../config/configure';
 import { IMessage } from '../models/messageModel';
 
+
 type ChatMessagesScreenRouteProps = RouteProp<RootStackParamList, 'Message'>;
 let socket;
 
@@ -40,7 +41,7 @@ export const ConversationScreen: React.FC = () => {
 	} = route.params;
 	const screenWidth = Dimensions.get('window').width;
 	const screenHeight = Dimensions.get('window').height;
-	const { contactedUsers: currUserContactedUsers } = useUserDetails();
+	const { contactedUsers: currUserContactedUsers, allowedNotifications, pushTokens } = useUserDetails();
 	// const { userId, contactedUsers: currUserContactedUsers } = useUserDetails();
 	const { user: clerkUser } = useUser();
 	const userId = clerkUser?.id;
@@ -53,7 +54,6 @@ export const ConversationScreen: React.FC = () => {
 	const [referenceId, setReferenceId] = useState(initialReferenceId);
 	const [type, setType] = useState(initialType);
 
-	console.log('TIP DIN SCREEN', type, initialReferenceId, referenceId);
 	useEffect(() => {
 		socket = io(config.api.baseUrl, { transports: ['websocket'] });
 		const roomId =
@@ -73,6 +73,11 @@ export const ConversationScreen: React.FC = () => {
 		socket.on('messageReceived', (msg) => {
 			if (msg.receiverId === userId && msg.senderId === receiverId) {
 				setMessages([...messages, msg]);
+
+				if(allowedNotifications.includes(NotificationTypesEnum.Messages)){
+					sendNewMessageNotification(msg);
+				}
+
 			}
 		});
 		socket.on('updateMessages', (msg) => {
@@ -89,6 +94,12 @@ export const ConversationScreen: React.FC = () => {
 		const verdict = alreadyDiscussed.length == 0 ? initialType : null;
 		console.log(verdict, 'INCLUDE MESSAGE');
 		return verdict;
+	};
+
+	const sendNewMessageNotification = async (msg) => {
+			for (const token of pushTokens) {
+				await notificationService.sendNotification("New message", msg.content, userId, token);
+			}
 	};
 
 	const getConversationMessages = async () => {
@@ -211,7 +222,7 @@ const styles = StyleSheet.create({
 		width: 40,
 		borderRadius: 20,
 	},
-	receiverName: {
+	receiverName:{
 		fontFamily: 'Proxima-Nova/Regular',
 		fontSize: 20,
 	},
@@ -237,12 +248,13 @@ const styles = StyleSheet.create({
 	},
 	senderMsgBubble: {
 		alignItems: 'center',
-		alignSelf: 'flex-end',
+		alignSelf:'flex-end',
 		backgroundColor: theme.colors.primary,
 	},
-	senderMsg: {
+	senderMsg:{
 		color: 'white',
 		alignSelf: 'flex-start',
+
 	},
 	receiverMsgBubble: {
 		backgroundColor: theme.colors.background,
@@ -250,26 +262,26 @@ const styles = StyleSheet.create({
 		alignSelf: 'flex-start',
 		color: 'black',
 	},
-	receiverMsg: {
+	receiverMsg:{
 		color: 'black',
 		alignSelf: 'flex-end',
 	},
-	inputBarContainer: {
+	inputBarContainer:{
 		alignItems: 'center',
 		flexDirection: 'row',
 		borderColor: theme.colors.primary,
 		borderTopWidth: 2,
 		paddingBottom: 20,
-		padding: 10,
+		padding:10,
 		backgroundColor: theme.colors.background,
 		width: '100%',
-		gap: 5,
+		gap:5,
 	},
-	inputBar: {
+	inputBar:{
 		borderColor: theme.colors.primary,
 		borderWidth: 1,
 		height: 40,
 		marginHorizontal: 5,
 		flex: 1,
-	},
+	}
 });

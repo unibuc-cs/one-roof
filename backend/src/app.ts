@@ -9,7 +9,8 @@ import {
 	reviewRouter,
 	searchRouter,
 	userRouter,
-	viewingRouter
+	viewingRouter,
+    notificationRouter,
 } from './routes';
 
 const app: Express = express();
@@ -28,6 +29,7 @@ app.use('/api/reviews', reviewRouter);
 app.use('/api/listings', listingRouter);
 app.use('/api/search', searchRouter);
 app.use('/api/messages', messageRouter);
+app.use('/api/notifications', notificationRouter);
 app.use('/api/viewings', viewingRouter);
 app.use('/api/friends', friendRouter);
 

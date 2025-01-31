@@ -159,6 +159,13 @@ export function DrawerContent(props: DrawerContentComponentProps) {
 							props.navigation.navigate('Viewings');
 						}}
 					/>
+					<DrawerItem
+						icon={({ color, size }) => (
+							<MaterialCommunityIcons name="bell-outline" color={color} size={size} />
+						)}
+						label="Notifications"
+						onPress={() => { props.navigation.navigate('Notifications'); }}
+					/>
 					<Button
 						mode="elevated"
 						style={{
