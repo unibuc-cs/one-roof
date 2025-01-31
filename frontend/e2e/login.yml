@@ -3,8 +3,10 @@ appId: host.exp.exponent
 - launchApp
 - openLink: "exp://${CURRENT_IP}:8081"
 - waitForAnimationToEnd
+- assertVisible: 'Home'
 - tapOn:
     id: 'SignIn'
+- assertVisible: 'SignIn'
 - tapOn:
     id: 'Email'
 - inputText: 'bagsylina@gmail.com'
