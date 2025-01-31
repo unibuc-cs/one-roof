@@ -82,11 +82,22 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y gnupg curl
+          
+          # Add MongoDB public key
           curl -fsSL https://pgp.mongodb.com/server-6.0.asc | sudo tee /usr/share/keyrings/mongodb-server-key.asc
-          echo "deb [signed-by=/usr/share/keyrings/mongodb-server-key.asc] https://repo.mongodb.org/apt/ubuntu $(lsb_release -cs)/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list
+          
+          # Use the Jammy repo (22.04) for Ubuntu 24.04+
+          UBUNTU_CODENAME=$(lsb_release -cs)
+          if [[ "$UBUNTU_CODENAME" == "noble" ]]; then
+            UBUNTU_CODENAME="jammy"
+          fi
+          
+          echo "Using MongoDB repo for: $UBUNTU_CODENAME"
+          echo "deb [signed-by=/usr/share/keyrings/mongodb-server-key.asc] https://repo.mongodb.org/apt/ubuntu $UBUNTU_CODENAME/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list
+          
           sudo apt-get update
-          sudo apt-get install -y mongodb-org-shell
-
+          sudo apt-get install -y mongodb-org-shell || echo "MongoDB shell installation failed. Falling back to Docker-based check."
+      
       - name: Check MongoDB Connection
         run: |
           echo "Checking MongoDB Connection..."
