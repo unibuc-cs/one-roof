@@ -1,0 +1,43 @@
+appId: host.exp.exponent
+---
+- launchApp
+- openLink: "exp://${EXPO_IP}:8081"
+- waitForAnimationToEnd
+- assertVisible: 'Home'
+- tapOn: 'Ok'
+- tapOn: 
+    id: 'menu'
+- tapOn: 'Profile'
+- assertVisible: 'Username'
+- assertVisible: 'Email'
+- assertVisible: 'First Name'
+- assertVisible: 'Last Name'
+- back
+- tapOn:
+    id: 'menu'
+- tapOn: 'Roommates'
+- back
+- tapOn:
+    id: 'menu'
+- tapOn: 'Friends'
+- assertVisible: 'Friends'
+- back
+- tapOn:
+    id: 'menu'
+- tapOn: 'Favorites'
+- assertVisible: 'Check out your favorite listings!'
+- back
+- tapOn:
+    id: 'menu'
+- tapOn: 'Chats'
+- assertVisible: 'Chats'
+- back
+- tapOn:
+    id: 'menu'
+- tapOn: 'Viewings'
+- assertVisible: 'Viewings'
+- back
+- tapOn:
+    id: 'menu'
+- tapOn: 'Notifications'
+- assertVisible: 'Allow Notifications'

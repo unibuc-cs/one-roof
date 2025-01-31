@@ -1,0 +1,22 @@
+appId: host.exp.exponent
+---
+- launchApp
+- openLink: "exp://${EXPO_IP}:8081"
+- waitForAnimationToEnd
+- assertVisible: 'Home'
+- tapOn: 'Ok'
+- tapOn: 'Open'
+- scroll
+- tapOn: 'Choose time for Viewing'
+- tapOn: '3'
+- tapOn: 'Ok'
+- tapOn: '12'
+- tapOn: 'AM'
+- tapOn: 'Ok'
+- tapOn: '6'
+- tapOn: 'Ok'
+- tapOn: 'Schedule Viewing'
+- tapOn:
+    id: 'menu'
+- tapOn: 'Viewings'
+- assertVisible: 'Viewings'
