@@ -1,7 +1,7 @@
-import React, {createContext, useContext, useState, ReactNode, useEffect} from 'react';
-import {NotificationTypesEnum, UserRoleEnum} from '../enums';
-import {useUser} from "@clerk/clerk-expo";
-import userService from "../services/internal/userService";
+import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import { NotificationTypesEnum, UserRoleEnum } from '../enums';
+import { useUser } from '@clerk/clerk-expo';
+import userService from '../services/internal/userService';
 
 interface UserDetails {
 	onboardingStep: number,
@@ -103,7 +103,7 @@ export const UserDetailsProvider: React.FC<UserDetailsProviderProps> = ({
 			contactedUsers, setContactedUsers,
 			pushTokens, setPushTokens,
 			allowedNotifications, setAllowedNotifications,
-            resetUserDetails}}>
+            resetUserDetails }}>
 			{children}
 		</UserDetailsContext.Provider>
 	);

@@ -1,4 +1,4 @@
-import {callApi} from "../../utils";
+import { callApi } from '../../utils';
 
 
 export const notificationService = {
@@ -11,4 +11,4 @@ export const notificationService = {
             }
         }, clerkId);
     }
-}
+};

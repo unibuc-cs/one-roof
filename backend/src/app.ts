@@ -10,7 +10,7 @@ import {
 	searchRouter,
 	userRouter,
 	viewingRouter,
-    notificationRouter,
+	notificationRouter,
 } from './routes';
 
 const app: Express = express();

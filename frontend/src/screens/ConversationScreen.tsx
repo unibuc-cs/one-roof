@@ -98,7 +98,7 @@ export const ConversationScreen: React.FC = () => {
 
 	const sendNewMessageNotification = async (msg) => {
 			for (const token of pushTokens) {
-				await notificationService.sendNotification("New message", msg.content, userId, token);
+				await notificationService.sendNotification('New message', msg.content, userId, token);
 			}
 	};
 
