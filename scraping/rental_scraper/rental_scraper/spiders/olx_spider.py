@@ -62,12 +62,11 @@ class OlxSpider(scrapy.Spider):
     def parse(self, response):
         # collects all links to listings we want to scrape next
         listing_urls = response.css('div[data-testid="listing-grid"] a::attr(href)').getall()
-        # for url in listing_urls:
+        for url in listing_urls:
             # a lot of OLX listings redirect to Storia, and we want to visit only those on OLX
-        url = listing_urls[0]
-        if url.startswith('/d/oferta'):
-            full_url = response.urljoin(url)
-            yield scrapy.Request(full_url, callback=self.parse_listing)
+            if url.startswith('/d/oferta'):
+                full_url = response.urljoin(url)
+                yield scrapy.Request(full_url, callback=self.parse_listing)
 
     def parse_listing(self, response):
         # parse an individual listing
@@ -103,10 +102,13 @@ class OlxSpider(scrapy.Spider):
         # the one containing the desired surface
 
         surface = None
-        surface_variants = response.css('div#baxter-above-parameters+div p::text').getall()
-        self.log(f'\n\n\n\nSURFACE TYPE: {surface_variants}')
+        div = WebDriverWait(self.driver, 20).until(
+            EC.visibility_of_element_located((By.CSS_SELECTOR, 'div[id="baxter-above-parameters"]+div'))
+        )
+        surface_variants = div.find_elements(By.CSS_SELECTOR, 'p')
+        self.log(f'\n\n\n\nSURFACE TYPE: {surface_variants[0].text}')
         for li in surface_variants:
-            li_text = str(li)
+            li_text = str(li.text)
             if li_text.startswith('Suprafata'):
                 # Example: Suprafata utila: 32 m^2
                 surface = int(li_text.split(' ')[2])
