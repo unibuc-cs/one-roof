@@ -1,7 +1,7 @@
 appId: host.exp.exponent
 ---
 - launchApp
-- openLink: "exp://${CURRENT_IP}:8081"
+- openLink: "exp://${EXPO_IP}:8081"
 - waitForAnimationToEnd
 - extendedWaitUntil:
     visible:

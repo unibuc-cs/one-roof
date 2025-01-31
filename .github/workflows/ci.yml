@@ -169,7 +169,7 @@ jobs:
             curl -o expo-go.apk https://d1ahtucjixef4r.cloudfront.net/Exponent-2.30.11.apk
             adb install expo-go.apk
             echo "Expo is running at exp://${CURRENT_IP}:8081"
-            maestro test home.yml
-            maestro test login.yml
+            maestro test -e EXPO_IP=$CURRENT_IP home.yml
+            maestro test -e EXPO_IP=$CURRENT_IP login.yml
         env:
           CURRENT_IP: ${{ env.CURRENT_IP }}
