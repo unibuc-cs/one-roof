@@ -94,11 +94,11 @@ jobs:
         run: npm install
 
       - name: Install Maestro
-        run: curl -Ls "https://get.maestro.mobile.dev" | zsh
+        run: curl -Ls "https://get.maestro.mobile.dev" | bash
 
       - name: Add Maestro to PATH
         run: |
-          export PATH="$PATH:$HOME/.maestro/bin"
+          export PATH="$PATH:$HOME/.bash_profile/.maestro/bin:$HOME/.zshrc/.maestro/bin"
           echo "PATH updated to include Maestro: $PATH"
 
       - name: Check Maestro
