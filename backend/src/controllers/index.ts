@@ -4,3 +4,4 @@ export * from './reviewController';
 export * from './searchController';
 export * from './messageController';
 export * from './viewingController';
+export * from './notificationController';
