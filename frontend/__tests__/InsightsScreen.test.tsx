@@ -74,9 +74,9 @@ jest.mock('../src/contexts/UserDetailsContext', () => ({
 
 describe('Insights screen', () => {
     it('barchart exists', async () => {
-         const mockedUserDetails : UserDetails
+        // const mockedUserDetails : UserDetails
         (callApi as jest.MockedFunction<typeof callApi>).mockResolvedValue(mockListingsResponse);
-        (useUserDetails as jest.MockedFunction<typeof useUserDetails>).mockReturnValue();
+        //(useUserDetails as jest.MockedFunction<typeof useUserDetails>).mockReturnValue();
 
         await renderWithNavigation(InsightsScreen);
 
