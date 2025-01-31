@@ -76,7 +76,7 @@ jobs:
 
   frontend-test:
     name: Run Frontend Tests
-    runs-on: macos-latest # MacOS is required for running Android Emulator
+    runs-on: ubuntu-latest # MacOS is required for running Android Emulator
     defaults:
       run:
         working-directory: frontend
@@ -95,8 +95,6 @@ jobs:
 
       - name: Install Maestro
         run: curl -Ls "https://get.maestro.mobile.dev" | bash
-
-      
 
       - name: Start Expo Server
         run: npx expo start --tunnel &
