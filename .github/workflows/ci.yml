@@ -99,12 +99,12 @@ jobs:
 
       - name: Add backend envs
         run: |
-          echo "MONGO_URI=mongodb://130.61.13.108:27017" >> $GITHUB_ENV
-          echo "MONGO_USER=one-roof-user" >> $GITHUB_ENV
-          echo "MONGO_PASS=w2L38f?Wpy}e" >> $GITHUB_ENV
-          echo "MONGO_DB_NAME=one-roof" >> $GITHUB_ENV
-          echo "PORT=3000" >> $GITHUB_ENV
-          echo "CLERK_SECRET_KEY=sk_test_Cj461JJptrxBIPC3NXxEkbJyz9gjp15pVdDxTiVp6a" >> $GITHUB_ENV
+          echo "MONGO_URI=${{ secrets.BACKEND_MONGO_URI }}" >> $GITHUB_ENV
+          echo "MONGO_USER=${{ secrets.BACKEND_MONGO_USER }}" >> $GITHUB_ENV
+          echo "MONGO_PASS=${{ secrets.BACKEND_MONGO_PASS }}" >> $GITHUB_ENV
+          echo "MONGO_DB_NAME=${{ secrets.BACKEND_MONGO_DB_NAME }}" >> $GITHUB_ENV
+          echo "PORT=${{ secrets.BACKEND_PORT }}" >> $GITHUB_ENV
+          echo "CLERK_SECRET_KEY=${{ secrets.BACKEND_CLERK_SECRET_KEY }}" >> $GITHUB_ENV
           echo "EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_c291bmQtdG9ydG9pc2UtMjcuY2xlcmsuYWNjb3VudHMuZGV2JA"
 
       - name: Run Backend
