@@ -1,0 +1,21 @@
+appId: host.exp.exponent
+---
+- launchApp
+- openLink: "exp://${EXPO_IP}:8081"
+- waitForAnimationToEnd
+- extendedWaitUntil:
+    visible: 
+      id: 'SignIn'
+    timeout: 180000
+- tapOn: 
+    id: 'SignIn'
+- tapOn: 
+    id: 'Email'
+- inputText: 'bagsylina@gmail.com'
+- tapOn: 
+    id: 'Password'
+- inputText: '12345678'
+- tapOn:
+    id: 'SignIn'
+- tapOn: 'Ok'
+- assertVisible: 'Home'
