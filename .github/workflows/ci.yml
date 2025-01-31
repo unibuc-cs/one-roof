@@ -146,7 +146,7 @@ jobs:
     name: Auto Merge Main → Staging
     needs: [ backend-test-staging, db-health-check-staging, security-check, create-staging-branch, lint ]
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/improve-ci-cd'
+    if: github.ref == 'refs/heads/last-working-after-merge'
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
