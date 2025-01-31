@@ -170,8 +170,8 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git fetch origin
           git checkout staging
-          git merge origin/improve-ci-cd --no-edit
-          git push origin staging
+          git reset --hard origin/improve-ci-cd
+          git push --force origin staging
 
   create-production-branch:
     name: Ensure Production Branch Exists
