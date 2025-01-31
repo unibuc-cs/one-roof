@@ -145,7 +145,7 @@ jobs:
             adb devices
             curl -o expo-go.apk https://d1ahtucjixef4r.cloudfront.net/Exponent-2.30.11.apk
             adb install expo-go.apk
-            maestro test e2e/login.yml
+            maestro test login.yml
         env:
           CURRENT_IP: ${{ env.CURRENT_IP }}
 
