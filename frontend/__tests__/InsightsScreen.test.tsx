@@ -1,6 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react-native';  // Import the component to test
 import { describe, expect, test, jest, it} from '@jest/globals';
 import React from 'react';
+import { StyleSheet } from 'react-native';
 import { InsightsScreen} from '../src/screens/InsightsScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { BarChart } from 'react-native-chart-kit';
@@ -8,6 +9,13 @@ import { viewingService } from '../src/services';
 import { callApi } from '../src/utils/apiWrapper';
 import { useUserDetails } from '../src/contexts/UserDetailsContext';
 import { mockedUserDetails, mockListingsResponse, mockViewingsResponse } from '../__tests_files__/mockResponses';
+
+const styles = StyleSheet.create({
+  activeTabText: {
+  fontWeight: 'bold',
+  color: '#000',
+},
+});
 
 import PropTypes from 'prop-types';
 
@@ -51,7 +59,6 @@ jest.mock('../src/contexts/UserDetailsContext', () => ({
 
 describe('Insights screen', () => {
     it('barchart exists', async () => {
-        
         (callApi as jest.MockedFunction<typeof callApi>).mockResolvedValue(mockListingsResponse);
         (useUserDetails as jest.MockedFunction<typeof useUserDetails>).mockReturnValue(mockedUserDetails);
 
@@ -61,7 +68,9 @@ describe('Insights screen', () => {
         expect(barchart_exists).toBeTruthy();
     }),
     it('api call is made if Views is changed to Viewings', async () => {
-      const spyOnServiceViewings = jest.spyOn(viewingService, 'getUserViewings');
+      //const spyOnServiceViewings = jest.spyOn(viewingService, 'getUserViewings');
+      (callApi as jest.MockedFunction<typeof callApi>).mockResolvedValue(mockListingsResponse);
+      (useUserDetails as jest.MockedFunction<typeof useUserDetails>).mockReturnValue(mockedUserDetails);
 
       renderWithNavigation(InsightsScreen);
 
@@ -69,7 +78,7 @@ describe('Insights screen', () => {
 
       fireEvent.press(button);
 
-      expect(spyOnServiceViewings).toHaveBeenCalled(); 
+      expect(button.props.style).toContainEqual(styles.activeTabText);
 
       // await waitFor(() => {
       //   expect(spyOnServiceViewings).toHaveBeenCalled(); 

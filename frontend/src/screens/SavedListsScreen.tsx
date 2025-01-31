@@ -23,7 +23,10 @@ export const SavedListsScreen: React.FC = () => {
 	const route = useRoute<ListingToBeAddedScreenRouteProp>(); // Use RouteProp to type the route
 	const listing = route.params?.listing; // Extract route params
 
-	const { user  } = useUser(); //: clerkUser
+	//console.log('listing received through params:', listing);
+
+	const {user }= useUser(); //: clerkUser
+	console.log(user?.id);
 	const { savedLists, setSavedLists } = useUserDetails();
 	const [loading, setLoading] = useState<boolean>(true);
 	const [newListName, setNewListName] = useState<string>('');
@@ -51,6 +54,8 @@ export const SavedListsScreen: React.FC = () => {
 
 		fetchLists();
 	}, [savedLists, selectedTab]);
+
+	console.log('selectedTab: ', selectedTab);
 
 
 	const handleAddNewList = async (listName: string) => {
@@ -150,12 +155,12 @@ export const SavedListsScreen: React.FC = () => {
 				<View style={styles.segmentedControl}>
 					<TouchableOpacity
 						style={[styles.tab, selectedTab === 'Mine' && styles.activeTab]}
-						onPress={() => setSelectedTab('Mine')} >
+						onPress={() => {console.log('Pressed Mine'); setSelectedTab('Mine')}}>
 						<Text style={[styles.tabText, selectedTab === 'Mine' && styles.activeTabText]}> Mine </Text>
 					</TouchableOpacity>
 					<TouchableOpacity
 						style={[styles.tab, selectedTab === 'Shared' && styles.activeTab]}
-						onPress={() => setSelectedTab('Shared')}
+						onPress={() => {console.log('Pressed Shared'); setSelectedTab('Shared')}}
 					>
 						<Text style={[styles.tabText, selectedTab === 'Shared' && styles.activeTabText]}> Shared </Text>
 					</TouchableOpacity>

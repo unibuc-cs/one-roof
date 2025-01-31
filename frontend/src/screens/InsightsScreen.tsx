@@ -15,6 +15,7 @@ const currDate = new Date('2025-01-31 23:24:17');
 //two buttons
 export const InsightsScreen: React.FC = () => {
 	// if an attribute defined with useState changes its state, the entire functional component re-runs
+	// use User here!!!
 	const { userId } = useUserDetails();
 	const [timeUnit, setTimeUnit] = useState<'Day' | 'Hour'>('Hour');
 	const [displayed, setDisplayed] = useState<'Views' | 'Viewings'>('Views');
