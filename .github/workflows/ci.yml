@@ -25,7 +25,7 @@ jobs:
           cache: npm
 
       - name: Install Frontend Dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps
         working-directory: frontend
 
       - name: Install Backend Dependencies
@@ -111,6 +111,9 @@ jobs:
         run: npm run dev &
         working-directory: backend
 
+      - name: Wait for backend to Start
+        run: sleep 20  # Ensure backend has time to start
+
       - name: Install Maestro
         run: curl -Ls "https://get.maestro.mobile.dev" | bash
 
@@ -126,7 +129,7 @@ jobs:
           EXPO_USE_LOCAL: 1
         
       - name: Wait for Expo to Start
-        run: sleep 20  # Ensure Expo has time to start
+        run: sleep 30  # Ensure Expo has time to start
       
       - name: Get Current IP Address
         run: |
@@ -160,7 +163,7 @@ jobs:
         with:
           api-level: 31
           arch: x86_64
-          profile: pixel_8
+          profile: pixel_7
           script: |
             adb devices
             curl -o expo-go.apk https://d1ahtucjixef4r.cloudfront.net/Exponent-2.30.11.apk
