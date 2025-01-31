@@ -1,5 +1,5 @@
-import { USERS, LISTINGS } from './seeds';
-import { Listing } from '../models';
+import {LISTINGS, USERS} from './seeds';
+import {Listing} from '../models';
 
 const seedUsers = async () => {
 	for (const user of USERS) {
@@ -18,6 +18,7 @@ const seedListings = async () => {
 
 export const seedDatabase = async () => {
 	try {
+		await seedUsers();
 		await seedListings();
 		console.log('Database seeding successful');
 	} catch (error) {

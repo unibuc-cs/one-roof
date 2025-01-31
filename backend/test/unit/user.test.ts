@@ -28,8 +28,8 @@ describe('User Model', () => {
 
 		const result = await User.create(REGULAR_USER);
 
-		expect(result).to.have.property('clerkId', 'clerk|regularuser123');
-		expect(result).to.have.property('role', 'regularUser');
+		expect(result).to.have.property('clerkId', 'user_2pwGRzshslTfPL09YP5S4jzVV7N');
+		expect(result).to.have.property('role', 'landlord');
 		userMock.verify();
 	});
 

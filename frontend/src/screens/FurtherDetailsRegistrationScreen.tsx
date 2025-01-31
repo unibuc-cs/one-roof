@@ -72,9 +72,6 @@ export const FurtherDetailsRegistrationScreen: React.FC = () => {
 			} as IUserDetails,
 			user.id,
 		);
-
-		const sanityCheckUser = await userService.getUserById(user.id);
-		console.error('User created', JSON.stringify(sanityCheckUser));
 	};
 
 	return (

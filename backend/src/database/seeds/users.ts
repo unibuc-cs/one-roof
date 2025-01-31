@@ -1,21 +1,12 @@
-import { User } from '../../models';
+import {User} from '../../models';
 
-export const REGULAR_USER = new User({
-	clerkId: 'clerk|regularuser123',
-	profilePicture: 'https://example.com/path/to/regularuser/profilepic.jpg',
-	role: 'regularUser',
-	onboardingStep: 1,
-});
-
-export const LANDLORD_USER = new User({
-	clerkId: 'clerk|landlorduser123',
-	profilePicture: 'https://example.com/path/to/landlord/profilepic.jpg',
+export const SEED_LANDLORD_USER = new User({
+	clerkId: 'user_2pwGRzshslTfPL09YP5S4jzVV7N',
 	role: 'landlord',
-	onboardingStep: 1,
+	onboardingStep: 3,
+	gender: 'female',
+	profilePicture: 'https://media.gettyimages.com/id/1067934132/photo/colorful-bird-perching.jpg?s=612x612&w=gi&k=20&c=o4tAbo-qa1vH8REUznIpvujZ2SNNUbYcOD7JKll4lo4='
 });
 
-const USERS = [REGULAR_USER, LANDLORD_USER];
-
-export { USERS };
-
+export const USERS = [SEED_LANDLORD_USER];
 

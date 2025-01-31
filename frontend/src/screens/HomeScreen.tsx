@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { useSearchContext } from '../contexts/SearchContext';
-import { Map } from '../components';
+import { BottomBar, Map } from '../components';
 import { HeatmapComponent } from '../components/map/Heatmap';
 
 export const HomeScreen = () => {
@@ -12,7 +12,10 @@ export const HomeScreen = () => {
 			{state.searchType === 'Heatmap' ? (
 				<HeatmapComponent/>
 			) : (
-				<Map/>
+				<>
+					<Map/>
+					<BottomBar/>
+				</>
 			)}
 		</View>
 	);
