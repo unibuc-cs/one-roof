@@ -1,5 +1,5 @@
 import {type Document, model, Schema} from 'mongoose';
-import {RoommatePreferencesSchema} from './roommatePreferences';
+import {IRoommatePreferences, RoommatePreferencesSchema} from './roommatePreferences';
 
 interface IUser extends Document {
 	clerkId: string,
