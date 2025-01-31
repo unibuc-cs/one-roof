@@ -97,7 +97,8 @@ jobs:
         run: curl -Ls "https://get.maestro.mobile.dev" | bash
 
       - name: Adding Maestro to PATH
-        run: export PATH="$PATH":"$HOME/.maestro/bin"
+        run: export PATH="$PATH":"/Users/runner/.zshrc/.maestro/bin"
+        run: echo "/Users/runner/.zshrc" >> $GITHUB_PATH
 
       - name: Check Maestro
         run: maestro --version
