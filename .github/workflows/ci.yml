@@ -77,9 +77,6 @@ jobs:
   frontend-test:
     name: Run Frontend Tests
     runs-on: ubuntu-latest # MacOS is required for running Android Emulator
-    defaults:
-      run:
-        working-directory: frontend
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -90,14 +87,24 @@ jobs:
           node-version: 20
           cache: npm
 
-      - name: Install Dependencies
+      - name: Install Frontend Dependencies
         run: npm install
+        working-directory: frontend
+
+      - name: Install Backend Dependencies
+        run: npm install
+        working-directory: backend
+
+      - name: Run Backend
+        run: npm run dev
+        working-directory: backend
 
       - name: Install Maestro
         run: curl -Ls "https://get.maestro.mobile.dev" | bash
 
       - name: Start Expo Server
         run: npx expo start --tunnel &
+        working-directory: frontend
         env:
           EXPO_NO_DEBUG: 1
           EXPO_USE_LOCAL: 1
@@ -127,10 +134,10 @@ jobs:
           sudo udevadm trigger --name-match=kvm
 
       - name: Move home.yml to Runner
-        run: mv e2e/home.yml /home/runner/work/one-roof/one-roof
+        run: mv frontend/e2e/home.yml /home/runner/work/one-roof/one-roof
 
       - name: Move login.yml to Runner
-        run: mv e2e/login.yml /home/runner/work/one-roof/one-roof
+        run: mv frontend/e2e/login.yml /home/runner/work/one-roof/one-roof
 
       - name: Start Android Emulator and Test
         uses: reactivecircus/android-emulator-runner@v2
