@@ -12,7 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { TextInput } from 'react-native-paper';
 import { theme } from '../theme';
 import { useUserDetails } from '../contexts/UserDetailsContext';
-import { messageService } from '../services';
+import {messageService, notificationService} from '../services';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { RootStackParamList } from '../navigation';
 import { useUserDataByClerkId } from '../hooks/useUserData';
@@ -23,6 +23,7 @@ import { io } from 'socket.io-client';
 import { useUser } from '@clerk/clerk-expo';
 import { config } from '../config/configure';
 import { IMessage } from '../models/messageModel';
+import {NotificationTypesEnum} from "../enums";
 
 
 type ChatMessagesScreenRouteProps = RouteProp<RootStackParamList, 'Message'>;
@@ -142,6 +143,9 @@ export const ConversationScreen: React.FC = () => {
 		//     setReferenceId(null);
 		//     setType(null);
 		// }
+		if(allowedNotifications.includes(NotificationTypesEnum.Messages)){
+			sendNewMessageNotification(newMessage);
+		}
 
 		setMessage('');
 		getConversationMessages();

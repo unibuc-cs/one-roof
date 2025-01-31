@@ -1,0 +1,59 @@
+name: Build and deploy Frontend
+
+defaults:
+  run:
+    working-directory: ./frontend
+
+on:
+  push:
+    branches:
+      - main
+      - backup-main
+      - last-working-backup-amin
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup repo
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+
+      - name: Setup EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Create release directory
+        run: mkdir release
+
+      - name: Build app
+        run: eas build -p android --local --profile preview --output release/one-roof-prev.apk
+
+      - name: Create GitHub release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: v${{ github.run_number }}
+          release_name: Release ${{ github.run_number }}
+          body: |
+          draft: false
+          prerelease: true
+
+      - name: Upload apk to GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release upload v${{ github.run_number }} ./release/one-roof-prev.apk
+
+      - name: Build app release remote
+        run: eas build -p android --non-interactive
+

@@ -62,11 +62,12 @@ class OlxSpider(scrapy.Spider):
     def parse(self, response):
         # collects all links to listings we want to scrape next
         listing_urls = response.css('div[data-testid="listing-grid"] a::attr(href)').getall()
-        for url in listing_urls:
+        # for url in listing_urls:
             # a lot of OLX listings redirect to Storia, and we want to visit only those on OLX
-            if url.startswith('/d/oferta'):
-                full_url = response.urljoin(url)
-                yield scrapy.Request(full_url, callback=self.parse_listing)
+        url = listing_urls[0]
+        if url.startswith('/d/oferta'):
+            full_url = response.urljoin(url)
+            yield scrapy.Request(full_url, callback=self.parse_listing)
 
     def parse_listing(self, response):
         # parse an individual listing
@@ -102,8 +103,8 @@ class OlxSpider(scrapy.Spider):
         # the one containing the desired surface
 
         surface = None
-        surface_variants = response.css('div[data-testid="main"] li p::text').getall()
-        self.log(f'SURFACE TYPE: {surface_variants[0]}')
+        surface_variants = response.css('div#baxter-above-parameters+div p::text').getall()
+        self.log(f'\n\n\n\nSURFACE TYPE: {surface_variants}')
         for li in surface_variants:
             li_text = str(li)
             if li_text.startswith('Suprafata'):
