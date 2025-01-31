@@ -113,21 +113,28 @@ jobs:
           echo "CURRENT_IP=$CURRENT_IP" >> $GITHUB_ENV
 
       - name: Debug Expo URL
-        run: echo "Expo is running at $CURRENT_IP:8081"
+        run: echo "Expo is running at exp://${CURRENT_IP}:8081"
 
-      #- name: Get Expo URL
-      #run: |
-        #EXPO_URL=$(curl -s http://localhost:19000/status | jq -r '.url')
-        #echo "EXPO_URL=$EXPO_URL" >> $GITHUB_ENV
-
-      #- name: Debug Expo URL
-        #run: echo "Expo is running at $EXPO_URL"
+      #- name: Start Android Emulator
+        #run: |
+          #echo "Starting Android Emulator..."
+          #nohup emulator -avd test-emulator -no-audio -no-window -gpu swiftshader_indirect &
+          #sleep 30  # Ensure emulator has time to start
 
       - name: Start Android Emulator
-        run: |
-          echo "Starting Android Emulator..."
-          nohup emulator -avd test-emulator -no-audio -no-window -gpu swiftshader_indirect &
-          sleep 30  # Ensure emulator has time to start
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 31
+          arch: x86_64
+          profile: pixel_4
+          script: adb devices
+
+      - name: Download Expo Go APK
+        run: curl -o expo-go.apk https://d1ahtucjixef4r.cloudfront.net/Exponent-2.30.11.apk
+
+      # Install Expo Go on Emulator
+      - name: Install Expo Go on Emulator
+        run: adb install expo-go.apk
 
       - name: Verify Emulator is Available
         run: adb devices
