@@ -76,7 +76,7 @@ jobs:
 
   frontend-test:
     name: Run Frontend Tests
-    runs-on: ubuntu-
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
