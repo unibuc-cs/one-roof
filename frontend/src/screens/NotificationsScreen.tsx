@@ -1,15 +1,15 @@
-import React, {useState} from "react";
-import {StyleSheet, Switch, View} from "react-native";
-import {Background, HeaderText} from "../components";
-import {theme} from '../theme';
-import {Button, Card, Divider, Text} from "react-native-paper";
-import {useUserDetails} from "../contexts/UserDetailsContext";
-import userService from "../services/internal/userService";
-import {NotificationTypesEnum} from "../enums";
-import {useUser} from "@clerk/clerk-expo";
+import React, { useState } from 'react';
+import { StyleSheet, Switch, View } from 'react-native';
+import { Background, HeaderText } from '../components';
+import { theme } from '../theme';
+import { Button, Card, Divider, Text } from 'react-native-paper';
+import { useUserDetails } from '../contexts/UserDetailsContext';
+import userService from '../services/internal/userService';
+import { NotificationTypesEnum } from '../enums';
+import { useUser } from '@clerk/clerk-expo';
 
 export const NotificationsScreen: React.FC = () => {
-    const {allowedNotifications, setAllowedNotifications} = useUserDetails();
+    const { allowedNotifications, setAllowedNotifications } = useUserDetails();
     const [messageNotification, setMessageNotification] = useState(allowedNotifications.includes(NotificationTypesEnum.Messages));
     const [friendRequestNotification, setFriendRequestNotification] = useState(allowedNotifications.includes(NotificationTypesEnum.FriendRequests));
     const [reminderNotification, setReminderNotification] = useState(allowedNotifications.includes(NotificationTypesEnum.Reminders));
@@ -20,10 +20,10 @@ export const NotificationsScreen: React.FC = () => {
 
     const toggleSwitch = (setState: React.Dispatch<React.SetStateAction<boolean>>) =>{
         setState(previousState => !previousState);
-    }
+    };
 
     const handleSave = async () =>{
-        let newAllowedNotifications =[]
+        const newAllowedNotifications =[];
         if(messageNotification)
             newAllowedNotifications.push(NotificationTypesEnum.Messages);
         if(friendRequestNotification)
@@ -37,13 +37,13 @@ export const NotificationsScreen: React.FC = () => {
 
         console.log(newAllowedNotifications);
         setAllowedNotifications(newAllowedNotifications);
-        await userService.updateUser(clerkUser!.id, {allowedNotifications: newAllowedNotifications});
-    }
+        await userService.updateUser(clerkUser!.id, { allowedNotifications: newAllowedNotifications });
+    };
 
     return (
         <Background>
             <Card style={styles.card} contentStyle={styles.container}>
-                <View style={[styles.flexItem, {alignItems: 'center'}]}>
+                <View style={[styles.flexItem, { alignItems: 'center' }]}>
                     <HeaderText color={theme.colors.primary} size={32}>
                         Allow Notifications
                     </HeaderText>
@@ -52,7 +52,7 @@ export const NotificationsScreen: React.FC = () => {
                     <View style={[styles.row]}>
                         <Switch
                             style={{ transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }] }}
-                            trackColor={{false: theme.colors.onDrag, true: theme.colors.secondary}}
+                            trackColor={{ false: theme.colors.onDrag, true: theme.colors.secondary }}
                             thumbColor={messageNotification ? theme.colors.primary : theme.colors.offWhite}
                             ios_backgroundColor="#3e3e3e"
                             onValueChange={() => toggleSwitch(setMessageNotification)}
@@ -67,7 +67,7 @@ export const NotificationsScreen: React.FC = () => {
                         <Switch
                             style={{ transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }] }}
 
-                            trackColor={{false: theme.colors.onDrag, true: theme.colors.secondary}}
+                            trackColor={{ false: theme.colors.onDrag, true: theme.colors.secondary }}
                             thumbColor={friendRequestNotification ? theme.colors.primary : theme.colors.offWhite}
                             ios_backgroundColor="#3e3e3e"
                             onValueChange={() => toggleSwitch(setFriendRequestNotification)}
@@ -83,7 +83,7 @@ export const NotificationsScreen: React.FC = () => {
                         <Switch
                             style={{ transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }] }}
 
-                            trackColor={{false: theme.colors.onDrag, true: theme.colors.secondary}}
+                            trackColor={{ false: theme.colors.onDrag, true: theme.colors.secondary }}
                             thumbColor={appointmentNotification ? theme.colors.primary : theme.colors.offWhite}
                             ios_backgroundColor="#3e3e3e"
                             onValueChange={() => toggleSwitch(setAppointmentNotification)}
@@ -102,7 +102,7 @@ export const NotificationsScreen: React.FC = () => {
                         <Switch
                             style={{ transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }] }}
 
-                            trackColor={{false: theme.colors.onDrag, true: theme.colors.secondary}}
+                            trackColor={{ false: theme.colors.onDrag, true: theme.colors.secondary }}
                             thumbColor={reminderNotification ? theme.colors.primary : theme.colors.offWhite}
                             ios_backgroundColor="#3e3e3e"
                             onValueChange={() => toggleSwitch(setReminderNotification)}
@@ -120,7 +120,7 @@ export const NotificationsScreen: React.FC = () => {
                     <View style={styles.row}>
                         <Switch
                             style={{ transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }] }}
-                            trackColor={{false: theme.colors.onDrag, true: theme.colors.secondary}}
+                            trackColor={{ false: theme.colors.onDrag, true: theme.colors.secondary }}
                             thumbColor={newPropertyNotification ? theme.colors.primary : theme.colors.offWhite}
                             ios_backgroundColor="#3e3e3e"
                             onValueChange={() => toggleSwitch(setNewPropertyNotification)}
@@ -132,7 +132,7 @@ export const NotificationsScreen: React.FC = () => {
                         Be notified when a property that might interest you appears.
                     </Text>
                 </View>
-                <View style={[styles.flexItem, {alignSelf: 'center'}]}>
+                <View style={[styles.flexItem, { alignSelf: 'center' }]}>
                     <Button mode={'contained'} onPress={handleSave}>
                         Save
                     </Button>

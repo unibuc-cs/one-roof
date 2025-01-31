@@ -19,14 +19,12 @@ describe('User Model', () => {
 		userMock.restore();
 	});
 
-	const REGULAR_USER = USERS[0];
-
-	const LANDLORD_USER = USERS[1];
+	const LANDLORD_USER = USERS[0];
 
 	it('should create a new regular user', async () => {
-		userMock.expects('create').withArgs(REGULAR_USER).resolves(REGULAR_USER);
+		userMock.expects('create').withArgs(LANDLORD_USER).resolves(LANDLORD_USER);
 
-		const result = await User.create(REGULAR_USER);
+		const result = await User.create(LANDLORD_USER);
 
 		expect(result).to.have.property('clerkId', 'user_2pwGRzshslTfPL09YP5S4jzVV7N');
 		expect(result).to.have.property('role', 'landlord');

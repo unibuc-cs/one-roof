@@ -23,7 +23,7 @@ const seedReviews = async () => {
 			await review.save();
 		}
 	}
-}
+};
 
 export const seedDatabase = async () => {
 	try {

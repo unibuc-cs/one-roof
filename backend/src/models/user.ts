@@ -2,31 +2,31 @@ import { Schema, type Document, model } from 'mongoose';
 import {IRoommatePreferences, RoommatePreferencesSchema} from "./roommatePreferences";
 
 interface IUser extends Document {
-    clerkId: string,
-    profilePicture: string,
-    role: 'regularUser' | 'landlord',
-    gender: 'male' | 'female' | 'other',
-    onboardingStep: number,
-    contactedUsers: string[],
-    roommateQuiz?: IRoommatePreferences,
-    pushTokens: string[],
-    allowedNotifications: string[],
-    createdAt: Date,
-    updatedAt: Date,
-    friendRequests: string[],
-    friends: string[],
+	clerkId: string,
+	profilePicture: string,
+	role: 'regularUser' | 'landlord',
+	gender: 'male' | 'female' | 'other',
+	onboardingStep: number,
+	contactedUsers: string[],
+	roommateQuiz?: IRoommatePreferences,
+	pushTokens: string[],
+	allowedNotifications: string[],
+	createdAt: Date,
+	updatedAt: Date,
+	friendRequests: string[],
+	friends: string[],
 }
 
 type IUserWithClerk = IUser & {
-    firstName: string,
-    lastName: string,
-    email: string,
-    nickname: string,
+	firstName: string,
+	lastName: string,
+	email: string,
+	nickname: string,
 };
 
 export type IUserWithCompatibilityScore = {
-    user: IUserWithClerk,
-    compatibilityScore: number,
+	user: IUserWithClerk,
+	compatibilityScore: number,
 };
 
 const UserSchema = new Schema<IUser>({
@@ -36,11 +36,11 @@ const UserSchema = new Schema<IUser>({
 	role: {type: String, required: true, enum: ['regularUser', 'landlord']},
 	gender: {type: String, required: true, enum: ['male', 'female', 'other']},
 	contactedUsers: [{type: String}],
-	friendRequests: [{ type: String }], // Incoming friend requests
-	friends: [{ type: String }], // Established friendships
+	friendRequests: [{type: String}], // Incoming friend requests
+	friends: [{type: String}], // Established friendships
 	roommateQuiz: {type: RoommatePreferencesSchema, default: null},
-    pushTokens: [{ type: String}],
-    allowedNotifications: [{ type: String}],
+	pushTokens: [{type: String}],
+	allowedNotifications: [{type: String}],
 },
 {timestamps: true});
 

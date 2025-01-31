@@ -1,4 +1,4 @@
-import {callApi} from "../../utils";
+import { callApi } from '../../utils';
 
 
 export const notificationService = {
@@ -18,4 +18,4 @@ export const notificationService = {
             await notificationService.sendNotification("New friend request", `Friend Request from: ${sendingUser.firstName} ${sendingUser.lastName}`, receivingUser.clerkId as string, token);
         }
     }
-}
+};
