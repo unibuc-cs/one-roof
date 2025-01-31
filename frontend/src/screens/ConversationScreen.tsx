@@ -61,6 +61,7 @@ export const ConversationScreen: React.FC = () => {
 		socket.on('messageReceived', (msg)=>{
 			if(msg.receiverId === userId && msg.senderId === receiverId){
 				setMessages([...messages, msg]);
+
 				if(allowedNotifications.includes(NotificationTypesEnum.Messages)){
 					sendNewMessageNotification(msg);
 				}
@@ -81,10 +82,9 @@ export const ConversationScreen: React.FC = () => {
 		return verdict;
 	};
 
-	const sendNewMessageNotification = async (msg, pushTokens) => {
+	const sendNewMessageNotification = async (msg) => {
 
 			for (const token of pushTokens) {
-				console.log(token);
 				await notificationService.sendNotification("New message", msg.content, userId, token);
 			}
 			// TODO: test with another device
@@ -118,7 +118,6 @@ export const ConversationScreen: React.FC = () => {
 			userId
 		);
 		socket.emit('newMessage', newMessage);
-		sendNewMessageNotification()
 		// // After the first message is sent, set referenceId and type to null
 		// if (referenceId !== null || type !== null) {
 		//     setReferenceId(null);
