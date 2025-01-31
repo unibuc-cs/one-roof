@@ -25,7 +25,7 @@ jobs:
           cache: npm
 
       - name: Install Frontend Dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps
         working-directory: frontend
 
       - name: Install Backend Dependencies
@@ -76,10 +76,7 @@ jobs:
 
   frontend-test:
     name: Run Frontend Tests
-    runs-on: macos-latest # MacOS is required for running Android Emulator
-    defaults:
-      run:
-        working-directory: frontend
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -90,38 +87,89 @@ jobs:
           node-version: 20
           cache: npm
 
-      - name: Install Dependencies
-        run: npm install
+      - name: Install Frontend Dependencies
+        run: npm install --legacy-peer-deps
+        working-directory: frontend
+
+      - name: Install Backend Dependencies
+        run: |
+          npm install
+          npm install socket.io
+        working-directory: backend
+
+      - name: Add backend envs
+        run: |
+          echo "MONGO_URI=${{ secrets.BACKEND_MONGO_URI }}" >> $GITHUB_ENV
+          echo "MONGO_USER=${{ secrets.BACKEND_MONGO_USER }}" >> $GITHUB_ENV
+          echo "MONGO_PASS=${{ secrets.BACKEND_MONGO_PASS }}" >> $GITHUB_ENV
+          echo "MONGO_DB_NAME=${{ secrets.BACKEND_MONGO_DB_NAME }}" >> $GITHUB_ENV
+          echo "PORT=${{ secrets.BACKEND_PORT }}" >> $GITHUB_ENV
+          echo "CLERK_SECRET_KEY=${{ secrets.BACKEND_CLERK_SECRET_KEY }}" >> $GITHUB_ENV
+          echo "EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_c291bmQtdG9ydG9pc2UtMjcuY2xlcmsuYWNjb3VudHMuZGV2JA"
+
+      - name: Run Backend
+        run: npm run dev &
+        working-directory: backend
+
+      - name: Wait for backend to Start
+        run: sleep 20  # Ensure backend has time to start
 
       - name: Install Maestro
         run: curl -Ls "https://get.maestro.mobile.dev" | bash
 
+      - name: Add android to path
+        run: |
+          echo "$HOME/android/sdk" >> $GITHUB_PATH
+
       - name: Start Expo Server
-        run: npx expo start --tunnel &
+        run: npx expo start &
+        working-directory: frontend
         env:
           EXPO_NO_DEBUG: 1
           EXPO_USE_LOCAL: 1
-
+        
       - name: Wait for Expo to Start
-        run: sleep 20  # Ensure Expo has time to start
-
-      - name: Get Expo Dev Server URL
+        run: sleep 30  # Ensure Expo has time to start
+      
+      - name: Get Current IP Address
         run: |
-          echo "EXPO_URL=$(npx expo url)" >> $GITHUB_ENV
+          CURRENT_IP=$(curl -s ifconfig.me)
+          echo "CURRENT_IP=$CURRENT_IP" >> $GITHUB_ENV
+
       - name: Debug Expo URL
-        run: echo "Expo is running at $EXPO_URL"
+        run: echo "Expo is running at exp://${CURRENT_IP}:8081"
 
-      - name: Start Android Emulator
+      - name: Add Maestro to PATH
         run: |
-          echo "Starting Android Emulator..."
-          nohup emulator -avd test-emulator -no-audio -no-window -gpu swiftshader_indirect &
-          sleep 30  # Ensure emulator has time to start
+          echo "$HOME/.maestro/bin" >> $GITHUB_PATH
 
-      - name: Verify Emulator is Available
-        run: adb devices
+      - name: Check Maestro
+        run: maestro --version
 
-      - name: Run Maestro E2E Tests
-        run: maestro test e2e/login.yml
+      - name: Enable KVM group perms
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Move home.yml to Runner
+        run: mv frontend/e2e/home.yml /home/runner/work/one-roof/one-roof
+
+      - name: Move login.yml to Runner
+        run: mv frontend/e2e/login.yml /home/runner/work/one-roof/one-roof
+
+      - name: Start Android Emulator and Test
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 31
+          arch: x86_64
+          profile: pixel_7
+          script: |
+            adb devices
+            curl -o expo-go.apk https://d1ahtucjixef4r.cloudfront.net/Exponent-2.30.11.apk
+            adb install expo-go.apk
+            echo "Expo is running at exp://${CURRENT_IP}:8081"
+            maestro test home.yml
+            maestro test login.yml
         env:
-          EXPO_URL: ${{ env.EXPO_URL }}
-
+          CURRENT_IP: ${{ env.CURRENT_IP }}

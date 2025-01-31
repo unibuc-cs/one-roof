@@ -73,7 +73,7 @@ export const CreateReviewScreen: React.FC<any> = () => {
 const styles = StyleSheet.create({
 	card: {
 		marginVertical: 30,
-		backgroundColor: 'white',
+		backgroundColor: theme.colors.background,
 		padding: 16,
 		paddingTop: 16,
 		maxHeight: '100%',

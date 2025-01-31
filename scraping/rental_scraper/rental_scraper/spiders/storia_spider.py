@@ -1,8 +1,10 @@
 import json
 import logging
+import time
 import scrapy
 import re
 from selenium import webdriver
+from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.support.ui import WebDriverWait
@@ -62,11 +64,10 @@ class StoriaSpider(scrapy.Spider):
     def parse(self, response):
         # collects all links to listings we want to scrape next
         listing_urls = response.css('a[data-cy="listing-item-link"]::attr(href)').getall()
-        # TODO: uncomment this line to scrape all listings
+
         for url in listing_urls:
-        # url = listing_urls[0]
             full_url = response.urljoin(url)
-            yield scrapy.Request(full_url, callback=self.parse_listing)
+            yield scrapy.Request(full_url, callback=self.parse_listing) 
 
     def parse_listing(self, response):
         # parse an individual listing
@@ -80,11 +81,11 @@ class StoriaSpider(scrapy.Spider):
             self.logger.info("No cookie acceptance button found or an error occurred.")
 
         div = WebDriverWait(self.driver, 20).until(
-            EC.visibility_of_element_located((By.CSS_SELECTOR, 'div.image-gallery-swipe'))
+            EC.visibility_of_element_located((By.CSS_SELECTOR, 'div.image-gallery-thumbnails'))
         )
-
-        photos = div.find_elements(By.CSS_SELECTOR, 'img.image-gallery-image')
-        photo_urls = [img.get_attribute('src') for img in photos]
+        
+        photos = div.find_elements(By.TAG_NAME, 'img')
+        photo_urls = [img.get_attribute('src').split(';')[0] for img in photos]
 
         title = response.css('h1[data-cy="adPageAdTitle"]::text').get().strip()
         price = response.css('strong[data-cy="adPageHeaderPrice"]::text').get().strip()
@@ -95,7 +96,7 @@ class StoriaSpider(scrapy.Spider):
             'title': title,
             'price': StoriaSpider.process_price(price),
             'address': address,
-            'surface': int(surface),
+            'surface': int(surface.split('.')[0]), 
             'rooms': int(rooms),
             'photos': photo_urls,
             'url': response.url,
