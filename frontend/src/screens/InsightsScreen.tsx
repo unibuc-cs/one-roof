@@ -10,7 +10,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Text } from 'react-native';
 import { HeaderText } from '../components/HeaderText';
 
-const currDate = "2025-01-25 10:24:17";
+const currDate = new Date('2025-01-31 23:24:17');
 
 //two buttons
 export const InsightsScreen: React.FC = () => {
@@ -21,7 +21,7 @@ export const InsightsScreen: React.FC = () => {
 	const [chartData, setChartData] = useState<{ labels: string[], values: number[] }>({labels: [],values: [], });
 	//const currDate = new Date();
 	
-
+	console.log('User id: ', userId);
 	useEffect(() => {
 		const updateChartData = async () => {
 			const aggregated = await handleData();
@@ -39,7 +39,9 @@ export const InsightsScreen: React.FC = () => {
 		let data;
 		console.log('Handling data; current pressed:', displayed, timeUnit);
 		if (displayed === 'Views') {
+			console.log('fetching Views');
 			data = await fetchViews(); //await
+			console.log('Got views:', data);
 		} else {
 			console.log('fetching Viewings');
 			data = await fetchViewings(); //await 
@@ -47,9 +49,10 @@ export const InsightsScreen: React.FC = () => {
 		console.log('Fetched data:', data);
 	
 		let acc: { [key: string]: number }; //!!!
-		if (timeUnit === 'Hour') { // hour shows last day, day shows last month
+		if (timeUnit === 'Hour') { // hour shows last day, day shows last week
+			console.log('7 hours ago:', subHours(currDate, 7));
 			data = data.filter(date => isAfter(date, subHours(currDate, 7)));
-			console.log('only last 24 hours:', data);
+			console.log('only last 7 hours:', data);
 			acc = aggregateByHour(data);
 			console.log('aggregated by hour : ', acc);
 		} else {
@@ -63,7 +66,7 @@ export const InsightsScreen: React.FC = () => {
 
 	const aggregateByDay = (data) => {
 		return data.reduce((acc, curr) => {
-			const day = format(parseISO(curr), 'yyyy-MM-dd');
+			const day = format(curr, 'yyyy-MM-dd');
 			if (!acc[day]) {
 				acc[day] = 0;
 			}
@@ -74,7 +77,7 @@ export const InsightsScreen: React.FC = () => {
 
 	const aggregateByHour = (data) => {
 		return data.reduce((acc, curr) => {
-			const hour = format(parseISO(curr), 'yyyy-MM-dd HH:00');
+			const hour = format(curr, 'yyyy-MM-dd HH:00');
 			//console.log('hour:', hour);
 			if (!acc[hour]) {
 				acc[hour] = 0;
@@ -87,6 +90,7 @@ export const InsightsScreen: React.FC = () => {
 
 	const fetchViews = async () => { // async
 		const allListings = await listingService.getAllListings();
+
 		const landlordsListings = allListings.filter(listing => listing.landlordId ===  userId);
 
 		const viewsDates : Date[] = [];

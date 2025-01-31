@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { UserRoleEnum } from '../enums';
 
-interface UserDetails {
+export interface UserDetails {
 	onboardingStep: number,
 	setOnboardingStep: React.Dispatch<React.SetStateAction<number>>,
 	profilePictureUrl?: string,
