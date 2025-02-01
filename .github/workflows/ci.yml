@@ -264,7 +264,7 @@ jobs:
         run: |
           echo "Checking MongoDB Connection on Production..."
           mongosh --username ${{ secrets.PRODUCTION_BACKEND_MONGO_USER }} \
-                --password ${{ secrets.PRODUCTION_BACKEND_MONGO_PASS }} \
+                -p ${{ secrets.PRODUCTION_BACKEND_MONGO_PASS }} \
                 --host ${{ secrets.PRODUCTION_BACKEND_MONGO_URI }} \
                 --authenticationDatabase admin \
                 --eval "db.runCommand({ ping: 1 })" || echo "MongoDB connection failed on production."
@@ -281,38 +281,38 @@ jobs:
           echo "${{ secrets.PRODUCTION_RSA_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
 
+      - name: SSH into VM, Deploy Backend
+        run: |
+          echo "SSHing into VM at ${{ secrets.PRODUCTION_VM_IP }}..."
+          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ubuntu@${{ secrets.PRODUCTION_VM_IP }} << EOF
+          echo "Checking for Node.js..."
+          if ! command -v node &> /dev/null; then
+          echo "Node.js not found. Installing Node.js..."
+           # This installs Node.js 20.x via NodeSource
+           curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+           sudo apt-get install -y nodejs
+          else
+           echo "Node.js is installed."
+          fi
+
+          echo "Deploying the backend..."
+          cd code/one-roof/backend
+          npm install
+          npm run prod
+          echo "✅ Deployment completed."
+
       - name: SSH into VM & Backup MongoDB
         run: |
           echo "SSHing into VM at ${{ secrets.PRODUCTION_VM_IP }}..."
           ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ubuntu@${{ secrets.PRODUCTION_VM_IP }} << EOF
             echo "Starting MongoDB Backup..."
             TIMESTAMP=\$(date +'%Y-%m-%d_%H-%M-%S')
-            mongodump --uri="${{ secrets.PRODUCTION_BACKEND_MONGO_URI }}" \
-                      --username="${{ secrets.PRODUCTION_BACKEND_MONGO_USER }}" \
-                      --password="${{ secrets.PRODUCTION_BACKEND_MONGO_PASS }}" \
-                      --authenticationDatabase=admin \
-                      --archive="/home/ubuntu/mongo_backups/backup_\${TIMESTAMP}.archive"
-            echo "✅ Backup completed: backup_\${TIMESTAMP}.archive" EOF
+            mongodump --uri="${{secrets.FULL_PRODUCTION_MONGO_URI}}" \
+                      --archive="/home/ubuntu/mongo_backups/backup.archive" \
+              --authenticationDatabase=admin \
+              --authenticationMechanism=SCRAM-SHA-256 \
+              --archive="/home/ubuntu/mongo_backups/backup_${TIMESTAMP}.archive" \
 
-      - name: SSH into VM, Deploy Backend
-        run: |
-          echo "SSHing into VM at ${{ secrets.PRODUCTION_VM_IP }}..."
-          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ubuntu@${{ secrets.PRODUCTION_VM_IP }} << EOF
-            echo "Checking for Node.js..."
-            if ! command -v node &> /dev/null; then
-             echo "Node.js not found. Installing Node.js..."
-              # This installs Node.js 20.x via NodeSource
-              curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-              sudo apt-get install -y nodejs
-            else
-              echo "Node.js is installed."
-            fi
-          
-            echo "Deploying the backend..."
-            cd code/one-roof/backend
-            git pull
-            npm install
-            npm run prod
-            echo "✅ Deployment completed."
+  
       
 
