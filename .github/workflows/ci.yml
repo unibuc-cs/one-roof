@@ -9,8 +9,9 @@ on:
   pull_request:
     branches:
       - main
+      - development
       - pre-staging
-  workflow_dispatch: # Allows manual triggering
+  workflow_dispatch:
 
 jobs:
   lint:
@@ -19,26 +20,31 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
+
       - name: Set up Node.js 20
         uses: actions/setup-node@v3
         with:
           node-version: 20
           cache: npm
+
       - name: Install Frontend Dependencies
         run: npm install
         working-directory: frontend
+
       - name: Install Backend Dependencies
         run: npm install
         working-directory: backend
+
       - name: Run ESLint Fix (Frontend)
         run: npm run lint:fix
         working-directory: frontend
+
       - name: Run ESLint Fix (Backend)
         run: npm run lint:fix
         working-directory: backend
 
   backend-test-staging:
-    name: Run Backend Tests on Staging
+    name: Run Backend Tests on Staging/Development
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -46,24 +52,40 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
+
       - name: Set up Node.js 20
         uses: actions/setup-node@v3
         with:
           node-version: 20
           cache: npm
           cache-dependency-path: backend/package-lock.json
+
       - name: Install Dependencies
         run: npm install
-      - name: Load Staging Backend Secrets
+
+      - name: Load Secrets Based on Branch
         run: |
-          echo "MONGO_URI=${{ secrets.STAGING_BACKEND_MONGO_URI }}" >> $GITHUB_ENV
-          echo "MONGO_USER=${{ secrets.STAGING_BACKEND_MONGO_USER }}" >> $GITHUB_ENV
-          echo "MONGO_PASS=${{ secrets.STAGING_BACKEND_MONGO_PASS }}" >> $GITHUB_ENV
-          echo "MONGO_DB_NAME=${{ secrets.STAGING_BACKEND_MONGO_DB_NAME }}" >> $GITHUB_ENV
-          echo "PORT=${{ secrets.STAGING_BACKEND_PORT }}" >> $GITHUB_ENV
-          echo "CLERK_SECRET_KEY=${{ secrets.STAGING_BACKEND_CLERK_SECRET_KEY }}" >> $GITHUB_ENV
-      - name: Debug Loaded Staging Environment Variables
+          if [ "${{ github.ref }}" = "refs/heads/pre-staging" ]; then
+            echo "Using STAGING secrets (pre-staging branch)."
+            echo "MONGO_URI=${{ secrets.STAGING_BACKEND_MONGO_URI }}" >> $GITHUB_ENV
+            echo "MONGO_USER=${{ secrets.STAGING_BACKEND_MONGO_USER }}" >> $GITHUB_ENV
+            echo "MONGO_PASS=${{ secrets.STAGING_BACKEND_MONGO_PASS }}" >> $GITHUB_ENV
+            echo "MONGO_DB_NAME=${{ secrets.STAGING_BACKEND_MONGO_DB_NAME }}" >> $GITHUB_ENV
+            echo "PORT=${{ secrets.STAGING_BACKEND_PORT }}" >> $GITHUB_ENV
+            echo "CLERK_SECRET_KEY=${{ secrets.STAGING_BACKEND_CLERK_SECRET_KEY }}" >> $GITHUB_ENV
+          else
+            echo "Using DEVELOPMENT secrets (development branch)."
+            echo "MONGO_URI=${{ secrets.DEVELOPMENT_BACKEND_MONGO_URI }}" >> $GITHUB_ENV
+            echo "MONGO_USER=${{ secrets.DEVELOPMENT_BACKEND_MONGO_USER }}" >> $GITHUB_ENV
+            echo "MONGO_PASS=${{ secrets.DEVELOPMENT_BACKEND_MONGO_PASS }}" >> $GITHUB_ENV
+            echo "MONGO_DB_NAME=${{ secrets.DEVELOPMENT_BACKEND_MONGO_DB_NAME }}" >> $GITHUB_ENV
+            echo "PORT=${{ secrets.DEVELOPMENT_BACKEND_PORT }}" >> $GITHUB_ENV
+            echo "CLERK_SECRET_KEY=${{ secrets.DEVELOPMENT_BACKEND_CLERK_SECRET_KEY }}" >> $GITHUB_ENV
+          fi
+
+      - name: Debug Loaded Environment Variables
         run: env | grep MONGO_
+
       - name: Run All Backend Tests
         env:
           NODE_ENV: test
@@ -89,11 +111,9 @@ jobs:
           echo "deb [signed-by=/usr/share/keyrings/mongodb-server-key.asc] https://repo.mongodb.org/apt/ubuntu $UBUNTU_CODENAME/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list
           sudo apt-get update
           sudo apt-get install -y mongodb-org
-          # Ensure MongoDB binaries are in PATH
           echo 'export PATH=/usr/bin:$PATH' >> ~/.bashrc
           source ~/.bashrc
-          # Verify installation
-          which mongo || echo "MongoDB shell installation failed."
+
       - name: Check Staging MongoDB Connection
         run: |
           echo "Checking MongoDB Connection on Staging..."
@@ -107,13 +127,15 @@ jobs:
     name: 🛡️ Dependency Security Check
     runs-on: ubuntu-latest
     needs: backend-test-staging
-    continue-on-error: true # allows pipeline to continue even if npm audit fails
+    continue-on-error: true
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
+
       - name: Install Node.js Dependencies
         run: npm install
         working-directory: backend
+
       - name: Run Security Audit (Non-Failing)
         run: |
           echo "Running security audit..."
@@ -126,6 +148,7 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
+
       - name: Check if Staging Branch Exists
         id: check-staging
         run: |
@@ -137,6 +160,7 @@ jobs:
             echo "Staging branch does not exist."
             echo "EXISTS=false" >> $GITHUB_ENV
           fi
+
       - name: Create Staging Branch if Missing
         if: env.EXISTS == 'false'
         run: |
@@ -151,6 +175,7 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
+
       - name: Merge Development into Staging
         run: |
           git config --global user.name "github-actions[bot]"
@@ -167,6 +192,7 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
+
       - name: Check if Production Branch Exists
         id: check-production
         run: |
@@ -178,6 +204,7 @@ jobs:
             echo "Production branch does not exist."
             echo "EXISTS=false" >> $GITHUB_ENV
           fi
+
       - name: Create Production Branch if Missing
         if: env.EXISTS == 'false'
         run: |
@@ -200,6 +227,7 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
+
       - name: Merge Staging into Production
         run: |
           git config --global user.name "github-actions[bot]"
@@ -220,7 +248,7 @@ jobs:
           sudo apt-get install -y gnupg curl
           # Add MongoDB public key
           curl -fsSL https://pgp.mongodb.com/server-6.0.asc | sudo tee /usr/share/keyrings/mongodb-server-key.asc
-          # Use the Jammy repo (22.04) if running Ubuntu 24.04+
+          # Handle possible distro differences
           UBUNTU_CODENAME=$(lsb_release -cs)
           if [[ "$UBUNTU_CODENAME" == "noble" ]]; then
             UBUNTU_CODENAME="jammy"
@@ -229,11 +257,9 @@ jobs:
           echo "deb [signed-by=/usr/share/keyrings/mongodb-server-key.asc] https://repo.mongodb.org/apt/ubuntu $UBUNTU_CODENAME/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list
           sudo apt-get update
           sudo apt-get install -y mongodb-org
-          # Ensure MongoDB binaries are in PATH
           echo 'export PATH=/usr/bin:$PATH' >> ~/.bashrc
           source ~/.bashrc
-          # Verify installation
-          which mongo || echo "MongoDB shell installation failed."
+
       - name: Check Production MongoDB Connection
         run: |
           echo "Checking MongoDB Connection on Production..."
@@ -242,3 +268,26 @@ jobs:
                 --host ${{ secrets.PRODUCTION_BACKEND_MONGO_URI }} \
                 --authenticationDatabase admin \
                 --eval "db.runCommand({ ping: 1 })" || echo "MongoDB connection failed on production."
+
+  backup-production:
+    name: Backup & Deploy to Production VM
+    runs-on: ubuntu-latest
+    needs: db-health-check-production
+    if: github.ref == 'refs/heads/production'
+    steps:
+      - name: Configure SSH Key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.PRODUCTION_RSA_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+      - name: SSH into VM & Backup MongoDB
+        run: |
+          echo "SSHing into VM at ${{ secrets.PRODUCTION_VM_IP }}..."
+          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ubuntu@${{ secrets.PRODUCTION_VM_IP }} << 'EOF'
+            echo "Starting MongoDB Backup..."
+            TIMESTAMP=$(date +'%Y-%m-%d_%H-%M-%S') 
+            mongodump --uri="${{ secrets.PRODUCTION_BACKEND_MONGO_URI }}" --username="${{ secrets.PRODUCTION_BACKEND_MONGO_USER }}" --password="${{ secrets.PRODUCTION_BACKEND_MONGO_PASS }}" --authenticationDatabase=admin --archive="/home/ubuntu/mongo_backups/backup_${TIMESTAMP}.archive"
+            echo "✅ Backup completed: backup_${TIMESTAMP}.archive"
+          EOF
+
