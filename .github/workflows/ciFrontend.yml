@@ -10,6 +10,7 @@ on:
       - main
       - backup-main
       - last-working-backup-amin
+      - pre-staging
 jobs:
   build:
     runs-on: ubuntu-latest
