@@ -264,7 +264,7 @@ jobs:
         run: |
           echo "Checking MongoDB Connection on Production..."
           mongosh --username ${{ secrets.PRODUCTION_BACKEND_MONGO_USER }} \
-                --password ${{ secrets.PRODUCTION_BACKEND_MONGO_PASS }} \
+                -p ${{ secrets.PRODUCTION_BACKEND_MONGO_PASS }} \
                 --host ${{ secrets.PRODUCTION_BACKEND_MONGO_URI }} \
                 --authenticationDatabase admin \
                 --eval "db.runCommand({ ping: 1 })" || echo "MongoDB connection failed on production."
