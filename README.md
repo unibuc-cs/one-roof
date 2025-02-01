@@ -19,6 +19,12 @@ Backlog - https://github.com/orgs/unibuc-cs/projects/63
 
 Scenarios - https://github.com/unibuc-cs/software-engineering-product-vISe-trISte/blob/main/ER_diagram.png
 
+## Documenting the Existing Application from MDS
+https://docs.google.com/document/d/1XHhuV2J3N0USXugi2o0FKy_04lVzw34dLr7n_raILbI/edit?tab=t.0#heading=h.qggrygypsp4q
+
+## Final deliverables
+https://docs.google.com/document/d/1K0IGSzq1u1fbIauxfc6NW58eAGFnCsVZpShQ4LoDc9g/edit?tab=t.0#heading=h.8wdxew4dvxyu
+
 ## Diagrams
 ### Container Diagram
 ![container_diagram](https://github.com/unibuc-cs/software-engineering-product-vISe-trISte/blob/main/container_diagram.png)
