@@ -5,7 +5,7 @@ import { ClerkProvider, SignedIn, SignedOut } from '@clerk/clerk-expo';
 import { tokenCache } from './src/auth/tokenCache';
 import { PaperProvider } from 'react-native-paper';
 import { theme } from './src/theme';
-import { CLERK_PUBLISHABLE_KEY } from '@env';
+import { EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY } from '@env';
 import { NavigationContainer } from '@react-navigation/native';
 import { useCustomFonts } from './src/hooks/useCustomFonts';
 import { SearchProvider, useSearchContext } from './src/contexts/SearchContext';
@@ -120,7 +120,7 @@ export default function App() {
 	const Stack = createNativeStackNavigator();
 
 	return (
-		<ClerkProvider tokenCache={tokenCache} publishableKey={CLERK_PUBLISHABLE_KEY}>
+		<ClerkProvider tokenCache={tokenCache} publishableKey={EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY}>
 			<PaperProvider theme={theme}>
 				<NavigationContainer>
 					<UserDetailsProvider>
