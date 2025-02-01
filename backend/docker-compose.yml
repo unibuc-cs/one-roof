@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      args:
+        - NODE_ENV=${NODE_ENV:-development}
+    container_name: one-roof-backend
+    restart: always
+    env_file:
+      - .env.${NODE_ENV:-development}
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongo
+    command: [ "sh", "-c", "if [ \"$NODE_ENV\" = 'production' ]; then npm run prod; elif [ \"$NODE_ENV\" = 'staging' ]; then npm run staging; else npm run dev; fi" ]
+
+  mongo:
+    image: mongo:latest
+    container_name: one-roof-mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASS}
+      MONGO_INITDB_DATABASE: ${MONGO_DB_NAME}
+    profiles:
+      - development
+
+volumes:
+  mongo_data:

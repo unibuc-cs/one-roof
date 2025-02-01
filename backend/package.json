@@ -16,20 +16,27 @@
     "dev": "nodemon --exec ts-node src/index.ts",
     "staging": "NODE_ENV=staging nodemon --exec ts-node src/index.ts",
     "staging:windows": "dotenv -e .env.staging -- nodemon --exec ts-node src/index.ts",
-    "prod": "NODE_ENV=production ts-node src/index.ts"
+    "prod": "NODE_ENV=production ts-node src/index.ts",
+    "security": "npm audit --audit-level=high"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@turf/turf": "^7.2.0",
+    "@types/express-rate-limit": "^6.0.2",
+    "@types/helmet": "^4.0.0",
+    "@types/winston": "^2.4.4",
     "cron": "^3.3.2",
     "dotenv": "^16.4.7",
     "expo-server-sdk": "^3.13.0",
-    "@turf/turf": "^7.2.0",
     "express": "^4.19.2",
+    "express-rate-limit": "^7.5.0",
     "firebase": "^11.1.0",
+    "helmet": "^8.0.0",
     "mongodb": "^6.5.0",
-    "socket.io": "^4.8.1"
+    "socket.io": "^4.8.1",
+    "winston": "^3.17.0"
   },
   "devDependencies": {
     "@clerk/clerk-sdk-node": "^4.13.14",

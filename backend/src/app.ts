@@ -13,9 +13,21 @@ import {
 	userRouter,
 	viewingRouter
 } from './routes';
+import rateLimit from 'express-rate-limit';
+import helmet from 'helmet';
 
 const app: Express = express();
 app.set('port', config.port);
+
+app.use(helmet());
+
+const limiter = rateLimit({
+	windowMs: 5 * 60 * 1000, // 5 minutes
+	max: 1000, // Limit each IP to 100 requests per windowMs
+	standardHeaders: true, // Return rate limit info in headers
+	legacyHeaders: false, // Disable legacy `X-RateLimit-*` headers
+});
+app.use(limiter);
 
 app.use(express.json());
 app.use(loggerMiddleware);

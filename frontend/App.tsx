@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { ActivityIndicator, StyleSheet, Text } from 'react-native';
+import { ActivityIndicator, LogBox, StyleSheet, Text } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
 import { ClerkProvider, SignedIn, SignedOut } from '@clerk/clerk-expo';
 import { tokenCache } from './src/auth/tokenCache';
@@ -12,11 +12,11 @@ import { SearchProvider, useSearchContext } from './src/contexts/SearchContext';
 import { UnauthenticatedHomeScreen } from './src/screens';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import SignUpScreen from './src/screens/SignUpScreen';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {UserDetailsProvider} from './src/contexts/UserDetailsContext';
-import {AppNavigation} from './src/navigation';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { UserDetailsProvider } from './src/contexts/UserDetailsContext';
+import { AppNavigation } from './src/navigation';
 import SignInScreen from './src/screens/SignInScreen';
-import {NotificationDataProvider} from "./src/contexts/NotificationContext";
+import { NotificationDataProvider } from './src/contexts/NotificationContext';
 import { Background } from './src/components';
 
 const AppLoader: React.FC<{ Stack: any }> = ({ Stack }) => {
@@ -55,7 +55,7 @@ const AppLoader: React.FC<{ Stack: any }> = ({ Stack }) => {
 			<SignedOut>
 				<GestureHandlerRootView style={{ flex: 1 }}>
 					<Stack.Navigator initialRouteName={'Home'}
-						screenOptions={{ headerShown: false }}>
+									 screenOptions={{ headerShown: false }}>
 						<Stack.Screen name="Home" component={UnauthenticatedHomeScreen}/>
 						<Stack.Screen name="SignIn" component={SignInScreen}/>
 						<Stack.Screen name="SignUp" component={SignUpScreen}/>
@@ -81,6 +81,7 @@ const AppLoader: React.FC<{ Stack: any }> = ({ Stack }) => {
 };
 
 export default function App() {
+	LogBox.ignoreLogs(['Require cycle:']);
 	// const { state } = useSearchContext();
 	// const isSearchDone = state.listings.length > 0;
 	//
@@ -124,11 +125,11 @@ export default function App() {
 			<PaperProvider theme={theme}>
 				<NavigationContainer>
 					<UserDetailsProvider>
-                        <NotificationDataProvider>
-                            <SearchProvider>
-                                <AppLoader Stack={Stack}/>
-                            </SearchProvider>
-                        </NotificationDataProvider>
+						<NotificationDataProvider>
+							<SearchProvider>
+								<AppLoader Stack={Stack}/>
+							</SearchProvider>
+						</NotificationDataProvider>
 					</UserDetailsProvider>
 				</NavigationContainer>
 			</PaperProvider>
