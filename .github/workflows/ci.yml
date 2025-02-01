@@ -308,9 +308,8 @@ jobs:
           ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ubuntu@${{ secrets.PRODUCTION_VM_IP }} << EOF
             echo "Starting MongoDB Backup..."
             TIMESTAMP=\$(date +'%Y-%m-%d_%H-%M-%S')
-            mongodump --uri="${{ secrets.PRODUCTION_BACKEND_MONGO_URI }}" \
-              --username="${{ secrets.PRODUCTION_BACKEND_MONGO_USER }}" \
-              --password="${{ secrets.PRODUCTION_BACKEND_MONGO_PASS }}" \
+            mongodump --uri="${{secrets.FULL_PRODUCTION_MONGO_URI}}" \
+                      --archive="/home/ubuntu/mongo_backups/backup_\${TIMESTAMP}.archive" \
               --authenticationDatabase=admin \
               --authenticationMechanism=SCRAM-SHA-256 \
               --archive="/home/ubuntu/mongo_backups/backup_${TIMESTAMP}.archive" \
