@@ -284,10 +284,14 @@ jobs:
       - name: SSH into VM & Backup MongoDB
         run: |
           echo "SSHing into VM at ${{ secrets.PRODUCTION_VM_IP }}..."
-          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ubuntu@${{ secrets.PRODUCTION_VM_IP }} << 'EOF'
+          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ubuntu@${{ secrets.PRODUCTION_VM_IP }} << EOF
             echo "Starting MongoDB Backup..."
-            TIMESTAMP=$(date +'%Y-%m-%d_%H-%M-%S') 
-            mongodump --uri="${{ secrets.PRODUCTION_BACKEND_MONGO_URI }}" --username="${{ secrets.PRODUCTION_BACKEND_MONGO_USER }}" --password="${{ secrets.PRODUCTION_BACKEND_MONGO_PASS }}" --authenticationDatabase=admin --archive="/home/ubuntu/mongo_backups/backup_${TIMESTAMP}.archive"
-            echo "✅ Backup completed: backup_${TIMESTAMP}.archive"
-          EOF
+            TIMESTAMP=\$(date +'%Y-%m-%d_%H-%M-%S')
+            mongodump --uri="${{ secrets.PRODUCTION_BACKEND_MONGO_URI }}" \
+                      --username="${{ secrets.PRODUCTION_BACKEND_MONGO_USER }}" \
+                      --password="${{ secrets.PRODUCTION_BACKEND_MONGO_PASS }}" \
+                      --authenticationDatabase=admin \
+                      --archive="/home/ubuntu/mongo_backups/backup_\${TIMESTAMP}.archive"
+            echo "✅ Backup completed: backup_\${TIMESTAMP}.archive" EOF
+      
 
