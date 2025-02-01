@@ -37,6 +37,15 @@ jobs:
       - name: Create GOOGLE_SERVICES_FILE
         run: echo ${{secrets.GOOGLE_SERVICES_FILE}} > google-services.json
 
+      - name: Load Staging Backend Secrets
+        run: |
+          echo "MONGO_URI=${{ secrets.STAGING_BACKEND_MONGO_URI }}" >> $GITHUB_ENV
+          echo "MONGO_USER=${{ secrets.STAGING_BACKEND_MONGO_USER }}" >> $GITHUB_ENV
+          echo "MONGO_PASS=${{ secrets.STAGING_BACKEND_MONGO_PASS }}" >> $GITHUB_ENV
+          echo "MONGO_DB_NAME=${{ secrets.STAGING_BACKEND_MONGO_DB_NAME }}" >> $GITHUB_ENV
+          echo "PORT=${{ secrets.STAGING_BACKEND_PORT }}" >> $GITHUB_ENV
+          echo "CLERK_SECRET_KEY=${{ secrets.STAGING_BACKEND_CLERK_SECRET_KEY }}" >> $GITHUB_ENV
+
       - name: Build app
         run: eas build -p android --local --profile preview --output release/one-roof-prev.apk
 

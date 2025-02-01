@@ -75,10 +75,6 @@ export const ConversationScreen: React.FC = () => {
 			if (msg.receiverId === userId && msg.senderId === receiverId) {
 				setMessages([...messages, msg]);
 
-				if(allowedNotifications.includes(NotificationTypesEnum.Messages)){
-					sendNewMessageNotification(msg);
-				}
-
 			}
 		});
 		socket.on('updateMessages', (msg) => {
@@ -97,11 +93,6 @@ export const ConversationScreen: React.FC = () => {
 		return verdict;
 	};
 
-	const sendNewMessageNotification = async (msg) => {
-			for (const token of pushTokens) {
-				await notificationService.sendNotification('New message', msg.content, userId, token);
-			}
-	};
 
 	const getConversationMessages = async () => {
 		const data = await messageService.getConversationMessages(
@@ -143,8 +134,8 @@ export const ConversationScreen: React.FC = () => {
 		//     setReferenceId(null);
 		//     setType(null);
 		// }
-		if(allowedNotifications.includes(NotificationTypesEnum.Messages)){
-			sendNewMessageNotification(newMessage);
+		if(receiverUser?.allowedNotifications.includes(NotificationTypesEnum.Messages)){
+			await notificationService.sendNewMessageNotification(receiverUser, newMessage)
 		}
 
 		setMessage('');
