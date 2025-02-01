@@ -4,11 +4,12 @@ on:
   push:
     branches:
       - main
-      - last-working-after-merge
+      - development
+      - pre-staging
   pull_request:
     branches:
       - main
-      - last-working-after-merge
+      - pre-staging
   workflow_dispatch: # Allows manual triggering
 
 jobs:
@@ -146,7 +147,7 @@ jobs:
     name: Auto Merge Main → Staging
     needs: [ backend-test-staging, db-health-check-staging, security-check, create-staging-branch, lint ]
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/last-working-after-merge'
+    if: github.ref == 'refs/heads/pre-staging'
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -156,7 +157,7 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git fetch origin
           git checkout staging
-          git reset --hard origin/last-working-after-merge
+          git reset --hard origin/pre-staging
           git push --force origin staging
 
   create-production-branch:
