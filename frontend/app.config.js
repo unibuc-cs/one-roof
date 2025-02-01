@@ -1,4 +1,4 @@
-{
+export default {
   "expo": {
     "name": "frontend",
     "slug": "frontend",
@@ -24,18 +24,34 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.anonymous.frontend",
-      "googleServicesFile": "./google-services.json"
+      "googleServicesFile": process.env.GOOGLE_SERVICES_FILE ?? "./google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-font"
+      "expo-font",
+      "expo-build-properties"
     ],
     "owner": "one-roof",
     "extra": {
       "eas": {
-        "projectId": "cc60edc5-201c-4192-af0f-26b81dddc7d3"
+        "projectId": "cc60edc5-201c-4192-af0f-26b81dddc7d3",
+        "plugins": [
+          [
+            "expo-build-properties",
+            {
+              "android": {
+                "compileSdkVersion": 34,
+                "targetSdkVersion": 34,
+                "buildToolsVersion": "34.0.0"
+              },
+              "ios": {
+                "deploymentTarget": "13.4"
+              }
+            }
+          ]
+        ]
       }
     }
   }

@@ -15,6 +15,7 @@ from services import MongoService
 class StoriaSpider(scrapy.Spider):
     name = "storia_spider"
     conversion_rate = 0.2  # from RON to EUR
+    amenities_list = ["kitchen", "dressing", "terrace", "parking place", "gym", "swimming pool", "no smoking", "ac", "washing machine", "internet", "wi-fi", "elevator", "refrigerator", 'dishwasher', 'washer', 'dryer', 'tv', 'balcony', 'parking space']
     start_urls = [
         'https://www.storia.ro/ro/rezultate/inchiriere/apartament/bucuresti?ownerTypeSingleSelect=ALL&distanceRadius=0&viewType=listing&limit=72&page=1'
     ]
@@ -91,7 +92,21 @@ class StoriaSpider(scrapy.Spider):
         price = response.css('strong[data-cy="adPageHeaderPrice"]::text').get().strip()
         address = response.css('main a:first-of-type::text').get().strip()
         surface = StoriaSpider.get_element_from_button_list(response, surface = True)
-        rooms = StoriaSpider.get_element_from_button_list(response, surface = False)        
+        rooms = StoriaSpider.get_element_from_button_list(response, surface = False) 
+
+        div = WebDriverWait(self.driver, 20).until(
+            EC.visibility_of_element_located((By.CSS_SELECTOR, 'div[data-cy="adPageAdDescription"] span'))
+        )
+        listing_description = div.find_elements(By.TAG_NAME, 'p')
+
+        amenities =[]
+
+        if(listing_description):
+            listing_description = listing_description[0].text.lower()
+            for el in self.amenities_list:
+                if(el in listing_description):
+                    amenities.append(el)
+
         data = {
             'title': title,
             'price': StoriaSpider.process_price(price),
@@ -100,7 +115,8 @@ class StoriaSpider(scrapy.Spider):
             'rooms': int(rooms),
             'photos': photo_urls,
             'url': response.url,
-            'precise': True
+            'precise': True,
+            'amenities': amenities
         }
 
         self.mongo_service.insert_apartment(data)

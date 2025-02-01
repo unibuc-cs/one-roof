@@ -6,6 +6,7 @@ import { Button } from './base/Button';
 import { useUser } from '@clerk/clerk-expo';
 import { friendService } from '../services/internal/friendService';
 import { useNavigation } from '@react-navigation/native';
+import {notificationService} from "../services";
 
 interface CompatibleRoommateCardProps {
 	roommate: {
@@ -53,6 +54,7 @@ export const CompatibleRoommateCard: React.FC<CompatibleRoommateCardProps> = ({
 		try {
 			await friendService.sendRequest(roommate.clerkId, clerkUser.id);
 			setFriendshipStatus('pending'); // ✅ Optimistically update UI
+			await notificationService.sendFriendRequestNotification(roommate, clerkUser);
 		} catch (error) {
 			console.error('Error sending friend request:', error);
 		} finally {

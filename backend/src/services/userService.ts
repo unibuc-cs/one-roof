@@ -83,37 +83,37 @@ class UserService {
 		} as IUserWithClerk;
 	}
 
-	async getAllUsersWithClerkDetail(): Promise<IUserWithClerk[]> {
-		const allUsers = await this.getAllUsers();
-		const usersWithClerkDetails: IUserWithClerk[] = [];
-
-		for (const user of allUsers) {
-			const userId = user._id;
-			try {
-				const databaseUser = await this.getUserByUserId(userId);
-				if (!databaseUser) {
-					continue;
-				}
-
-				const clerkUser = await clerkClient.users.getUser(databaseUser.clerkId);
-				if (!clerkUser) {
-					continue;
-				}
-
-				usersWithClerkDetails.push({
-					...databaseUser.toObject(),
-					firstName: clerkUser.firstName,
-					lastName: clerkUser.lastName,
-					email: clerkUser.primaryEmailAddressId,
-					nickname: clerkUser.username,
-				} as IUserWithClerk);
-			} catch (error) {
-				console.error(`Error fetching user ${userId}:`, error);
-			}
-		}
-
-		return usersWithClerkDetails;
-	}
+	// async getAllUsersWithClerkDetail(): Promise<IUserWithClerk[]> {
+	// 	const allUsers = await this.getAllUsers();
+	// 	const usersWithClerkDetails: IUserWithClerk[] = [];
+	//
+	// 	for (const user of allUsers) {
+	// 		const userId = user._id;
+	// 		try {
+	// 			const databaseUser = await this.getUserByUserId(userId);
+	// 			if (!databaseUser) {
+	// 				continue;
+	// 			}
+	//
+	// 			const clerkUser = await clerkClient.users.getUser(databaseUser.clerkId);
+	// 			if (!clerkUser) {
+	// 				continue;
+	// 			}
+	//
+	// 			usersWithClerkDetails.push({
+	// 				...databaseUser.toObject(),
+	// 				firstName: clerkUser.firstName,
+	// 				lastName: clerkUser.lastName,
+	// 				email: clerkUser.primaryEmailAddressId,
+	// 				nickname: clerkUser.username,
+	// 			} as IUserWithClerk);
+	// 		} catch (error) {
+	// 			console.error(`Error fetching user ${userId}:`, error);
+	// 		}
+	// 	}
+	//
+	// 	return usersWithClerkDetails;
+	// }
 
 
 	async updateUserByClerkId(clerkId: string, update: Partial<IUser>): Promise<IUser | null> {

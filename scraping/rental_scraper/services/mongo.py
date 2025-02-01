@@ -6,7 +6,7 @@ import random
 
 class MongoService:
 #     def __init__(self, uri='mongodb://localhost:27017/', db_name='one-roof', collection_name='listings'):
-    def __init__(self, uri='mongodb://one-roof-user:w2L38f?Wpy}e@130.61.13.108:27017/one-roof', db_name='one-roof', collection_name='listings'):
+    def __init__(self, uri='mongodb://one-roof-user:w2L38f%3FWpy%7De@130.61.13.108:27017/one-roof?authMechanism=DEFAULT&authSource=admin', db_name='one-roof-staging', collection_name='listings'):
 
         self.client = MongoClient(uri)
         self.db = self.client[db_name]
@@ -78,6 +78,7 @@ class MongoService:
             'size': apartment_data['surface'],
             'numberOfRooms': apartment_data['rooms'],
             'numberOfBathrooms': apartment_data.get('bathrooms', 1),
+            'amenities': apartment_data['amenities'],
             'photos': apartment_data['photos'],
             'type': 'apartment',
             'location': {

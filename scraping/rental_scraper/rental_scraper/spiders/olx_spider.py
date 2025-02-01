@@ -102,10 +102,13 @@ class OlxSpider(scrapy.Spider):
         # the one containing the desired surface
 
         surface = None
-        surface_variants = response.css('div[data-testid="main"] li p::text').getall()
-        self.log(f'SURFACE TYPE: {surface_variants[0]}')
+        div = WebDriverWait(self.driver, 20).until(
+            EC.visibility_of_element_located((By.CSS_SELECTOR, 'div[id="baxter-above-parameters"]+div'))
+        )
+        surface_variants = div.find_elements(By.CSS_SELECTOR, 'p')
+        self.log(f'\n\n\n\nSURFACE TYPE: {surface_variants[0].text}')
         for li in surface_variants:
-            li_text = str(li)
+            li_text = str(li.text)
             if li_text.startswith('Suprafata'):
                 # Example: Suprafata utila: 32 m^2
                 surface = int(li_text.split(' ')[2])
@@ -137,7 +140,8 @@ class OlxSpider(scrapy.Spider):
             'photos': photo_urls,
             'type': room_type,
             'url': response.url,
-            'precise': False
+            'precise': False,
+            'amenities': []
         }
 
         self.mongo_service.insert_apartment(data)

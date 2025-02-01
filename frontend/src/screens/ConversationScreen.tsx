@@ -12,7 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { TextInput } from 'react-native-paper';
 import { theme } from '../theme';
 import { useUserDetails } from '../contexts/UserDetailsContext';
-import { messageService } from '../services';
+import {messageService, notificationService} from '../services';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { RootStackParamList } from '../navigation';
 import { useUserDataByClerkId } from '../hooks/useUserData';
@@ -23,6 +23,7 @@ import { io } from 'socket.io-client';
 import { useUser } from '@clerk/clerk-expo';
 import { config } from '../config/configure';
 import { IMessage } from '../models/messageModel';
+import {NotificationTypesEnum} from "../enums";
 
 
 type ChatMessagesScreenRouteProps = RouteProp<RootStackParamList, 'Message'>;
@@ -74,10 +75,6 @@ export const ConversationScreen: React.FC = () => {
 			if (msg.receiverId === userId && msg.senderId === receiverId) {
 				setMessages([...messages, msg]);
 
-				if(allowedNotifications.includes(NotificationTypesEnum.Messages)){
-					sendNewMessageNotification(msg);
-				}
-
 			}
 		});
 		socket.on('updateMessages', (msg) => {
@@ -96,11 +93,6 @@ export const ConversationScreen: React.FC = () => {
 		return verdict;
 	};
 
-	const sendNewMessageNotification = async (msg) => {
-			for (const token of pushTokens) {
-				await notificationService.sendNotification('New message', msg.content, userId, token);
-			}
-	};
 
 	const getConversationMessages = async () => {
 		const data = await messageService.getConversationMessages(
@@ -142,6 +134,9 @@ export const ConversationScreen: React.FC = () => {
 		//     setReferenceId(null);
 		//     setType(null);
 		// }
+		if(receiverUser?.allowedNotifications.includes(NotificationTypesEnum.Messages)){
+			await notificationService.sendNewMessageNotification(receiverUser, newMessage)
+		}
 
 		setMessage('');
 		getConversationMessages();

@@ -17,6 +17,7 @@ import {
 	ReviewGeneralDetailsScreen,
 	ViewingsCalendar,
 	ViewReviewScreen,
+	NotificationsScreen
 } from '../screens';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import TopBar from '../components/TopBar';
