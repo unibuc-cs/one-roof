@@ -117,7 +117,7 @@ jobs:
       - name: Check Staging MongoDB Connection
         run: |
           echo "Checking MongoDB Connection on Staging..."
-          mongo --username ${{ secrets.STAGING_BACKEND_MONGO_USER }} \
+          mongosh --username ${{ secrets.STAGING_BACKEND_MONGO_USER }} \
                 --password ${{ secrets.STAGING_BACKEND_MONGO_PASS }} \
                 --host ${{ secrets.STAGING_BACKEND_MONGO_URI }} \
                 --authenticationDatabase admin \
@@ -263,7 +263,7 @@ jobs:
       - name: Check Production MongoDB Connection
         run: |
           echo "Checking MongoDB Connection on Production..."
-          mongo --username ${{ secrets.PRODUCTION_BACKEND_MONGO_USER }} \
+          mongosh --username ${{ secrets.PRODUCTION_BACKEND_MONGO_USER }} \
                 --password ${{ secrets.PRODUCTION_BACKEND_MONGO_PASS }} \
                 --host ${{ secrets.PRODUCTION_BACKEND_MONGO_URI }} \
                 --authenticationDatabase admin \
@@ -293,5 +293,26 @@ jobs:
                       --authenticationDatabase=admin \
                       --archive="/home/ubuntu/mongo_backups/backup_\${TIMESTAMP}.archive"
             echo "✅ Backup completed: backup_\${TIMESTAMP}.archive" EOF
+
+      - name: SSH into VM, Deploy Backend
+        run: |
+          echo "SSHing into VM at ${{ secrets.PRODUCTION_VM_IP }}..."
+          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ubuntu@${{ secrets.PRODUCTION_VM_IP }} << EOF
+            echo "Checking for Node.js..."
+            if ! command -v node &> /dev/null; then
+             echo "Node.js not found. Installing Node.js..."
+              # This installs Node.js 20.x via NodeSource
+              curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+              sudo apt-get install -y nodejs
+            else
+              echo "Node.js is installed."
+            fi
+          
+            echo "Deploying the backend..."
+            cd code/one-roof/backend
+            git pull
+            npm install
+            npm run prod
+            echo "✅ Deployment completed."
       
 
