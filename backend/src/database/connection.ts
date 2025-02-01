@@ -11,7 +11,7 @@ const connect = async (): Promise<void> => {
 				user: mongo_user,
 				pass: mongo_pass,
 				dbName: mongo_db_name,
-				authSource: mongo_db_name
+				authSource: 'admin'
 			});
 			console.log('Remote database connected');
 		}
