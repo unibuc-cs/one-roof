@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { OPENWEATHER_API_KEY } from '@env';
 
 const BUCURESTI_COORDS = { lat: 44.4268, lon: 26.1025 }; // Bucharest center
 
@@ -43,7 +42,7 @@ export async function fetchAirPollutionData(): Promise<DataPoint[]> {
 		// Fetch air pollution data for each point
 		const pollutionData = await Promise.all(
 			points.map(async (point) => {
-				const url = `http://api.openweathermap.org/data/2.5/air_pollution?lat=${point.lat}&lon=${point.lon}&appid=${OPENWEATHER_API_KEY}`;
+				const url = `http://api.openweathermap.org/data/2.5/air_pollution?lat=${point.lat}&lon=${point.lon}&appid=${process.env.OPENWEATHER_API_KEY}`;
 				const response = await axios.get(url);
 				const pm2_5 = response.data.list[0]?.components.pm2_5 || 0; // Default to 0 if no data
 				return {
