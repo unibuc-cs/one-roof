@@ -78,6 +78,7 @@ class MongoService:
             'size': apartment_data['surface'],
             'numberOfRooms': apartment_data['rooms'],
             'numberOfBathrooms': apartment_data.get('bathrooms', 1),
+            'amenities': apartment_data['amenities'],
             'photos': apartment_data['photos'],
             'type': 'apartment',
             'location': {

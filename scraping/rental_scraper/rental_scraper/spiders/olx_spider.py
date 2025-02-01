@@ -140,7 +140,8 @@ class OlxSpider(scrapy.Spider):
             'photos': photo_urls,
             'type': room_type,
             'url': response.url,
-            'precise': False
+            'precise': False,
+            'amenities': []
         }
 
         self.mongo_service.insert_apartment(data)
