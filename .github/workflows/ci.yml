@@ -297,7 +297,6 @@ jobs:
 
           echo "Deploying the backend..."
           cd code/one-roof/backend
-          git pull
           npm install
           npm run prod
           echo "✅ Deployment completed."
@@ -309,7 +308,7 @@ jobs:
             echo "Starting MongoDB Backup..."
             TIMESTAMP=\$(date +'%Y-%m-%d_%H-%M-%S')
             mongodump --uri="${{secrets.FULL_PRODUCTION_MONGO_URI}}" \
-                      --archive="/home/ubuntu/mongo_backups/backup_\${TIMESTAMP}.archive" \
+                      --archive="/home/ubuntu/mongo_backups/backup.archive" \
               --authenticationDatabase=admin \
               --authenticationMechanism=SCRAM-SHA-256 \
               --archive="/home/ubuntu/mongo_backups/backup_${TIMESTAMP}.archive" \
