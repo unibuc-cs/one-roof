@@ -25,7 +25,8 @@ export const SavedListsScreen: React.FC = () => {
 
 	//console.log('listing received through params:', listing);
 
-	const {user }= useUser(); //: clerkUser
+	const user = {id: 'un id'};
+	//const {user }= useUser(); //: clerkUser
 	console.log(user?.id);
 	const { savedLists, setSavedLists } = useUserDetails();
 	const [loading, setLoading] = useState<boolean>(true);

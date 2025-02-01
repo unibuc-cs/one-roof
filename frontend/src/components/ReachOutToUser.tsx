@@ -31,7 +31,7 @@ const ReachOutToUser: React.FC<any> = ({ message, userToReachOutToId, referenceI
 	};
 
 	return (
-		<Card style={styles.container}>
+		<Card style={styles.container} testID='cardLandlord'>
 			<Text style={styles.landlordTitle}>{message}</Text>
 			<View style={{ flexDirection: 'row', alignItems: 'center' }}>
 				<Image style={styles.landlordProfilePicture} source={{ uri: landlord.profilePicture }}/>

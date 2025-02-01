@@ -18,7 +18,8 @@ type ListingScreenRouteProp = RouteProp<RootStackParamList, 'Listing'>;
 export const ListingScreen: React.FC = () => { // maybe include navigation here
 	const route = useRoute<ListingScreenRouteProp>();
 	const { id } = route.params;
-	const { user } = useUser();
+	//const { user } = useUser();
+	const user = {id:'un id'};
 	const { listing } = useListing(id, user?.id as string);
 	const width = Dimensions.get('window').width;
 	if (listing == null) {

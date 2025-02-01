@@ -33,7 +33,7 @@ export const EditableField: React.FC<EditableFieldProps> = ({ label, value, onSa
 			<View style={styles.fieldContainerRow}>
 				{isEditing ? (
 					<View style={{ width: '70%' }}>
-						<TextInput
+						<TextInput testID='EditableFieldTextInput'
 							ref={textInputRef}
 							style={{ ...styles.input, width: '100%' }}
 							value={editValue}

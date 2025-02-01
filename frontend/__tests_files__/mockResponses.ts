@@ -1,8 +1,92 @@
-import { IListing, ISavedList, IViewing } from "../src/models";
+import { IFriendRequest, IFriendship, IListing, ISavedList, IUserWithClerk, IViewing } from "../src/models";
 import { UserDetails } from "../src/contexts/UserDetailsContext";
-import { UserRoleEnum } from '../src/enums';
+import { getUserRoleEnumFromString, UserRoleEnum } from '../src/enums';
 import { UserResource } from "@clerk/types";
 import { describe, expect, test, jest, it} from '@jest/globals';
+
+export const mockedFriends : IFriendship[] = [
+    {
+        firstUser: 'Ana Maria',
+        secondUser:'Ioana'
+    },
+    {
+        firstUser: 'Ana Maria',
+        secondUser:'Miruna'
+    },
+    {
+        firstUser: 'Ana Maria',
+        secondUser:'Elena'
+    }
+]
+
+export const mockedFriendRequests : IFriendRequest[] = [{
+    requestedUser: 'maria',
+    pendingUser: 'andrei',
+    time: new Date(),
+    status: 'pending',
+}]
+
+export const firstUser : IUserWithClerk = {
+    _id: 'first user id',
+	clerkId: 'clerk id',
+	profilePicture: 'one pic',
+	role: getUserRoleEnumFromString('ceva'),
+	onboardingStep: 3,
+	contactedUsers: [], // modified to keep clerk ID's
+	favoriteListings: [],
+	savedLists: [],
+	viewedListings: [],
+	createdAt: new Date(),
+	updatedAt: new Date(),
+    firstName: 'ana',
+	lastName: 'maria',
+	email: 'mail',
+	nickname: 'anamaria',
+}
+
+export const secondUser : IUserWithClerk  = {
+    _id: 'second user id',
+	clerkId: 'clerk id 2',
+	profilePicture: 'one pic 2',
+	role: getUserRoleEnumFromString('ceva'),
+	onboardingStep: 3,
+	contactedUsers: [], // modified to keep clerk ID's
+	favoriteListings: [],
+	savedLists: [],
+	viewedListings: [],
+	createdAt: new Date(),
+	updatedAt: new Date(),
+    firstName: 'ioana',
+	lastName: 'neacsu',
+	email: 'mail 2',
+	nickname: 'ioana',
+}
+
+export const oneListing : IListing = {
+    _id: 'fake listing id',
+    landlordId: 'user_2pwGRzshslTfPL09YP5S4jzVV7N',
+    title: ' fake listing',
+    description: '',
+    photos: ['photo 1'],
+    address: 'fake address',
+    location: {
+        type: 'fake address type',
+        coordinates: [34,45],
+    },
+    type: 'apartment',
+    price: 200,
+    numberOfRooms: 3,
+    numberOfBathrooms: 1,
+    size: 100,
+    external: false,
+    url: '',
+    amenities: ['sink'],
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    views: [new Date('2025-01-31 22:15:17'), new Date('2025-01-31 22:50:17'), new Date('2025-01-31 20:24:17'), new Date('2025-01-31 22:24:17'), new Date('2025-01-31 21:24:17'), new Date('2025-01-31 20:57:17')],
+}
+
+export const mockUseListing = {listing: oneListing, error: null};
 
 export const mockSavedLists : ISavedList[] = [
     {
@@ -202,21 +286,23 @@ export const mockViewingsResponse : IViewing[] = [
 //     lastSignInAt: new Date(),
 //     createdAt: new Date(),
 //     updatedAt: new Date(),
-//     update: jest.fn().mockResolvedValue({
-//         ...mockUserResource, 
-//         firstName: 'UpdatedName' // Simulating an update to the firstName
-//       }),
-//       delete: jest.fn().mockResolvedValue(undefined),
-//       setProfileImage: jest.fn().mockResolvedValue({
-//         id: 'image123',
-//         name: 'new-avatar.jpg',
-//         publicUrl: 'https://example.com/new-avatar.jpg'
-//       }),
-//       reload: jest.fn().mockResolvedValue(mockUserResource),
-//       getSessions: jest.fn().mockResolvedValue([]),
-//       createPasskey: jest.fn().mockResolvedValue({ id: 'passkey123' }),
-//       isPrimaryIdentification: jest.fn().mockReturnValue(true),
-//       getOrganizationInvitations: jest.fn().mockResolvedValue([]),
-//       getOrganizationSuggestions: jest.fn().mockResolvedValue([]),
-//       getOrganizationMemberships: jest.fn().mockResolvedValue([]),
-//   };
+//     update: jest.MockedFunction<typeof mockUserResource.update>().mockReturnValue()
+//     //...UserResource
+    // update: jest.fn().mockResolvedValue({
+    //     ...mockUserResource, 
+    //     firstName: 'UpdatedName' // Simulating an update to the firstName
+    //   }),
+    //   delete: jest.fn().mockResolvedValue(undefined),
+    //   setProfileImage: jest.fn().mockResolvedValue({
+    //     id: 'image123',
+    //     name: 'new-avatar.jpg',
+    //     publicUrl: 'https://example.com/new-avatar.jpg'
+    //   }),
+    //   reload: jest.fn().mockResolvedValue(mockUserResource),
+    //   getSessions: jest.fn().mockResolvedValue([]),
+    //   createPasskey: jest.fn().mockResolvedValue({ id: 'passkey123' }),
+    //   isPrimaryIdentification: jest.fn().mockReturnValue(true),
+    //   getOrganizationInvitations: jest.fn().mockResolvedValue([]),
+    //   getOrganizationSuggestions: jest.fn().mockResolvedValue([]),
+    //   getOrganizationMemberships: jest.fn().mockResolvedValue([]),
+//  };

@@ -10,12 +10,12 @@ import { useUser } from '@clerk/clerk-expo';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 export const ChatsScreen: React.FC = () => {
-	const LoadFonts = async () => { await useCustomFonts(); };
-	const navigation = useNavigation();
+	//const LoadFonts = async () => { await useCustomFonts(); };
+	//const navigation = useNavigation();
 	// const {userId, } = useUserDetails();
 	// const {user: currentUser} = useUserData(userId)
 	const { user } = useUser();
-	console.log('CLERK ID FROM CHATS', user.id);
+	console.log('CLERK ID FROM CHATS', user?.id);
 
 	const { user: currentUser, isLoading, error } = useUserDataByClerkId(user?.id ?? '');
 	console.log('CURRENT USER FROM CLERK', currentUser);
@@ -37,7 +37,7 @@ export const ChatsScreen: React.FC = () => {
 			<View style={styles.title}>
 				<Text style={{ fontSize:25 }}> Chats</Text>
 			</View>
-			<Pressable>
+			<Pressable testID='pressable'>
 				{currentUser?.contactedUsers.map((clerkUserId, index) =>(
 					<UserChatCard key={index} userId={clerkUserId}/>
 				))}

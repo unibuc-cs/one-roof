@@ -14,7 +14,8 @@ export const FriendsScreen: React.FC = () => {
 	const [friendRequests, setFriendRequests] = useState<IFriendRequest[]>([]);
 	const [loading, setLoading] = useState(false);
 
-	const { user } = useUser();
+	//const { user } = useUser();
+	const user = {id: 'un id'};
 	const userId = user?.id as string;
 
 	useEffect(() => {
@@ -76,6 +77,9 @@ export const FriendsScreen: React.FC = () => {
 		}
 	}, [selectedTab]);
 
+	console.log('loading', loading);
+	console.log(friends);
+
 	const acceptFriendRequest = async (requestId: string) => {
 		try {
 			setLoading(true);
@@ -111,9 +115,9 @@ export const FriendsScreen: React.FC = () => {
 		}
 	};
 	const renderSegmentContent = () => {
-		if (loading) {
-			return <ActivityIndicator size="large" color="#0000ff" />;
-		}
+		// if (loading) {
+		// 	return <ActivityIndicator size="large" color="#0000ff" />;
+		// }
 
 		const capitalize = (str: string): string =>
 			str
@@ -124,22 +128,22 @@ export const FriendsScreen: React.FC = () => {
 
 		if (selectedTab === 'All') {
 			return (
-				<FlatList
+				<FlatList testID='flatlist'
 					data={friends}
-					keyExtractor={(item) => `${item.firstUser}-${item.secondUser}`}
-					renderItem={({ item }) => (
-						<View style={styles.card}>
-							<Text style={styles.friendName}>
+					keyExtractor={(item) => {/*console.log(item); */ return `${item.firstUser}-${item.secondUser}`}}
+					renderItem={({ item }) => {console.log(item); return (
+						<View style={styles.card} testID='displayedFriend'>
+							<Text style={styles.friendName} >
 								{capitalize(`${item.otherUserFirstName} ${item.otherUserSecondName}`.trim())}
 							</Text>
 						</View>
-					)}
-					ListEmptyComponent={<Text style={styles.emptyText}>You have no friends yet</Text>}
+					)}}
+					//ListEmptyComponent={<Text style={styles.emptyText}>You have no friends yet</Text>}
 				/>
 			);
 		} else if (selectedTab === 'Requests') {
 			return (
-				<FlatList
+				<FlatList testID='req_flatlist'
 					data={friendRequests}
 					keyExtractor={(item) => `${item.requestedUser}-${item.pendingUser}`}
 					renderItem={({ item }) => (
@@ -180,7 +184,7 @@ export const FriendsScreen: React.FC = () => {
 				>
 					<Text style={[styles.tabText, selectedTab === 'All' && styles.activeTabText]}>All</Text>
 				</TouchableOpacity>
-				<TouchableOpacity
+				<TouchableOpacity testID='requests'
 					style={[styles.tab, selectedTab === 'Requests' && styles.activeTab]}
 					onPress={() => setSelectedTab('Requests')}
 				>
