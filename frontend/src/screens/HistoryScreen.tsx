@@ -6,7 +6,7 @@ import { listingService } from '../services';
 import { useUser } from '@clerk/clerk-expo';
 import { IListing } from '../models';
 import { useUserDetails } from '../contexts/UserDetailsContext';
-import { useFocusEffect } from '@react-navigation/native';
+import { useEffect } from 'react';
 
 export const HistoryScreen: React.FC = () => {
 	const { user } = useUser();
@@ -14,7 +14,7 @@ export const HistoryScreen: React.FC = () => {
 	const [listings, setListings] = useState<IListing[]>([]);
 	const [loading, setLoading] = useState<boolean>(true);
 
-	useFocusEffect(() => {
+	useEffect(() => {
 		const fetchListings = async () => {
 			const fetchedListings = await Promise.all(viewedListings.map(id => listingService.getListing(id, user?.id ?? '')));
 			setListings(fetchedListings.filter(listing => listing !== null));
@@ -22,7 +22,7 @@ export const HistoryScreen: React.FC = () => {
 		};
 
 		fetchListings();
-	});
+	}, [viewedListings]);
 
 	return (
 		<View style={styles.wrapper}>

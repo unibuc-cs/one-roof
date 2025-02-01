@@ -182,7 +182,7 @@ export const InsightsScreen: React.FC = () => {
 					</TouchableOpacity>
 				</View>
 
-				<HeaderText size={25}>Displaying {displayed} for the last 7 {timeUnit}s</HeaderText>
+				<HeaderText size={25}>Displaying {displayed} in {timeUnit}s</HeaderText>
 
 				<View style={styles.chartContainer} testID="chart container">
 					<ScrollView>
