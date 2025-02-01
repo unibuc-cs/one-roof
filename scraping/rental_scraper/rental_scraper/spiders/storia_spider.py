@@ -97,13 +97,15 @@ class StoriaSpider(scrapy.Spider):
         div = WebDriverWait(self.driver, 20).until(
             EC.visibility_of_element_located((By.CSS_SELECTOR, 'div[data-cy="adPageAdDescription"] span'))
         )
-        listing_description = div.find_elements(By.TAG_NAME, 'p')[0].text.lower()
+        listing_description = div.find_elements(By.TAG_NAME, 'p')
 
         amenities =[]
 
-        for el in self.amenities_list:
-            if(el in listing_description):
-                amenities.append(el)
+        if(listing_description):
+            listing_description = listing_description[0].text.lower()
+            for el in self.amenities_list:
+                if(el in listing_description):
+                    amenities.append(el)
 
         data = {
             'title': title,
