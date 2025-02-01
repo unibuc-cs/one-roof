@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import PropertyCard from '../components/PropertyCard'; // Assuming PropertyCard is your listing component
 import { HeaderText } from '../components';
@@ -14,15 +14,21 @@ export const HistoryScreen: React.FC = () => {
 	const [listings, setListings] = useState<IListing[]>([]);
 	const [loading, setLoading] = useState<boolean>(true);
 
-	useFocusEffect(() => {
-		const fetchListings = async () => {
-			const fetchedListings = await Promise.all(viewedListings.map(id => listingService.getListing(id, user?.id ?? '')));
-			setListings(fetchedListings.filter(listing => listing !== null));
-			setLoading(false);
-		};
 
-		fetchListings();
-	});
+	useFocusEffect(
+		useCallback(() => {
+			const fetchListings = async () => {
+				const fetchedListings = await Promise.all(viewedListings.map(id =>
+					listingService.getListing(id, user?.id ?? '')
+				));
+				setListings(fetchedListings.filter(listing => listing !== null));
+				setLoading(false);
+			};
+
+			fetchListings();
+		}, [viewedListings, user])
+	);
+
 
 	return (
 		<View style={styles.wrapper}>

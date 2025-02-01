@@ -6,12 +6,13 @@ const connect = async (): Promise<void> => {
 	try {
 		if (!mongo_user || !mongo_pass || mongo_user === '' || mongo_pass === '') {
 			await mongoose.connect(mongo_uri);
+			console.log('Local database connected');
 		} else {
 			await mongoose.connect(mongo_uri, {
 				user: mongo_user,
 				pass: mongo_pass,
 				dbName: mongo_db_name,
-				authSource: mongo_db_name
+				authSource: 'admin'
 			});
 			console.log('Remote database connected');
 		}
